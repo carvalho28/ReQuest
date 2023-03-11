@@ -14,27 +14,30 @@ const Header = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
   return (
-    <header className="bg-white">
+    <header>
       <nav
         className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8"
         aria-label="Global"
       >
-        <div className="flex lg:flex-1">
+        <div className="flex lg:flex-1 items-center">
           <a href="#" className="-m-1.5 p-1.5">
-            <span className="sr-only">Your Company</span>
+            {/* <span className="sr-only">ReQuest</span> */}
             <Image
-              className="h-8 w-auto"
-              src="/next.svg"
-              width={600}
-              height={600}
+              className="w-auto h-14"
+              src="/logo.svg"
               alt="logo"
+              width={100}
+              height={100}
             />
           </a>
+          <span className="flex ml-2 font-semibold text-white text-lg">
+            ReQuest
+          </span>
         </div>
         <div className="flex lg:hidden">
           <button
             type="button"
-            className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700"
+            className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-white"
             onClick={() => setMobileMenuOpen(true)}
           >
             <span className="sr-only">Open main menu</span>
@@ -46,16 +49,22 @@ const Header = () => {
             <a
               key={item.name}
               href={item.href}
-              className="text-sm font-semibold leading-6 text-gray-900"
+              className="text-base font-semibold leading-6 text-white"
             >
               {item.name}
             </a>
           ))}
         </div>
-        <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-          <a href="#" className="text-sm font-semibold leading-6 text-gray-900">
-            Log in <span aria-hidden="true">&rarr;</span>
+        <div className="hidden lg:flex lg:flex-1 lg:justify-end items-center">
+          <a href="#" className="text-md font-semibold leading-6 text-white">
+            Login <span aria-hidden="true"></span>
           </a>
+          <button
+            type="button"
+            className="ml-8 rounded-md bg-contrast py-2 px-3 text-base font-semibold text-white shadow-sm hover:bg-contrasthover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-contrast"
+          >
+            Get started
+          </button>
         </div>
       </nav>
       <Dialog
