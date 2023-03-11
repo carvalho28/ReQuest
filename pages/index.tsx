@@ -1,5 +1,6 @@
 import Header from "@/components/Header"
 import Head from "next/head"
+import Image from "next/image"
 
 export default function Home() {
   return (
@@ -10,7 +11,40 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Header />
-      <div className=""></div>
+      {/* <div className="flex flex-row">
+        <div>01</div>
+        <div>02</div>
+      </div> */}
+      <div className="relative isolate pt-14">
+        <div className="mx-auto max-w-7xl px-6 py-24 sm:py-32 lg:flex lg:items-center lg:gap-x-24 lg:px-8 lg:py-40">
+          <div className="mx-auto max-w-2xl lg:mx-0 lg:flex-auto flex flex-col justify-center items-center">
+            <h1 className="mt-10 max-w-2xl text-4xl font-bold tracking-tight text-center text-white sm:text-6xl">
+              Your requirements at a fun glance
+            </h1>
+            <p className="mt-8 text-lg max-w-md text-center leading-8 text-white">
+              Your projects will benefit from a streamlined and efficient
+              approach to accomplishing your requirements.
+            </p>
+            <div className="mt-10 flex items-center gap-x-6">
+              <a
+                href="#"
+                className="rounded-md bg-contrast px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-contrasthover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-contrast"
+              >
+                Get started
+              </a>
+              <a
+                href="#"
+                className="text-sm font-semibold leading-6 text-white"
+              >
+                Learn more <span aria-hidden="true">→</span>
+              </a>
+            </div>
+          </div>
+          <div className="mt-16 sm:mt-24 lg:mt-0 lg:flex-shrink-0 lg:flex-grow flex justify-center">
+            <Image src="/guy.svg" alt="Guy" width={550} height={550} />
+          </div>
+        </div>
+      </div>
     </div>
   )
 }
