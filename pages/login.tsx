@@ -1,10 +1,10 @@
 import Header from "@/components/Header";
 import Image from "next/image";
 import Link from "next/link";
-import { FcGoogle } from "react-icons/fc";
 import { FaGithub, FaTwitter } from "react-icons/fa";
+import { FcGoogle } from "react-icons/fc";
 
-export default function Register() {
+export default function Login() {
   return (
     <div className="h-screen login-background">
       <Header color={0} />
@@ -14,7 +14,7 @@ export default function Register() {
             <div className="mx-auto w-full max-w-sm lg:w-96">
               <div>
                 <h2 className="mt-6 text-3xl font-bold tracking-tight text-black text-center">
-                  Create an account
+                  Welcome back!
                 </h2>
               </div>
 
@@ -77,25 +77,6 @@ export default function Register() {
                   <form action="#" method="POST" className="space-y-6">
                     <div>
                       <label
-                        htmlFor="name"
-                        className="block text-sm font-medium leading-6 text-gray-900"
-                      >
-                        Name
-                      </label>
-                      <div className="mt-2">
-                        <input
-                          id="name"
-                          name="name"
-                          type="name"
-                          autoComplete="name"
-                          placeholder="Your name"
-                          required
-                          className="block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-contrast sm:text-sm sm:leading-6 pl-4"
-                        />
-                      </div>
-                    </div>
-                    <div>
-                      <label
                         htmlFor="email"
                         className="block text-sm font-medium leading-6 text-gray-900"
                       >
@@ -134,32 +115,12 @@ export default function Register() {
                       </div>
                     </div>
 
-                    <div className="space-y-1">
-                      <label
-                        htmlFor="password"
-                        className="block text-sm font-medium leading-6 text-gray-900"
-                      >
-                        Confirm Password
-                      </label>
-                      <div className="mt-2">
-                        <input
-                          id="conf-password"
-                          name="conf-password"
-                          type="password"
-                          autoComplete="current-password"
-                          placeholder="Confirm password"
-                          required
-                          className="pl-4 block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-contrast sm:text-sm sm:leading-6"
-                        />
-                      </div>
-                    </div>
-
                     <div className="flex items-center align-end text-sm justify-end">
                       <Link
-                        href="/login"
+                        href="/register"
                         className="font-medium text-contrast hover:text-contrasthover"
                       >
-                        Already have an account?
+                        Don&apos;t have an account yet?
                       </Link>
                     </div>
 
@@ -168,7 +129,7 @@ export default function Register() {
                         type="submit"
                         className="flex w-full justify-center rounded-md bg-contrast py-2 px-3 text-sm font-semibold text-white shadow-sm hover:bg-contrasthover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-contrast"
                       >
-                        Sign up
+                        Sign in
                       </button>
                     </div>
                   </form>
