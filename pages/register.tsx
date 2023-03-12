@@ -48,13 +48,14 @@ export default function Register() {
   }
 
   return (
-    <div className="min-h-screen login-background">
+    <div className="min-h-screen login-background flex flex-col">
       <Header color={0} />
-      {regSuccess && <ConfirmEmail />}
-      <div className="relative isolate">
+      <div className="flex-1 flex items-center justify-center">
+        {regSuccess && <ConfirmEmail />}
+        {/* <div className="flex items-center justify-center h-screen"> */}
         <div className="mx-auto max-w-7xl px-6 lg:flex lg:items-center lg:gap-x-24 lg:px-8">
           <div className="flex flex-1 flex-col justify-center py-12 px-4 sm:px-6 lg:flex-none lg:px-20 xl:px-24 bg-white2 rounded-3xl shadow-lg">
-            <div className="mx-auto w-full max-w-sm lg:w-96">
+            <div className="mx-auto max-w-sm md:w-96">
               <div>
                 <h2 className="mt-6 text-3xl font-bold tracking-tight text-black text-center">
                   Create an account
@@ -248,13 +249,13 @@ export default function Register() {
               </div>
             </div>
           </div>
-          <div className="relative w-0 flex-1 justify-center hidden lg:block">
+          <div className="relative flex-1 justify-center hidden lg:block">
             <Image
-              className="inset-0 w-full h-full p-6"
+              className="inset-0 w-128 h-full max-w-screen p-6 mx-auto"
               src="/register.svg"
               alt=""
-              width={600}
-              height={600}
+              width={800}
+              height={800}
             />
           </div>
         </div>
