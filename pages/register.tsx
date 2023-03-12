@@ -52,7 +52,7 @@ export default function Register() {
       const { data, error } = await supabase.auth.signInWithOAuth({
         provider: "github",
         options: {
-          redirectTo: "http://localhost:3000/dashboard",
+          redirectTo: "https://re-quest.vercel.app/dashboard",
         },
       });
       if (error) {
@@ -69,7 +69,7 @@ export default function Register() {
       const { data, error } = await supabase.auth.signInWithOAuth({
         provider: "google",
         options: {
-          redirectTo: "http://localhost:3000/dashboard",
+          redirectTo: "https://re-quest.vercel.app/dashboard",
         },
       });
       if (error) {
