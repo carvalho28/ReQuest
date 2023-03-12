@@ -1,6 +1,7 @@
 import Header from "@/components/Header";
 import Head from "next/head";
 import Image from "next/image";
+import Link from "next/link";
 
 export default function Home() {
   return (
@@ -22,12 +23,12 @@ export default function Home() {
               approach to accomplishing your requirements.
             </p>
             <div className="mt-10 flex items-center gap-x-6">
-              <a
-                href="#"
+              <Link
+                href="/register"
                 className="rounded-md bg-contrast px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-contrasthover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-contrast"
               >
                 Get started
-              </a>
+              </Link>
               <a
                 href="#"
                 className="text-sm font-semibold leading-6 text-white"

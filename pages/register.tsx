@@ -3,8 +3,43 @@ import Image from "next/image";
 import Link from "next/link";
 import { FcGoogle } from "react-icons/fc";
 import { FaGithub, FaTwitter } from "react-icons/fa";
+import { useState } from "react";
+import supabase from "@/utils/supabaseClient";
+import { useRouter } from "next/router";
 
 export default function Register() {
+  const router = useRouter();
+
+  const [name, setName] = useState<string | undefined>();
+  const [email, setEmail] = useState<string | undefined>();
+  const [password, setPassword] = useState<string | undefined>();
+  const [confirmPassword, setConfirmPassword] = useState<string | undefined>();
+
+  async function signUpEmail(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    try {
+      if (name && email && password && confirmPassword) {
+        console.log(email, password, confirmPassword);
+
+        const resp = await supabase.auth.signUp({
+          email: email,
+          password: password,
+          options: {
+            data: {
+              name: name,
+            },
+          },
+        });
+        if (resp.error) {
+          throw resp.error.message;
+        }
+        const userId = resp.data.user?.id;
+      }
+    } catch (error) {
+      throw error;
+    }
+  }
+
   return (
     <div className="h-screen login-background">
       <Header color={0} />
@@ -74,7 +109,7 @@ export default function Register() {
                 </div>
 
                 <div className="mt-6">
-                  <form action="#" method="POST" className="space-y-6">
+                  <form className="space-y-6" onSubmit={signUpEmail}>
                     <div>
                       <label
                         htmlFor="name"
@@ -91,6 +126,7 @@ export default function Register() {
                           placeholder="Your name"
                           required
                           className="block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-contrast sm:text-sm sm:leading-6 pl-4"
+                          onChange={(e) => setName(e.target.value)}
                         />
                       </div>
                     </div>
@@ -110,6 +146,7 @@ export default function Register() {
                           placeholder="Email address"
                           required
                           className="pl-4 block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-contrast sm:text-sm sm:leading-6"
+                          onChange={(e) => setEmail(e.target.value)}
                         />
                       </div>
                     </div>
@@ -130,6 +167,7 @@ export default function Register() {
                           placeholder="Password"
                           required
                           className="pl-4 block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-contrast sm:text-sm sm:leading-6"
+                          onChange={(e) => setPassword(e.target.value)}
                         />
                       </div>
                     </div>
@@ -150,6 +188,7 @@ export default function Register() {
                           placeholder="Confirm password"
                           required
                           className="pl-4 block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-contrast sm:text-sm sm:leading-6"
+                          onChange={(e) => setConfirmPassword(e.target.value)}
                         />
                       </div>
                     </div>
@@ -167,6 +206,7 @@ export default function Register() {
                       <button
                         type="submit"
                         className="flex w-full justify-center rounded-md bg-contrast py-2 px-3 text-sm font-semibold text-white shadow-sm hover:bg-contrasthover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-contrast"
+                        // onClick={signUpEmail}
                       >
                         Sign up
                       </button>
