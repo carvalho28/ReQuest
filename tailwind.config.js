@@ -13,6 +13,7 @@ module.exports = {
         contrast: "#845EC2",
         contrasthover: "#503182",
         black: "#1E1E1E",
+        white2: "#FAFDFE",
       },
     },
   },
