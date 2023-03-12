@@ -13,7 +13,7 @@ export default function Home() {
       </Head>
       <Header />
       <div className="relative isolate pt-14">
-        <div className="mx-auto max-w-7xl px-6 py-24 sm:py-32 lg:flex lg:items-center lg:gap-x-24 lg:px-8 lg:py-40">
+        <div className="mx-auto max-w-7xl px-6 py-10 sm:py-2 lg:flex lg:items-center lg:gap-x-24 lg:px-8 lg:py-40">
           <div className="mx-auto max-w-2xl lg:mx-0 lg:flex-auto flex flex-col justify-center items-center">
             <h1 className="mt-10 max-w-2xl text-4xl font-bold tracking-tight text-center text-white sm:text-6xl">
               Your requirements at a fun glance

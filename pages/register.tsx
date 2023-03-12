@@ -47,6 +47,40 @@ export default function Register() {
     }
   }
 
+  async function signUpGithub() {
+    try {
+      const { data, error } = await supabase.auth.signInWithOAuth({
+        provider: "github",
+        options: {
+          redirectTo: "http://localhost:3000/dashboard",
+        },
+      });
+      if (error) {
+        throw error;
+      }
+      console.log(data);
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async function signUpGoogle() {
+    try {
+      const { data, error } = await supabase.auth.signInWithOAuth({
+        provider: "google",
+        options: {
+          redirectTo: "http://localhost:3000/dashboard",
+        },
+      });
+      if (error) {
+        throw error;
+      }
+      console.log(data);
+    } catch (error) {
+      throw error;
+    }
+  }
+
   return (
     <div className="min-h-screen login-background flex flex-col">
       <Header color={0} />
@@ -71,33 +105,36 @@ export default function Register() {
 
                     <div className="mt-2 grid grid-cols-3 gap-3">
                       <div>
-                        <a
-                          href="#"
+                        <button
+                          type="button"
                           className="inline-flex w-full justify-center rounded-md bg-white py-2 px-3 text-gray-500 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:outline-offset-0"
+                          onClick={signUpGoogle}
                         >
                           <span className="sr-only">Sign in with Google</span>
                           <FcGoogle size={20} />
-                        </a>
+                        </button>
                       </div>
 
                       <div>
-                        <a
-                          href="#"
+                        <button
+                          type="button"
                           className="inline-flex w-full justify-center rounded-md bg-white py-2 px-3 text-gray-500 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:outline-offset-0"
+                          // onClick={handleClick}
                         >
                           <span className="sr-only">Sign in with Twitter</span>
                           <FaTwitter size={20} color="#1DA1F2" />
-                        </a>
+                        </button>
                       </div>
 
                       <div>
-                        <a
-                          href="#"
+                        <button
+                          type="button"
                           className="inline-flex w-full justify-center rounded-md bg-white py-2 px-3 text-gray-500 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:outline-offset-0"
+                          onClick={signUpGithub}
                         >
                           <span className="sr-only">Sign in with GitHub</span>
                           <FaGithub size={20} color="#333" />
-                        </a>
+                        </button>
                       </div>
                     </div>
                   </div>
