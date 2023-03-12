@@ -1,17 +1,34 @@
-import { useState } from "react"
-import { Dialog } from "@headlessui/react"
-import Image from "next/image"
-import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline"
+import { useRouter } from "next/router";
+import { useState } from "react";
+import { Dialog } from "@headlessui/react";
+import Image from "next/image";
+import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
+import Link from "next/link";
 
 const navigation = [
   { name: "Product", href: "#" },
   { name: "Features", href: "#" },
   { name: "Marketplace", href: "#" },
   { name: "Company", href: "#" },
-]
+];
 
-const Header = () => {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+type headerProps = {
+  color?: number;
+};
+
+const Header = ({ color }: headerProps) => {
+  let colorClickable = "text-black";
+  if (color === 1) {
+    // default state, white clickable buttons
+    colorClickable = "text-white";
+  }
+
+  const router = useRouter();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  const handleGetStarted = () => {
+    router.push("/register");
+  };
 
   return (
     <header>
@@ -20,7 +37,7 @@ const Header = () => {
         aria-label="Global"
       >
         <div className="flex lg:flex-1 items-center">
-          <a href="#" className="-m-1.5 p-1.5">
+          <Link href="/" className="-m-1.5 p-1.5">
             <Image
               className="w-auto h-14"
               src="/logo.svg"
@@ -28,7 +45,7 @@ const Header = () => {
               width={80}
               height={80}
             />
-          </a>
+          </Link>
           <span className="flex ml-4 font-semibold text-white text-lg">
             ReQuest
           </span>
@@ -45,22 +62,26 @@ const Header = () => {
         </div>
         <div className="hidden lg:flex lg:gap-x-12">
           {navigation.map((item) => (
-            <a
+            <Link
               key={item.name}
               href={item.href}
-              className="text-base font-semibold leading-6 text-white"
+              className={`text-base font-semibold leading-6 ${colorClickable}`}
             >
               {item.name}
-            </a>
+            </Link>
           ))}
         </div>
         <div className="hidden lg:flex lg:flex-1 lg:justify-end items-center">
-          <a href="#" className="text-md font-semibold leading-6 text-white">
+          <Link
+            href="/login"
+            className={`text-md font-semibold leading-6 ${colorClickable}`}
+          >
             Login <span aria-hidden="true"></span>
-          </a>
+          </Link>
           <button
             type="button"
             className="ml-8 rounded-md bg-contrast py-2 px-3 text-base font-semibold text-white shadow-sm hover:bg-contrasthover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-contrast"
+            onClick={handleGetStarted}
           >
             Get started
           </button>
@@ -75,8 +96,7 @@ const Header = () => {
         <div className="fixed inset-0 z-10" />
         <Dialog.Panel className="fixed inset-y-0 right-0 z-10 w-full overflow-y-auto bg-white px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
           <div className="flex items-center">
-            <a href="#" className="-m-1.5 p-1.5">
-              {/* <span className="sr-only">ReQuest</span> */}
+            <Link href="/" className="-m-1.5 p-1.5">
               <Image
                 className="h-14 w-auto"
                 src="/logo.svg"
@@ -84,7 +104,7 @@ const Header = () => {
                 height={600}
                 alt=""
               />
-            </a>
+            </Link>
             <span className="flex ml-2 font-semibold text-black text-lg">
               ReQuest
             </span>
@@ -101,29 +121,33 @@ const Header = () => {
             <div className="-my-6 divide-y divide-gray-500/10">
               <div className="space-y-2 py-6">
                 {navigation.map((item) => (
-                  <a
+                  <Link
                     key={item.name}
                     href={item.href}
-                    className="-mx-3 block rounded-lg py-2 px-3 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
+                    className="-mx-3 block rounded-lg py-2 px-3 text-base font-semibold leading-7 text-black hover:bg-gray-50"
                   >
                     {item.name}
-                  </a>
+                  </Link>
                 ))}
               </div>
               <div className="py-6">
-                <a
-                  href="#"
-                  className="-mx-3 block rounded-lg py-2.5 px-3 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
+                <Link
+                  href="/"
+                  className="-mx-3 block rounded-lg py-2.5 px-3 text-base font-semibold leading-7 text-black hover:bg-gray-50"
                 >
-                  Log in
-                </a>
+                  Login
+                </Link>
               </div>
             </div>
           </div>
         </Dialog.Panel>
       </Dialog>
     </header>
-  )
-}
+  );
+};
 
-export default Header
+Header.defaultProps = {
+  color: 1,
+};
+
+export default Header;

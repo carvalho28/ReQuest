@@ -1,0 +1,8 @@
+.login-background {
+  background: conic-gradient(
+    at 0% 100%,
+    #0998b7 0deg,
+    white 70deg,
+    #32c487 100deg
+  );
+}

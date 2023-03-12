@@ -1,5 +1,6 @@
 import "@/styles/globals.css"
 import "@/styles/index.css"
+import "@/styles/login.css"
 
 import type { AppProps } from "next/app"
 import { Poppins } from "next/font/google"

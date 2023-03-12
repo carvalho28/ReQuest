@@ -12,8 +12,9 @@ module.exports = {
         primarygreen: "#32C487",
         contrast: "#845EC2",
         contrasthover: "#503182",
+        black: "#1E1E1E",
       },
     },
   },
   plugins: [],
-}
+};
