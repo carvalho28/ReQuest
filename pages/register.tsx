@@ -9,7 +9,7 @@ export default function Register() {
     <div className="h-screen login-background">
       <Header color={0} />
       <div className="flex min-h-full max-w-7xl mx-auto items-center space-x-16">
-        <div className="flex flex-1 flex-col justify-center py-12 px-4 sm:px-6 lg:flex-none lg:px-20 xl:px-24 bg-white2 rounded-3xl h-fit">
+        <div className="flex flex-1 flex-col justify-center py-12 px-4 sm:px-6 lg:flex-none lg:px-20 xl:px-24 bg-white2 rounded-3xl h-fit shadow-lg m-6">
           <div className="mx-auto w-full max-w-sm lg:w-96">
             <div>
               <h2 className="mt-6 text-3xl font-bold tracking-tight text-black text-center">
@@ -175,10 +175,10 @@ export default function Register() {
             </div>
           </div>
         </div>
-        <div className="relative w-0 flex-1 lg:block flex justify-center">
+        <div className="relative w-0 flex-1 justify-center hidden lg:block">
           <Image
-            className="inset-0 w-full"
-            src="/guy.svg"
+            className="inset-0 w-full h-full p-10"
+            src="/register.svg"
             alt=""
             width={500}
             height={500}
