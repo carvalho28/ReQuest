@@ -21,16 +21,15 @@ const Header = () => {
       >
         <div className="flex lg:flex-1 items-center">
           <a href="#" className="-m-1.5 p-1.5">
-            {/* <span className="sr-only">ReQuest</span> */}
             <Image
               className="w-auto h-14"
               src="/logo.svg"
               alt="logo"
-              width={100}
-              height={100}
+              width={80}
+              height={80}
             />
           </a>
-          <span className="flex ml-2 font-semibold text-white text-lg">
+          <span className="flex ml-4 font-semibold text-white text-lg">
             ReQuest
           </span>
         </div>
