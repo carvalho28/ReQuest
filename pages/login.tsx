@@ -1,4 +1,5 @@
 import ConfirmEmail from "@/components/ConfirmEmail";
+import ErrorMessage from "@/components/ErrorMessage";
 import Header from "@/components/Header";
 import LoadModals from "@/components/LoadModals";
 import PasswordInput from "@/components/PasswordInput";
@@ -18,6 +19,8 @@ export default function Login() {
   const [regSuccess, setRegSuccess] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [loadProvider, setLoadProvider] = useState<boolean>(false);
+
+  const [errorMessage, setErrorMessage] = useState<string | undefined>();
 
   const router = useRouter();
 
@@ -44,9 +47,10 @@ export default function Login() {
           password: password,
         });
         if (error) {
-          throw error;
+          setErrorMessage(error.message);
+          setLoading(false);
         }
-        if (data) {
+        if (data.user) {
           console.log("data", data);
           localStorage.setItem("is-auth", "true");
           router.push("/dashboard");
@@ -173,6 +177,7 @@ export default function Login() {
                       <PasswordInput
                         setPassword={setPassword}
                         placeholder="Password"
+                        id="password"
                       />
                     </div>
 
@@ -205,10 +210,10 @@ export default function Login() {
                         href="/login"
                         className="font-medium text-contrast hover:text-contrasthover"
                       >
-                        Already have an account?
+                        Don&apos;t have an account? Sign up
                       </Link>
                     </div>
-
+                    {errorMessage && <ErrorMessage message={errorMessage} />}
                     <div>
                       <button
                         type="submit"

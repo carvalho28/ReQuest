@@ -10,6 +10,7 @@ import { checkUser, signUpGithub, signUpGoogle } from "@/utils/signInUtils";
 import LoadModals from "@/components/LoadModals";
 import { useRouter } from "next/router";
 import PasswordInput from "@/components/PasswordInput";
+import ErrorMessage from "@/components/ErrorMessage";
 
 export default function Register() {
   const [name, setName] = useState<string | undefined>();
@@ -20,6 +21,8 @@ export default function Register() {
   const [regSuccess, setRegSuccess] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [loadProvider, setLoadProvider] = useState<boolean>(false);
+
+  const [errorMessage, setErrorMessage] = useState<string | undefined>();
 
   const router = useRouter();
 
@@ -35,10 +38,15 @@ export default function Register() {
 
   async function signUpEmail(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    setLoading(true);
+
+    if (password !== confirmPassword) {
+      setErrorMessage("Passwords do not match");
+      return;
+    }
+
     try {
       if (name && email && password && confirmPassword) {
-        console.log(email, password, confirmPassword);
+        setLoading(true);
 
         const resp = await supabase.auth.signUp({
           email: email,
@@ -50,12 +58,14 @@ export default function Register() {
           },
         });
         if (resp.error) {
-          throw resp.error.message;
+          setErrorMessage(resp.error.message);
+          setLoading(false);
         }
         const userId = resp.data.user?.id;
         if (userId) {
           setLoading(false);
           setRegSuccess(true);
+          setErrorMessage(undefined);
         }
       }
     } catch (error) {
@@ -199,6 +209,7 @@ export default function Register() {
                         <PasswordInput
                           setPassword={setPassword}
                           placeholder="Password"
+                          id="password"
                         />
                       </div>
                     </div>
@@ -214,6 +225,7 @@ export default function Register() {
                         <PasswordInput
                           setPassword={setConfirmPassword}
                           placeholder="Confirm Password"
+                          id="confirmPassword"
                         />
                       </div>
 
@@ -250,6 +262,8 @@ export default function Register() {
                         Already have an account?
                       </Link>
                     </div>
+
+                    {errorMessage && <ErrorMessage message={errorMessage} />}
 
                     <div>
                       <button

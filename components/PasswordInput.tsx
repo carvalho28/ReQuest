@@ -4,17 +4,21 @@ import { RiEyeFill, RiEyeOffFill } from "react-icons/ri";
 interface PasswordInputProps {
   setPassword: (password: string) => void;
   placeholder: string;
+  id: string;
 }
 
-const PasswordInput = ({ setPassword, placeholder }: PasswordInputProps) => {
-  //   const [password, setPassword] = useState("");
+const PasswordInput = ({
+  setPassword,
+  placeholder,
+  id,
+}: PasswordInputProps) => {
   const [showPassword, setShowPassword] = useState(false);
 
   return (
     <div className="mt-2 relative rounded-md shadow-sm">
       <input
-        id="password"
-        name="password"
+        id={id}
+        name={id}
         type={showPassword ? "text" : "password"}
         autoComplete="current-password"
         required
