@@ -2,19 +2,28 @@ import { checkUser } from "@/utils/signInUtils";
 import { useRouter } from "next/router";
 import React, { useEffect } from "react";
 
-export function withAuth<P>(WrappedComponent: React.ComponentType<P>) {
+export function withAuth<P>(
+  WrappedComponent: React.ComponentType<P>,
+  isDashboard?: boolean
+) {
   const WithAuthComponent = function (props: P & React.Attributes) {
     const router = useRouter();
 
     useEffect(() => {
       async function checkUserAuth() {
         const user = await checkUser();
-        if (!user) {
-          router.push("/");
+        if (isDashboard) {
+          if (!user) {
+            router.push("/");
+          }
+        } else {
+          if (user) {
+            router.push("/dashboard");
+          }
         }
       }
       checkUserAuth();
-    }, [router]);
+    }, []);
 
     return <WrappedComponent {...props} />;
   };

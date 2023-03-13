@@ -7,15 +7,15 @@ import { useEffect } from "react";
 function Dashboard() {
   const router = useRouter();
 
-  useEffect(() => {
-    async function checkUserAuth() {
-      const user = await checkUser();
-      if (!user) {
-        router.push("/");
-      }
-    }
-    checkUserAuth();
-  });
+  // useEffect(() => {
+  // async function checkUserAuth() {
+  //   const user = await checkUser();
+  //   if (!user) {
+  //     router.push("/");
+  //   }
+  // }
+  // checkUserAuth();
+  // });
 
   async function userLogout() {
     const { error } = await supabase.auth.signOut();
@@ -40,4 +40,4 @@ function Dashboard() {
   );
 }
 
-export default withAuth(Dashboard);
+export default withAuth(Dashboard, true);

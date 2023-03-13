@@ -3,6 +3,7 @@ import ErrorMessage from "@/components/ErrorMessage";
 import Header from "@/components/Header";
 import LoadModals from "@/components/LoadModals";
 import PasswordInput from "@/components/PasswordInput";
+import { withAuth } from "@/components/WithAuth";
 import { checkUser, signUpGithub, signUpGoogle } from "@/utils/signInUtils";
 import supabase from "@/utils/supabaseClient";
 import Image from "next/image";
@@ -12,7 +13,7 @@ import { useEffect, useState } from "react";
 import { FaGithub, FaTwitter } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 
-export default function Login() {
+function Login() {
   const [email, setEmail] = useState<string | undefined>();
   const [password, setPassword] = useState<string | undefined>();
 
@@ -24,15 +25,15 @@ export default function Login() {
 
   const router = useRouter();
 
-  useEffect(() => {
-    async function checkUserAuth() {
-      const user = await checkUser();
-      if (user) {
-        router.push("/dashboard");
-      }
-    }
-    checkUserAuth();
-  }, [router]);
+  // useEffect(() => {
+  //   // async function checkUserAuth() {
+  //   //   const user = await checkUser();
+  //   //   if (user) {
+  //   //     router.push("/dashboard");
+  //   //   }
+  //   // }
+  //   // checkUserAuth();
+  // }, [router]);
 
   async function signIn(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -241,3 +242,5 @@ export default function Login() {
     </div>
   );
 }
+
+export default withAuth(Login, false);

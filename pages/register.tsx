@@ -11,8 +11,9 @@ import LoadModals from "@/components/LoadModals";
 import { useRouter } from "next/router";
 import PasswordInput from "@/components/PasswordInput";
 import ErrorMessage from "@/components/ErrorMessage";
+import { withAuth } from "@/components/WithAuth";
 
-export default function Register() {
+function Register() {
   const [name, setName] = useState<string | undefined>();
   const [email, setEmail] = useState<string | undefined>();
   const [password, setPassword] = useState<string | undefined>();
@@ -26,15 +27,15 @@ export default function Register() {
 
   const router = useRouter();
 
-  useEffect(() => {
-    async function checkUserAuth() {
-      const user = await checkUser();
-      if (user) {
-        router.push("/dashboard");
-      }
-    }
-    checkUserAuth();
-  }, [router]);
+  // useEffect(() => {
+  //   async function checkUserAuth() {
+  //     const user = await checkUser();
+  //     if (user) {
+  //       router.push("/dashboard");
+  //     }
+  //   }
+  //   checkUserAuth();
+  // }, [router]);
 
   async function signUpEmail(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -292,3 +293,5 @@ export default function Register() {
     </div>
   );
 }
+
+export default withAuth(Register, false);

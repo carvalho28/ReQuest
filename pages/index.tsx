@@ -1,4 +1,5 @@
 import Header from "@/components/Header";
+import { withAuth } from "@/components/WithAuth";
 import { checkUser } from "@/utils/signInUtils";
 import Head from "next/head";
 import Image from "next/image";
@@ -6,17 +7,17 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 
-export default function Home() {
+function Home() {
   const router = useRouter();
 
   useEffect(() => {
-    async function checkUserAuth() {
-      const user = await checkUser();
-      if (user) {
-        router.push("/dashboard");
-      }
-    }
-    checkUserAuth();
+    // async function checkUserAuth() {
+    //   const user = await checkUser();
+    //   if (user) {
+    //     router.push("/dashboard");
+    //   }
+    // }
+    // checkUserAuth();
   }, [router]);
 
   return (
@@ -60,3 +61,5 @@ export default function Home() {
     </div>
   );
 }
+
+export default withAuth(Home, false);
