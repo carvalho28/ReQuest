@@ -5,7 +5,7 @@ async function signUpGithub() {
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider: "github",
       options: {
-        redirectTo: "https://re-quest.vercel.app/dashboard",
+        redirectTo: window.location.origin + "/dashboard",
       },
     });
     if (error) {
@@ -23,7 +23,7 @@ async function signUpGoogle() {
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
-        redirectTo: "https://re-quest.vercel.app/dashboard",
+        redirectTo: window.location.origin + "/dashboard",
       },
     });
     if (error) {
