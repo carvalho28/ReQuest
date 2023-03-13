@@ -11,7 +11,7 @@ import LoadModals from "@/components/LoadModals";
 import { useRouter } from "next/router";
 import PasswordInput from "@/components/PasswordInput";
 import ErrorMessage from "@/components/ErrorMessage";
-import { withAuth } from "@/components/WithAuth";
+import { WithAuth } from "@/components/WithAuth";
 
 function Register() {
   const [name, setName] = useState<string | undefined>();
@@ -294,4 +294,4 @@ function Register() {
   );
 }
 
-export default withAuth(Register, false);
+export default WithAuth(Register, false);

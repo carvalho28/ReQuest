@@ -2,7 +2,7 @@ import { checkUser } from "@/utils/signInUtils";
 import { useRouter } from "next/router";
 import React, { useEffect } from "react";
 
-export function withAuth<P>(
+export function WithAuth<P>(
   WrappedComponent: React.ComponentType<P>,
   isDashboard?: boolean
 ) {

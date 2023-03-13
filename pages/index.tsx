@@ -1,6 +1,5 @@
 import Header from "@/components/Header";
-import { withAuth } from "@/components/WithAuth";
-import { checkUser } from "@/utils/signInUtils";
+import { WithAuth } from "@/components/WithAuth";
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
@@ -62,4 +61,4 @@ function Home() {
   );
 }
 
-export default withAuth(Home, false);
+export default WithAuth(Home, false);

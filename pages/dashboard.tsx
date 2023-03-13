@@ -1,4 +1,4 @@
-import { withAuth } from "@/components/WithAuth";
+import { WithAuth } from "@/components/WithAuth";
 import supabase from "@/utils/supabaseClient";
 import { useRouter } from "next/router";
 
@@ -38,4 +38,4 @@ function Dashboard() {
   );
 }
 
-export default withAuth(Dashboard, true);
+export default WithAuth(Dashboard, true);

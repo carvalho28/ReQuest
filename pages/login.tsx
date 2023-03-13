@@ -3,8 +3,8 @@ import ErrorMessage from "@/components/ErrorMessage";
 import Header from "@/components/Header";
 import LoadModals from "@/components/LoadModals";
 import PasswordInput from "@/components/PasswordInput";
-import { withAuth } from "@/components/WithAuth";
-import { checkUser, signUpGithub, signUpGoogle } from "@/utils/signInUtils";
+import { WithAuth } from "@/components/WithAuth";
+import { signUpGithub, signUpGoogle } from "@/utils/signInUtils";
 import supabase from "@/utils/supabaseClient";
 import Image from "next/image";
 import Link from "next/link";
@@ -243,4 +243,4 @@ function Login() {
   );
 }
 
-export default withAuth(Login, false);
+export default WithAuth(Login, false);
