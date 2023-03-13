@@ -45,6 +45,7 @@ export default function Login() {
         }
         if (data) {
           console.log("data", data);
+          localStorage.setItem("is-auth", "true");
           router.push("/dashboard");
         }
       }
@@ -69,7 +70,6 @@ export default function Login() {
       <div className="flex-1 flex items-center justify-center">
         {loadProvider && <LoadModals />}
         {regSuccess && <ConfirmEmail />}
-        {/* <div className="flex items-center justify-center h-screen"> */}
         <div className="mx-auto max-w-7xl px-6 lg:flex lg:items-center lg:gap-x-24 lg:px-8">
           <div className="flex flex-1 flex-col justify-center py-12 px-4 sm:px-6 lg:flex-none lg:px-20 xl:px-24 bg-white2 rounded-3xl shadow-lg">
             <div className="mx-auto max-w-sm md:w-96">
@@ -218,7 +218,6 @@ export default function Login() {
                       <button
                         type="submit"
                         className="flex w-full justify-center rounded-md bg-contrast py-2 px-3 text-sm font-semibold text-white shadow-sm hover:bg-contrasthover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-contrast"
-                        // onClick={signUpEmail}
                       >
                         Login
                       </button>

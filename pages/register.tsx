@@ -110,7 +110,6 @@ export default function Register() {
                         <button
                           type="button"
                           className="inline-flex w-full justify-center rounded-md bg-white py-2 px-3 text-gray-500 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:outline-offset-0"
-                          // onClick={handleClick}
                         >
                           <span className="sr-only">Sign in with Twitter</span>
                           <FaTwitter size={20} color="#1DA1F2" />
@@ -267,7 +266,6 @@ export default function Register() {
                       <button
                         type="submit"
                         className="flex w-full justify-center rounded-md bg-contrast py-2 px-3 text-sm font-semibold text-white shadow-sm hover:bg-contrasthover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-contrast"
-                        // onClick={signUpEmail}
                       >
                         Sign up
                       </button>
