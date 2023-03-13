@@ -1,8 +1,6 @@
 import { withAuth } from "@/components/WithAuth";
-import { checkUser } from "@/utils/signInUtils";
 import supabase from "@/utils/supabaseClient";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
 
 function Dashboard() {
   const router = useRouter();
