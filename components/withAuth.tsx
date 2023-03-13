@@ -2,7 +2,7 @@ import { checkUser } from "@/utils/signInUtils";
 import { useRouter } from "next/router";
 import React, { useEffect } from "react";
 
-export function WithAuth<P>(
+function WithAuth<P>(
   WrappedComponent: React.ComponentType<P>,
   isDashboard?: boolean
 ) {
@@ -38,3 +38,5 @@ export function WithAuth<P>(
 function getDisplayName(WrappedComponent: React.ComponentType<any>) {
   return WrappedComponent.displayName || WrappedComponent.name || "Component";
 }
+
+export default WithAuth;

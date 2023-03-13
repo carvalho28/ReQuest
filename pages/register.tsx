@@ -6,12 +6,12 @@ import { FaGithub, FaTwitter } from "react-icons/fa";
 import { useEffect, useState } from "react";
 import supabase from "@/utils/supabaseClient";
 import ConfirmEmail from "@/components/ConfirmEmail";
-import { checkUser, signUpGithub, signUpGoogle } from "@/utils/signInUtils";
+import { signUpGithub, signUpGoogle } from "@/utils/signInUtils";
 import LoadModals from "@/components/LoadModals";
 import { useRouter } from "next/router";
 import PasswordInput from "@/components/PasswordInput";
 import ErrorMessage from "@/components/ErrorMessage";
-import { WithAuth } from "@/components/WithAuth";
+import WithAuth from "@/components/WithAuth";
 
 function Register() {
   const [name, setName] = useState<string | undefined>();
