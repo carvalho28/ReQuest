@@ -21,6 +21,7 @@ function Dashboard() {
     const { error } = await supabase.auth.signOut();
     if (error) {
       console.log(error);
+      throw error;
     }
     router.push("/");
   }
