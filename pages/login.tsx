@@ -9,7 +9,7 @@ import supabase from "@/utils/supabaseClient";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { FaGithub, FaTwitter } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 
@@ -19,7 +19,6 @@ function Login() {
 
   const [regSuccess, setRegSuccess] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
-  const [loadProvider, setLoadProvider] = useState<boolean>(false);
 
   const [errorMessage, setErrorMessage] = useState<string | undefined>();
 
@@ -39,8 +38,6 @@ function Login() {
     event.preventDefault();
     setLoading(true);
 
-    console.log(password);
-
     try {
       if (email && password) {
         const { data, error } = await supabase.auth.signInWithPassword({
@@ -52,8 +49,6 @@ function Login() {
           setLoading(false);
         }
         if (data.user) {
-          console.log("data", data);
-          localStorage.setItem("is-auth", "true");
           router.push("/dashboard");
         }
       }
@@ -63,7 +58,7 @@ function Login() {
   }
 
   async function signInProviders(provider: string) {
-    setLoadProvider(true);
+    setLoading(true);
     if (provider === "google") {
       signUpGoogle();
     }
@@ -76,7 +71,6 @@ function Login() {
     <div className="min-h-screen login-background flex flex-col">
       <Header color={0} />
       <div className="flex-1 flex items-center justify-center">
-        {loadProvider && <LoadModals />}
         {regSuccess && <ConfirmEmail />}
         <div className="mx-auto max-w-7xl px-6 lg:flex lg:items-center lg:gap-x-24 lg:px-8">
           <div className="flex flex-1 flex-col justify-center py-12 px-4 sm:px-6 lg:flex-none lg:px-20 xl:px-24 bg-white2 rounded-3xl shadow-lg">
@@ -208,7 +202,7 @@ function Login() {
 
                     <div className="flex items-center align-end text-sm justify-end">
                       <Link
-                        href="/login"
+                        href="/register"
                         className="font-medium text-contrast hover:text-contrasthover"
                       >
                         Don&apos;t have an account? Sign up

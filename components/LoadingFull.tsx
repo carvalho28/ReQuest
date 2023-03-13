@@ -16,7 +16,7 @@ const LoadModals = () => {
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
         >
-          <div className="fixed inset-0 bg-gray-500 bg-opacity-90 transition-opacity" />
+          <div className="fixed inset-0 index-background bg-opacity-30 transition-opacity" />
         </Transition.Child>
 
         <div className="fixed inset-0 z-10 overflow-y-auto">
@@ -35,7 +35,7 @@ const LoadModals = () => {
                   <div role="status">
                     <svg
                       aria-hidden="true"
-                      className="inline w-10 h-10 mr-2 mt-2 text-gray-200 animate-spin fill-contrast"
+                      className="inline w-20 h-20 mr-2 mt-2 text-gray-200 animate-spin fill-contrast"
                       viewBox="0 0 100 101"
                       fill="none"
                       xmlns="http://www.w3.org/2000/svg"

@@ -1,6 +1,7 @@
 import { checkUser } from "@/utils/signInUtils";
 import { useRouter } from "next/router";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import LoadingFull from "@/components/LoadingFull";
 
 function WithAuth<P>(
   WrappedComponent: React.ComponentType<P>,
@@ -8,6 +9,7 @@ function WithAuth<P>(
 ) {
   const WithAuthComponent = function (props: P & React.Attributes) {
     const router = useRouter();
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
       async function checkUserAuth() {
@@ -21,9 +23,19 @@ function WithAuth<P>(
             router.push("/dashboard");
           }
         }
+        setTimeout(() => setLoading(false), 500); // 1 second delay
       }
-      checkUserAuth();
+      const token = localStorage.getItem("sb-nvvxhbjuugqdzpygnaaw-auth-token");
+      if (token) {
+        checkUserAuth();
+      } else {
+        setLoading(false);
+      }
     }, []);
+
+    if (loading) {
+      return <LoadingFull />;
+    }
 
     return <WrappedComponent {...props} />;
   };

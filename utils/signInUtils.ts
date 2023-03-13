@@ -30,12 +30,16 @@ async function signUpGoogle() {
 
 // check if user is logged in
 async function checkUser() {
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  try {
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
 
-  if (user) {
-    return user;
+    if (user) {
+      return user;
+    }
+  } catch (error) {
+    throw error;
   }
 }
 

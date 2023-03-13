@@ -1,3 +1,5 @@
+import LoadingFull from "@/components/LoadingFull";
+import LoadModals from "@/components/LoadModals";
 import WithAuth from "@/components/WithAuth";
 import supabase from "@/utils/supabaseClient";
 import { useRouter } from "next/router";
@@ -34,6 +36,7 @@ function Dashboard() {
       >
         Logout
       </button>
+      Hello
     </>
   );
 }

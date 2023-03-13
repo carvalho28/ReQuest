@@ -21,11 +21,10 @@ function Register() {
 
   const [regSuccess, setRegSuccess] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
-  const [loadProvider, setLoadProvider] = useState<boolean>(false);
 
   const [errorMessage, setErrorMessage] = useState<string | undefined>();
 
-  const router = useRouter();
+  // const router = useRouter();
 
   // useEffect(() => {
   //   async function checkUserAuth() {
@@ -75,7 +74,7 @@ function Register() {
   }
 
   async function signUpProviders(provider: string) {
-    setLoadProvider(true);
+    setLoading(true);
     if (provider === "google") {
       signUpGoogle();
     }
@@ -88,7 +87,6 @@ function Register() {
     <div className="min-h-screen login-background flex flex-col">
       <Header color={0} />
       <div className="flex-1 flex items-center justify-center">
-        {loadProvider && <LoadModals />}
         {regSuccess && <ConfirmEmail />}
         <div className="mx-auto max-w-7xl px-6 lg:flex lg:items-center lg:gap-x-24 lg:px-8">
           <div className="flex flex-1 flex-col justify-center py-12 px-4 sm:px-6 lg:flex-none lg:px-20 xl:px-24 bg-white2 rounded-3xl shadow-lg">
