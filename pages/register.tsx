@@ -9,6 +9,7 @@ import ConfirmEmail from "@/components/ConfirmEmail";
 import { checkUser, signUpGithub, signUpGoogle } from "@/utils/signInUtils";
 import LoadModals from "@/components/LoadModals";
 import { useRouter } from "next/router";
+import PasswordInput from "@/components/PasswordInput";
 
 export default function Register() {
   const [name, setName] = useState<string | undefined>();
@@ -30,7 +31,7 @@ export default function Register() {
       }
     }
     checkUserAuth();
-  });
+  }, [router]);
 
   async function signUpEmail(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -188,22 +189,16 @@ export default function Register() {
                     </div>
 
                     <div className="space-y-1">
-                      <label
-                        htmlFor="password"
-                        className="block text-sm font-medium leading-6 text-gray-900"
-                      >
-                        Password
-                      </label>
-                      <div className="mt-2">
-                        <input
-                          id="password"
-                          name="password"
-                          type="password"
-                          autoComplete="current-password"
+                      <div>
+                        <label
+                          htmlFor="email"
+                          className="block text-sm font-medium leading-6 text-gray-900"
+                        >
+                          Password
+                        </label>
+                        <PasswordInput
+                          setPassword={setPassword}
                           placeholder="Password"
-                          required
-                          className="pl-4 block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-contrast sm:text-sm sm:leading-6"
-                          onChange={(e) => setPassword(e.target.value)}
                         />
                       </div>
                     </div>
@@ -215,16 +210,10 @@ export default function Register() {
                       >
                         Confirm Password
                       </label>
-                      <div className="mt-2">
-                        <input
-                          id="conf-password"
-                          name="conf-password"
-                          type="password"
-                          autoComplete="current-password"
-                          placeholder="Confirm password"
-                          required
-                          className="pl-4 block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-contrast sm:text-sm sm:leading-6"
-                          onChange={(e) => setConfirmPassword(e.target.value)}
+                      <div>
+                        <PasswordInput
+                          setPassword={setConfirmPassword}
+                          placeholder="Confirm Password"
                         />
                       </div>
 

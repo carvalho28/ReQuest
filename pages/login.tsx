@@ -1,6 +1,7 @@
 import ConfirmEmail from "@/components/ConfirmEmail";
 import Header from "@/components/Header";
 import LoadModals from "@/components/LoadModals";
+import PasswordInput from "@/components/PasswordInput";
 import { checkUser, signUpGithub, signUpGoogle } from "@/utils/signInUtils";
 import supabase from "@/utils/supabaseClient";
 import Image from "next/image";
@@ -28,11 +29,13 @@ export default function Login() {
       }
     }
     checkUserAuth();
-  });
+  }, [router]);
 
   async function signIn(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setLoading(true);
+
+    console.log(password);
 
     try {
       if (email && password) {
@@ -160,25 +163,17 @@ export default function Login() {
                       </div>
                     </div>
 
-                    <div className="space-y-1">
+                    <div>
                       <label
-                        htmlFor="password"
+                        htmlFor="email"
                         className="block text-sm font-medium leading-6 text-gray-900"
                       >
                         Password
                       </label>
-                      <div className="mt-2">
-                        <input
-                          id="password"
-                          name="password"
-                          type="password"
-                          autoComplete="current-password"
-                          placeholder="Password"
-                          required
-                          className="pl-4 block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-contrast sm:text-sm sm:leading-6"
-                          onChange={(e) => setPassword(e.target.value)}
-                        />
-                      </div>
+                      <PasswordInput
+                        setPassword={setPassword}
+                        placeholder="Password"
+                      />
                     </div>
 
                     {loading && (

@@ -17,7 +17,7 @@ export default function Home() {
       }
     }
     checkUserAuth();
-  });
+  }, [router]);
 
   return (
     <div className="min-h-screen index-background">

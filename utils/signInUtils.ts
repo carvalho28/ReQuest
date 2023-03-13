@@ -30,11 +30,13 @@ async function signUpGoogle() {
 
 // check if user is logged in
 async function checkUser() {
-  const user = supabase.auth.getUser();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
   if (user) {
     return user;
   }
-  return null;
 }
 
 export { signUpGithub, signUpGoogle, checkUser };
