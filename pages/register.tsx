@@ -5,8 +5,9 @@ import { FcGoogle } from "react-icons/fc";
 import { FaGithub, FaTwitter } from "react-icons/fa";
 import { useState } from "react";
 import supabase from "@/utils/supabaseClient";
-import { useRouter } from "next/router";
 import ConfirmEmail from "@/components/ConfirmEmail";
+import { signUpGithub, signUpGoogle } from "@/utils/signInProviders";
+import LoadModals from "@/components/LoadModals";
 
 export default function Register() {
   const [name, setName] = useState<string | undefined>();
@@ -16,6 +17,7 @@ export default function Register() {
 
   const [regSuccess, setRegSuccess] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
+  const [loadProvider, setLoadProvider] = useState<boolean>(false);
 
   async function signUpEmail(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -47,37 +49,13 @@ export default function Register() {
     }
   }
 
-  async function signUpGithub() {
-    try {
-      const { data, error } = await supabase.auth.signInWithOAuth({
-        provider: "github",
-        options: {
-          redirectTo: "https://re-quest.vercel.app/dashboard",
-        },
-      });
-      if (error) {
-        throw error;
-      }
-      console.log(data);
-    } catch (error) {
-      throw error;
+  async function signUpProvider(provider: string) {
+    setLoadProvider(true);
+    if (provider === "google") {
+      signUpGoogle();
     }
-  }
-
-  async function signUpGoogle() {
-    try {
-      const { data, error } = await supabase.auth.signInWithOAuth({
-        provider: "google",
-        options: {
-          redirectTo: "https://re-quest.vercel.app/dashboard",
-        },
-      });
-      if (error) {
-        throw error;
-      }
-      console.log(data);
-    } catch (error) {
-      throw error;
+    if (provider === "github") {
+      signUpGithub();
     }
   }
 
@@ -86,7 +64,7 @@ export default function Register() {
       <Header color={0} />
       <div className="flex-1 flex items-center justify-center">
         {regSuccess && <ConfirmEmail />}
-        {/* <div className="flex items-center justify-center h-screen"> */}
+        {loadProvider && <LoadModals />}
         <div className="mx-auto max-w-7xl px-6 lg:flex lg:items-center lg:gap-x-24 lg:px-8">
           <div className="flex flex-1 flex-col justify-center py-12 px-4 sm:px-6 lg:flex-none lg:px-20 xl:px-24 bg-white2 rounded-3xl shadow-lg">
             <div className="mx-auto max-w-sm md:w-96">
@@ -108,7 +86,7 @@ export default function Register() {
                         <button
                           type="button"
                           className="inline-flex w-full justify-center rounded-md bg-white py-2 px-3 text-gray-500 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:outline-offset-0"
-                          onClick={signUpGoogle}
+                          onClick={() => signUpProvider("google")}
                         >
                           <span className="sr-only">Sign in with Google</span>
                           <FcGoogle size={20} />
@@ -119,7 +97,6 @@ export default function Register() {
                         <button
                           type="button"
                           className="inline-flex w-full justify-center rounded-md bg-white py-2 px-3 text-gray-500 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:outline-offset-0"
-                          // onClick={handleClick}
                         >
                           <span className="sr-only">Sign in with Twitter</span>
                           <FaTwitter size={20} color="#1DA1F2" />
@@ -130,7 +107,7 @@ export default function Register() {
                         <button
                           type="button"
                           className="inline-flex w-full justify-center rounded-md bg-white py-2 px-3 text-gray-500 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:outline-offset-0"
-                          onClick={signUpGithub}
+                          onClick={() => signUpProvider("github")}
                         >
                           <span className="sr-only">Sign in with GitHub</span>
                           <FaGithub size={20} color="#333" />
@@ -276,7 +253,6 @@ export default function Register() {
                       <button
                         type="submit"
                         className="flex w-full justify-center rounded-md bg-contrast py-2 px-3 text-sm font-semibold text-white shadow-sm hover:bg-contrasthover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-contrast"
-                        // onClick={signUpEmail}
                       >
                         Sign up
                       </button>
