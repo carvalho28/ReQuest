@@ -1,5 +1,7 @@
 import ConfirmEmail from "@/components/ConfirmEmail";
 import Header from "@/components/Header";
+import LoadModals from "@/components/LoadModals";
+import { checkUser, signUpGithub, signUpGoogle } from "@/utils/signInUtils";
 import supabase from "@/utils/supabaseClient";
 import Image from "next/image";
 import Link from "next/link";
@@ -14,22 +16,19 @@ export default function Login() {
 
   const [regSuccess, setRegSuccess] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
+  const [loadProvider, setLoadProvider] = useState<boolean>(false);
 
   const router = useRouter();
 
   useEffect(() => {
-    const getUser = async () => {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
+    async function checkUserAuth() {
+      const user = await checkUser();
       if (user) {
-        console.log("user", user);
         router.push("/dashboard");
       }
-    };
-
-    getUser();
-  }, []);
+    }
+    checkUserAuth();
+  });
 
   async function signIn(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -54,10 +53,21 @@ export default function Login() {
     }
   }
 
+  async function signInProviders(provider: string) {
+    setLoadProvider(true);
+    if (provider === "google") {
+      signUpGoogle();
+    }
+    if (provider === "github") {
+      signUpGithub();
+    }
+  }
+
   return (
     <div className="min-h-screen login-background flex flex-col">
       <Header color={0} />
       <div className="flex-1 flex items-center justify-center">
+        {loadProvider && <LoadModals />}
         {regSuccess && <ConfirmEmail />}
         {/* <div className="flex items-center justify-center h-screen"> */}
         <div className="mx-auto max-w-7xl px-6 lg:flex lg:items-center lg:gap-x-24 lg:px-8">
@@ -81,7 +91,7 @@ export default function Login() {
                         <button
                           type="button"
                           className="inline-flex w-full justify-center rounded-md bg-white py-2 px-3 text-gray-500 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:outline-offset-0"
-                          //   onClick={signUpGoogle}
+                          onClick={() => signInProviders("google")}
                         >
                           <span className="sr-only">Sign in with Google</span>
                           <FcGoogle size={20} />
@@ -103,7 +113,7 @@ export default function Login() {
                         <button
                           type="button"
                           className="inline-flex w-full justify-center rounded-md bg-white py-2 px-3 text-gray-500 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:outline-offset-0"
-                          //   onClick={signUpGithub}
+                          onClick={() => signInProviders("github")}
                         >
                           <span className="sr-only">Sign in with GitHub</span>
                           <FaGithub size={20} color="#333" />

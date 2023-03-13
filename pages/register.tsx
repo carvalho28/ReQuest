@@ -3,10 +3,12 @@ import Image from "next/image";
 import Link from "next/link";
 import { FcGoogle } from "react-icons/fc";
 import { FaGithub, FaTwitter } from "react-icons/fa";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import supabase from "@/utils/supabaseClient";
-import { useRouter } from "next/router";
 import ConfirmEmail from "@/components/ConfirmEmail";
+import { checkUser, signUpGithub, signUpGoogle } from "@/utils/signInUtils";
+import LoadModals from "@/components/LoadModals";
+import { useRouter } from "next/router";
 
 export default function Register() {
   const [name, setName] = useState<string | undefined>();
@@ -16,6 +18,19 @@ export default function Register() {
 
   const [regSuccess, setRegSuccess] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
+  const [loadProvider, setLoadProvider] = useState<boolean>(false);
+
+  const router = useRouter();
+
+  useEffect(() => {
+    async function checkUserAuth() {
+      const user = await checkUser();
+      if (user) {
+        router.push("/dashboard");
+      }
+    }
+    checkUserAuth();
+  });
 
   async function signUpEmail(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -47,37 +62,13 @@ export default function Register() {
     }
   }
 
-  async function signUpGithub() {
-    try {
-      const { data, error } = await supabase.auth.signInWithOAuth({
-        provider: "github",
-        options: {
-          redirectTo: "https://re-quest.vercel.app/dashboard",
-        },
-      });
-      if (error) {
-        throw error;
-      }
-      console.log(data);
-    } catch (error) {
-      throw error;
+  async function signUpProviders(provider: string) {
+    setLoadProvider(true);
+    if (provider === "google") {
+      signUpGoogle();
     }
-  }
-
-  async function signUpGoogle() {
-    try {
-      const { data, error } = await supabase.auth.signInWithOAuth({
-        provider: "google",
-        options: {
-          redirectTo: "https://re-quest.vercel.app/dashboard",
-        },
-      });
-      if (error) {
-        throw error;
-      }
-      console.log(data);
-    } catch (error) {
-      throw error;
+    if (provider === "github") {
+      signUpGithub();
     }
   }
 
@@ -85,8 +76,8 @@ export default function Register() {
     <div className="min-h-screen login-background flex flex-col">
       <Header color={0} />
       <div className="flex-1 flex items-center justify-center">
+        {loadProvider && <LoadModals />}
         {regSuccess && <ConfirmEmail />}
-        {/* <div className="flex items-center justify-center h-screen"> */}
         <div className="mx-auto max-w-7xl px-6 lg:flex lg:items-center lg:gap-x-24 lg:px-8">
           <div className="flex flex-1 flex-col justify-center py-12 px-4 sm:px-6 lg:flex-none lg:px-20 xl:px-24 bg-white2 rounded-3xl shadow-lg">
             <div className="mx-auto max-w-sm md:w-96">
@@ -108,7 +99,7 @@ export default function Register() {
                         <button
                           type="button"
                           className="inline-flex w-full justify-center rounded-md bg-white py-2 px-3 text-gray-500 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:outline-offset-0"
-                          onClick={signUpGoogle}
+                          onClick={() => signUpProviders("google")}
                         >
                           <span className="sr-only">Sign in with Google</span>
                           <FcGoogle size={20} />
@@ -130,7 +121,7 @@ export default function Register() {
                         <button
                           type="button"
                           className="inline-flex w-full justify-center rounded-md bg-white py-2 px-3 text-gray-500 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:outline-offset-0"
-                          onClick={signUpGithub}
+                          onClick={() => signUpProviders("github")}
                         >
                           <span className="sr-only">Sign in with GitHub</span>
                           <FaGithub size={20} color="#333" />

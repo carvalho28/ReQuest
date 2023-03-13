@@ -1,9 +1,24 @@
 import Header from "@/components/Header";
+import { checkUser } from "@/utils/signInUtils";
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/router";
+import { useEffect } from "react";
 
 export default function Home() {
+  const router = useRouter();
+
+  useEffect(() => {
+    async function checkUserAuth() {
+      const user = await checkUser();
+      if (user) {
+        router.push("/dashboard");
+      }
+    }
+    checkUserAuth();
+  });
+
   return (
     <div className="min-h-screen index-background">
       <Head>
