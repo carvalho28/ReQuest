@@ -1,11 +1,16 @@
 import supabase from "./supabaseClient";
+import { SupabaseClient } from "@supabase/auth-helpers-react";
 
-async function signUpGithub() {
+interface Props {
+  supabaseClient: SupabaseClient;
+}
+
+async function signUpGithub({ supabaseClient }: Props) {
   try {
-    const { data, error } = await supabase.auth.signInWithOAuth({
+    const { data, error } = await supabaseClient.auth.signInWithOAuth({
       provider: "github",
       options: {
-        redirectTo: window.location.origin + "/dashboard",
+        redirectTo: "http://localhost:3000/dashboard",
       },
     });
     if (error) {
@@ -17,12 +22,12 @@ async function signUpGithub() {
   }
 }
 
-async function signUpGoogle() {
+async function signUpGoogle({ supabaseClient }: Props) {
   try {
-    const { data, error } = await supabase.auth.signInWithOAuth({
+    const { data, error } = await supabaseClient.auth.signInWithOAuth({
       provider: "google",
       options: {
-        redirectTo: window.location.origin + "/dashboard",
+        redirectTo: "http://localhost:3000/dashboard",
       },
     });
     if (error) {

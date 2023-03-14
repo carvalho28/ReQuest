@@ -1,24 +1,10 @@
 import Header from "@/components/Header";
-import WithAuth from "@/components/WithAuth";
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/router";
 import { useEffect } from "react";
 
-function Home() {
-  const router = useRouter();
-
-  useEffect(() => {
-    // async function checkUserAuth() {
-    //   const user = await checkUser();
-    //   if (user) {
-    //     router.push("/dashboard");
-    //   }
-    // }
-    // checkUserAuth();
-  }, [router]);
-
+export default function Home() {
   return (
     <div className="min-h-screen index-background">
       <Head>
@@ -60,5 +46,3 @@ function Home() {
     </div>
   );
 }
-
-export default WithAuth(Home, false);

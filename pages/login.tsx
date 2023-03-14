@@ -1,19 +1,42 @@
 import ConfirmEmail from "@/components/ConfirmEmail";
 import ErrorMessage from "@/components/ErrorMessage";
 import Header from "@/components/Header";
-import LoadModals from "@/components/LoadModals";
 import PasswordInput from "@/components/PasswordInput";
-import WithAuth from "@/components/WithAuth";
 import { signUpGithub, signUpGoogle } from "@/utils/signInUtils";
-import supabase from "@/utils/supabaseClient";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { FaGithub, FaTwitter } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
+import { useUser, useSupabaseClient } from "@supabase/auth-helpers-react";
+import { GetServerSidePropsContext } from "next";
+import { createServerSupabaseClient } from "@supabase/auth-helpers-nextjs";
 
-function Login() {
+export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
+  // Create authenticated Supabase Client
+  const supabase = createServerSupabaseClient(ctx);
+  // Check if we have a session
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
+
+  console.log(session);
+
+  if (session)
+    return {
+      redirect: {
+        destination: "/dashboard",
+        permanent: false,
+      },
+    };
+
+  return {
+    props: {},
+  };
+};
+
+export default function Login() {
   const [email, setEmail] = useState<string | undefined>();
   const [password, setPassword] = useState<string | undefined>();
 
@@ -24,15 +47,12 @@ function Login() {
 
   const router = useRouter();
 
+  const supabaseClient = useSupabaseClient();
+  const user = useUser();
+
   useEffect(() => {
-    //   // async function checkUserAuth() {
-    //   //   const user = await checkUser();
-    //   //   if (user) {
-    //   //     router.push("/dashboard");
-    //   //   }
-    //   // }
-    //   // checkUserAuth();
-  }, [router]);
+    // load data
+  }, [user]);
 
   async function signIn(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -40,7 +60,7 @@ function Login() {
 
     try {
       if (email && password) {
-        const { data, error } = await supabase.auth.signInWithPassword({
+        const { data, error } = await supabaseClient.auth.signInWithPassword({
           email: email,
           password: password,
         });
@@ -60,10 +80,10 @@ function Login() {
   async function signInProviders(provider: string) {
     setLoading(true);
     if (provider === "google") {
-      signUpGoogle();
+      signUpGoogle({ supabaseClient });
     }
     if (provider === "github") {
-      signUpGithub();
+      signUpGithub({ supabaseClient });
     }
   }
 
@@ -236,5 +256,3 @@ function Login() {
     </div>
   );
 }
-
-export default WithAuth(Login, false);

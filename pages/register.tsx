@@ -7,13 +7,36 @@ import { useEffect, useState } from "react";
 import supabase from "@/utils/supabaseClient";
 import ConfirmEmail from "@/components/ConfirmEmail";
 import { signUpGithub, signUpGoogle } from "@/utils/signInUtils";
-import LoadModals from "@/components/LoadModals";
-import { useRouter } from "next/router";
 import PasswordInput from "@/components/PasswordInput";
 import ErrorMessage from "@/components/ErrorMessage";
-import WithAuth from "@/components/WithAuth";
+import { GetServerSidePropsContext } from "next";
+import { createServerSupabaseClient } from "@supabase/auth-helpers-nextjs";
+import { useUser, useSupabaseClient } from "@supabase/auth-helpers-react";
 
-function Register() {
+export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
+  // Create authenticated Supabase Client
+  const supabase = createServerSupabaseClient(ctx);
+  // Check if we have a session
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
+
+  console.log(session);
+
+  if (session)
+    return {
+      redirect: {
+        destination: "/dashboard",
+        permanent: false,
+      },
+    };
+
+  return {
+    props: {},
+  };
+};
+
+export default function Register() {
   const [name, setName] = useState<string | undefined>();
   const [email, setEmail] = useState<string | undefined>();
   const [password, setPassword] = useState<string | undefined>();
@@ -24,17 +47,12 @@ function Register() {
 
   const [errorMessage, setErrorMessage] = useState<string | undefined>();
 
-  // const router = useRouter();
+  const supabaseClient = useSupabaseClient();
+  const user = useUser();
 
-  // useEffect(() => {
-  //   async function checkUserAuth() {
-  //     const user = await checkUser();
-  //     if (user) {
-  //       router.push("/dashboard");
-  //     }
-  //   }
-  //   checkUserAuth();
-  // }, [router]);
+  useEffect(() => {
+    // load data
+  }, [user]);
 
   async function signUpEmail(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -76,10 +94,10 @@ function Register() {
   async function signUpProviders(provider: string) {
     setLoading(true);
     if (provider === "google") {
-      signUpGoogle();
+      signUpGoogle({ supabaseClient });
     }
     if (provider === "github") {
-      signUpGithub();
+      signUpGithub({ supabaseClient });
     }
   }
 
@@ -291,5 +309,3 @@ function Register() {
     </div>
   );
 }
-
-export default WithAuth(Register, false);
