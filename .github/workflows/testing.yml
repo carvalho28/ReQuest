@@ -1,0 +1,23 @@
+name: Cypress Tests
+
+on: [push]
+
+jobs:
+  cypress-run:
+    runs-on: ubuntu-latest
+    steps:
+      # Install NPM dependencies, cache them correctly
+      - name: Checkout
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: ${{secrets.NEXT_PUBLIC_SUPABASE_URL}}
+          NEXT_PUBLIC_SUPABASE_API_KEY: ${{secrets.NEXT_PUBLIC_SUPABASE_API_KEY}}
+        uses: actions/checkout@v3
+      # and run all Cypress tests
+      - name: Cypress run
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: ${{secrets.NEXT_PUBLIC_SUPABASE_URL}}
+          NEXT_PUBLIC_SUPABASE_API_KEY: ${{secrets.NEXT_PUBLIC_SUPABASE_API_KEY}}
+        uses: cypress-io/github-action@v5 # use the explicit version number
+        with:
+          build: npm run build
+          start: npm start
