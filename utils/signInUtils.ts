@@ -10,7 +10,7 @@ async function signUpGithub({ supabaseClient }: Props) {
     const { data, error } = await supabaseClient.auth.signInWithOAuth({
       provider: "github",
       options: {
-        redirectTo: "http://localhost:3000/dashboard",
+        redirectTo: window.location.origin + "/dashboard",
       },
     });
     if (error) {
@@ -27,7 +27,7 @@ async function signUpGoogle({ supabaseClient }: Props) {
     const { data, error } = await supabaseClient.auth.signInWithOAuth({
       provider: "google",
       options: {
-        redirectTo: "http://localhost:3000/dashboard",
+        redirectTo: window.location.origin + "/dashboard",
       },
     });
     if (error) {
