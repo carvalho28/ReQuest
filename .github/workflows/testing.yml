@@ -6,14 +6,6 @@ jobs:
   cypress-run:
     runs-on: ubuntu-latest
     steps:
-      # Cache NPM dependencies
-      - name: Cache npm dependencies
-        uses: actions/cache@v2
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
       # Install NPM dependencies, cache them correctly
       - name: Checkout
         env:
