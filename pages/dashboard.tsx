@@ -5,22 +5,18 @@ import { createServerSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import { useEffect } from "react";
 
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
-  console.log("ctx", ctx);
-
   const supabase = createServerSupabaseClient(ctx);
 
-  console.log("supabase", supabase);
-
-  // const {
-  //   data: { session },
-  // } = await supabase.auth.getSession();
-  // if (!session)
-  //   return {
-  //     redirect: {
-  //       destination: "/",
-  //       permanent: false,
-  //     },
-  //   };
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
+  if (!session)
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
 
   return {
     props: {},
