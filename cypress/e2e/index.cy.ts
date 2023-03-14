@@ -12,3 +12,5 @@ describe("Home page load", () => {
     cy.get("button").should("contain", "Get started");
   });
 });
+
+export {};
