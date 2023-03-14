@@ -9,7 +9,7 @@ import supabase from "@/utils/supabaseClient";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FaGithub, FaTwitter } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 
@@ -24,15 +24,15 @@ function Login() {
 
   const router = useRouter();
 
-  // useEffect(() => {
-  //   // async function checkUserAuth() {
-  //   //   const user = await checkUser();
-  //   //   if (user) {
-  //   //     router.push("/dashboard");
-  //   //   }
-  //   // }
-  //   // checkUserAuth();
-  // }, [router]);
+  useEffect(() => {
+    //   // async function checkUserAuth() {
+    //   //   const user = await checkUser();
+    //   //   if (user) {
+    //   //     router.push("/dashboard");
+    //   //   }
+    //   // }
+    //   // checkUserAuth();
+  }, [router]);
 
   async function signIn(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
