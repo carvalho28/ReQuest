@@ -19,5 +19,5 @@ jobs:
           NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY}}
         uses: cypress-io/github-action@v5 # use the explicit version number
         with:
-          build: npm run build
-          start: npm start
+          build: yarn run build
+          start: yarn start
