@@ -32,7 +32,7 @@
     "autoprefixer": "^10.4.14",
     "cypress": "^12.7.0",
     "postcss": "^8.4.21",
-    "supabase": "^1.42.5",
+    "supabase": "^1.42.6",
     "tailwindcss": "^3.2.7"
   }
 }
