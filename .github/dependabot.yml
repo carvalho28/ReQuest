@@ -1,7 +1,7 @@
 version: 2
 updates:
   # Enable version updates for Python
-  - package-ecosystem: "yarn"
+  - package-ecosystem: "npm"
     directory: "/"
     # Check for updates once a week
     schedule:
