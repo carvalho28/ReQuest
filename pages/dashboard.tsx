@@ -3,6 +3,7 @@ import { GetServerSidePropsContext } from "next";
 import { useRouter } from "next/router";
 import { createServerSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import { useEffect } from "react";
+import Sidebar from "@/components/Sidebar";
 
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   const supabase = createServerSupabaseClient(ctx);
@@ -43,14 +44,15 @@ export default function Dashboard() {
   return (
     <>
       {/* button to logout */}
-      <button
+      {/* <button
         onClick={() => userLogout()}
         type="button"
         className="rounded bg-indigo-600 py-1 px-2 text-xs font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
       >
         Logout
       </button>
-      Hello
+      Hello */}
+      <Sidebar />
     </>
   );
 }

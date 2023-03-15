@@ -1,3 +1,20 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.login-background {
+  background: conic-gradient(
+    at 0% 100%,
+    #0998b7 0deg,
+    white 70deg,
+    #32c487 100deg
+  );
+}
+
+.index-background {
+  background: linear-gradient(to top right, #845ec2, #0998b7, #32c487);
+}
+
+.sidebar-background {
+  background: linear-gradient(to top, #32c487 6%, #0998b7 30%);
+}
