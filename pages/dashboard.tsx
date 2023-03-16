@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 import { createServerSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import { useEffect } from "react";
 import Sidebar from "@/components/Sidebar";
+import Card from "@/components/Card";
 
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   const supabase = createServerSupabaseClient(ctx);
@@ -52,7 +53,17 @@ export default function Dashboard() {
         Logout
       </button>
       Hello */}
-      <Sidebar />
+      <div className="fixed top-0 left-0 h-full w-64 flex flex-col overflow-y-auto border-r border-gray-200 sidebar-background pt-5 pb-4">
+        <Sidebar />
+      </div>
+      <div className="mt-12 mx-72">
+        <div className="flex flex-wrap justify-between">
+          <Card sizeClass="w-full lg:w-1/3 mb-4" />
+          <Card sizeClass="w-full lg:w-1/2 mb-4" />
+          <Card sizeClass="w-full lg:w-1/4 mb-4" />
+          <Card sizeClass="w-full lg:w-1/4 mb-4" />
+        </div>
+      </div>
     </>
   );
 }
