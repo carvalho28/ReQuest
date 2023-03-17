@@ -1,3 +1,4 @@
+import Layout from "@/components/Layout";
 import Sidebar from "@/components/Sidebar";
 import { createServerSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import { GetServerSidePropsContext } from "next";
@@ -33,11 +34,8 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
 
 export default function Teams({ avatar_url }: any) {
   return (
-    <>
-      <div className="fixed top-0 left-0 h-full w-64 flex flex-col overflow-y-auto sidebar-background pt-5 pb-4">
-        <Sidebar currentPage="teams" avatar_url={avatar_url} />
-      </div>
-      <div className="mt-12 ml-72 mr-8">Teams</div>
-    </>
+    <Layout currentPage="teams" avatarUrl={avatar_url}>
+      Teams
+    </Layout>
   );
 }
