@@ -11,6 +11,7 @@ import {
 } from "@heroicons/react/24/outline";
 import { useUser, useSupabaseClient } from "@supabase/auth-helpers-react";
 import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
@@ -49,6 +50,8 @@ const Sidebar = () => {
   const supabaseClient = useSupabaseClient();
   const user = useUser();
 
+  const [avatar, setAvatar] = useState<string | undefined>();
+
   async function userLogout() {
     // popup are you sure?
 
@@ -65,6 +68,21 @@ const Sidebar = () => {
     router.push(`/profile/${id}`);
   }
 
+  useEffect(() => {
+    async function getAvatar() {
+      const { data, error } = await supabaseClient
+        .from("profiles")
+        .select("avatar_url")
+        .eq("id", user?.id);
+      if (error) {
+        console.log(error);
+        throw error;
+      }
+      setAvatar(data[0].avatar_url);
+    }
+    getAvatar();
+  }, [user, supabaseClient]);
+
   return (
     <div className="flex flex-grow flex-col overflow-y-auto pt-5 pb-4">
       <div className="flex flex-shrink-0 items-center px-4">
@@ -78,15 +96,15 @@ const Sidebar = () => {
       </div>
       <div className="flex text-center justify-center mt-10">
         <Image
-          className="h-28 p-2 w-auto hover:bg-white hover:cursor-pointer hover:rounded-lg hover:w-48"
-          src="/logo.svg"
-          alt="ReQuest"
+          className="pb-2 w-48 h-auto hover:bg-white hover:cursor-pointer hover:rounded-lg hover:w-48"
+          src={avatar || ""}
+          alt="Avatar"
           width={32}
           height={32}
           onClick={() => profileClick()}
         />
       </div>
-      <div className="mt-48 flex flex-grow flex-col">
+      <div className="mt-32 flex flex-grow flex-col">
         <nav className="flex-1 space-y-4 px-2" aria-label="Sidebar">
           {navigation.map((item) => (
             <a

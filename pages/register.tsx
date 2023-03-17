@@ -70,6 +70,7 @@ export default function Register() {
           options: {
             data: {
               name: name,
+              avatar_url: process.env.NEXT_PUBLIC_DEFAULT_AVATAR,
             },
           },
         });
@@ -78,6 +79,7 @@ export default function Register() {
           setLoading(false);
         }
         const userId = resp.data.user?.id;
+
         if (userId) {
           setLoading(false);
           setRegSuccess(true);
