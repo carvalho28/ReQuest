@@ -1,10 +1,12 @@
 describe("Dashboard page load", () => {
   it("should navigate to the dashboard page", () => {
-    cy.visit("/dashboard");
+    // login
+    cy.visit("/login");
+    cy.get("input[name=email]").type(Cypress.env("email"));
+    cy.get("input[name=password]").type(Cypress.env("password"));
+    cy.get("button").contains("Login").click();
 
-    // click on the "Link" to the teams page
-    cy.get("a").contains("Teams").should("have.attr", "href", "/teams");
-    // click on link and check if the url is correct
+    // check "Teams" is working
     cy.get("a").contains("Teams").click();
     cy.url().should("include", "/teams");
 
