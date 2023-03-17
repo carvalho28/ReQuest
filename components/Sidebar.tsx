@@ -38,15 +38,16 @@ const navigation = [
   {
     name: "Settings",
     icon: Cog6ToothIcon,
-    href: "#",
+    href: "/settings",
     count: 0,
     current: false,
   },
 ];
 
 const Sidebar = () => {
-  const supabaseClient = useSupabaseClient();
   const router = useRouter();
+  const supabaseClient = useSupabaseClient();
+  const user = useUser();
 
   async function userLogout() {
     // popup are you sure?
@@ -59,9 +60,13 @@ const Sidebar = () => {
     router.push("/");
   }
 
+  function profileClick() {
+    const id = user?.id;
+    router.push(`/profile/${id}`);
+  }
+
   return (
-    // <div className="fixed inset-y-0 z-10 bg-gray-100 flex flex-col overflow-y-auto border-r border-gray-200 pt-5 pb-4 w-48">
-    <div className="flex flex-grow flex-col overflow-y-auto border-r border-gray-200  pt-5 pb-4">
+    <div className="flex flex-grow flex-col overflow-y-auto pt-5 pb-4">
       <div className="flex flex-shrink-0 items-center px-4">
         <Image
           className="h-8 w-auto"
@@ -71,13 +76,14 @@ const Sidebar = () => {
           height={32}
         />
       </div>
-      <div className="flex text-center justify-center">
+      <div className="flex text-center justify-center mt-10">
         <Image
-          className="h-28 w-auto"
+          className="h-28 p-2 w-auto hover:bg-white hover:cursor-pointer hover:rounded-lg hover:w-48"
           src="/logo.svg"
           alt="ReQuest"
           width={32}
           height={32}
+          onClick={() => profileClick()}
         />
       </div>
       <div className="mt-48 flex flex-grow flex-col">

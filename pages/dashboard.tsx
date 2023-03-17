@@ -56,8 +56,8 @@ export default function Dashboard() {
       <div className="fixed top-0 left-0 h-full w-64 flex flex-col overflow-y-auto border-r border-gray-200 sidebar-background pt-5 pb-4">
         <Sidebar />
       </div>
-      <div className="mt-12 mx-72">
-        <div className="flex flex-wrap justify-between">
+      <div className="mt-12 ml-72 mr-8">
+        <div className="flex flex-wrap space-x-14">
           <Card sizeClass="w-full lg:w-1/3 mb-4" />
           <Card sizeClass="w-full lg:w-1/2 mb-4" />
           <Card sizeClass="w-full lg:w-1/4 mb-4" />
