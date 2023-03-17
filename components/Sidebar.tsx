@@ -110,7 +110,7 @@ const Sidebar = ({ currentPage, avatar_url }: SidebarProps) => {
           isProfile
             ? "bg-white rounded-l-3xl"
             : "hover:bg-white rounded-l-3xl hover:cursor-pointer",
-          "flex text-center justify-center mt-10"
+          "flex text-center justify-center mt-10 ml-6"
         )}
       >
         {avatar_url ? (
@@ -127,8 +127,9 @@ const Sidebar = ({ currentPage, avatar_url }: SidebarProps) => {
           <></>
         )}
       </div>
+
       <div className="mt-32 flex flex-grow flex-col">
-        <nav className="flex-1 space-y-4 pl-2" aria-label="Sidebar">
+        <nav className="flex-1 space-y-4 pl-6" aria-label="Sidebar">
           {navItems.map((item) => (
             <Link
               key={item.name}
