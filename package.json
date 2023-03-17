@@ -10,6 +10,10 @@
     "cypress": "cypress open"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^6.3.0",
+    "@fortawesome/free-regular-svg-icons": "^6.3.0",
+    "@fortawesome/free-solid-svg-icons": "^6.3.0",
+    "@fortawesome/react-fontawesome": "^0.2.0",
     "@headlessui/react": "^1.7.13",
     "@heroicons/react": "^2.0.16",
     "@supabase/auth-helpers-nextjs": "^0.5.6",

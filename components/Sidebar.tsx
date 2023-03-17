@@ -108,8 +108,8 @@ const Sidebar = ({ currentPage, avatar_url }: SidebarProps) => {
       <div
         className={classNames(
           isProfile
-            ? "bg-white rounded-l-3xl"
-            : "hover:bg-white rounded-l-3xl hover:cursor-pointer",
+            ? "bg-whitepages rounded-l-3xl"
+            : "hover:bg-whitepages rounded-l-3xl hover:cursor-pointer",
           "flex text-center justify-center mt-10 ml-6"
         )}
       >
@@ -136,8 +136,8 @@ const Sidebar = ({ currentPage, avatar_url }: SidebarProps) => {
               href={item.href}
               className={classNames(
                 item.current
-                  ? "bg-white text-black"
-                  : "text-white hover:bg-gray-50 hover:text-gray-900",
+                  ? "bg-whitepages text-black"
+                  : "text-white hover:bg-whitepages hover:text-black",
                 "group flex items-center px-2 pl-5 py-4 text-md font-medium rounded-l-full"
               )}
             >
@@ -145,7 +145,7 @@ const Sidebar = ({ currentPage, avatar_url }: SidebarProps) => {
                 className={classNames(
                   item.current
                     ? "text-primarygreen"
-                    : "text-white group-hover:text-primarygreen",
+                    : "text-whitepages group-hover:text-primarygreen",
                   "mr-3 h-6 w-6 flex-shrink-0"
                 )}
                 aria-hidden="true"
@@ -155,8 +155,8 @@ const Sidebar = ({ currentPage, avatar_url }: SidebarProps) => {
                 <span
                   className={classNames(
                     item.current
-                      ? "bg-white"
-                      : "bg-gray-100 group-hover:bg-gray-400 text-black",
+                      ? "bg-whitepages"
+                      : "bg-whitepages group-hover:bg-gray-400 text-black",
                     "ml-3 mr-2 inline-block rounded-full py-0.5 px-3 text-xs font-medium"
                   )}
                 >

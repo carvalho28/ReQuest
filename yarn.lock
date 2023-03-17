@@ -47,9 +47,9 @@
     lodash.once "^4.1.1"
 
 "@eslint-community/eslint-utils@^4.2.0":
-  version "4.2.0"
-  resolved "https://registry.yarnpkg.com/@eslint-community/eslint-utils/-/eslint-utils-4.2.0.tgz#a831e6e468b4b2b5ae42bf658bea015bf10bc518"
-  integrity sha512-gB8T4H4DEfX2IV9zGDJPOBgP1e/DbfCPDTtEqUMckpvzS1OYtva8JdFYBqMwYk7xAQ429WGF/UPqn8uQ//h2vQ==
+  version "4.3.0"
+  resolved "https://registry.yarnpkg.com/@eslint-community/eslint-utils/-/eslint-utils-4.3.0.tgz#a556790523a351b4e47e9d385f47265eaaf9780a"
+  integrity sha512-v3oplH6FYCULtFuCeqyuTd9D2WKO937Dxdq+GmHOLL72TTRriLxz2VLlNfkZRsvj6PKnOPAtuT6dwrs/pA5DvA==
   dependencies:
     eslint-visitor-keys "^3.3.0"
 
@@ -77,6 +77,39 @@
   version "8.36.0"
   resolved "https://registry.yarnpkg.com/@eslint/js/-/js-8.36.0.tgz#9837f768c03a1e4a30bd304a64fb8844f0e72efe"
   integrity sha512-lxJ9R5ygVm8ZWgYdUweoq5ownDlJ4upvoWmO4eLxBYHdMo+vZ/Rx0EN6MbKWDJOSUGrqJy2Gt+Dyv/VKml0fjg==
+
+"@fortawesome/fontawesome-common-types@6.3.0":
+  version "6.3.0"
+  resolved "https://registry.yarnpkg.com/@fortawesome/fontawesome-common-types/-/fontawesome-common-types-6.3.0.tgz#51f734e64511dbc3674cd347044d02f4dd26e86b"
+  integrity sha512-4BC1NMoacEBzSXRwKjZ/X/gmnbp/HU5Qqat7E8xqorUtBFZS+bwfGH5/wqOC2K6GV0rgEobp3OjGRMa5fK9pFg==
+
+"@fortawesome/fontawesome-svg-core@^6.3.0":
+  version "6.3.0"
+  resolved "https://registry.yarnpkg.com/@fortawesome/fontawesome-svg-core/-/fontawesome-svg-core-6.3.0.tgz#b6a17d48d231ac1fad93e43fca7271676bf316cf"
+  integrity sha512-uz9YifyKlixV6AcKlOX8WNdtF7l6nakGyLYxYaCa823bEBqyj/U2ssqtctO38itNEwXb8/lMzjdoJ+aaJuOdrw==
+  dependencies:
+    "@fortawesome/fontawesome-common-types" "6.3.0"
+
+"@fortawesome/free-regular-svg-icons@^6.3.0":
+  version "6.3.0"
+  resolved "https://registry.yarnpkg.com/@fortawesome/free-regular-svg-icons/-/free-regular-svg-icons-6.3.0.tgz#286f87f777e6c96af59151e86647c81083029ee2"
+  integrity sha512-cZnwiVHZ51SVzWHOaNCIA+u9wevZjCuAGSvSYpNlm6A4H4Vhwh8481Bf/5rwheIC3fFKlgXxLKaw8Xeroz8Ntg==
+  dependencies:
+    "@fortawesome/fontawesome-common-types" "6.3.0"
+
+"@fortawesome/free-solid-svg-icons@^6.3.0":
+  version "6.3.0"
+  resolved "https://registry.yarnpkg.com/@fortawesome/free-solid-svg-icons/-/free-solid-svg-icons-6.3.0.tgz#d3bd33ae18bb15fdfc3ca136e2fea05f32768a65"
+  integrity sha512-x5tMwzF2lTH8pyv8yeZRodItP2IVlzzmBuD1M7BjawWgg9XAvktqJJ91Qjgoaf8qJpHQ8FEU9VxRfOkLhh86QA==
+  dependencies:
+    "@fortawesome/fontawesome-common-types" "6.3.0"
+
+"@fortawesome/react-fontawesome@^0.2.0":
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/@fortawesome/react-fontawesome/-/react-fontawesome-0.2.0.tgz#d90dd8a9211830b4e3c08e94b63a0ba7291ddcf4"
+  integrity sha512-uHg75Rb/XORTtVt7OS9WoK8uM276Ufi7gCzshVWkUJbHhh3svsUUeqXerrM96Wm7fRiDzfKRwSoahhMIkGAYHw==
+  dependencies:
+    prop-types "^15.8.1"
 
 "@headlessui/react@^1.7.13":
   version "1.7.13"
@@ -249,9 +282,9 @@
     cross-fetch "^3.1.5"
 
 "@supabase/gotrue-js@^2.12.0":
-  version "2.13.0"
-  resolved "https://registry.yarnpkg.com/@supabase/gotrue-js/-/gotrue-js-2.13.0.tgz#9b415a49986196b0e5e80d6289da353d7bddfc4e"
-  integrity sha512-NFBHuHNUn94mP/zOQzsp1k2PtwV55Vhf6ZbTzmMpiUvIRlXhVteZcdfdoAQDIBrdxOdL7F54NFp1gIupPZka6g==
+  version "2.14.0"
+  resolved "https://registry.yarnpkg.com/@supabase/gotrue-js/-/gotrue-js-2.14.0.tgz#4d6734cd5a0dd206d8b275248b8d6354151cd678"
+  integrity sha512-FI6q4n4iZ2zrEt1BnBYYe8HQ1k9t5CpBcDQxVXa8PeMwygXpzR0AcdfAsZ5Yba42C8YsBA132ti01f+RINS3UQ==
   dependencies:
     cross-fetch "^3.1.5"
 
@@ -262,10 +295,10 @@
   dependencies:
     cross-fetch "^3.1.5"
 
-"@supabase/realtime-js@^2.4.0":
-  version "2.6.0"
-  resolved "https://registry.yarnpkg.com/@supabase/realtime-js/-/realtime-js-2.6.0.tgz#eff000c2fd9f5cd8d59f4adf6d76165b81ebd536"
-  integrity sha512-tOVulMobhpxyDuu8VIImpL8FXmZOKsGNOSyS5ihJdj2xYmPPvYG+D2J51Ewfl+MFF65tweiB6p9N9bNIW1cDNA==
+"@supabase/realtime-js@^2.7.0":
+  version "2.7.0"
+  resolved "https://registry.yarnpkg.com/@supabase/realtime-js/-/realtime-js-2.7.0.tgz#7acce7b575932864556b05a596ad40c64d77ecef"
+  integrity sha512-wg35ofiCpIemycmPZvvZk3jM9c9z8VvnPUBbSP9ZZN2vSOEJ9C7DZuLiiZMXsyNUzjVgIn62A1tN99T5+9O8Aw==
   dependencies:
     "@types/phoenix" "^1.5.4"
     websocket "^1.0.34"
@@ -278,14 +311,14 @@
     cross-fetch "^3.1.5"
 
 "@supabase/supabase-js@^2.10.0":
-  version "2.10.0"
-  resolved "https://registry.yarnpkg.com/@supabase/supabase-js/-/supabase-js-2.10.0.tgz#17a4d625451cda1062aa495f672c380219968c48"
-  integrity sha512-/vkpPxGDyLfTASWnVHL8vdgQxn9SX/Cs+BotTxFhLSIeGFSazC6rpQSMKu6RqzO7gjBD1KqTv0h3auWfClWs+Q==
+  version "2.11.0"
+  resolved "https://registry.yarnpkg.com/@supabase/supabase-js/-/supabase-js-2.11.0.tgz#0f76760fa247cda6cdc38e70a480d6c8d5ff985f"
+  integrity sha512-FkaPZjVx1oY4boS02kAoNhmdyy5hrezxGlY8lZdQwKvk7ee5NPiXzjjsGruc6JOS1QNeuWIUAw1L7uKVYI30dA==
   dependencies:
     "@supabase/functions-js" "^2.1.0"
     "@supabase/gotrue-js" "^2.12.0"
     "@supabase/postgrest-js" "^1.1.1"
-    "@supabase/realtime-js" "^2.4.0"
+    "@supabase/realtime-js" "^2.7.0"
     "@supabase/storage-js" "^2.3.1"
     cross-fetch "^3.1.5"
 
@@ -761,9 +794,9 @@ camelcase-css@^2.0.1:
   integrity sha512-QOSvevhslijgYwRx6Rv7zKdMF8lbRmx+uQGx2+vDc+KI/eBnsy9kit5aj23AgGu3pa4t9AgwbnXWqS+iOY+2aA==
 
 caniuse-lite@^1.0.30001406, caniuse-lite@^1.0.30001449, caniuse-lite@^1.0.30001464:
-  version "1.0.30001466"
-  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001466.tgz#c1e6197c540392e09709ecaa9e3e403428c53375"
-  integrity sha512-ewtFBSfWjEmxUgNBSZItFSmVtvk9zkwkl1OfRZlKA8slltRN+/C/tuGVrF9styXkN36Yu3+SeJ1qkXxDEyNZ5w==
+  version "1.0.30001467"
+  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001467.tgz#1afc9c16ed61f50dd87139da87ca43a3e0051c77"
+  integrity sha512-cEdN/5e+RPikvl9AHm4uuLXxeCNq8rFsQ+lPHTfe/OtypP3WwnVVbjn+6uBV7PaFL6xUFzTh+sSCOz1rKhcO+Q==
 
 caseless@~0.12.0:
   version "0.12.0"
@@ -918,9 +951,9 @@ csstype@^3.0.2:
   integrity sha512-DJR/VvkAvSZW9bTouZue2sSxDwdTN92uHjqeKVm+0dAqdfNykRzQ95tay8aXMBAAPpUiq4Qcug2L7neoRh2Egw==
 
 cypress@^12.7.0:
-  version "12.8.0"
-  resolved "https://registry.yarnpkg.com/cypress/-/cypress-12.8.0.tgz#d31b86ad7b39678b4fa20892f60a8ed58b271729"
-  integrity sha512-+zblUeRIesOwpZ/E0HT0YE19STwbZy/ySJZIW6BHxX/eVX258gs4t9hP3sE4Opw9y0RfhJeoE8oa1wF/WhIb0A==
+  version "12.8.1"
+  resolved "https://registry.yarnpkg.com/cypress/-/cypress-12.8.1.tgz#0c6e67f34554d553138697aaf349b637d80004eb"
+  integrity sha512-lIFbKdaSYAOarNLHNFa2aPZu6YSF+8UY4VRXMxJrFUnk6RvfG0AWsZ7/qle/aIz30TNUD4aOihz2ZgS4vuQVSA==
   dependencies:
     "@cypress/request" "^2.88.10"
     "@cypress/xvfb" "^1.2.4"
@@ -1116,9 +1149,9 @@ ecc-jsbn@~0.1.1:
     safer-buffer "^2.1.0"
 
 electron-to-chromium@^1.4.284:
-  version "1.4.329"
-  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.329.tgz#ea54b67c981c814f16917b585acf3a667d4c997f"
-  integrity sha512-dcwPzNUG4+reo5z+wHnrl2eZMu4kz+nLQEeepxLEDTLDC7Mi7AVTM4NXWct1TZyu3G4oQgygaAfbByaBtPqw2Q==
+  version "1.4.332"
+  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.332.tgz#b981fcf61587abe03c24b301b2cfbdcc2b70e8a5"
+  integrity sha512-c1Vbv5tuUlBFp0mb3mCIjw+REEsgthRgNE8BlbEDKmvzb8rxjcVki6OkQP83vLN34s0XCxpSkq7AZNep1a6xhw==
 
 emoji-regex@^8.0.0:
   version "8.0.0"
@@ -1851,9 +1884,9 @@ gopd@^1.0.1:
     get-intrinsic "^1.1.3"
 
 graceful-fs@^4.1.6, graceful-fs@^4.2.0, graceful-fs@^4.2.4:
-  version "4.2.10"
-  resolved "https://registry.yarnpkg.com/graceful-fs/-/graceful-fs-4.2.10.tgz#147d3a006da4ca3ce14728c7aefc287c367d7a6c"
-  integrity sha512-9ByhssR2fPVsNZj478qUUbKfmL0+t5BDVyjShtyZZLiK7ZDAArFFfopyOTj0M05wE2tJPisA4iTnnXl2YoPvOA==
+  version "4.2.11"
+  resolved "https://registry.yarnpkg.com/graceful-fs/-/graceful-fs-4.2.11.tgz#4183e4e8bf08bb6e05bbb2f7d2e0c8f712ca40e3"
+  integrity sha512-RbJ5/jmFcNNCcDV5o9eTnBLJ/HszWV0P73bc+Ff4nS/rJj+YaS6IGyiOL0VoBYX+l1Wrl3k63h/KrH+nhJ0XvQ==
 
 grapheme-splitter@^1.0.4:
   version "1.0.4"
@@ -3198,9 +3231,9 @@ styled-jsx@5.1.1:
     client-only "0.0.1"
 
 supabase@^1.42.6:
-  version "1.42.6"
-  resolved "https://registry.yarnpkg.com/supabase/-/supabase-1.42.6.tgz#4e6aaffe00e1049bd11de17971d69a53d136cff4"
-  integrity sha512-HRrADbLMA8nRB5VsWChdR1L3tCHTVwIjMHWh4+M8GepX654C693jHJEVSb09eu59N2T2OsxfDvf5+kvIkzh3kg==
+  version "1.42.7"
+  resolved "https://registry.yarnpkg.com/supabase/-/supabase-1.42.7.tgz#d6767200590b2ad134cfabcf51b13b18aee3007c"
+  integrity sha512-wBdb5MDqsB9J7IYf9Pilat4Q0NSehTs3iC1ghPSfxrzIhlwHelN2AT+5FDy0CBgHcFSdj4OoKCFDARKSvWst9w==
   dependencies:
     bin-links "^4.0.1"
     node-fetch "^3.2.10"
