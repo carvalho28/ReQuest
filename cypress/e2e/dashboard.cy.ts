@@ -15,3 +15,5 @@ describe("Dashboard page load", () => {
     // cy.url().should("include", "/projects");
   });
 });
+
+export {};
