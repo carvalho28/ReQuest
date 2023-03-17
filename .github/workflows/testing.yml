@@ -11,14 +11,16 @@ jobs:
         env:
           NEXT_PUBLIC_SUPABASE_URL: ${{secrets.NEXT_PUBLIC_SUPABASE_URL}}
           NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY}}
-          DEFAULT_AVATAR: ${{secrets.DEFAULT_AVATAR}}
+          NEXT_PUBLIC_DEFAULT_AVATAR: ${{secrets.NEXT_PUBLIC_DEFAULT_AVATAR}}
+          NEXT_PUBLIC_IMAGE_DOMAINS: ${{secrets.NEXT_PUBLIC_IMAGE_DOMAINS}}
         uses: actions/checkout@v3
       # and run all Cypress tests
       - name: Cypress run
         env:
           NEXT_PUBLIC_SUPABASE_URL: ${{secrets.NEXT_PUBLIC_SUPABASE_URL}}
           NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY}}
-          DEFAULT_AVATAR: ${{secrets.DEFAULT_AVATAR}}
+          NEXT_PUBLIC_DEFAULT_AVATAR: ${{secrets.NEXT_PUBLIC_DEFAULT_AVATAR}}
+          NEXT_PUBLIC_IMAGE_DOMAINS: ${{secrets.NEXT_PUBLIC_IMAGE_DOMAINS}}
         uses: cypress-io/github-action@v5 # use the explicit version number
         with:
           build: yarn run build
