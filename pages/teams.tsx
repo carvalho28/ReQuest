@@ -1,8 +1,6 @@
-import { useUser, useSupabaseClient } from "@supabase/auth-helpers-react";
-import { GetServerSidePropsContext } from "next";
-import { createServerSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import Sidebar from "@/components/Sidebar";
-import { useRouter } from "next/router";
+import { createServerSupabaseClient } from "@supabase/auth-helpers-nextjs";
+import { GetServerSidePropsContext } from "next";
 
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   const supabase = createServerSupabaseClient(ctx);
@@ -10,14 +8,13 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   const {
     data: { session },
   } = await supabase.auth.getSession();
-  if (!session) {
+  if (!session)
     return {
       redirect: {
         destination: "/",
         permanent: false,
       },
     };
-  }
 
   const user = session.user;
   const { data, error } = await supabase
@@ -34,18 +31,13 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   };
 };
 
-export default function Profile({ avatar_url }: any) {
-  const router = useRouter();
-
-  const supabaseClient = useSupabaseClient();
-  const user = useUser();
-
+export default function Teams({ avatar_url }: any) {
   return (
     <>
       <div className="fixed top-0 left-0 h-full w-64 flex flex-col overflow-y-auto sidebar-background pt-5 pb-4">
-        <Sidebar currentPage="profile" avatar_url={avatar_url} />
+        <Sidebar currentPage="teams" avatar_url={avatar_url} />
       </div>
-      <div className="mt-12 ml-72 mr-8">user.id: {user?.id}</div>
+      <div className="mt-12 ml-72 mr-8">Teams</div>
     </>
   );
 }

@@ -14,6 +14,7 @@ module.exports = {
         contrasthover: "#503182",
         black: "#1E1E1E",
         white2: "#FAFDFE",
+        whitepages: "#F5F5F7",
       },
     },
   },
