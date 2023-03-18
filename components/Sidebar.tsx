@@ -115,6 +115,7 @@ const Sidebar = ({ currentPage, avatar_url }: SidebarProps) => {
       >
         {avatar_url ? (
           <Image
+            id="Profile"
             className="h-auto w-48 pb-5"
             src={avatar_url}
             alt="Avatar"
