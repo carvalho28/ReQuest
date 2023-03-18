@@ -130,7 +130,7 @@ export default function Profile({ avatar_url }: any) {
 
   return (
     <Layout currentPage="profile" avatarUrl={avatar_url}>
-      <div className="flex gap-x-4">
+      <div className="flex gap-x-2">
         <div className="flex p-6 bg-white rounded-lg shadow-lg w-3/5">
           <div className="w-2/5 flex flex-col justify-center items-center">
             <Image
@@ -284,8 +284,12 @@ export default function Profile({ avatar_url }: any) {
             </div>
           </div>
         </div>
-        <div className="flex p-6 bg-white rounded-lg shadow-lg justify-center w-1/3"></div>
-        <div className="flex p-6 bg-white rounded-lg shadow-lg justify-center w-1/3"></div>
+        <div className="flex p-6 bg-white rounded-lg shadow-lg justify-center w-1/3">
+          <h3 className="text-xl font-bold flex justify-center">Teams</h3>
+        </div>
+        <div className="flex p-6 bg-white rounded-lg shadow-lg justify-center w-1/3">
+          <h3 className="text-xl font-bold flex justify-center">Projects</h3>
+        </div>
       </div>
     </Layout>
   );
