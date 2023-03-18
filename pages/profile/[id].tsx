@@ -5,7 +5,13 @@ import { useRouter } from "next/router";
 import Layout from "@/components/Layout";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import { FaPen } from "react-icons/fa";
+import { FaPen, FaStar } from "react-icons/fa";
+import { Black_Ops_One } from "next/font/google";
+
+const blackOpsOne = Black_Ops_One({
+  subsets: ["latin"],
+  weight: ["400"],
+});
 
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   const supabase = createServerSupabaseClient(ctx);
@@ -131,41 +137,22 @@ export default function Profile({ avatar_url }: any) {
               {denomination}
             </span>
           </div>
-          <div className="flex mt-6 justify-center">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="100"
-              height="100"
-              fill="#ffffff"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke="#000"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="1.5"
-                d="M4 7l8-4 8 4c0 5.193-2.784 12.51-8 14-5.216-1.49-8-8.807-8-14z"
-              ></path>
-              <text
-                x="50%"
-                y="50%"
-                textAnchor="middle"
-                dominantBaseline="middle"
-                fill="#292D32"
-                fontSize={10}
-                className="font-bold"
+          <div className="flex mt-8 justify-center">
+            <div className="flex items-center align-middle">
+              <FaStar className="h-20 w-20 text-yellow-400 w-" />
+              <span
+                className={`ml-5 text-black text-2xl ${blackOpsOne.className}`}
               >
-                {level}
-              </text>
-            </svg>
+                Level {level}
+              </span>
+            </div>
           </div>
-          <div className="mt-8">
+          <div className="mt-10">
             <div className="w-full h-4 mb-4 bg-gray-200 rounded-full">
               <div
                 className="h-4 bg-contrast rounded-full"
                 style={{ width: `${(xp / xpNeeded) * 100}%` }}
               ></div>
-              {/* write on the right side how much is left */}
               <div className="flex justify-end text-xs text-gray-600 mt-2">
                 <span className="text-sm">
                   {xp} / {xpNeeded} XP
