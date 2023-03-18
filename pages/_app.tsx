@@ -1,7 +1,7 @@
 import "@/styles/globals.css";
 
 import type { AppProps } from "next/app";
-import { Poppins } from "next/font/google";
+import { Inter } from "next/font/google";
 
 import {
   createBrowserSupabaseClient,
@@ -11,9 +11,8 @@ import { SessionContextProvider } from "@supabase/auth-helpers-react";
 import { useState } from "react";
 import { Database } from "@/types/supabase";
 
-const poppins = Poppins({
+const inter = Inter({
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700", "800", "900"],
 });
 
 export default function App({
@@ -27,7 +26,7 @@ export default function App({
   );
 
   return (
-    <main className={poppins.className}>
+    <main className={inter.className}>
       <SessionContextProvider
         supabaseClient={supabaseClient}
         initialSession={pageProps.initialSession}

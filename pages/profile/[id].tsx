@@ -151,8 +151,9 @@ export default function Profile({ avatar_url }: any) {
                 y="50%"
                 textAnchor="middle"
                 dominantBaseline="middle"
-                fontSize="8"
                 fill="#292D32"
+                fontSize={10}
+                className="font-bold"
               >
                 {level}
               </text>
