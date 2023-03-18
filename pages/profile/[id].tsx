@@ -5,9 +5,7 @@ import { useRouter } from "next/router";
 import Layout from "@/components/Layout";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { FaPen } from "react-icons/fa";
-import Link from "next/link";
 
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   const supabase = createServerSupabaseClient(ctx);
@@ -44,10 +42,14 @@ export default function Profile({ avatar_url }: any) {
   const supabaseClient = useSupabaseClient();
   const user = useUser();
 
-  const [userData, setUserData] = useState<any>(null);
+  // const [userData, setUserData] = useState<any>(null);
   const [name, setName] = useState<string>();
-  const [loading, setLoading] = useState<boolean>(false);
   const [showModal, setShowModal] = useState(false);
+  const [reqComplete, setReqComplete] = useState<number>(0);
+  const [level, setLevel] = useState<number>(0);
+  const [xp, setXp] = useState<number>(0);
+  const [xpNeeded, setXpNeeded] = useState<number>(0);
+  const [denomination, setDenomination] = useState<string>("");
 
   function toggleModal() {
     console.log("toggle");
@@ -60,7 +62,7 @@ export default function Profile({ avatar_url }: any) {
       .update({ name: name })
       .eq("id", user?.id);
     if (!error) {
-      setUserData({ ...userData, name: name });
+      console.log("Name updated");
     }
 
     toggleModal();
@@ -72,15 +74,21 @@ export default function Profile({ avatar_url }: any) {
       if (user) {
         const { data, error } = await supabaseClient
           .from("profiles")
-          .select("*")
+          .select("*, levels (denomination, xp_needed)")
           .eq("id", user?.id);
         if (error) console.log(error);
         if (!data) {
           console.log("No data found");
           return;
         }
-        setUserData(data[0]);
+        console.log(data);
+
         setName(data[0].name);
+        setReqComplete(data[0].requirements_completed);
+        setLevel(data[0].level);
+        setXp(data[0].xp);
+        setXpNeeded(data[0].levels.xp_needed);
+        setDenomination(data[0].levels.denomination);
       }
     }
 
@@ -110,15 +118,59 @@ export default function Profile({ avatar_url }: any) {
 
         <div className="w-3/5 p-6">
           <div className="flex items-center">
-            <h3 className="text-black font-semibold text-lg">
-              {userData?.name}
-            </h3>
+            <h3 className="text-black font-semibold text-lg">{name}</h3>
             <button
               className="flex items-center ml-4 mb-2"
               onClick={() => toggleModal()}
             >
               <FaPen />
             </button>
+          </div>
+          <div className="flex mt-2">
+            <span className="inline-flex items-center rounded-full bg-primarygreen px-3 py-0.5 text-sm font-medium text-white">
+              {denomination}
+            </span>
+          </div>
+          <div className="flex mt-6 justify-center">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="100"
+              height="100"
+              fill="#ffffff"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke="#000"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="1.5"
+                d="M4 7l8-4 8 4c0 5.193-2.784 12.51-8 14-5.216-1.49-8-8.807-8-14z"
+              ></path>
+              <text
+                x="50%"
+                y="50%"
+                textAnchor="middle"
+                dominantBaseline="middle"
+                fontSize="8"
+                fill="#292D32"
+              >
+                {level}
+              </text>
+            </svg>
+          </div>
+          <div className="mt-8">
+            <div className="w-full h-4 mb-4 bg-gray-200 rounded-full">
+              <div
+                className="h-4 bg-contrast rounded-full"
+                style={{ width: `${(xp / xpNeeded) * 100}%` }}
+              ></div>
+              {/* write on the right side how much is left */}
+              <div className="flex justify-end text-xs text-gray-600 mt-2">
+                <span className="text-sm">
+                  {xp} / {xpNeeded} XP
+                </span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
