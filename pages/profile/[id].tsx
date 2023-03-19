@@ -65,7 +65,7 @@ export default function Profile({ avatar_url }: any) {
   const [nProjects, setNProjects] = useState<number>(0);
 
   const itemsCarrousel: ItemCarrousel[] = [
-    { label: "Reqquirements completed", value: reqComplete },
+    { label: "Requirements completed", value: reqComplete },
     { label: "Number of projects", value: nProjects },
   ];
 
@@ -130,8 +130,8 @@ export default function Profile({ avatar_url }: any) {
 
   return (
     <Layout currentPage="profile" avatar_url={avatar_url}>
-      <div className="flex gap-x-2">
-        <div className="flex p-6 bg-white rounded-lg shadow-lg w-3/5">
+      <div className="flex gap-x-2 flex-col gap-y-4 sm:flex-row">
+        <div className="flex p-6 bg-white rounded-lg shadow-lg sm:w-3/5 w-full">
           <div className="w-2/5 flex flex-col justify-center items-center">
             <Image
               className="object-cover w-full rounded-lg"
@@ -252,7 +252,7 @@ export default function Profile({ avatar_url }: any) {
             </div>
           )}
         </div>
-        <div className="flex p-6 bg-white rounded-lg shadow-lg w-2/5 justify-center">
+        <div className="flex p-6 bg-white rounded-lg shadow-lg sm:w-2/5 justify-center w-full">
           <h3 className="text-xl font-bold">Trophies</h3>
           <div></div>
         </div>
@@ -260,8 +260,8 @@ export default function Profile({ avatar_url }: any) {
       <div className="flex gap-x-4 mt-8 h-52">
         <div className="flex p-6 bg-white rounded-lg shadow-lg w-full justify-center"></div>
       </div>
-      <div className="flex gap-x-4 mt-8">
-        <div className="flex flex-col p-6 bg-white rounded-lg shadow-lg justify-center w-1/3">
+      <div className="flex gap-x-4 mt-8 flex-col sm:flex-row gap-y-8">
+        <div className="flex flex-col p-6 bg-white rounded-lg shadow-lg justify-center sm:w-1/3 w-full">
           <h3 className="text-xl font-bold flex justify-center">
             Global Stats
           </h3>
@@ -284,10 +284,10 @@ export default function Profile({ avatar_url }: any) {
             </div>
           </div>
         </div>
-        <div className="flex p-6 bg-white rounded-lg shadow-lg justify-center w-1/3">
+        <div className="flex p-6 bg-white rounded-lg shadow-lg justify-center sm:w-1/3 w-full">
           <h3 className="text-xl font-bold flex justify-center">Teams</h3>
         </div>
-        <div className="flex p-6 bg-white rounded-lg shadow-lg justify-center w-1/3">
+        <div className="flex p-6 bg-white rounded-lg shadow-lg justify-center sm:w-1/3 w-full">
           <h3 className="text-xl font-bold flex justify-center">Projects</h3>
         </div>
       </div>

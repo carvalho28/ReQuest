@@ -29,7 +29,6 @@ const navigation = [
     count: 0,
     current: false,
   },
-  { name: "Teams", icon: UsersIcon, href: "/teams", count: 0, current: false },
   {
     name: "Projects",
     icon: FolderIcon,
@@ -172,9 +171,9 @@ const Layout2 = ({ children, currentPage, avatar_url }: LayoutProps) => {
                     <div
                       className={classNames(
                         isProfile
-                          ? "bg-whitepages rounded-l-3xl"
-                          : "hover:bg-whitepages rounded-l-3xl hover:cursor-pointer",
-                        "flex text-center justify-center mt-10 ml-6"
+                          ? "bg-whitepages rounded-3xl"
+                          : "hover:bg-whitepages rounded-3xl hover:cursor-pointer",
+                        "flex text-center justify-center mt-10 mx-5"
                       )}
                     >
                       {avatar_url ? (
@@ -193,9 +192,9 @@ const Layout2 = ({ children, currentPage, avatar_url }: LayoutProps) => {
                       )}
                     </div>
 
-                    <div className="mt-32 flex flex-grow flex-col">
+                    <div className="mt-5 flex flex-grow flex-col">
                       <nav
-                        className="flex-1 space-y-4 pl-6"
+                        className="flex-1 space-y-4 px-3"
                         aria-label="Sidebar"
                       >
                         {navItems.map((item) => (
@@ -206,7 +205,7 @@ const Layout2 = ({ children, currentPage, avatar_url }: LayoutProps) => {
                               item.current
                                 ? "bg-whitepages text-black"
                                 : "text-white hover:bg-whitepages hover:text-black",
-                              "group flex items-center px-2 pl-5 py-4 text-md font-medium rounded-l-full"
+                              "group flex items-center px-5 py-4 text-md font-medium rounded-full"
                             )}
                           >
                             <item.icon
@@ -295,45 +294,45 @@ const Layout2 = ({ children, currentPage, avatar_url }: LayoutProps) => {
                   <></>
                 )}
               </div>
-              <div className="mt-32 flex flex-grow flex-col">
-                <nav className="flex-1 space-y-4 pl-6" aria-label="Sidebar">
-                  {navItems.map((item) => (
-                    <Link
-                      key={item.name}
-                      href={item.href}
+              {/* <div className="mt-12 flex flex-grow flex-col"> */}
+              <nav className="mt-5 flex-1 space-y-4 pl-6" aria-label="Sidebar">
+                {navItems.map((item) => (
+                  <Link
+                    key={item.name}
+                    href={item.href}
+                    className={classNames(
+                      item.current
+                        ? "bg-whitepages text-black"
+                        : "text-white hover:bg-whitepages hover:text-black",
+                      "group flex items-center px-2 pl-5 py-4 text-md font-medium rounded-l-full"
+                    )}
+                  >
+                    <item.icon
                       className={classNames(
                         item.current
-                          ? "bg-whitepages text-black"
-                          : "text-white hover:bg-whitepages hover:text-black",
-                        "group flex items-center px-2 pl-5 py-4 text-md font-medium rounded-l-full"
+                          ? "text-primarygreen"
+                          : "text-whitepages group-hover:text-primarygreen",
+                        "mr-3 h-6 w-6 flex-shrink-0"
                       )}
-                    >
-                      <item.icon
+                      aria-hidden="true"
+                    />
+                    <span className="flex-1">{item.name}</span>
+                    {item.count ? (
+                      <span
                         className={classNames(
                           item.current
-                            ? "text-primarygreen"
-                            : "text-whitepages group-hover:text-primarygreen",
-                          "mr-3 h-6 w-6 flex-shrink-0"
+                            ? "bg-primarygreen text-white"
+                            : "bg-whitepages group-hover:bg-gray-400 text-black",
+                          "ml-3 mr-2 inline-block rounded-full py-0.5 px-3 text-xs font-medium"
                         )}
-                        aria-hidden="true"
-                      />
-                      <span className="flex-1">{item.name}</span>
-                      {item.count ? (
-                        <span
-                          className={classNames(
-                            item.current
-                              ? "bg-primarygreen text-white"
-                              : "bg-whitepages group-hover:bg-gray-400 text-black",
-                            "ml-3 mr-2 inline-block rounded-full py-0.5 px-3 text-xs font-medium"
-                          )}
-                        >
-                          {item.count}
-                        </span>
-                      ) : null}
-                    </Link>
-                  ))}
-                </nav>
-              </div>
+                      >
+                        {item.count}
+                      </span>
+                    ) : null}
+                  </Link>
+                ))}
+              </nav>
+              {/* </div> */}
             </div>
             <div className="flex flex-shrink p-8 justify-center">
               <button

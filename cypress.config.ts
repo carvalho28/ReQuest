@@ -6,6 +6,8 @@ export default defineConfig({
       // implement node event listeners here
     },
     baseUrl: "http://localhost:3000",
+    viewportHeight: 1024,
+    viewportWidth: 1280,
   },
 
   component: {
