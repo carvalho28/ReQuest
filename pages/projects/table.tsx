@@ -3,6 +3,7 @@ import Layout from "@/components/Layout";
 import { createServerSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import { GetServerSidePropsContext } from "next";
 import dynamic from "next/dynamic";
+import { useRouter } from "next/router";
 
 const Tabs = dynamic(() => import("@/components/Tabs"), { ssr: false });
 
@@ -43,7 +44,8 @@ export default function Projects({ avatar_url }: any) {
 
   const projects = [
     {
-      name: "M-Team",
+      id: 2341234,
+      name: "Share",
       description: "Project for computer security course",
       status: "Active",
       deadline: "2021-01-01",
@@ -59,7 +61,24 @@ export default function Projects({ avatar_url }: any) {
         },
       ],
     },
+    {
+      id: 2341234234,
+      name: "O-Security",
+      description: "Project for lorem ipsum",
+      status: "Completed",
+      deadline: "2021-01-01",
+      people: [
+        {
+          name: "ze@ze.com",
+        },
+        {
+          name: "pedro@pedro.com",
+        },
+      ],
+    },
   ];
+
+  const router = useRouter();
 
   return (
     <div>
@@ -85,28 +104,28 @@ export default function Projects({ avatar_url }: any) {
             <div className="-mx-4 mt-8 sm:-mx-0">
               <table className="min-w-full divide-y divide-gray-300">
                 <thead>
-                  <tr>
+                  <tr className="divide-x divide-gray-300">
                     <th
                       scope="col"
-                      className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0"
+                      className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-black sm:pl-0"
                     >
                       Name
                     </th>
                     <th
                       scope="col"
-                      className="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 lg:table-cell"
+                      className="hidden px-3 py-3.5 text-left text-sm font-semibold text-black lg:table-cell"
                     >
                       Description
                     </th>
                     <th
                       scope="col"
-                      className="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 sm:table-cell"
+                      className="hidden px-3 py-3.5 text-left text-sm font-semibold text-black sm:table-cell"
                     >
                       Status
                     </th>
                     <th
                       scope="col"
-                      className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                      className="px-3 py-3.5 text-left text-sm font-semibold text-black"
                     >
                       Deadline
                     </th>
@@ -117,27 +136,35 @@ export default function Projects({ avatar_url }: any) {
                     >
                       People
                     </th>
-                    <th
-                      scope="col"
-                      className="relative py-3.5 pl-3 pr-4 sm:pr-0"
-                    >
-                      <span className="sr-only">Edit</span>
-                    </th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200 bg-whitepages">
                   {projects.map((project) => (
-                    <tr key={project.name}>
-                      <td className="w-full max-w-0 py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:w-auto sm:max-w-none sm:pl-0">
+                    <tr
+                      key={project.name}
+                      className="hover:bg-gray-200 hover:cursor-pointer divide-x divide-gray-300"
+                      onClick={() => {
+                        router.push(`/projects/${project.id}`);
+                      }}
+                    >
+                      <td className="w-full max-w-0 py-4 pl-4 pr-3 text-sm font-medium text-black sm:w-auto sm:max-w-none sm:pl-0">
                         {project.name}
                         <dl className="font-normal lg:hidden">
-                          <dt className="sr-only">Name</dt>
+                          <dt className="sr-only">Description</dt>
                           <dd className="mt-1 truncate text-gray-700">
-                            {project.status}
-                          </dd>
-                          <dt className="sr-only sm:hidden">Email</dt>
-                          <dd className="mt-1 truncate text-gray-500 sm:hidden">
                             {project.description}
+                          </dd>
+                          <dt className="sr-only sm:hidden">Status</dt>
+                          <dd className="mt-1 truncate text-gray-500 sm:hidden">
+                            {project.status == "Active" ? (
+                              <span className="inline-flex items-center rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-800">
+                                {project.status}
+                              </span>
+                            ) : (
+                              <span className="inline-flex items-center rounded-full bg-indigo-100 px-2.5 py-0.5 text-xs font-medium text-indigo-800">
+                                {project.status}
+                              </span>
+                            )}
                           </dd>
                         </dl>
                       </td>
@@ -145,7 +172,15 @@ export default function Projects({ avatar_url }: any) {
                         {project.description}
                       </td>
                       <td className="hidden px-3 py-4 text-sm text-gray-500 sm:table-cell">
-                        {project.status}
+                        {project.status == "Active" ? (
+                          <span className="inline-flex items-center rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-800">
+                            {project.status}
+                          </span>
+                        ) : (
+                          <span className="inline-flex items-center rounded-full bg-indigo-100 px-2.5 py-0.5 text-xs font-medium text-indigo-800">
+                            {project.status}
+                          </span>
+                        )}
                       </td>
                       <td className="px-3 py-4 text-sm text-gray-500">
                         {project.deadline}
@@ -159,15 +194,6 @@ export default function Projects({ avatar_url }: any) {
                             <div className="flex-shrink-0">{p.name}</div>
                           </div>
                         ))}
-                      </td>
-
-                      <td className="py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
-                        <a
-                          href="#"
-                          className="text-indigo-600 hover:text-indigo-900"
-                        >
-                          Edit<span className="sr-only">, {project.name}</span>
-                        </a>
                       </td>
                     </tr>
                   ))}
