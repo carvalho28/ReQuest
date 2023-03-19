@@ -13,7 +13,6 @@ import { useUser, useSupabaseClient, User } from "@supabase/auth-helpers-react";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import Loading from "./Loading";
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
@@ -28,7 +27,13 @@ const navigation = [
     current: false,
   },
   { name: "Teams", icon: UsersIcon, href: "/teams", count: 0, current: false },
-  { name: "Projects", icon: FolderIcon, href: "#", count: 1, current: false },
+  {
+    name: "Projects",
+    icon: FolderIcon,
+    href: "/projects/table",
+    count: 1,
+    current: false,
+  },
   {
     name: "Chat",
     icon: ChatBubbleBottomCenterTextIcon,
