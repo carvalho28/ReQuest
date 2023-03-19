@@ -7,14 +7,8 @@ describe("Dashboard page load", () => {
     cy.get("button").contains("Login").click();
 
     // check "Teams" is working
-    cy.get("a").contains("Teams").click();
-    cy.url().should("include", "/teams");
-
-    // click on the "Link" to the projects page
-    // cy.get("a").contains("Projects").should("have.attr", "href", "/projects");
-    // // click on link and check if the url is correct
-    // cy.get("a").contains("Projects").click();
-    // cy.url().should("include", "/projects");
+    cy.get("a").contains("Projects").click();
+    cy.url().should("include", "/projects");
   });
 });
 

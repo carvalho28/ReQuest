@@ -66,16 +66,12 @@ export default function Projects({ avatar_url }: any) {
       <Layout currentPage="projects" avatar_url={avatar_url}>
         <Tabs currentPage="table" tabs={tabs} />
         <div className="mt-10">
-          <div className="px-4 sm:px-6">
+          <div className="px-4 sm:px-2">
             <div className="sm:flex sm:items-center">
               <div className="sm:flex-auto">
                 <h1 className="text-base font-semibold leading-6 text-gray-900">
                   Your projects
                 </h1>
-                {/* <p className="mt-2 text-sm text-gray-700">
-                  A list of all the users in your account including their name,
-                  title, email and role.
-                </p> */}
               </div>
               <div className="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
                 <button
