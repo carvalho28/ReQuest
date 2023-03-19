@@ -1,7 +1,9 @@
 import Layout from "@/components/Layout";
-import Tabs from "@/components/Tabs";
 import { createServerSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import { GetServerSidePropsContext } from "next";
+import dynamic from "next/dynamic";
+
+const Tabs = dynamic(() => import("@/components/Tabs"), { ssr: false });
 
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   const supabase = createServerSupabaseClient(ctx);
