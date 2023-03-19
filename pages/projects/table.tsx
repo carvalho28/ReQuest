@@ -5,6 +5,8 @@ import { GetServerSidePropsContext } from "next";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import { useState } from "react";
+import { RiArrowRightCircleFill, RiArrowLeftCircleFill } from "react-icons/ri";
+import { XMarkIcon } from "@heroicons/react/24/outline";
 
 const Tabs = dynamic(() => import("@/components/Tabs"), { ssr: false });
 
@@ -82,9 +84,24 @@ export default function Projects({ avatar_url }: any) {
   const router = useRouter();
   const [showModal, setShowModal] = useState(false);
 
+  const [name, setName] = useState<string | undefined>();
+  const [description, setDescription] = useState<string | undefined>();
+  const [status, setStatus] = useState<string | undefined>();
+  const [deadline, setDeadline] = useState<string | undefined>();
+
   function toggleModal() {
     setShowModal(!showModal);
   }
+
+  const [currentSlide, setCurrentSlide] = useState(0);
+
+  const handleLeftArrow = () => {
+    setCurrentSlide(currentSlide === 0 ? 3 : currentSlide - 1);
+  };
+
+  const handleRightArrow = () => {
+    setCurrentSlide(currentSlide === 3 ? 0 : currentSlide + 1);
+  };
 
   return (
     <div>
@@ -227,57 +244,139 @@ export default function Projects({ avatar_url }: any) {
                   &#8203;
                 </span>
 
-                <div className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-                  <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4 flex justify-center items-center">
-                    <div className="sm:flex sm:items-start">
-                      <div className="mt-3 text-center sm:mt-0 sm:ml-4 ml-2">
+                <div className="inline-block bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 align-middle sm:max-w-lg sm:w-full">
+                  <div className="bg-white px-4 pt-4 pb-4 sm:p-6 sm:pb-4 flex justify-center items-center">
+                    <div className="flex flex-col">
+                      <div className="mt-5 text-center">
                         <h3
-                          className="text-lg leading-6 font-medium text-black"
+                          className="text-2xl font-medium text-black"
                           id="modal-headline"
                         >
-                          New project
+                          New Project
                         </h3>
-                        <h5>
-                          <span className="text-gray-500">Name</span>
-                        </h5>
-                        <div className="mt-6 w-72">
-                          <input
-                            type="text"
-                            name="name"
-                            id="name"
-                            // value={name}
-                            // onChange={(e) => setName(e.target.value)}
-                            className="shadow-sm focus:ring-contrast focus:border-contrast block w-full sm:text-sm border-gray-300 rounded-md"
-                          />
+                      </div>
+                      <button
+                        className="absolute top-0 right-0 m-4 text-gray-500 hover:text-gray-800"
+                        onClick={() => toggleModal()}
+                      >
+                        <XMarkIcon className="h-8 w-8" />
+                      </button>
+
+                      {/* w-full grey line */}
+                      <div className="w-full h-0.5 bg-gray-200 mt-1"></div>
+
+                      <div className="carousel-container mt-8 text-left flex-col space-y-2 w-96">
+                        <div
+                          className={`carousel-slide ${
+                            currentSlide === 0 ? "active" : "hidden"
+                          }`}
+                        >
+                          <label
+                            htmlFor="name"
+                            className="block text-md font-medium text-gray-700"
+                          >
+                            Name
+                          </label>
+                          <div className="mt-1">
+                            <input
+                              type="text"
+                              name="name"
+                              id="name"
+                              className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
+                              onChange={(e) => setName(e.target.value)}
+                            />
+                          </div>
                         </div>
-                        {/* <div className="mt-6 w-72">
-                          <input
-                            type="textarea"
-                            name="name"
-                            id="name"
-                            // value={name}
-                            // onChange={(e) => setName(e.target.value)}
-                            className="shadow-sm focus:ring-contrast focus:border-contrast block w-full sm:text-sm border-gray-300 rounded-md"
-                          />
-                        </div> */}
+                        <div
+                          className={`carousel-slide ${
+                            currentSlide === 1 ? "active" : "hidden"
+                          }`}
+                        >
+                          <label
+                            htmlFor="description"
+                            className="block text-md font-medium text-gray-700"
+                          >
+                            Description
+                          </label>
+                          <div className="mt-1">
+                            <textarea
+                              name="description"
+                              id="description"
+                              className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
+                              onChange={(e) => setDescription(e.target.value)}
+                            />
+                          </div>
+                        </div>
+                        <div
+                          className={`carousel-slide ${
+                            currentSlide === 2 ? "active" : "hidden"
+                          }`}
+                        >
+                          <label
+                            htmlFor="deadline"
+                            className="block text-md font-medium text-gray-700"
+                          >
+                            Deadline
+                          </label>
+                          <div className="mt-1">
+                            <input
+                              type="date"
+                              name="deadline"
+                              id="deadline"
+                              className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
+                              onChange={(e) => setDeadline(e.target.value)}
+                            />
+                          </div>
+                        </div>
+                        <div
+                          className={`carousel-slide ${
+                            currentSlide === 3 ? "active" : "hidden"
+                          }`}
+                        >
+                          <label
+                            htmlFor="people"
+                            className="block text-md font-medium text-gray-700"
+                          >
+                            People
+                          </label>
+                          <div className="mt-1">
+                            <input
+                              type="text"
+                              name="people"
+                              id="people"
+                              className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
+                              // onChange={(e) => setPeople(e.target.value)}
+                            />
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
-                  <div className="bg-white px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse justify-center">
-                    <button
-                      type="button"
-                      className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-contrast text-base font-medium text-white hover:bg-contrasthover focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-contrast sm:ml-3 sm:w-auto sm:text-sm"
-                      // onClick={() => saveName()}
-                    >
-                      Save
-                    </button>
-                    <button
-                      type="button"
-                      className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-contrast sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
-                      onClick={() => toggleModal()}
-                    >
-                      Cancel
-                    </button>
+                  <div className="bg-white px-4 py-3 flex flex-col">
+                    <div className="flex flex-row justify-center">
+                      {currentSlide > 0 && (
+                        <RiArrowLeftCircleFill
+                          className="h-16 w-16 text-contrast hover:cursor-pointer"
+                          onClick={() => handleLeftArrow()}
+                        />
+                      )}
+                      {currentSlide < 3 && (
+                        <RiArrowRightCircleFill
+                          className="h-16 w-16 text-contrast hover:cursor-pointer"
+                          onClick={() => handleRightArrow()}
+                        />
+                      )}
+                    </div>
+                    <div className="flex flex-row justify-end mb-5">
+                      {currentSlide === 3 && (
+                        <button
+                          type="submit"
+                          className="flex w-fit h-fit rounded-md bg-contrast py-2 px-3 text-sm font-semibold text-white shadow-sm hover:bg-contrasthover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-contrast"
+                        >
+                          Create
+                        </button>
+                      )}
+                    </div>
                   </div>
                 </div>
               </div>
