@@ -41,7 +41,7 @@ const Tabs = ({ tabs }: TabsProps) => {
           <nav className="-mb-px flex space-x-8" aria-label="Tabs">
             {tabs.map((tab) => (
               <Link
-                prefetch={true}
+                // prefetch={true}
                 key={tab.name}
                 href={tab.href}
                 className={classNames(

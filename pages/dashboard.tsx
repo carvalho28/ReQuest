@@ -3,7 +3,6 @@ import { GetServerSidePropsContext } from "next";
 import { useRouter } from "next/router";
 import { createServerSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import { useEffect } from "react";
-import Sidebar from "@/components/Sidebar";
 import Card from "@/components/Card";
 import Layout from "@/components/Layout";
 
@@ -45,7 +44,7 @@ export default function Dashboard({ avatar_url }: any) {
   useEffect(() => {}, [user]);
 
   return (
-    <Layout currentPage="dashboard" avatarUrl={avatar_url}>
+    <Layout currentPage="dashboard" avatar_url={avatar_url}>
       Dashboard
     </Layout>
   );

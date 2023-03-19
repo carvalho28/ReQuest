@@ -129,7 +129,7 @@ export default function Profile({ avatar_url }: any) {
   }, [supabaseClient, user]);
 
   return (
-    <Layout currentPage="profile" avatarUrl={avatar_url}>
+    <Layout currentPage="profile" avatar_url={avatar_url}>
       <div className="flex gap-x-2">
         <div className="flex p-6 bg-white rounded-lg shadow-lg w-3/5">
           <div className="w-2/5 flex flex-col justify-center items-center">

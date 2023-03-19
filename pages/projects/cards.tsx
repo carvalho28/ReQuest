@@ -42,7 +42,7 @@ export default function Projects({ avatar_url }: any) {
 
   return (
     <div>
-      <Layout currentPage="projects" avatarUrl={avatar_url}>
+      <Layout currentPage="projects" avatar_url={avatar_url}>
         <Tabs currentPage="table" tabs={tabs} />
       </Layout>
     </div>

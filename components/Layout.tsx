@@ -1,24 +1,380 @@
-import Sidebar from "./Sidebar";
+import { Dialog, Transition } from "@headlessui/react";
+import {
+  ArrowRightOnRectangleIcon,
+  Bars3Icon,
+  CalendarIcon,
+  ChatBubbleBottomCenterTextIcon,
+  Cog6ToothIcon,
+  FolderIcon,
+  InboxIcon,
+  Squares2X2Icon,
+  UsersIcon,
+  XMarkIcon,
+} from "@heroicons/react/24/outline";
+import Image from "next/image";
+import { useRouter } from "next/router";
+import { Fragment, useEffect, useState } from "react";
+import { useUser, useSupabaseClient, User } from "@supabase/auth-helpers-react";
+import Link from "next/link";
 
-interface Props {
-  children: React.ReactNode;
-  currentPage: string;
-  avatarUrl: string;
+function classNames(...classes: string[]) {
+  return classes.filter(Boolean).join(" ");
 }
 
-const Layout = ({ children, currentPage, avatarUrl }: Props) => {
+const navigation = [
+  {
+    name: "Dashboard",
+    icon: Squares2X2Icon,
+    href: "/dashboard",
+    count: 0,
+    current: false,
+  },
+  { name: "Teams", icon: UsersIcon, href: "/teams", count: 0, current: false },
+  {
+    name: "Projects",
+    icon: FolderIcon,
+    href: "/projects/table",
+    count: 1,
+    current: false,
+  },
+  {
+    name: "Chat",
+    icon: ChatBubbleBottomCenterTextIcon,
+    href: "#",
+    count: 0,
+    current: false,
+  },
+  { name: "Calendar", icon: CalendarIcon, href: "#", count: 0, current: false },
+  { name: "Documents", icon: InboxIcon, href: "#", count: 0, current: false },
+  {
+    name: "Settings",
+    icon: Cog6ToothIcon,
+    href: "/settings",
+    count: 0,
+    current: false,
+  },
+];
+
+interface LayoutProps {
+  children: React.ReactNode;
+  currentPage: string;
+  avatar_url: string;
+}
+
+const Layout2 = ({ children, currentPage, avatar_url }: LayoutProps) => {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const router = useRouter();
+  const supabaseClient = useSupabaseClient();
+  var user = useUser();
+
+  const [isProfile, setIsProfile] = useState<boolean>(false);
+  const [navItems, setNavItems] = useState([...navigation]);
+
+  useEffect(() => {
+    setNavItems((prevNavItems) =>
+      prevNavItems.map((item) => {
+        if (item.name.toLowerCase() === currentPage.toLowerCase()) {
+          return { ...item, current: true };
+        } else {
+          return { ...item, current: false };
+        }
+      })
+    );
+  }, [currentPage]);
+
+  useEffect(() => {
+    if (currentPage === "profile") {
+      setIsProfile(true);
+    }
+  }, [currentPage]);
+
+  async function userLogout() {
+    const { error } = await supabaseClient.auth.signOut();
+    if (error) {
+      console.log(error);
+      throw error;
+    }
+    router.push("/");
+  }
+
+  function profileClick() {
+    const id = user?.id;
+    router.push(`/profile/${id}`);
+  }
+
   return (
     <>
-      <div className="fixed top-0 left-0 h-full w-64 flex flex-col overflow-y-auto sidebar-background pt-5 pb-4">
-        <Sidebar currentPage={currentPage} avatar_url={avatarUrl} />
-      </div>
-      <div className="mt-16 ml-80 mr-16">
-        <div className="text-3xl text-black font-bold">
-          {currentPage.charAt(0).toUpperCase() + currentPage.slice(1)}
+      <div>
+        <Transition.Root show={sidebarOpen} as={Fragment}>
+          <Dialog
+            as="div"
+            className="relative z-40 lg:hidden"
+            onClose={setSidebarOpen}
+          >
+            <Transition.Child
+              as={Fragment}
+              enter="transition-opacity ease-linear duration-300"
+              enterFrom="opacity-0"
+              enterTo="opacity-100"
+              leave="transition-opacity ease-linear duration-300"
+              leaveFrom="opacity-100"
+              leaveTo="opacity-0"
+            >
+              <div className="fixed inset-0 bg-gray-600 bg-opacity-75" />
+            </Transition.Child>
+
+            <div className="fixed inset-0 z-40 flex">
+              <Transition.Child
+                as={Fragment}
+                enter="transition ease-in-out duration-300 transform"
+                enterFrom="-translate-x-full"
+                enterTo="translate-x-0"
+                leave="transition ease-in-out duration-300 transform"
+                leaveFrom="translate-x-0"
+                leaveTo="-translate-x-full"
+              >
+                <Dialog.Panel className="relative flex w-full max-w-xs flex-1 flex-col sidebar-background">
+                  <Transition.Child
+                    as={Fragment}
+                    enter="ease-in-out duration-300"
+                    enterFrom="opacity-0"
+                    enterTo="opacity-100"
+                    leave="ease-in-out duration-300"
+                    leaveFrom="opacity-100"
+                    leaveTo="opacity-0"
+                  >
+                    <div className="absolute top-0 right-0 -mr-12 pt-2">
+                      <button
+                        type="button"
+                        className="ml-1 flex h-10 w-10 items-center justify-center rounded-full focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
+                        onClick={() => setSidebarOpen(false)}
+                      >
+                        <span className="sr-only">Close sidebar</span>
+                        <XMarkIcon
+                          className="h-6 w-6 text-white"
+                          aria-hidden="true"
+                        />
+                      </button>
+                    </div>
+                  </Transition.Child>
+                  <div className="h-0 flex-1 overflow-y-auto pt-5 pb-4">
+                    <div className="flex flex-shrink-0 items-center px-4">
+                      <Image
+                        className="h-8 w-auto hover:cursor-pointer"
+                        src="/logo.svg"
+                        alt="ReQuest"
+                        width={32}
+                        height={32}
+                        onClick={() => router.push("/dashboard")}
+                      />
+                    </div>
+
+                    <div
+                      className={classNames(
+                        isProfile
+                          ? "bg-whitepages rounded-l-3xl"
+                          : "hover:bg-whitepages rounded-l-3xl hover:cursor-pointer",
+                        "flex text-center justify-center mt-10 ml-6"
+                      )}
+                    >
+                      {avatar_url ? (
+                        <Image
+                          id="Profile"
+                          className="h-auto w-48 pb-5"
+                          src={avatar_url}
+                          alt="Avatar"
+                          width={32}
+                          height={32}
+                          onClick={() => profileClick()}
+                          priority
+                        />
+                      ) : (
+                        <></>
+                      )}
+                    </div>
+
+                    <div className="mt-32 flex flex-grow flex-col">
+                      <nav
+                        className="flex-1 space-y-4 pl-6"
+                        aria-label="Sidebar"
+                      >
+                        {navItems.map((item) => (
+                          <Link
+                            key={item.name}
+                            href={item.href}
+                            className={classNames(
+                              item.current
+                                ? "bg-whitepages text-black"
+                                : "text-white hover:bg-whitepages hover:text-black",
+                              "group flex items-center px-2 pl-5 py-4 text-md font-medium rounded-l-full"
+                            )}
+                          >
+                            <item.icon
+                              className={classNames(
+                                item.current
+                                  ? "text-primarygreen"
+                                  : "text-whitepages group-hover:text-primarygreen",
+                                "mr-3 h-6 w-6 flex-shrink-0"
+                              )}
+                              aria-hidden="true"
+                            />
+                            <span className="flex-1">{item.name}</span>
+                            {item.count ? (
+                              <span
+                                className={classNames(
+                                  item.current
+                                    ? "bg-primarygreen text-white"
+                                    : "bg-whitepages group-hover:bg-gray-400 text-black",
+                                  "ml-3 mr-2 inline-block rounded-full py-0.5 px-3 text-xs font-medium"
+                                )}
+                              >
+                                {item.count}
+                              </span>
+                            ) : null}
+                          </Link>
+                        ))}
+                      </nav>
+                    </div>
+                  </div>
+                  <div className="flex flex-shrink p-8 justify-center">
+                    <button
+                      className="flex items-center justify-center w-10 h-10 rounded-full bg-white hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
+                      onClick={userLogout}
+                    >
+                      <ArrowRightOnRectangleIcon
+                        className="text-black h-6 w-6"
+                        aria-hidden="true"
+                      />
+                    </button>
+                  </div>
+                </Dialog.Panel>
+              </Transition.Child>
+              <div className="w-14 flex-shrink-0">
+                {/* Force sidebar to shrink to fit close icon */}
+              </div>
+            </div>
+          </Dialog>
+        </Transition.Root>
+
+        {/* Static sidebar for desktop */}
+        <div className="hidden lg:fixed lg:inset-y-0 lg:flex lg:w-64 lg:flex-col sidebar-background">
+          {/* Sidebar component, swap this element with another sidebar if you like */}
+          <div className="flex min-h-0 flex-1 flex-col mt-4">
+            <div className="flex flex-1 flex-col overflow-y-auto pt-5 pb-4">
+              <div className="flex flex-shrink-0 items-center px-4">
+                <Image
+                  className="h-8 w-auto hover:cursor-pointer"
+                  src="/logo.svg"
+                  alt="ReQuest"
+                  width={32}
+                  height={32}
+                  onClick={() => router.push("/dashboard")}
+                />
+              </div>
+
+              <div
+                className={classNames(
+                  isProfile
+                    ? "bg-whitepages rounded-l-3xl"
+                    : "hover:bg-whitepages rounded-l-3xl hover:cursor-pointer",
+                  "flex text-center justify-center mt-10 ml-6"
+                )}
+              >
+                {avatar_url ? (
+                  <Image
+                    id="Profile"
+                    className="h-auto w-48 pb-5"
+                    src={avatar_url}
+                    alt="Avatar"
+                    width={32}
+                    height={32}
+                    onClick={() => profileClick()}
+                    priority
+                  />
+                ) : (
+                  <></>
+                )}
+              </div>
+              <div className="mt-32 flex flex-grow flex-col">
+                <nav className="flex-1 space-y-4 pl-6" aria-label="Sidebar">
+                  {navItems.map((item) => (
+                    <Link
+                      key={item.name}
+                      href={item.href}
+                      className={classNames(
+                        item.current
+                          ? "bg-whitepages text-black"
+                          : "text-white hover:bg-whitepages hover:text-black",
+                        "group flex items-center px-2 pl-5 py-4 text-md font-medium rounded-l-full"
+                      )}
+                    >
+                      <item.icon
+                        className={classNames(
+                          item.current
+                            ? "text-primarygreen"
+                            : "text-whitepages group-hover:text-primarygreen",
+                          "mr-3 h-6 w-6 flex-shrink-0"
+                        )}
+                        aria-hidden="true"
+                      />
+                      <span className="flex-1">{item.name}</span>
+                      {item.count ? (
+                        <span
+                          className={classNames(
+                            item.current
+                              ? "bg-primarygreen text-white"
+                              : "bg-whitepages group-hover:bg-gray-400 text-black",
+                            "ml-3 mr-2 inline-block rounded-full py-0.5 px-3 text-xs font-medium"
+                          )}
+                        >
+                          {item.count}
+                        </span>
+                      ) : null}
+                    </Link>
+                  ))}
+                </nav>
+              </div>
+            </div>
+            <div className="flex flex-shrink p-8 justify-center">
+              <button
+                className="flex items-center justify-center w-10 h-10 rounded-full bg-white hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
+                onClick={userLogout}
+              >
+                <ArrowRightOnRectangleIcon
+                  className="text-black h-6 w-6"
+                  aria-hidden="true"
+                />
+              </button>
+            </div>
+          </div>
         </div>
-        <div className="mt-12">{children}</div>
+        <div className="flex flex-1 flex-col lg:pl-64">
+          <div className="sticky top-0 z-10 bg-gray-100 pl-1 pt-1 sm:pl-3 sm:pt-3 lg:hidden">
+            <button
+              type="button"
+              className="-ml-0.5 -mt-0.5 inline-flex h-12 w-12 items-center justify-center rounded-md text-black focus:outline-none focus:ring-2 focus:ring-inset focus:ring-contrast"
+              onClick={() => setSidebarOpen(true)}
+            >
+              <span className="sr-only">Open sidebar</span>
+              <Bars3Icon className="h-6 w-6" aria-hidden="true" />
+            </button>
+          </div>
+          <main className="flex-1 px-4 py-4">
+            <div className="py-6">
+              <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+                <h1 className="text-3xl font-bold text-black">
+                  {currentPage.charAt(0).toUpperCase() + currentPage.slice(1)}
+                </h1>
+              </div>
+              <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 mt-8">
+                {children}
+              </div>
+            </div>
+          </main>
+        </div>
       </div>
     </>
   );
 };
-export default Layout;
+
+export default Layout2;
