@@ -4,9 +4,11 @@ import { createServerSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import { GetServerSidePropsContext } from "next";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { RiArrowRightCircleFill, RiArrowLeftCircleFill } from "react-icons/ri";
-import { XMarkIcon } from "@heroicons/react/24/outline";
+import { UserIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import { useSupabaseClient, useUser } from "@supabase/auth-helpers-react";
+import ErrorMessage from "@/components/ErrorMessage";
 
 const Tabs = dynamic(() => import("@/components/Tabs"), { ssr: false });
 
@@ -89,6 +91,43 @@ export default function Projects({ avatar_url }: any) {
   const [status, setStatus] = useState<string | undefined>();
   const [deadline, setDeadline] = useState<string | undefined>();
 
+  const [person, setPerson] = useState<string | undefined>("");
+
+  const [peopleId, setPeopleId] = useState<string[]>([]);
+  const [peopleEmails, setPeopleEmails] = useState<string[]>([]);
+
+  const [error, setError] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<string>("");
+
+  const supabaseClient = useSupabaseClient();
+  const user = useUser();
+
+  function handleAddPeople() {
+    if (person !== undefined) {
+      // setPeople([...people, person]);
+      setPeopleEmails([...peopleEmails, person]);
+      setPerson("");
+    }
+  }
+
+  function removePerson(email: string) {
+    setPeopleEmails(peopleEmails.filter((e) => e !== email));
+  }
+
+  async function searchByEmail(email: string) {
+    const { data, error } = await supabaseClient
+      .from("profiles")
+      .select("id")
+      .eq("email", email);
+    if (error) console.log(error);
+    if (!data) throw new Error("No data found");
+    return data[0].id;
+  }
+
+  useEffect(() => {
+    console.log(name, description, status, deadline, peopleEmails);
+  }, [name, description, status, deadline, peopleEmails]);
+
   function toggleModal() {
     setShowModal(!showModal);
   }
@@ -100,6 +139,19 @@ export default function Projects({ avatar_url }: any) {
   };
 
   const handleRightArrow = () => {
+    if (name === undefined) {
+      setErrorMessage("Please enter a name for the project");
+      setError(true);
+      return;
+    }
+    if (currentSlide === 2) {
+      if (deadline === undefined) {
+        setErrorMessage("Please enter a deadline for the project");
+        setError(true);
+        return;
+      }
+    }
+    setError(false);
     setCurrentSlide(currentSlide === 3 ? 0 : currentSlide + 1);
   };
 
@@ -266,6 +318,7 @@ export default function Projects({ avatar_url }: any) {
                       <div className="w-full h-0.5 bg-gray-200 mt-1"></div>
 
                       <div className="carousel-container mt-8 text-left flex-col space-y-2 w-96">
+                        {error && <ErrorMessage message={errorMessage} />}
                         <div
                           className={`carousel-slide ${
                             currentSlide === 0 ? "active" : "hidden"
@@ -282,11 +335,13 @@ export default function Projects({ avatar_url }: any) {
                               type="text"
                               name="name"
                               id="name"
-                              className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
+                              required
+                              className="shadow-sm focus:ring-contrat focus:border-contrast block w-full sm:text-sm border-gray-300 rounded-md"
                               onChange={(e) => setName(e.target.value)}
                             />
                           </div>
                         </div>
+
                         <div
                           className={`carousel-slide ${
                             currentSlide === 1 ? "active" : "hidden"
@@ -333,20 +388,54 @@ export default function Projects({ avatar_url }: any) {
                             currentSlide === 3 ? "active" : "hidden"
                           }`}
                         >
+                          {/* list of people added */}
+                          <div className="flex flex-col space-y-2 mb-8">
+                            {peopleEmails.map((p) => (
+                              <div
+                                className="flex flex-row justify-between items-center"
+                                key={p}
+                              >
+                                <div className="flex flex-row items-center space-x-2">
+                                  <UserIcon className="h-6 w-6" />
+                                  <p>{p}</p>
+                                </div>
+                                <button
+                                  type="button"
+                                  // className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-contrast hover:bg-contrast-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                                  onClick={() => removePerson(p)}
+                                >
+                                  <XMarkIcon className="h-6 w-6 text-red-500" />
+                                </button>
+                              </div>
+                            ))}
+                          </div>
                           <label
                             htmlFor="people"
                             className="block text-md font-medium text-gray-700"
                           >
                             People
                           </label>
-                          <div className="mt-1">
-                            <input
-                              type="text"
-                              name="people"
-                              id="people"
-                              className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
-                              // onChange={(e) => setPeople(e.target.value)}
-                            />
+                          <div className="flex flex-row space-x-2 w-full">
+                            <div className="mt-1 w-5/6">
+                              <input
+                                value={person}
+                                type="email"
+                                name="person"
+                                id="person"
+                                className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
+                                onChange={(e) => setPerson(e.target.value)}
+                              />
+                            </div>
+                            {/* add button */}
+                            <div className="mt-1">
+                              <button
+                                type="button"
+                                className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-contrast hover:bg-contrast-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                                onClick={() => handleAddPeople()}
+                              >
+                                Add
+                              </button>
+                            </div>
                           </div>
                         </div>
                       </div>
