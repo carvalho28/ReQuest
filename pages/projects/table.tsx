@@ -353,6 +353,7 @@ export default function Projects({ avatar_url }: any) {
                       <div className="mt- px-5 pt-5">
                         <Stepper steps={steps} />
                       </div>
+
                       <button
                         className="absolute top-0 right-0 m-4 text-gray-500 hover:text-gray-800"
                         onClick={() => toggleModal()}
