@@ -69,6 +69,7 @@ export default function Register() {
           password: password,
           options: {
             data: {
+              email: email,
               name: name,
               avatar_url: process.env.NEXT_PUBLIC_DEFAULT_AVATAR,
             },

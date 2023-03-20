@@ -102,11 +102,18 @@ export default function Projects({ avatar_url }: any) {
   const supabaseClient = useSupabaseClient();
   const user = useUser();
 
-  function handleAddPeople() {
+  async function handleAddPeople() {
     if (person !== undefined) {
-      // setPeople([...people, person]);
-      setPeopleEmails([...peopleEmails, person]);
-      setPerson("");
+      setError(false);
+      const id = await searchByEmail(person);
+      if (id) {
+        setPeopleId([...peopleId, id]);
+        setPeopleEmails([...peopleEmails, person]);
+        setPerson("");
+      } else {
+        setErrorMessage("User not found");
+        setError(true);
+      }
     }
   }
 
@@ -120,7 +127,9 @@ export default function Projects({ avatar_url }: any) {
       .select("id")
       .eq("email", email);
     if (error) console.log(error);
-    if (!data) throw new Error("No data found");
+    if (!data) return undefined;
+    if (data.length === 0) return undefined;
+
     return data[0].id;
   }
 
@@ -375,6 +384,7 @@ export default function Projects({ avatar_url }: any) {
                           </label>
                           <div className="mt-1">
                             <input
+                              min={new Date().toISOString().split("T")[0]}
                               type="date"
                               name="deadline"
                               id="deadline"
