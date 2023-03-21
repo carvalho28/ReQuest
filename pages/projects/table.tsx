@@ -66,44 +66,10 @@ export default function Projects({ avatar_url }: any) {
     { name: "Cards", href: "/projects/cards", current: false },
   ];
 
-  const projects = [
-    {
-      id: 2341234,
-      name: "Share",
-      description: "Project for computer security course",
-      status: "Active",
-      deadline: "2021-01-01",
-      people: [
-        {
-          name: "ze@ze.com",
-        },
-        {
-          name: "joao@joao.com",
-        },
-        {
-          name: "diogo@diogo.com",
-        },
-      ],
-    },
-    {
-      id: 2341234234,
-      name: "O-Security",
-      description: "Project for lorem ipsum",
-      status: "Completed",
-      deadline: "2021-01-01",
-      people: [
-        {
-          name: "ze@ze.com",
-        },
-        {
-          name: "pedro@pedro.com",
-        },
-      ],
-    },
-  ];
-
   const router = useRouter();
   const [showModal, setShowModal] = useState(false);
+
+  const [projects, setProjects] = useState<any>([]);
 
   const [name, setName] = useState<string | undefined>();
   const [description, setDescription] = useState<string | undefined>();
@@ -120,6 +86,50 @@ export default function Projects({ avatar_url }: any) {
 
   const supabaseClient = useSupabaseClient();
   const user = useUser();
+
+  async function handleCreate() {
+    const { data, error } = await supabaseClient
+      .from("projects")
+      .insert([
+        {
+          name,
+          description,
+          deadline,
+        },
+      ])
+      .select("id");
+    if (error) console.log(error);
+    if (!data) return;
+
+    // add user to the beginning of the arra
+    if (user) {
+      peopleId.unshift(user.id);
+    }
+
+    if (data) {
+      const { data: data2, error: error2 } = await supabaseClient
+        .from("project_profiles")
+        .insert(
+          peopleId.map((id) => {
+            return {
+              id_proj: data[0].id,
+              id_user: id,
+            };
+          })
+        );
+      if (error2) console.log(error2);
+      if (!data2) return;
+    }
+
+    // console.log(data2);
+
+    setShowModal(false);
+    setName(undefined);
+    setDescription(undefined);
+    setDeadline(undefined);
+    setPeopleId([]);
+    router.push("/projects/table");
+  }
 
   async function handleAddPeople() {
     if (person === user?.email) {
@@ -162,13 +172,44 @@ export default function Projects({ avatar_url }: any) {
   }
 
   useEffect(() => {
-    console.log(name, description, status, deadline, peopleEmails);
-  }, [name, description, status, deadline, peopleEmails]);
+    async function getProjects() {
+      if (user) {
+        const { data, error } = await supabaseClient
+          .from("project_profiles")
+          .select(
+            `
+          projects (
+            id,
+            name,
+            description,
+            status,
+            deadline
+          )
+        `
+          )
+          .eq("id_user", user?.id)
+          .order("id", { ascending: false });
+        if (error) console.log(error);
+        if (!data) return;
 
-  function toggleModal() {
+        setProjects(data);
+      }
+    }
+    getProjects();
+  }, [supabaseClient, user]);
+
+  function toggleModal(cross?: boolean) {
+    if (cross) {
+      clearSteps();
+    }
     setError(false);
     setCurrentSlide(0);
     setShowModal(!showModal);
+  }
+
+  function clearSteps() {
+    steps.forEach((step) => (step.status = "upcoming"));
+    steps[0].status = "current";
   }
 
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -222,105 +263,109 @@ export default function Projects({ avatar_url }: any) {
                 </button>
               </div>
             </div>
-            <div className="-mx-4 mt-8 sm:-mx-0">
-              <table className="min-w-full divide-y divide-gray-300">
-                <thead>
-                  <tr className="divide-x divide-gray-300">
-                    <th
-                      scope="col"
-                      className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-black sm:pl-0"
-                    >
-                      Name
-                    </th>
-                    <th
-                      scope="col"
-                      className="hidden px-3 py-3.5 text-left text-sm font-semibold text-black lg:table-cell"
-                    >
-                      Description
-                    </th>
-                    <th
-                      scope="col"
-                      className="hidden px-3 py-3.5 text-left text-sm font-semibold text-black sm:table-cell"
-                    >
-                      Status
-                    </th>
-                    <th
-                      scope="col"
-                      className="px-3 py-3.5 text-left text-sm font-semibold text-black"
-                    >
-                      Deadline
-                    </th>
+            {projects && (
+              <div className="-mx-4 mt-8 sm:-mx-0">
+                <table className="min-w-full divide-y divide-gray-300">
+                  <thead>
+                    <tr className="divide-x divide-gray-300">
+                      <th
+                        scope="col"
+                        className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-black sm:pl-0"
+                      >
+                        Name
+                      </th>
+                      <th
+                        scope="col"
+                        className="hidden px-3 py-3.5 text-left text-sm font-semibold text-black lg:table-cell"
+                      >
+                        Description
+                      </th>
+                      <th
+                        scope="col"
+                        className="hidden px-3 py-3.5 text-left text-sm font-semibold text-black sm:table-cell"
+                      >
+                        Status
+                      </th>
+                      <th
+                        scope="col"
+                        className="px-3 py-3.5 text-left text-sm font-semibold text-black"
+                      >
+                        Deadline
+                      </th>
 
-                    <th
-                      scope="col"
-                      className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
-                    >
-                      People
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-gray-200 bg-whitepages">
-                  {projects.map((project) => (
-                    <tr
-                      key={project.name}
-                      className="hover:bg-gray-200 hover:cursor-pointer divide-x divide-gray-300"
-                      onClick={() => {
-                        router.push(`/projects/${project.id}`);
-                      }}
-                    >
-                      <td className="w-full max-w-0 py-4 pl-4 pr-3 text-sm font-medium text-black sm:w-auto sm:max-w-none sm:pl-0">
-                        {project.name}
-                        <dl className="font-normal lg:hidden">
-                          <dt className="sr-only">Description</dt>
-                          <dd className="mt-1 truncate text-gray-700">
-                            {project.description}
-                          </dd>
-                          <dt className="sr-only sm:hidden">Status</dt>
-                          <dd className="mt-1 truncate text-gray-500 sm:hidden">
-                            {project.status == "Active" ? (
-                              <span className="inline-flex items-center rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-800">
-                                {project.status}
-                              </span>
-                            ) : (
-                              <span className="inline-flex items-center rounded-full bg-indigo-100 px-2.5 py-0.5 text-xs font-medium text-indigo-800">
-                                {project.status}
-                              </span>
-                            )}
-                          </dd>
-                        </dl>
-                      </td>
-                      <td className="hidden px-3 py-4 text-sm text-gray-500 lg:table-cell">
-                        {project.description}
-                      </td>
-                      <td className="hidden px-3 py-4 text-sm text-gray-500 sm:table-cell">
-                        {project.status == "Active" ? (
-                          <span className="inline-flex items-center rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-800">
-                            {project.status}
-                          </span>
-                        ) : (
-                          <span className="inline-flex items-center rounded-full bg-indigo-100 px-2.5 py-0.5 text-xs font-medium text-indigo-800">
-                            {project.status}
-                          </span>
-                        )}
-                      </td>
-                      <td className="px-3 py-4 text-sm text-gray-500">
-                        {project.deadline}
-                      </td>
-                      <td className="px-3 py-4 text-sm text-gray-500">
-                        {project.people.map((p) => (
-                          <div
-                            className="flex items-center space-x-3"
-                            key={p.name}
-                          >
-                            <div className="flex-shrink-0">{p.name}</div>
-                          </div>
-                        ))}
-                      </td>
+                      <th
+                        scope="col"
+                        className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                      >
+                        People
+                      </th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+                  </thead>
+                  <tbody className="divide-y divide-gray-200 bg-whitepages">
+                    {projects?.map((item: any) => (
+                      <tr
+                        key={item.projects.id}
+                        className="hover:bg-gray-200 hover:cursor-pointer divide-x divide-gray-300"
+                        onClick={() => {
+                          router.push(`/projects/${item.id}`);
+                        }}
+                      >
+                        <td className="w-full max-w-0 py-4 pl-4 pr-3 text-sm font-medium text-black sm:w-auto sm:max-w-none sm:pl-0">
+                          {item.projects.name}
+                          <dl className="font-normal lg:hidden">
+                            <dt className="sr-only">Description</dt>
+                            <dd className="mt-1 truncate text-gray-700">
+                              {item.projects.description}
+                            </dd>
+                            <dt className="sr-only sm:hidden">Status</dt>
+                            <dd className="mt-1 truncate text-gray-500 sm:hidden">
+                              {item.projects.status == "Active" ? (
+                                <span className="inline-flex items-center rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-800">
+                                  {item.projects.status}
+                                </span>
+                              ) : (
+                                <span className="inline-flex items-center rounded-full bg-indigo-100 px-2.5 py-0.5 text-xs font-medium text-indigo-800">
+                                  {item.projects.status}
+                                </span>
+                              )}
+                            </dd>
+                          </dl>
+                        </td>
+                        <td className="hidden px-3 py-4 text-sm text-gray-500 lg:table-cell">
+                          {item.projects.description}
+                        </td>
+                        <td className="hidden px-3 py-4 text-sm text-gray-500 sm:table-cell">
+                          {item.projects.status == "Active" ? (
+                            <span className="inline-flex items-center rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-800">
+                              {item.projects.status}
+                            </span>
+                          ) : (
+                            <span className="inline-flex items-center rounded-full bg-indigo-100 px-2.5 py-0.5 text-xs font-medium text-indigo-800">
+                              {item.projects.status}
+                            </span>
+                          )}
+                        </td>
+                        <td className="px-3 py-4 text-sm text-gray-500">
+                          {/* {item.projects.deadline} */}
+                          {/* convert to only show date */}
+                          {item.projects.deadline?.split("T")[0]}
+                        </td>
+                        <td className="px-3 py-4 text-sm text-gray-500">
+                          {item.projects.people?.map((p: any) => (
+                            <div
+                              className="flex items-center space-x-3"
+                              key={p.name}
+                            >
+                              <div className="flex-shrink-0">{p.name}</div>
+                            </div>
+                          ))}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
           </div>
         </div>
         <div>
@@ -356,7 +401,7 @@ export default function Projects({ avatar_url }: any) {
 
                       <button
                         className="absolute top-0 right-0 m-4 text-gray-500 hover:text-gray-800"
-                        onClick={() => toggleModal()}
+                        onClick={() => toggleModal(true)}
                       >
                         <XMarkIcon className="h-6 w-6" />
                       </button>
@@ -521,6 +566,7 @@ export default function Projects({ avatar_url }: any) {
                         <button
                           type="submit"
                           className="flex w-fit h-fit rounded-md bg-contrast py-2 px-3 text-sm font-semibold text-white shadow-sm hover:bg-contrasthover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-contrast"
+                          onClick={() => handleCreate()}
                         >
                           Create
                         </button>
