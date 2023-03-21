@@ -274,6 +274,41 @@ export default function Projects({ avatar_url }: any) {
     console.log("Project updated");
   }
 
+  const debounce = (func: Function, wait: number) => {
+    let timeout: ReturnType<typeof setTimeout>;
+    return function (this: any, ...args: any[]) {
+      const context = this;
+      clearTimeout(timeout);
+      timeout = setTimeout(() => func.apply(context, args), wait);
+    };
+  };
+
+  const debouncedUpdateField = debounce(updateField, 500);
+
+  const saveSelection = () => {
+    if (window.getSelection) {
+      const sel = window.getSelection();
+      if (sel) {
+        if (sel.getRangeAt && sel.rangeCount) {
+          return sel.getRangeAt(0);
+        }
+      }
+    }
+    return null;
+  };
+
+  const restoreSelection = (range: Range | null) => {
+    if (range) {
+      if (window.getSelection) {
+        const sel = window.getSelection();
+        if (sel) {
+          sel.removeAllRanges();
+          sel.addRange(range);
+        }
+      }
+    }
+  };
+
   return (
     <div>
       <Layout currentPage="projects" avatar_url={avatar_url}>
@@ -351,11 +386,13 @@ export default function Projects({ avatar_url }: any) {
                           contentEditable="true"
                           suppressContentEditableWarning={true}
                           onInput={(e) => {
-                            updateField(
+                            const range = saveSelection();
+                            debouncedUpdateField(
                               item.id,
                               "name",
                               e.currentTarget.innerText
                             );
+                            restoreSelection(range);
                           }}
                         >
                           {item.name}
