@@ -4,7 +4,7 @@ import { createServerSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import { GetServerSidePropsContext } from "next";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { RiArrowRightCircleFill, RiArrowLeftCircleFill } from "react-icons/ri";
 import { PlusIcon, UserIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { useSupabaseClient, useUser } from "@supabase/auth-helpers-react";
@@ -258,6 +258,22 @@ export default function Projects({ avatar_url }: any) {
     setCurrentSlide(currentSlide === 3 ? 0 : currentSlide + 1);
   };
 
+  async function updateField(id: string, field: string, value: string) {
+    console.log(id, field, value);
+
+    const { data, error } = await supabaseClient
+      .from("projects")
+      .update({ [field]: value })
+      .eq("id", id)
+      .select("id");
+    if (error) console.log(error);
+    if (!data) return;
+
+    console.log(data);
+
+    console.log("Project updated");
+  }
+
   return (
     <div>
       <Layout currentPage="projects" avatar_url={avatar_url}>
@@ -314,7 +330,7 @@ export default function Projects({ avatar_url }: any) {
 
                       <th
                         scope="col"
-                        className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                        className="px-3 py-3.5 text-left text-sm font-semibold text-black"
                       >
                         Coworkers
                       </th>
@@ -324,12 +340,24 @@ export default function Projects({ avatar_url }: any) {
                     {projects?.map((item: any) => (
                       <tr
                         key={item.id}
-                        className="hover:bg-gray-200 hover:cursor-pointer divide-x divide-gray-300"
-                        onClick={() => {
-                          router.push(`/projects/${item.id}`);
-                        }}
+                        className="divide-x divide-gray-300"
+                        // hover:bg-gray-200 hover:cursor-pointer
+                        // onClick={() => {
+                        //   router.push(`/projects/${item.id}`);
+                        // }}
                       >
-                        <td className="w-full max-w-0 py-4 pl-4 pr-3 text-sm font-medium text-black sm:w-auto sm:max-w-none sm:pl-0">
+                        <td
+                          className="w-full max-w-0 py-4 pl-4 pr-3 text-sm sm:font-medium text-black sm:w-auto sm:max-w-none sm:pl-0"
+                          contentEditable="true"
+                          suppressContentEditableWarning={true}
+                          onInput={(e) => {
+                            updateField(
+                              item.id,
+                              "name",
+                              e.currentTarget.innerText
+                            );
+                          }}
+                        >
                           {item.name}
                           <dl className="font-normal lg:hidden">
                             <dt className="sr-only">Description</dt>
@@ -376,7 +404,7 @@ export default function Projects({ avatar_url }: any) {
                           )}
                           {item.project_users?.map((p: any) => (
                             <div
-                              className="flex items-center space-x-3"
+                              className="flex items-center space-x-3 text-xs sm:text-sm"
                               key={p}
                             >
                               <div className="flex-shrink-0">{p}</div>
