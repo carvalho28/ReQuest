@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "cypress": "cypress open"
+    "cypress": "cypress open",
+    "update-types": "npx supabase gen types typescript --project-id \"nvvxhbjuugqdzpygnaaw\" > types/supabase.ts"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.3.0",
