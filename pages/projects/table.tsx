@@ -209,7 +209,6 @@ export default function Projects({ avatar_url }: any) {
         if (!data) return;
 
         console.log(data);
-
         setProjects(data);
       }
     }
@@ -273,29 +272,6 @@ export default function Projects({ avatar_url }: any) {
 
     console.log("Project updated");
   }
-
-  const debounce = (func: Function, wait: number) => {
-    let timeout: ReturnType<typeof setTimeout>;
-    return function (this: any, ...args: any[]) {
-      const context = this;
-      clearTimeout(timeout);
-      timeout = setTimeout(() => func.apply(context, args), wait);
-    };
-  };
-
-  const debouncedUpdateField = debounce(updateField, 1000);
-
-  const saveSelection = () => {
-    if (window.getSelection) {
-      const sel = window.getSelection();
-      if (sel) {
-        if (sel.getRangeAt && sel.rangeCount) {
-          return sel.getRangeAt(0);
-        }
-      }
-    }
-    return null;
-  };
 
   const restoreSelection = (range: Range | null) => {
     if (range) {
@@ -385,14 +361,8 @@ export default function Projects({ avatar_url }: any) {
                           className="w-full max-w-0 py-4 pl-4 pr-3 text-sm sm:font-medium text-black sm:w-auto sm:max-w-none sm:pl-0"
                           contentEditable="true"
                           suppressContentEditableWarning={true}
-                          onInput={(e) => {
-                            const range = saveSelection();
-                            debouncedUpdateField(
-                              item.id,
-                              "name",
-                              e.currentTarget.innerText
-                            );
-                            restoreSelection(range);
+                          onBlur={(e) => {
+                            updateField(item.id, "name", e.target.innerText);
                           }}
                         >
                           {item.name}
