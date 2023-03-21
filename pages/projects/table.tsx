@@ -101,7 +101,6 @@ export default function Projects({ avatar_url }: any) {
     if (error) console.log(error);
     if (!data) return;
 
-    // add user to the beginning of the arra
     if (user) {
       peopleId.unshift(user.id);
     }
@@ -120,8 +119,6 @@ export default function Projects({ avatar_url }: any) {
       if (error2) console.log(error2);
       if (!data2) return;
     }
-
-    // console.log(data2);
 
     setShowModal(false);
     setName(undefined);
@@ -174,21 +171,12 @@ export default function Projects({ avatar_url }: any) {
   useEffect(() => {
     async function getProjects() {
       if (user) {
-        const { data, error } = await supabaseClient
-          .from("project_profiles")
-          .select(
-            `
-          projects (
-            id,
-            name,
-            description,
-            status,
-            deadline
-          )
-        `
-          )
-          .eq("id_user", user?.id)
-          .order("id", { ascending: false });
+        // get all projects from user and the people in that project
+        const { data, error } = await supabaseClient.rpc(
+          "projects_user_people",
+          { user_id: user.id }
+        );
+
         if (error) console.log(error);
         if (!data) return;
 
@@ -297,66 +285,65 @@ export default function Projects({ avatar_url }: any) {
                         scope="col"
                         className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                       >
-                        People
+                        Coworkers
                       </th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-200 bg-whitepages">
                     {projects?.map((item: any) => (
                       <tr
-                        key={item.projects.id}
+                        key={item.id}
                         className="hover:bg-gray-200 hover:cursor-pointer divide-x divide-gray-300"
                         onClick={() => {
                           router.push(`/projects/${item.id}`);
                         }}
                       >
                         <td className="w-full max-w-0 py-4 pl-4 pr-3 text-sm font-medium text-black sm:w-auto sm:max-w-none sm:pl-0">
-                          {item.projects.name}
+                          {item.name}
                           <dl className="font-normal lg:hidden">
                             <dt className="sr-only">Description</dt>
                             <dd className="mt-1 truncate text-gray-700">
-                              {item.projects.description}
+                              {item.description}
                             </dd>
                             <dt className="sr-only sm:hidden">Status</dt>
                             <dd className="mt-1 truncate text-gray-500 sm:hidden">
-                              {item.projects.status == "Active" ? (
+                              {item.status == "Active" ? (
                                 <span className="inline-flex items-center rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-800">
-                                  {item.projects.status}
+                                  {item.status}
                                 </span>
                               ) : (
                                 <span className="inline-flex items-center rounded-full bg-indigo-100 px-2.5 py-0.5 text-xs font-medium text-indigo-800">
-                                  {item.projects.status}
+                                  {item.status}
                                 </span>
                               )}
                             </dd>
                           </dl>
                         </td>
                         <td className="hidden px-3 py-4 text-sm text-gray-500 lg:table-cell">
-                          {item.projects.description}
+                          {item.description}
                         </td>
                         <td className="hidden px-3 py-4 text-sm text-gray-500 sm:table-cell">
-                          {item.projects.status == "Active" ? (
+                          {item.status == "Active" ? (
                             <span className="inline-flex items-center rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-800">
-                              {item.projects.status}
+                              {item.status}
                             </span>
                           ) : (
                             <span className="inline-flex items-center rounded-full bg-indigo-100 px-2.5 py-0.5 text-xs font-medium text-indigo-800">
-                              {item.projects.status}
+                              {item.status}
                             </span>
                           )}
                         </td>
                         <td className="px-3 py-4 text-sm text-gray-500">
-                          {/* {item.projects.deadline} */}
                           {/* convert to only show date */}
-                          {item.projects.deadline?.split("T")[0]}
+                          {item.deadline?.split("T")[0]}
                         </td>
                         <td className="px-3 py-4 text-sm text-gray-500">
-                          {item.projects.people?.map((p: any) => (
+                          {item.project_users?.map((p: any) => (
                             <div
                               className="flex items-center space-x-3"
-                              key={p.name}
+                              key={p}
                             >
-                              <div className="flex-shrink-0">{p.name}</div>
+                              <div className="flex-shrink-0">{p}</div>
                             </div>
                           ))}
                         </td>
