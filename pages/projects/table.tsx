@@ -283,7 +283,7 @@ export default function Projects({ avatar_url }: any) {
     };
   };
 
-  const debouncedUpdateField = debounce(updateField, 500);
+  const debouncedUpdateField = debounce(updateField, 1000);
 
   const saveSelection = () => {
     if (window.getSelection) {
