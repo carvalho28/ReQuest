@@ -58,9 +58,15 @@ interface LayoutProps {
   children: React.ReactNode;
   currentPage: string;
   avatar_url: string;
+  namePage?: string;
 }
 
-const Layout2 = ({ children, currentPage, avatar_url }: LayoutProps) => {
+const Layout = ({
+  children,
+  currentPage,
+  avatar_url,
+  namePage,
+}: LayoutProps) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const router = useRouter();
   const supabaseClient = useSupabaseClient();
@@ -362,7 +368,10 @@ const Layout2 = ({ children, currentPage, avatar_url }: LayoutProps) => {
             <div className="py-6">
               <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 <h1 className="text-3xl font-bold text-black">
-                  {currentPage.charAt(0).toUpperCase() + currentPage.slice(1)}
+                  {namePage
+                    ? namePage
+                    : currentPage.charAt(0).toUpperCase() +
+                      currentPage.slice(1)}
                 </h1>
               </div>
               <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 mt-8">
@@ -376,4 +385,4 @@ const Layout2 = ({ children, currentPage, avatar_url }: LayoutProps) => {
   );
 };
 
-export default Layout2;
+export default Layout;
