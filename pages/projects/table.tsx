@@ -10,6 +10,7 @@ import { PlusIcon, UserIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { useSupabaseClient, useUser } from "@supabase/auth-helpers-react";
 import ErrorMessage from "@/components/ErrorMessage";
 import Stepper from "@/components/Stepper";
+import { RealtimeChannel } from "@supabase/supabase-js";
 
 function classNames(...classes: any[]) {
   return classes.filter(Boolean).join(" ");
@@ -117,15 +118,18 @@ export default function Projects({ avatar_url }: any) {
           })
         );
       if (error2) console.log(error2);
-      if (!data2) return;
-    }
 
-    setShowModal(false);
-    setName(undefined);
-    setDescription(undefined);
-    setDeadline(undefined);
-    setPeopleId([]);
-    router.push("/projects/table");
+      console.log("Project created");
+
+      setShowModal(false);
+      setName(undefined);
+      setDescription(undefined);
+      setDeadline(undefined);
+      setPeopleId([]);
+      setPeopleEmails([]);
+      clearSteps();
+      router.push("/projects/table");
+    }
   }
 
   async function handleAddPeople() {
@@ -169,9 +173,33 @@ export default function Projects({ avatar_url }: any) {
   }
 
   useEffect(() => {
+    // realtime updates
+    let pj_channel: RealtimeChannel;
+    async function getProjectsRealTime() {
+      pj_channel = supabaseClient
+        .channel("projects_load")
+        .on(
+          "postgres_changes",
+          {
+            event: "*",
+            schema: "public",
+            table: "projects",
+          },
+          async (payload) => {
+            console.log(payload);
+
+            await getProjects();
+          }
+        )
+        .subscribe();
+
+      return () => {
+        supabaseClient.removeChannel(pj_channel);
+      };
+    }
+
     async function getProjects() {
       if (user) {
-        // get all projects from user and the people in that project
         const { data, error } = await supabaseClient.rpc(
           "projects_user_people",
           { user_id: user.id }
@@ -180,10 +208,13 @@ export default function Projects({ avatar_url }: any) {
         if (error) console.log(error);
         if (!data) return;
 
+        console.log(data);
+
         setProjects(data);
       }
     }
     getProjects();
+    getProjectsRealTime();
   }, [supabaseClient, user]);
 
   function toggleModal(cross?: boolean) {
@@ -338,6 +369,11 @@ export default function Projects({ avatar_url }: any) {
                           {item.deadline?.split("T")[0]}
                         </td>
                         <td className="px-3 py-4 text-sm text-gray-500">
+                          {item.project_users?.length === 0 && (
+                            <div className="flex items-center space-x-3">
+                              <div className="flex-shrink-0">-</div>
+                            </div>
+                          )}
                           {item.project_users?.map((p: any) => (
                             <div
                               className="flex items-center space-x-3"
