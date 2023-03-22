@@ -37,3 +37,5 @@ next-env.d.ts
 
 # cypress
 cypress.env.json
+# Local Netlify folder
+.netlify
