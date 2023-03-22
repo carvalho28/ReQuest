@@ -9,7 +9,7 @@ export default function Home() {
       <Head>
         <title>ReQuest App</title>
         <meta name="description" content="" />
-        <Link rel="icon" href="/favicon.ico" />
+        <link rel="icon" href="/favicon.ico" />
       </Head>
       <Header />
       <div className="relative isolate pt-14">
