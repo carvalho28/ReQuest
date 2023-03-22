@@ -45,7 +45,6 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   if (errorRpc) console.log(error);
   if (!dataRpc) throw new Error("No user data found");
   const userData = dataRpc[0];
-  console.log(userData);
 
   return {
     props: {
@@ -123,7 +122,7 @@ export default function Profile({ avatar_url, user_data }: any) {
   return (
     <Layout currentPage="profile" avatar_url={avatar_url}>
       <div className="flex gap-x-2 flex-col gap-y-4 sm:flex-row">
-        <div className="flex p-6 bg-white rounded-lg shadow-lg sm:w-3/5 w-full">
+        <div className="flex p-5 md:p-6 bg-white rounded-lg shadow-lg sm:w-3/5 w-full">
           <div className="w-2/5 flex flex-col justify-center items-center">
             <Image
               className="object-cover w-full rounded-lg"
@@ -140,7 +139,7 @@ export default function Profile({ avatar_url, user_data }: any) {
             </button>
           </div>
 
-          <div className="w-px bg-gray-400 mx-4"></div>
+          <div className="md:w-px mx-2 bg-gray-400 md:mx-4"></div>
 
           <div className="flex-grow p-6">
             <div className="flex items-center">
@@ -161,9 +160,9 @@ export default function Profile({ avatar_url, user_data }: any) {
             </div>
             <div className="flex mt-8 justify-center">
               <div className="flex items-center align-middle">
-                <FaStar className="h-20 w-20 text-yellow-400 w-" />
+                <FaStar className="h-12 w-12 md:h-20 md:w-20 text-yellow-400 w-" />
                 <span
-                  className={`ml-5 text-black text-2xl ${blackOpsOne.className} text-center`}
+                  className={`ml-5 text-black text-xl md:text-2xl ${blackOpsOne.className} text-center`}
                 >
                   Level {level}
                 </span>

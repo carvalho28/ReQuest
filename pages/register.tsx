@@ -108,7 +108,7 @@ export default function Register() {
       <div className="flex-1 flex items-center justify-center">
         {regSuccess && <ConfirmEmail />}
         <div className="mx-auto max-w-7xl px-6 lg:flex lg:items-center lg:gap-x-24 lg:px-8">
-          <div className="flex flex-1 flex-col justify-center py-12 px-4 sm:px-6 lg:flex-none lg:px-20 xl:px-24 bg-white2 rounded-3xl shadow-lg">
+          <div className="flex flex-1 flex-col justify-center py-8 px-12 sm:px-6 lg:flex-none lg:px-20 xl:px-24 bg-white2 rounded-3xl shadow-lg">
             <div className="mx-auto max-w-sm md:w-96">
               <div>
                 <h2 className="mt-6 text-3xl font-bold tracking-tight text-black text-center">
