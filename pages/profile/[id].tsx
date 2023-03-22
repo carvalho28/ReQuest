@@ -112,8 +112,6 @@ export default function Profile({ avatar_url }: any) {
           console.log("No data found");
           return;
         }
-        // console.log(data);
-
         setName(data[0].name);
         setUserData(data[0]);
         setReqComplete(data[0].requirements_completed);

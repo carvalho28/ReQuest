@@ -10,7 +10,12 @@ import { PlusIcon, UserIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { useSupabaseClient, useUser } from "@supabase/auth-helpers-react";
 import ErrorMessage from "@/components/ErrorMessage";
 import Stepper from "@/components/Stepper";
-import { RealtimeChannel } from "@supabase/supabase-js";
+import {
+  RealtimeChannel,
+  RealtimePostgresChangesPayload,
+  RealtimePresence,
+} from "@supabase/supabase-js";
+import { Database } from "@/types/supabase";
 
 function classNames(...classes: any[]) {
   return classes.filter(Boolean).join(" ");
@@ -53,15 +58,29 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
     .eq("id", user?.id);
   if (error) console.log(error);
   if (!data) throw new Error("No data found");
+  const avatar_url = data[0].avatar_url;
+
+  const { data: rpcData, error: rpcError } = await supabase.rpc(
+    "projects_user_people",
+    {
+      user_id: user.id,
+    }
+  );
+
+  if (rpcError) console.log(error);
+  if (!rpcData) return;
+
+  const projects = rpcData;
 
   return {
     props: {
-      avatar_url: data[0].avatar_url,
+      avatar_url: avatar_url,
+      projects: projects,
     },
   };
 };
 
-export default function Projects({ avatar_url }: any) {
+export default function Projects({ avatar_url, projects }: any) {
   const tabs = [
     { name: "Table", href: "/projects/table", current: true },
     { name: "Cards", href: "/projects/cards", current: false },
@@ -70,7 +89,9 @@ export default function Projects({ avatar_url }: any) {
   const router = useRouter();
   const [showModal, setShowModal] = useState(false);
 
-  const [projects, setProjects] = useState<any>([]);
+  const [projectsList, setProjectsList] = useState<
+    Database["public"]["Tables"]["projects"]["Row"][]
+  >([]);
 
   const [name, setName] = useState<string | undefined>();
   const [description, setDescription] = useState<string | undefined>();
@@ -173,6 +194,7 @@ export default function Projects({ avatar_url }: any) {
   }
 
   useEffect(() => {
+    setProjectsList(projects);
     // realtime updates
     let pj_channel: RealtimeChannel;
     async function getProjectsRealTime() {
@@ -185,10 +207,19 @@ export default function Projects({ avatar_url }: any) {
             schema: "public",
             table: "projects",
           },
-          async (payload) => {
-            console.log(payload);
+          async (payload: any) => {
+            // set the project changed to the new state
+            if (payload.new) {
+              const id = payload.new.id;
+              const index = projectsList.findIndex((p) => p.id === id);
+              console.log(index);
 
-            await getProjects();
+              if (index !== -1) {
+                const newProjectsList = [...projectsList];
+                newProjectsList[index] = payload.new;
+                setProjectsList(newProjectsList);
+              }
+            }
           }
         )
         .subscribe();
@@ -197,24 +228,9 @@ export default function Projects({ avatar_url }: any) {
         supabaseClient.removeChannel(pj_channel);
       };
     }
-
-    async function getProjects() {
-      if (user) {
-        const { data, error } = await supabaseClient.rpc(
-          "projects_user_people",
-          { user_id: user.id }
-        );
-
-        if (error) console.log(error);
-        if (!data) return;
-
-        console.log(data);
-        setProjects(data);
-      }
-    }
-    getProjects();
+    // getProjects();
     getProjectsRealTime();
-  }, [supabaseClient, user]);
+  }, [supabaseClient, user, projectsList, projects]);
 
   function toggleModal(cross?: boolean) {
     if (cross) {
@@ -297,7 +313,7 @@ export default function Projects({ avatar_url }: any) {
                 </button>
               </div>
             </div>
-            {projects && (
+            {projectsList && (
               <div className="-mx-4 mt-8 sm:-mx-0">
                 <table className="min-w-full divide-y divide-gray-300">
                   <thead>
@@ -336,7 +352,7 @@ export default function Projects({ avatar_url }: any) {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-200 bg-whitepages">
-                    {projects?.map((item: any) => (
+                    {projectsList?.map((item: any) => (
                       <tr
                         key={item.id}
                         className="divide-x divide-gray-300"
