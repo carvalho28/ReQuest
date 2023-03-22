@@ -37,9 +37,20 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   if (error) console.log(error);
   if (!data) throw new Error("No data found");
 
+  // get user data
+  const { data: dataRpc, error: errorRpc } = await supabase
+    .from("profiles")
+    .select("*, levels (denomination, xp_needed)")
+    .eq("id", user?.id);
+  if (errorRpc) console.log(error);
+  if (!dataRpc) throw new Error("No user data found");
+  const userData = dataRpc[0];
+  console.log(userData);
+
   return {
     props: {
       avatar_url: data[0].avatar_url,
+      user_data: userData,
     },
   };
 };
@@ -49,12 +60,12 @@ type ItemCarrousel = {
   value: number;
 };
 
-export default function Profile({ avatar_url }: any) {
+export default function Profile({ avatar_url, user_data }: any) {
   const router = useRouter();
   const supabaseClient = useSupabaseClient();
   const user = useUser();
 
-  const [userData, setUserData] = useState<any>(null);
+  const [userData, setUserData] = useState<any>(user_data);
   const [name, setName] = useState<string>();
   const [showModal, setShowModal] = useState(false);
   const [reqComplete, setReqComplete] = useState<number>(0);
@@ -100,31 +111,14 @@ export default function Profile({ avatar_url }: any) {
   }
 
   useEffect(() => {
-    // get user data
-    async function getUserData() {
-      if (user) {
-        const { data, error } = await supabaseClient
-          .from("profiles")
-          .select("*, levels (denomination, xp_needed)")
-          .eq("id", user?.id);
-        if (error) console.log(error);
-        if (!data) {
-          console.log("No data found");
-          return;
-        }
-        setName(data[0].name);
-        setUserData(data[0]);
-        setReqComplete(data[0].requirements_completed);
-        setLevel(data[0].level);
-        setXp(data[0].xp);
-        setXpNeeded(data[0].levels.xp_needed);
-        setDenomination(data[0].levels.denomination);
-        setNProjects(data[0].n_projects);
-      }
-    }
-
-    getUserData();
-  }, [supabaseClient, user]);
+    setName(userData?.name);
+    setReqComplete(userData?.requirements_completed);
+    setLevel(userData?.level);
+    setXp(userData?.xp);
+    setXpNeeded(userData?.levels.xp_needed);
+    setDenomination(userData?.levels.denomination);
+    setNProjects(userData?.n_projects);
+  }, [userData]);
 
   return (
     <Layout currentPage="profile" avatar_url={avatar_url}>
@@ -169,7 +163,7 @@ export default function Profile({ avatar_url }: any) {
               <div className="flex items-center align-middle">
                 <FaStar className="h-20 w-20 text-yellow-400 w-" />
                 <span
-                  className={`ml-5 text-black text-2xl ${blackOpsOne.className}`}
+                  className={`ml-5 text-black text-2xl ${blackOpsOne.className} text-center`}
                 >
                   Level {level}
                 </span>
