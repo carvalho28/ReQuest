@@ -60,7 +60,7 @@ type ItemCarrousel = {
 };
 
 export default function Profile({ avatar_url, user_data }: any) {
-  const router = useRouter();
+  // const router = useRouter();
   const supabaseClient = useSupabaseClient();
   const user = useUser();
 

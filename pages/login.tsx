@@ -6,13 +6,14 @@ import { signUpGithub, signUpGoogle } from "@/utils/signInUtils";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { FaGithub, FaTwitter } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
-import { useUser, useSupabaseClient } from "@supabase/auth-helpers-react";
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { GetServerSidePropsContext } from "next";
 import { createServerSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import Loading from "@/components/Loading";
+import Head from "next/head";
 
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   // Create authenticated Supabase Client
@@ -47,11 +48,7 @@ export default function Login() {
   const router = useRouter();
 
   const supabaseClient = useSupabaseClient();
-  const user = useUser();
-
-  useEffect(() => {
-    // load data
-  }, [user]);
+  // const user = useUser();
 
   async function signIn(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();

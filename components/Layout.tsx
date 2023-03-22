@@ -294,7 +294,6 @@ const Layout = ({
                     width={32}
                     height={32}
                     onClick={() => profileClick()}
-                    priority
                   />
                 ) : (
                   <></>
