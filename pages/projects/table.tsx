@@ -273,18 +273,6 @@ export default function Projects({ avatar_url }: any) {
     console.log("Project updated");
   }
 
-  const restoreSelection = (range: Range | null) => {
-    if (range) {
-      if (window.getSelection) {
-        const sel = window.getSelection();
-        if (sel) {
-          sel.removeAllRanges();
-          sel.addRange(range);
-        }
-      }
-    }
-  };
-
   return (
     <div>
       <Layout currentPage="projects" avatar_url={avatar_url}>
