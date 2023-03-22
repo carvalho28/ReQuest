@@ -130,6 +130,7 @@ export default function Profile({ avatar_url, user_data }: any) {
               alt="avatar"
               width={300}
               height={300}
+              priority={true}
             />
             <button
               type="submit"

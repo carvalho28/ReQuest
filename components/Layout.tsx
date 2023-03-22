@@ -271,8 +271,9 @@ const Layout = ({
                   className="h-8 w-auto hover:cursor-pointer"
                   src="/logo.svg"
                   alt="ReQuest"
-                  width={32}
-                  height={32}
+                  width={175}
+                  height={150}
+                  priority={true}
                   onClick={() => router.push("/dashboard")}
                 />
               </div>
@@ -291,6 +292,7 @@ const Layout = ({
                     className="h-auto w-48 pb-5"
                     src={avatar_url}
                     alt="Avatar"
+                    priority={true}
                     width={32}
                     height={32}
                     onClick={() => profileClick()}
