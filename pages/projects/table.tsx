@@ -363,10 +363,18 @@ export default function Projects({ avatar_url, projects }: any) {
                       >
                         <td
                           className="w-full max-w-0 py-4 pl-4 pr-3 text-sm sm:font-medium text-black sm:w-auto sm:max-w-none sm:pl-0"
-                          contentEditable="true"
+                          contentEditable="false"
                           suppressContentEditableWarning={true}
+                          onFocus={(e) => {
+                            const screenWidth = window.innerWidth;
+                            if (screenWidth >= 768) {
+                              (e.target as HTMLElement).contentEditable =
+                                "true";
+                            }
+                          }}
                           onBlur={(e) => {
-                            updateField(item.id, "name", e.target.innerText);
+                            (e.target as HTMLElement).contentEditable = "false";
+                            updateField(item.id, "name", item.name);
                           }}
                         >
                           {item.name}
@@ -449,7 +457,7 @@ export default function Projects({ avatar_url, projects }: any) {
                 <div className="inline-block bg-neutral-50 rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 align-middle w-fit">
                   <div className="px-4 pt-4 pb-4 sm:p-6 sm:pb-4 flex justify-center items-center">
                     <div className="flex flex-col">
-                      <div className="mt-5 text-left">
+                      <div className="mt-5 md:text-left text-center">
                         <h3
                           className="text-2xl text-black font-semibold"
                           id="modal-headline"
@@ -468,12 +476,12 @@ export default function Projects({ avatar_url, projects }: any) {
                         <XMarkIcon className="h-6 w-6" />
                       </button>
 
-                      <div className="carousel-container mt-8 text-left flex-col space-y-2 w-full">
+                      <div className="carousel-container mt-8 md:text-left text-center flex-col space-y-2 w-full">
                         <div className="flex flex-col justify-center items-center">
                           <div
                             className={classNames(
                               error ? "mb-2" : "mb-0",
-                              "w-96"
+                              "w-80 md:w-96"
                             )}
                           >
                             {error && <ErrorMessage message={errorMessage} />}
@@ -495,7 +503,7 @@ export default function Projects({ avatar_url, projects }: any) {
                                 name="name"
                                 id="name"
                                 required
-                                className="shadow-sm focus:ring-contrat focus:border-contrast block w-96 sm:text-sm border-gray-300 rounded-md"
+                                className="shadow-sm focus:ring-contrat focus:border-contrast block w-80 md:w-96 sm:text-sm border-gray-300 rounded-md"
                                 onChange={(e) => setName(e.target.value)}
                               />
                             </div>
@@ -518,7 +526,7 @@ export default function Projects({ avatar_url, projects }: any) {
                                 maxLength={125}
                                 name="description"
                                 id="description"
-                                className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-96 sm:text-sm border-gray-300 rounded-md"
+                                className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-80 md:w-96 sm:text-sm border-gray-300 rounded-md"
                                 onChange={(e) => setDescription(e.target.value)}
                               />
                             </div>
@@ -573,19 +581,19 @@ export default function Projects({ avatar_url, projects }: any) {
                             </div>
                             <label
                               htmlFor="people"
-                              className="block text-md font-medium text-gray-700"
+                              className="block text-md font-medium text-gray-700 mb-4"
                             >
                               Coworker
                             </label>
                             <div className="flex flex-row space-x-6 w-full">
-                              <div className="mt-1 w-5/6">
+                              <div className="md:mt-1 w-5/6">
                                 <input
                                   value={person}
                                   type="email"
                                   name="person"
                                   id="person"
                                   placeholder="Coworker email address"
-                                  className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-80 sm:text-sm border-gray-300 rounded-md"
+                                  className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-64 md:w-80 sm:text-sm border-gray-300 rounded-md"
                                   onChange={(e) => setPerson(e.target.value)}
                                 />
                               </div>
