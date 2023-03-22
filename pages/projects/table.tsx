@@ -356,22 +356,7 @@ export default function Projects({ avatar_url, projects }: any) {
                         //   router.push(`/projects/${item.id}`);
                         // }}
                       >
-                        <td
-                          className="w-full max-w-0 py-4 pl-4 pr-3 text-sm sm:font-medium text-black sm:w-auto sm:max-w-none sm:pl-0"
-                          contentEditable="false"
-                          suppressContentEditableWarning={true}
-                          onFocus={(e) => {
-                            const screenWidth = window.innerWidth;
-                            if (screenWidth >= 768) {
-                              (e.target as HTMLElement).contentEditable =
-                                "true";
-                            }
-                          }}
-                          onBlur={(e) => {
-                            (e.target as HTMLElement).contentEditable = "false";
-                            updateField(item.id, "name", item.name);
-                          }}
-                        >
+                        <td className="w-full max-w-0 py-4 pl-4 pr-3 text-sm sm:font-medium text-black sm:w-auto sm:max-w-none sm:pl-0">
                           {item.name}
                           <dl className="font-normal lg:hidden">
                             <dt className="sr-only">Description</dt>
