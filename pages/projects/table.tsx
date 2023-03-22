@@ -1,20 +1,15 @@
 import Layout from "@/components/Layout";
-
 import { createServerSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import { GetServerSidePropsContext } from "next";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { RiArrowRightCircleFill, RiArrowLeftCircleFill } from "react-icons/ri";
 import { PlusIcon, UserIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { useSupabaseClient, useUser } from "@supabase/auth-helpers-react";
 import ErrorMessage from "@/components/ErrorMessage";
 import Stepper from "@/components/Stepper";
-import {
-  RealtimeChannel,
-  RealtimePostgresChangesPayload,
-  RealtimePresence,
-} from "@supabase/supabase-js";
+import { RealtimeChannel } from "@supabase/supabase-js";
 import { Database } from "@/types/supabase";
 
 function classNames(...classes: any[]) {
