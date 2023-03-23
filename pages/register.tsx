@@ -5,13 +5,20 @@ import { FcGoogle } from "react-icons/fc";
 import { FaGithub, FaTwitter } from "react-icons/fa";
 import { useEffect, useState } from "react";
 import supabase from "@/utils/supabaseClient";
-import ConfirmEmail from "@/components/ConfirmEmail";
 import { signUpGithub, signUpGoogle } from "@/utils/signInUtils";
 import PasswordInput from "@/components/PasswordInput";
-import ErrorMessage from "@/components/ErrorMessage";
 import { GetServerSidePropsContext } from "next";
 import { createServerSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import { useUser, useSupabaseClient } from "@supabase/auth-helpers-react";
+
+// dynamic imports
+import dynamic from "next/dynamic";
+const ErrorMessage = dynamic(() => import("@/components/ErrorMessage"), {
+  ssr: false,
+});
+const ConfirmEmail = dynamic(() => import("@/components/ConfirmEmail"), {
+  ssr: false,
+});
 
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   // Create authenticated Supabase Client

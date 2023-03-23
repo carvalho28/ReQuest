@@ -12,8 +12,10 @@ import Tabs from "@/components/Tabs";
 
 // dynamic imports
 import dynamic from "next/dynamic";
-const ErrorMessage = dynamic(() => import("@/components/ErrorMessage"));
-const Stepper = dynamic(() => import("@/components/Stepper"));
+const ErrorMessage = dynamic(() => import("@/components/ErrorMessage"), {
+  ssr: false,
+});
+const Stepper = dynamic(() => import("@/components/Stepper"), { ssr: false });
 
 function classNames(...classes: any[]) {
   return classes.filter(Boolean).join(" ");
