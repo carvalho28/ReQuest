@@ -1,5 +1,3 @@
-import ConfirmEmail from "@/components/ConfirmEmail";
-import ErrorMessage from "@/components/ErrorMessage";
 import Header from "@/components/Header";
 import PasswordInput from "@/components/PasswordInput";
 import { signUpGithub, signUpGoogle } from "@/utils/signInUtils";
@@ -12,7 +10,16 @@ import { FcGoogle } from "react-icons/fc";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { GetServerSidePropsContext } from "next";
 import { createServerSupabaseClient } from "@supabase/auth-helpers-nextjs";
-import Loading from "@/components/Loading";
+
+// dynamic imports
+import dynamic from "next/dynamic";
+const Loading = dynamic(() => import("@/components/Loading"), { ssr: false });
+const ConfirmEmail = dynamic(() => import("@/components/ConfirmEmail"), {
+  ssr: false,
+});
+const ErrorMessage = dynamic(() => import("@/components/ErrorMessage"), {
+  ssr: false,
+});
 
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   // Create authenticated Supabase Client
