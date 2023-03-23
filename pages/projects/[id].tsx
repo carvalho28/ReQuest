@@ -2,6 +2,7 @@ import Layout from "@/components/Layout";
 import { createServerSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import { GetServerSidePropsContext } from "next";
 import { Database } from "@/types/supabase";
+import RequirementsTable from "@/components/RequirementsTable";
 
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   const supabase = createServerSupabaseClient(ctx);
@@ -48,7 +49,7 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
 export default function SingleProject({ avatar_url, project_data }: any) {
   const project: Database["public"]["Tables"]["projects"]["Row"] =
     project_data[0];
-  console.log(project);
+  // console.log(project);
 
   return (
     <div>
@@ -57,7 +58,7 @@ export default function SingleProject({ avatar_url, project_data }: any) {
         namePage={project.name}
         avatar_url={avatar_url}
       >
-        Single Project
+        <RequirementsTable />
       </Layout>
     </div>
   );
