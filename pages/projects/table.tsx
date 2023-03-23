@@ -1,16 +1,19 @@
 import Layout from "@/components/Layout";
 import { createServerSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import { GetServerSidePropsContext } from "next";
-import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { RiArrowRightCircleFill, RiArrowLeftCircleFill } from "react-icons/ri";
 import { PlusIcon, UserIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { useSupabaseClient, useUser } from "@supabase/auth-helpers-react";
-import ErrorMessage from "@/components/ErrorMessage";
-import Stepper from "@/components/Stepper";
 import { RealtimeChannel } from "@supabase/supabase-js";
 import { Database } from "@/types/supabase";
+import Tabs from "@/components/Tabs";
+
+// dynamic imports
+import dynamic from "next/dynamic";
+const ErrorMessage = dynamic(() => import("@/components/ErrorMessage"));
+const Stepper = dynamic(() => import("@/components/Stepper"));
 
 function classNames(...classes: any[]) {
   return classes.filter(Boolean).join(" ");
@@ -29,8 +32,6 @@ const steps: Step[] = [
   { id: "03", name: "Deadline", href: "#", status: "upcoming" },
   { id: "04", name: "Coworkers", href: "#", status: "upcoming" },
 ];
-
-const Tabs = dynamic(() => import("@/components/Tabs"), { ssr: false });
 
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   const supabase = createServerSupabaseClient(ctx);

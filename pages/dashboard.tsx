@@ -3,7 +3,6 @@ import { GetServerSidePropsContext } from "next";
 import { useRouter } from "next/router";
 import { createServerSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import { useEffect } from "react";
-import Card from "@/components/Card";
 import Layout from "@/components/Layout";
 
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {

@@ -1,7 +1,6 @@
 import { useUser, useSupabaseClient } from "@supabase/auth-helpers-react";
 import { GetServerSidePropsContext } from "next";
 import { createServerSupabaseClient } from "@supabase/auth-helpers-nextjs";
-import { useRouter } from "next/router";
 import Layout from "@/components/Layout";
 import Image from "next/image";
 import { useEffect, useState } from "react";
