@@ -1,4 +1,11 @@
-import { ChevronDownIcon, PlusIcon } from "@heroicons/react/24/outline";
+import {
+  ArrowLongRightIcon,
+  ArrowUpRightIcon,
+  ChevronDownIcon,
+  ChevronUpIcon,
+  PencilIcon,
+} from "@heroicons/react/24/outline";
+import moment from "moment";
 import React, { useEffect, useState } from "react";
 
 const RequirementsTable = () => {
@@ -6,11 +13,17 @@ const RequirementsTable = () => {
     id: number;
     name: string;
     description: string;
-    created_at: Date;
+    due_date?: Date;
+    priority: number;
     updated_at: Date;
+    created_at: Date;
+    edited_by: string;
+    created_by: string;
     assigned_to: string;
+    checked: boolean;
   };
   const [requirements, setRequirements] = useState<Requirement[]>([]);
+  const [descriptionOrder, setDescriptionOrder] = useState("");
 
   useEffect(() => {
     const reqs = [
@@ -18,23 +31,32 @@ const RequirementsTable = () => {
         id: 1,
         name: "Requirement 1",
         description: "bbbbbb",
+        due_date: new Date("2021-10-01"),
+        priority: 1,
         created_at: new Date("2021-10-01"),
         updated_at: new Date("2021-08-01"),
+        edited_by: "John Doe",
+        created_by: "John Doe",
         assigned_to: "John Doe",
+        checked: false,
       },
       {
         id: 2,
         name: "Requirement 2",
         description: "aaaaa",
+        due_date: new Date("2021-10-01"),
+        priority: 1,
         created_at: new Date("2021-10-01"),
         updated_at: new Date("2021-08-01"),
+        edited_by: "John Doe",
+        created_by: "John Doe",
         assigned_to: "John Doe",
+        checked: false,
       },
     ];
     setRequirements(reqs);
+    setDescriptionOrder("asc");
   }, []);
-
-  const [descriptionOrder, setDescriptionOrder] = useState("asc");
 
   function sortByTitle(column: string, toggleOrder: boolean) {
     let order = descriptionOrder;
@@ -68,6 +90,29 @@ const RequirementsTable = () => {
         return 0;
       });
       setRequirements(sorted);
+    }
+  }
+
+  // render different badge depending on priority
+  function renderPriorityBadge(priority: number) {
+    if (priority === 1) {
+      return (
+        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
+          High
+        </span>
+      );
+    } else if (priority === 2) {
+      return (
+        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+          Medium
+        </span>
+      );
+    } else {
+      return (
+        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+          Low
+        </span>
+      );
     }
   }
 
@@ -122,10 +167,17 @@ const RequirementsTable = () => {
                         onClick={() => sortByTitle("description", true)}
                         className="ml-2 flex-none rounded bg-gray-100 text-gray-900 group-hover:bg-gray-200"
                       >
-                        <ChevronDownIcon
-                          className="h-5 w-5"
-                          aria-hidden="true"
-                        />
+                        {descriptionOrder === "asc" ? (
+                          <ChevronDownIcon
+                            className="h-5 w-5"
+                            aria-hidden="true"
+                          />
+                        ) : (
+                          <ChevronUpIcon
+                            className="h-5 w-5"
+                            aria-hidden="true"
+                          />
+                        )}
                       </span>
                     </a>
                   </th>
@@ -134,7 +186,7 @@ const RequirementsTable = () => {
                     className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                   >
                     <a href="#" className="group inline-flex">
-                      Email
+                      Priority
                       <span className="invisible ml-2 flex-none rounded text-gray-400 group-hover:visible group-focus:visible">
                         <ChevronDownIcon
                           className="invisible ml-2 h-5 w-5 flex-none rounded text-gray-400 group-hover:visible group-focus:visible"
@@ -148,7 +200,24 @@ const RequirementsTable = () => {
                     className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                   >
                     <a href="#" className="group inline-flex">
-                      Role
+                      Due Date
+                      <span
+                        // onClick={() => sortByColumn(requirements, "id", "asc")}
+                        className="invisible ml-2 flex-none rounded text-gray-400 group-hover:visible group-focus:visible"
+                      >
+                        <ChevronDownIcon
+                          className="invisible ml-2 h-5 w-5 flex-none rounded text-gray-400 group-hover:visible group-focus:visible"
+                          aria-hidden="true"
+                        />
+                      </span>
+                    </a>
+                  </th>
+                  <th
+                    scope="col"
+                    className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                  >
+                    <a href="#" className="group inline-flex">
+                      Assigned To
                       <span
                         // onClick={() => sortByColumn(requirements, "id", "asc")}
                         className="invisible ml-2 flex-none rounded text-gray-400 group-hover:visible group-focus:visible"
@@ -172,29 +241,38 @@ const RequirementsTable = () => {
                       {req.name}
                     </td>
                     <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                      {req.description}
+                      {/* limit 25 chars */}
+                      {req.description.length > 25
+                        ? req.description.substring(0, 25) + "..."
+                        : req.description}
                     </td>
                     <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                      {req.created_at.getDate() +
-                        "/" +
-                        req.created_at.getMonth() +
-                        "/" +
-                        req.created_at.getFullYear()}
+                      {renderPriorityBadge(req.priority)}
                     </td>
                     <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                      {req.updated_at.getDate() +
+                      {/* {req.due_date.getDate() +
                         "/" +
-                        req.updated_at.getMonth() +
+                        req.due_date.getMonth() +
                         "/" +
-                        req.updated_at.getFullYear()}
+                        req.due_date.getFullYear()} */}
+                      {req.due_date !== null
+                        ? moment(req.due_date).format("DD/MM/YYYY")
+                        : "No due date"}
+                    </td>
+                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                      {req.assigned_to}
                     </td>
                     <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm sm:pr-0">
-                      <a
-                        href="#"
-                        className="text-indigo-600 hover:text-indigo-900"
+                      <button
+                        type="button"
+                        className="text-contrast hover:text-contrasthover"
                       >
-                        Edit<span className="sr-only">, {req.name}</span>
-                      </a>
+                        <span className="sr-only">Edit</span>
+                        <ArrowUpRightIcon
+                          className="h-5 w-5"
+                          aria-hidden="true"
+                        />
+                      </button>
                     </td>
                   </tr>
                 ))}
