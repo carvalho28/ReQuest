@@ -6812,6 +6812,11 @@ moize@^6.1.0, moize@^6.1.3:
     fast-equals "^3.0.1"
     micro-memoize "^4.0.11"
 
+moment@^2.29.4:
+  version "2.29.4"
+  resolved "https://registry.yarnpkg.com/moment/-/moment-2.29.4.tgz#3dbe052889fe7c1b2ed966fcb3a77328964ef108"
+  integrity sha512-5LC9SOxjSc2HF6vO2CyuTDNivEdoz2IvyJJGj6X8DJ0eFyfszE0QiEd+iXmBvUP3WHxSjFH/vIsA0EN00cgr8w==
+
 move-file@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/move-file/-/move-file-3.0.0.tgz#b2da5d7b4627e61ff5408841e81312143fa58a64"
