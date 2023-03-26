@@ -7,6 +7,7 @@ import {
 } from "@heroicons/react/24/outline";
 import moment from "moment";
 import React, { useEffect, useState } from "react";
+import RequirementData from "./RequirementData";
 
 const RequirementsTable = () => {
   type Requirement = {
@@ -24,6 +25,14 @@ const RequirementsTable = () => {
   };
   const [requirements, setRequirements] = useState<Requirement[]>([]);
   const [descriptionOrder, setDescriptionOrder] = useState("");
+
+  const [showReq, setShowReq] = useState(false);
+
+  function toggleReq() {
+    console.log("toggle");
+
+    setShowReq(!showReq);
+  }
 
   useEffect(() => {
     const reqs = [
@@ -263,16 +272,24 @@ const RequirementsTable = () => {
                       {req.assigned_to}
                     </td>
                     <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm sm:pr-0">
-                      <button
+                      {/* <button
                         type="button"
                         className="text-contrast hover:text-contrasthover"
+                        onClick={() => {
+                          toggleReq();
+                        }}
+                      > */}
+                      <label
+                        htmlFor="my-modal-5"
+                        className="btn text-contrast hover:text-contrasthover bg-transparent border-0 hover:bg-purple-200"
                       >
                         <span className="sr-only">Edit</span>
                         <ArrowUpRightIcon
                           className="h-5 w-5"
                           aria-hidden="true"
                         />
-                      </button>
+                      </label>
+                      {/* </button> */}
                     </td>
                   </tr>
                 ))}
@@ -281,6 +298,7 @@ const RequirementsTable = () => {
           </div>
         </div>
       </div>
+      {showReq && <RequirementData />}
     </div>
   );
 };

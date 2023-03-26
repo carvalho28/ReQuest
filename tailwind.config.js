@@ -18,5 +18,18 @@ module.exports = {
       },
     },
   },
-  plugins: [require("@tailwindcss/forms")],
+  daisyui: {
+    themes: [
+      {
+        mytheme: {
+          primary: "#0998B7",
+          secondary: "#32C487",
+          accent: "#845EC2",
+          neutral: "#1E1E1E",
+          "base-100": "#F5F5F7",
+        },
+      },
+    ],
+  },
+  plugins: [require("@tailwindcss/forms"), require("daisyui")],
 };
