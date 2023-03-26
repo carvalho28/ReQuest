@@ -1,4 +1,7 @@
-import React from "react";
+// import Tiptap from "./TipTap";
+// import { Editor } from "./LexicalReq";
+
+import Tiptap from "./TipTap";
 
 const RequirementData = () => {
   return (
@@ -9,10 +12,9 @@ const RequirementData = () => {
           <h3 className="font-bold text-lg">
             Congratulations random Internet user!
           </h3>
-          <p className="py-4">
-            Youve been selected for a chance to get one year of subscription to
-            use Wikipedia for free!
-          </p>
+          {/* <div> */}
+          <Tiptap />
+          {/* </div> */}
           <div className="modal-action">
             <label htmlFor="my-modal-5" className="btn">
               Yay!

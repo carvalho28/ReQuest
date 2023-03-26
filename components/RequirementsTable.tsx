@@ -298,7 +298,7 @@ const RequirementsTable = () => {
           </div>
         </div>
       </div>
-      {showReq && <RequirementData />}
+      <RequirementData />
     </div>
   );
 };
