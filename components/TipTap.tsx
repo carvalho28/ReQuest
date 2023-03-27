@@ -196,38 +196,40 @@ const Tiptap = ({ name }: TiptapProps) => {
   async function addImageOnDrop(event: React.DragEvent<HTMLDivElement>) {
     event.preventDefault();
     const file = event.dataTransfer?.files[0];
-    // generate random string for file name
-    const randomString = Math.random().toString(36).substring(2, 15);
-    const fileName = `${randomString}-${file.name}`;
-
     if (file) {
-      const { data, error } = await supabaseClient.storage
-        .from("images-editor")
-        .upload(`${fileName}`, file, {
-          cacheControl: "3600",
-          upsert: false,
-        });
+      // generate random string for file name
+      const randomString = Math.random().toString(36).substring(2, 15);
+      const fileName = `${randomString}-${file.name}`;
 
-      if (error) {
-        console.log("error", error);
-        return;
+      if (file) {
+        const { data, error } = await supabaseClient.storage
+          .from("images-editor")
+          .upload(`${fileName}`, file, {
+            cacheControl: "3600",
+            upsert: false,
+          });
+
+        if (error) {
+          console.log("error", error);
+          return;
+        }
+
+        // get a url for the uploaded file
+        const { data: urlData } = await supabaseClient.storage
+          .from("images-editor")
+          .createSignedUrl(`${fileName}`, 365 * 24 * 60 * 60);
+
+        const url = urlData?.signedUrl as string;
+
+        editor?.chain().focus().setImage({ src: url }).run();
       }
-
-      // get a url for the uploaded file
-      const { data: urlData } = await supabaseClient.storage
-        .from("images-editor")
-        .createSignedUrl(`${fileName}`, 365 * 24 * 60 * 60);
-
-      const url = urlData?.signedUrl as string;
-
-      editor?.chain().focus().setImage({ src: url }).run();
     }
   }
 
   return (
     <div>
       <MenuBar editor={editor} />
-      <EditorContent editor={editor} onDrop={addImageOnDrop} />
+      <EditorContent editor={editor} onDragOver={addImageOnDrop} />
     </div>
   );
 };
