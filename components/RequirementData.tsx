@@ -3,7 +3,11 @@
 
 import Tiptap from "./TipTap";
 
-const RequirementData = () => {
+interface RequirementDataProps {
+  name: string;
+}
+
+const RequirementData = ({ name }: RequirementDataProps) => {
   return (
     <>
       <input type="checkbox" id="my-modal-5" className="modal-toggle" />
@@ -13,7 +17,7 @@ const RequirementData = () => {
             Congratulations random Internet user!
           </h3>
           {/* <div> */}
-          <Tiptap />
+          <Tiptap name={name} />
           {/* </div> */}
           <div className="modal-action">
             <label htmlFor="my-modal-5" className="btn">
