@@ -1,6 +1,3 @@
-// import Tiptap from "./TipTap";
-// import { Editor } from "./LexicalReq";
-
 import Tiptap from "./TipTap";
 
 interface RequirementDataProps {

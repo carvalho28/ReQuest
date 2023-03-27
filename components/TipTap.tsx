@@ -27,8 +27,8 @@ const Tiptap = ({ name }: TiptapProps) => {
   useEffect(() => {
     setProvider(
       new HocuspocusProvider({
-        // url: "ws://req-server-real.up.railway.app:1234",
-        url: "ws://localhost:1234",
+        url: "ws://little-rain-5635.fly.dev/",
+        // url: "ws://localhost:1234",
         name: "tiptap",
         document: new Y.Doc(),
       })
