@@ -1,15 +1,17 @@
 import {
-  ArrowLongRightIcon,
   ArrowUpRightIcon,
   ChevronDownIcon,
   ChevronUpIcon,
-  PencilIcon,
 } from "@heroicons/react/24/outline";
 import moment from "moment";
 import React, { useEffect, useState } from "react";
 import RequirementData from "./RequirementData";
 
-const RequirementsTable = () => {
+interface RequirementsTableProps {
+  name: string;
+}
+
+const RequirementsTable = ({ name }: RequirementsTableProps) => {
   type Requirement = {
     id: number;
     name: string;
@@ -272,13 +274,6 @@ const RequirementsTable = () => {
                       {req.assigned_to}
                     </td>
                     <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm sm:pr-0">
-                      {/* <button
-                        type="button"
-                        className="text-contrast hover:text-contrasthover"
-                        onClick={() => {
-                          toggleReq();
-                        }}
-                      > */}
                       <label
                         htmlFor="my-modal-5"
                         className="btn text-contrast hover:text-contrasthover bg-transparent border-0 hover:bg-purple-200"
@@ -298,7 +293,7 @@ const RequirementsTable = () => {
           </div>
         </div>
       </div>
-      {showReq && <RequirementData />}
+      <RequirementData name={name} />
     </div>
   );
 };
