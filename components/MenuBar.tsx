@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   RiArrowGoBackLine,
   RiArrowGoForwardLine,
@@ -141,19 +142,6 @@ const MenuBar = ({ editor }: any) => {
 
       {/* divider */}
       <div className="border-r-2 border-gray-300 h-6"></div>
-
-      {/* <button
-        onClick={() => editor.chain().focus().undo().run()}
-        disabled={!editor.can().chain().focus().undo().run()}
-      >
-        <RiArrowGoBackLine size={20} />
-      </button>
-      <button
-        onClick={() => editor.chain().focus().redo().run()}
-        disabled={!editor.can().chain().focus().redo().run()}
-      >
-        <RiArrowGoForwardLine size={20} />
-      </button> */}
     </div>
   );
 };

@@ -30,11 +30,18 @@ import java from "highlight.js/lib/languages/java";
 import c from "highlight.js/lib/languages/c";
 import cpp from "highlight.js/lib/languages/cpp";
 
+// images
+import Image from "@tiptap/extension-image";
+import Dropcursor from "@tiptap/extension-dropcursor";
+import { useSupabaseClient, useUser } from "@supabase/auth-helpers-react";
+
 interface TiptapProps {
   name: string;
 }
 
 const Tiptap = ({ name }: TiptapProps) => {
+  const supabaseClient = useSupabaseClient();
+
   const [content, setContent] = useState("");
   const [provider, setProvider] = useState<HocuspocusProvider>();
 
@@ -126,6 +133,7 @@ const Tiptap = ({ name }: TiptapProps) => {
     Color.configure({ types: [TextStyle.name, ListItem.name] }),
     TextStyle.configure({ types: [ListItem.name] } as any),
     StarterKit.configure({
+      codeBlock: false,
       history: false,
       bulletList: {
         keepMarks: true,
@@ -148,6 +156,9 @@ const Tiptap = ({ name }: TiptapProps) => {
     }),
     CodeBlockLowlight.configure({
       lowlight,
+    }),
+    Image.configure({
+      inline: true,
     }),
   ];
 
@@ -182,10 +193,41 @@ const Tiptap = ({ name }: TiptapProps) => {
     [provider]
   );
 
+  async function addImageOnDrop(event: React.DragEvent<HTMLDivElement>) {
+    event.preventDefault();
+    const file = event.dataTransfer?.files[0];
+    // generate random string for file name
+    const randomString = Math.random().toString(36).substring(2, 15);
+    const fileName = `${randomString}-${file.name}`;
+
+    if (file) {
+      const { data, error } = await supabaseClient.storage
+        .from("images-editor")
+        .upload(`${fileName}`, file, {
+          cacheControl: "3600",
+          upsert: false,
+        });
+
+      if (error) {
+        console.log("error", error);
+        return;
+      }
+
+      // get a url for the uploaded file
+      const { data: urlData } = await supabaseClient.storage
+        .from("images-editor")
+        .createSignedUrl(`${fileName}`, 365 * 24 * 60 * 60);
+
+      const url = urlData?.signedUrl as string;
+
+      editor?.chain().focus().setImage({ src: url }).run();
+    }
+  }
+
   return (
     <div>
       <MenuBar editor={editor} />
-      <EditorContent editor={editor} />
+      <EditorContent editor={editor} onDrop={addImageOnDrop} />
     </div>
   );
 };
