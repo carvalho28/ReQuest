@@ -16,6 +16,20 @@ import CollaborationCursor from "@tiptap/extension-collaboration-cursor";
 import * as Y from "yjs";
 import { HocuspocusProvider } from "@hocuspocus/provider";
 
+// code blocks
+import { lowlight } from "lowlight/lib/core";
+import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
+import css from "highlight.js/lib/languages/css";
+import js from "highlight.js/lib/languages/javascript";
+import ts from "highlight.js/lib/languages/typescript";
+import html from "highlight.js/lib/languages/xml";
+import json from "highlight.js/lib/languages/json";
+import bash from "highlight.js/lib/languages/bash";
+import python from "highlight.js/lib/languages/python";
+import java from "highlight.js/lib/languages/java";
+import c from "highlight.js/lib/languages/c";
+import cpp from "highlight.js/lib/languages/cpp";
+
 interface TiptapProps {
   name: string;
 }
@@ -23,6 +37,19 @@ interface TiptapProps {
 const Tiptap = ({ name }: TiptapProps) => {
   const [content, setContent] = useState("");
   const [provider, setProvider] = useState<HocuspocusProvider>();
+
+  useEffect(() => {
+    lowlight.registerLanguage("html", html);
+    lowlight.registerLanguage("css", css);
+    lowlight.registerLanguage("javascript", js);
+    lowlight.registerLanguage("typescript", ts);
+    lowlight.registerLanguage("json", json);
+    lowlight.registerLanguage("bash", bash);
+    lowlight.registerLanguage("python", python);
+    lowlight.registerLanguage("java", java);
+    lowlight.registerLanguage("c", c);
+    lowlight.registerLanguage("cpp", cpp);
+  }, []);
 
   useEffect(() => {
     setProvider(
@@ -95,6 +122,35 @@ const Tiptap = ({ name }: TiptapProps) => {
     return hexColor;
   }
 
+  const commonExtensions = [
+    Color.configure({ types: [TextStyle.name, ListItem.name] }),
+    TextStyle.configure({ types: [ListItem.name] } as any),
+    StarterKit.configure({
+      history: false,
+      bulletList: {
+        keepMarks: true,
+        keepAttributes: false, // TODO : Making this as `false` becase marks are not preserved when I try to preserve attrs, awaiting a bit of help
+      },
+      orderedList: {
+        keepMarks: true,
+        keepAttributes: false, // TODO : Making this as `false` becase marks are not preserved when I try to preserve attrs, awaiting a bit of help
+      },
+    }),
+    Placeholder.configure({
+      emptyEditorClass: "is-editor-empty",
+    }),
+    Highlight.configure({
+      multicolor: true,
+    }),
+    TaskList,
+    TaskItem.configure({
+      nested: true,
+    }),
+    CodeBlockLowlight.configure({
+      lowlight,
+    }),
+  ];
+
   const extensions = provider
     ? [
         Collaboration.configure({
@@ -104,59 +160,12 @@ const Tiptap = ({ name }: TiptapProps) => {
           provider,
           user: {
             name: name,
-            // create a random color
             color: generatePastelColor(),
           },
         }),
-        Color.configure({ types: [TextStyle.name, ListItem.name] }),
-        TextStyle.configure({ types: [ListItem.name] } as any),
-        StarterKit.configure({
-          history: false,
-          bulletList: {
-            keepMarks: true,
-            keepAttributes: false, // TODO : Making this as `false` becase marks are not preserved when I try to preserve attrs, awaiting a bit of help
-          },
-          orderedList: {
-            keepMarks: true,
-            keepAttributes: false, // TODO : Making this as `false` becase marks are not preserved when I try to preserve attrs, awaiting a bit of help
-          },
-        }),
-        Placeholder.configure({
-          emptyEditorClass: "is-editor-empty",
-        }),
-        Highlight.configure({
-          multicolor: true,
-        }),
-        TaskList,
-        TaskItem.configure({
-          nested: true,
-        }),
+        ...commonExtensions,
       ]
-    : [
-        Color.configure({ types: [TextStyle.name, ListItem.name] }),
-        TextStyle.configure({ types: [ListItem.name] } as any),
-        StarterKit.configure({
-          history: false,
-          bulletList: {
-            keepMarks: true,
-            keepAttributes: false, // TODO : Making this as `false` becase marks are not preserved when I try to preserve attrs, awaiting a bit of help
-          },
-          orderedList: {
-            keepMarks: true,
-            keepAttributes: false, // TODO : Making this as `false` becase marks are not preserved when I try to preserve attrs, awaiting a bit of help
-          },
-        }),
-        Placeholder.configure({
-          emptyEditorClass: "is-editor-empty",
-        }),
-        Highlight.configure({
-          multicolor: true,
-        }),
-        TaskList,
-        TaskItem.configure({
-          nested: true,
-        }),
-      ];
+    : [...commonExtensions];
 
   const editor = useEditor(
     {
@@ -164,7 +173,8 @@ const Tiptap = ({ name }: TiptapProps) => {
       editorProps: {
         attributes: {
           class:
-            "prose p-4 prose-md mx-auto mb-12 mx-8 focus:outline-none border-l-2 border-b-2 border-r-2 border-black h-96 max-w-none",
+            "prose p-4 prose-md mx-auto mb-12 mx-8 focus:outline-none border-l-2 border-b-2 border-r-2 border-black max-w-none",
+          style: "min-height: 20em;",
         },
       },
       // content: content,
