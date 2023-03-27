@@ -22,7 +22,7 @@ const Tiptap = () => {
   useEffect(() => {
     setProvider(
       new HocuspocusProvider({
-        url: "ws://localhost:3000",
+        url: "ws://localhost:1234",
         name: "tiptap",
         document: new Y.Doc(),
       })
