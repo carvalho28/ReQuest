@@ -61,7 +61,7 @@ kleur@^4.1.4:
   resolved "https://registry.yarnpkg.com/kleur/-/kleur-4.1.5.tgz#95106101795f7050c6c650f350c683febddb1780"
   integrity sha512-o+NO+8WrRiQEE4/7nwRJhN1HWpVmJm511pBHUxPLtp0BUISzlBplORYSmTclCnJvQq2tKu/sgl3xVpkc7ZWuQQ==
 
-lib0@^0.2.46, lib0@^0.2.47:
+lib0@^0.2.42, lib0@^0.2.46, lib0@^0.2.47, lib0@^0.2.72:
   version "0.2.73"
   resolved "https://registry.yarnpkg.com/lib0/-/lib0-0.2.73.tgz#af7d7ce9ad523fa3e241d437cc3ab1862f9a1f29"
   integrity sha512-aJJIElCLWnHMcYZPtsM07QoSfHwpxCy4VUzBYGXFYEmh/h2QS5uZNbCCfL0CqnkOE30b7Tp9DVfjXag+3qzZjQ==
@@ -77,3 +77,17 @@ ws@^8.5.0:
   version "8.13.0"
   resolved "https://registry.yarnpkg.com/ws/-/ws-8.13.0.tgz#9a9fb92f93cf41512a0735c8f4dd09b8a1211cd0"
   integrity sha512-x9vcZYTrFPC7aSIbj7sRCYo7L/Xb8Iy+pW0ng0wt2vCJv7M9HOMy0UoN3rr+IFC7hb7vXoqS+P9ktyLLLhO+LA==
+
+y-protocols@^1.0.5:
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/y-protocols/-/y-protocols-1.0.5.tgz#91d574250060b29fcac8f8eb5e276fbad594245e"
+  integrity sha512-Wil92b7cGk712lRHDqS4T90IczF6RkcvCwAD0A2OPg+adKmOe+nOiT/N2hvpQIWS3zfjmtL4CPaH5sIW1Hkm/A==
+  dependencies:
+    lib0 "^0.2.42"
+
+yjs@^13.5.51:
+  version "13.5.51"
+  resolved "https://registry.yarnpkg.com/yjs/-/yjs-13.5.51.tgz#afd5a26a230498c3b4bf8fee9c8dbeea71ef7e5c"
+  integrity sha512-F1Nb3z3TdandD80IAeQqgqy/2n9AhDLcXoBhZvCUX1dNVe0ef7fIwi6MjSYaGAYF2Ev8VcLcsGnmuGGOl7AWbw==
+  dependencies:
+    lib0 "^0.2.72"
