@@ -9858,10 +9858,10 @@ styled-jsx@5.1.1:
   dependencies:
     client-only "0.0.1"
 
-supabase@^1.42.8:
-  version "1.42.8"
-  resolved "https://registry.yarnpkg.com/supabase/-/supabase-1.42.8.tgz#77976b9838d7984bd99b8562bf082048f48696ec"
-  integrity sha512-z4sVqaQ3l/WUyqKm8PyJ5Il1zVNsHxfw7KKUGAY6nERAPKOEwr1h20q6dL9dPspLfZgVBVtgwbUp3oFYSi/90A==
+supabase@^1.45.2:
+  version "1.45.2"
+  resolved "https://registry.yarnpkg.com/supabase/-/supabase-1.45.2.tgz#1e69196d3d38881a17957317a20588f036448897"
+  integrity sha512-M9Mk8+pj6F5sTGS8m0lDlOQ5WUgI6TWQBL8wnSobq834ZwImUgn6731NDoetsUd2GFsG7DFffPU+HzgLWbnqkQ==
   dependencies:
     bin-links "^4.0.1"
     node-fetch "^3.2.10"

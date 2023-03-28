@@ -72,7 +72,7 @@
     "cypress": "^12.7.0",
     "netlify-cli": "^13.2.1",
     "postcss": "^8.4.21",
-    "supabase": "^1.42.8",
+    "supabase": "^1.45.2",
     "tailwindcss": "^3.2.7"
   }
 }
