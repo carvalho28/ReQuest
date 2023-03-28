@@ -1,4 +1,4 @@
-import { renderPriorityBadge } from "@/utils/generalFunctions";
+import { renderPriorityBadge, Requirement } from "@/components/utils/general";
 import {
   ArrowUpRightIcon,
   ChevronDownIcon,
@@ -19,19 +19,6 @@ interface RequirementsTableProps {
 }
 
 const RequirementsTable = ({ name }: RequirementsTableProps) => {
-  type Requirement = {
-    id: number;
-    name: string;
-    description: string;
-    due_date: Date;
-    priority: number;
-    updated_at: Date;
-    created_at: Date;
-    edited_by: string;
-    created_by: string;
-    assigned_to: string;
-    checked: boolean;
-  };
   const [requirements, setRequirements] = useState<Requirement[]>([]);
   const [descriptionOrder, setDescriptionOrder] = useState("");
 
@@ -39,6 +26,7 @@ const RequirementsTable = ({ name }: RequirementsTableProps) => {
   const [reqName, setReqName] = useState("");
   const [reqPriority, setReqPriority] = useState(0);
   const [reqDueDate, setReqDueDate] = useState("");
+  const [reqUpdatedAt, setReqUpdatedAt] = useState("");
 
   const [showReq, setShowReq] = useState(false);
 
@@ -58,7 +46,7 @@ const RequirementsTable = ({ name }: RequirementsTableProps) => {
         priority: 1,
         created_at: new Date("2021-10-01"),
         updated_at: new Date("2021-08-01"),
-        edited_by: "John Doe",
+        updated_by: "John Doe",
         created_by: "John Doe",
         assigned_to: "John Doe",
         checked: false,
@@ -71,7 +59,7 @@ const RequirementsTable = ({ name }: RequirementsTableProps) => {
         priority: 2,
         created_at: new Date("2021-10-01"),
         updated_at: new Date("2021-08-01"),
-        edited_by: "John Doe",
+        updated_by: "John Doe",
         created_by: "John Doe",
         assigned_to: "John Doe",
         checked: false,
@@ -262,6 +250,7 @@ const RequirementsTable = ({ name }: RequirementsTableProps) => {
                           setReqName(req.name);
                           setReqPriority(req.priority);
                           setReqDueDate(req.due_date.toString());
+                          setReqUpdatedAt(req.updated_at.toString());
                         }}
                         className="btn text-contrast hover:text-contrasthover bg-transparent border-0 hover:bg-purple-200"
                       >
@@ -286,6 +275,7 @@ const RequirementsTable = ({ name }: RequirementsTableProps) => {
         reqName={reqName}
         reqPriority={reqPriority}
         reqDueDate={reqDueDate}
+        reqUpdatedAt={reqUpdatedAt}
       />
     </div>
   );

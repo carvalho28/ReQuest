@@ -76,7 +76,7 @@ const Tiptap = ({ userName, reqId }: TiptapProps) => {
       })
     );
   }, [reqId]);
-  console.log("provider", provider?.document);
+  // console.log("provider", provider?.document);
 
   function generatePastelColor() {
     // Set the saturation and lightness to a fixed value to generate a pastel color

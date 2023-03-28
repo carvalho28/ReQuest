@@ -6,7 +6,6 @@ interface DatePickerProps {
 
 const DatePicker = ({ value }: DatePickerProps) => {
   if (!value) return null;
-  // convert date to YYYY-MM-DD
   const date = new Date(value).toISOString().split("T")[0];
 
   return (
