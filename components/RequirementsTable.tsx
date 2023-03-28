@@ -4,8 +4,13 @@ import {
   ChevronUpIcon,
 } from "@heroicons/react/24/outline";
 import moment from "moment";
+import dynamic from "next/dynamic";
 import React, { useEffect, useState } from "react";
-import RequirementData from "./RequirementData";
+
+//dynamic import
+const RequirementData = dynamic(() => import("./RequirementData"), {
+  ssr: false,
+});
 
 interface RequirementsTableProps {
   name: string;
