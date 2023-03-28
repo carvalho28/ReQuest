@@ -32,8 +32,13 @@ import cpp from "highlight.js/lib/languages/cpp";
 
 // images
 import Image from "@tiptap/extension-image";
-import Dropcursor from "@tiptap/extension-dropcursor";
-import { useSupabaseClient, useUser } from "@supabase/auth-helpers-react";
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
+
+// tables
+import Table from "@tiptap/extension-table";
+import TableHeader from "@tiptap/extension-table-header";
+import TableRow from "@tiptap/extension-table-row";
+import TableCell from "@tiptap/extension-table-cell";
 
 interface TiptapProps {
   name: string;
@@ -160,6 +165,12 @@ const Tiptap = ({ name }: TiptapProps) => {
     Image.configure({
       inline: true,
     }),
+    Table.configure({
+      resizable: true,
+    }),
+    TableRow,
+    TableHeader,
+    TableCell,
   ];
 
   const extensions = provider
@@ -229,7 +240,7 @@ const Tiptap = ({ name }: TiptapProps) => {
   return (
     <div>
       <MenuBar editor={editor} />
-      <EditorContent editor={editor} onDragOver={addImageOnDrop} />
+      <EditorContent editor={editor} onDrop={addImageOnDrop} />
     </div>
   );
 };

@@ -1,16 +1,20 @@
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
-import { useState } from "react";
 import {
-  RiArrowGoBackLine,
-  RiArrowGoForwardLine,
   RiBold,
   RiCodeBoxLine,
   RiCodeFill,
+  RiDeleteBinLine,
+  RiDeleteColumn,
+  RiDeleteRow,
   RiDoubleQuotesL,
   RiFormatClear,
   RiH1,
   RiH2,
   RiImageAddLine,
+  RiInsertColumnLeft,
+  RiInsertColumnRight,
+  RiInsertRowBottom,
+  RiInsertRowTop,
   RiItalic,
   RiListCheck2,
   RiListOrdered,
@@ -19,6 +23,7 @@ import {
   RiParagraph,
   RiSeparator,
   RiStrikethrough,
+  RiTableLine,
   RiTextWrap,
 } from "react-icons/ri";
 
@@ -196,6 +201,59 @@ const MenuBar = ({ editor }: any) => {
       {/* divider */}
       <div className="border-r-2 border-gray-300 h-6"></div>
 
+      {/* table buttons */}
+      <button
+        onClick={() =>
+          editor
+            .chain()
+            .focus()
+            .insertTable({ rows: 3, cols: 3, withHeaderRow: true })
+            .run()
+        }
+      >
+        <RiTableLine size={20} />
+      </button>
+
+      {/* delete table */}
+      <button onClick={() => editor.chain().focus().deleteTable().run()}>
+        {/* make an icon for delete */}
+        <RiDeleteBinLine size={20} />
+      </button>
+
+      {/* insert row bottom */}
+      <button onClick={() => editor.chain().focus().addRowAfter().run()}>
+        <RiInsertRowBottom size={20} />
+      </button>
+
+      {/* insert row top */}
+      <button onClick={() => editor.chain().focus().addRowBefore().run()}>
+        <RiInsertRowTop size={20} />
+      </button>
+
+      {/* delete row */}
+      <button onClick={() => editor.chain().focus().deleteRow().run()}>
+        <RiDeleteRow size={20} />
+      </button>
+
+      {/* insert column left */}
+      <button onClick={() => editor.chain().focus().addColumnBefore().run()}>
+        <RiInsertColumnLeft size={20} />
+      </button>
+
+      {/* insert column right */}
+      <button onClick={() => editor.chain().focus().addColumnAfter().run()}>
+        <RiInsertColumnRight size={20} />
+      </button>
+
+      {/* delete column */}
+      <button onClick={() => editor.chain().focus().deleteColumn().run()}>
+        <RiDeleteColumn size={20} />
+      </button>
+
+      {/* divider */}
+      <div className="border-r-2 border-gray-300 h-6"></div>
+
+      {/* image button */}
       <button onClick={() => addNewImage()}>
         <RiImageAddLine size={20} />
       </button>
