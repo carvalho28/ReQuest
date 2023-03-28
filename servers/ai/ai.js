@@ -11,7 +11,7 @@ const config = new Configuration({
 const app = express();
 app.use(cors());
 app.use(express.json());
-const port = 3002;
+const port = 8080;
 
 app.post("/api/ai", async (req, res) => {
   const { requirement } = req.body;

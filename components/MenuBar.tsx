@@ -95,7 +95,7 @@ const MenuBar = ({ editor }: any) => {
     const req = JSON.stringify({ requirement });
     console.log("req", req);
 
-    const response = await fetch("http://localhost:3002/api/ai", {
+    const response = await fetch("https://morning-flower-3545.fly.dev/api/ai", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
