@@ -41,10 +41,11 @@ import TableRow from "@tiptap/extension-table-row";
 import TableCell from "@tiptap/extension-table-cell";
 
 interface TiptapProps {
+  reqId: number;
   userName: string;
 }
 
-const Tiptap = ({ userName }: TiptapProps) => {
+const Tiptap = ({ userName, reqId }: TiptapProps) => {
   const supabaseClient = useSupabaseClient();
 
   const [content, setContent] = useState("");
@@ -68,11 +69,14 @@ const Tiptap = ({ userName }: TiptapProps) => {
       new HocuspocusProvider({
         url: "wss://little-rain-5635.fly.dev/",
         // url: "ws://localhost:1234",
-        name: "tiptap",
-        document: new Y.Doc(),
+        name: reqId.toString(),
+        document: new Y.Doc({
+          guid: reqId.toString(),
+        }),
       })
     );
-  }, []);
+  }, [reqId]);
+  console.log("provider", provider?.document);
 
   function generatePastelColor() {
     // Set the saturation and lightness to a fixed value to generate a pastel color
@@ -181,7 +185,7 @@ const Tiptap = ({ userName }: TiptapProps) => {
         CollaborationCursor.configure({
           provider,
           user: {
-            name: name,
+            name: userName,
             color: generatePastelColor(),
           },
         }),

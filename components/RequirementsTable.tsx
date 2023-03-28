@@ -35,6 +35,7 @@ const RequirementsTable = ({ name }: RequirementsTableProps) => {
   const [requirements, setRequirements] = useState<Requirement[]>([]);
   const [descriptionOrder, setDescriptionOrder] = useState("");
 
+  const [reqId, setReqId] = useState(0);
   const [reqName, setReqName] = useState("");
   const [reqPriority, setReqPriority] = useState(0);
   const [reqDueDate, setReqDueDate] = useState("");
@@ -257,6 +258,7 @@ const RequirementsTable = ({ name }: RequirementsTableProps) => {
                       <label
                         htmlFor="my-modal-5"
                         onClick={() => {
+                          setReqId(req.id);
                           setReqName(req.name);
                           setReqPriority(req.priority);
                           setReqDueDate(req.due_date.toString());
@@ -280,6 +282,7 @@ const RequirementsTable = ({ name }: RequirementsTableProps) => {
       </div>
       <RequirementData
         name={name}
+        reqId={reqId}
         reqName={reqName}
         reqPriority={reqPriority}
         reqDueDate={reqDueDate}

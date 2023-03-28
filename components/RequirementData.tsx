@@ -4,6 +4,7 @@ import Tiptap from "./TipTap";
 
 interface RequirementDataProps {
   name: string;
+  reqId: number;
   reqName: string;
   reqPriority: number;
   reqDueDate: string;
@@ -11,6 +12,7 @@ interface RequirementDataProps {
 
 const RequirementData = ({
   name,
+  reqId,
   reqName,
   reqPriority,
   reqDueDate,
@@ -29,7 +31,7 @@ const RequirementData = ({
             {/* due date */}
             <DatePicker value={reqDueDate} />
           </div>
-          <Tiptap userName={name} />
+          {reqId && <Tiptap userName={name} reqId={reqId} />}
           {/* </div> */}
           <div className="modal-action">
             <label htmlFor="my-modal-5" className="btn">
