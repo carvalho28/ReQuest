@@ -41,10 +41,10 @@ import TableRow from "@tiptap/extension-table-row";
 import TableCell from "@tiptap/extension-table-cell";
 
 interface TiptapProps {
-  name: string;
+  userName: string;
 }
 
-const Tiptap = ({ name }: TiptapProps) => {
+const Tiptap = ({ userName }: TiptapProps) => {
   const supabaseClient = useSupabaseClient();
 
   const [content, setContent] = useState("");

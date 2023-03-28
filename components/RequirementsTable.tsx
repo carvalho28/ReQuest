@@ -1,3 +1,4 @@
+import { renderPriorityBadge } from "@/utils/generalFunctions";
 import {
   ArrowUpRightIcon,
   ChevronDownIcon,
@@ -11,6 +12,7 @@ import React, { useEffect, useState } from "react";
 const RequirementData = dynamic(() => import("./RequirementData"), {
   ssr: false,
 });
+// import RequirementData from "./RequirementData";
 
 interface RequirementsTableProps {
   name: string;
@@ -21,7 +23,7 @@ const RequirementsTable = ({ name }: RequirementsTableProps) => {
     id: number;
     name: string;
     description: string;
-    due_date?: Date;
+    due_date: Date;
     priority: number;
     updated_at: Date;
     created_at: Date;
@@ -32,6 +34,10 @@ const RequirementsTable = ({ name }: RequirementsTableProps) => {
   };
   const [requirements, setRequirements] = useState<Requirement[]>([]);
   const [descriptionOrder, setDescriptionOrder] = useState("");
+
+  const [reqName, setReqName] = useState("");
+  const [reqPriority, setReqPriority] = useState(0);
+  const [reqDueDate, setReqDueDate] = useState("");
 
   const [showReq, setShowReq] = useState(false);
 
@@ -61,7 +67,7 @@ const RequirementsTable = ({ name }: RequirementsTableProps) => {
         name: "Requirement 2",
         description: "aaaaa",
         due_date: new Date("2021-10-01"),
-        priority: 1,
+        priority: 2,
         created_at: new Date("2021-10-01"),
         updated_at: new Date("2021-08-01"),
         edited_by: "John Doe",
@@ -106,29 +112,6 @@ const RequirementsTable = ({ name }: RequirementsTableProps) => {
         return 0;
       });
       setRequirements(sorted);
-    }
-  }
-
-  // render different badge depending on priority
-  function renderPriorityBadge(priority: number) {
-    if (priority === 1) {
-      return (
-        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
-          High
-        </span>
-      );
-    } else if (priority === 2) {
-      return (
-        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
-          Medium
-        </span>
-      );
-    } else {
-      return (
-        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-          Low
-        </span>
-      );
     }
   }
 
@@ -245,9 +228,6 @@ const RequirementsTable = ({ name }: RequirementsTableProps) => {
                       </span>
                     </a>
                   </th>
-                  <th scope="col" className="relative py-3.5 pl-3 pr-0">
-                    <span className="sr-only">Edit</span>
-                  </th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200">
@@ -266,11 +246,6 @@ const RequirementsTable = ({ name }: RequirementsTableProps) => {
                       {renderPriorityBadge(req.priority)}
                     </td>
                     <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                      {/* {req.due_date.getDate() +
-                        "/" +
-                        req.due_date.getMonth() +
-                        "/" +
-                        req.due_date.getFullYear()} */}
                       {req.due_date !== null
                         ? moment(req.due_date).format("DD/MM/YYYY")
                         : "No due date"}
@@ -281,6 +256,11 @@ const RequirementsTable = ({ name }: RequirementsTableProps) => {
                     <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm sm:pr-0">
                       <label
                         htmlFor="my-modal-5"
+                        onClick={() => {
+                          setReqName(req.name);
+                          setReqPriority(req.priority);
+                          setReqDueDate(req.due_date.toString());
+                        }}
                         className="btn text-contrast hover:text-contrasthover bg-transparent border-0 hover:bg-purple-200"
                       >
                         <span className="sr-only">Edit</span>
@@ -298,7 +278,12 @@ const RequirementsTable = ({ name }: RequirementsTableProps) => {
           </div>
         </div>
       </div>
-      <RequirementData name={name} />
+      <RequirementData
+        name={name}
+        reqName={reqName}
+        reqPriority={reqPriority}
+        reqDueDate={reqDueDate}
+      />
     </div>
   );
 };
