@@ -16,18 +16,57 @@ import CollaborationCursor from "@tiptap/extension-collaboration-cursor";
 import * as Y from "yjs";
 import { HocuspocusProvider } from "@hocuspocus/provider";
 
+// code blocks
+import { lowlight } from "lowlight/lib/core";
+import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
+import css from "highlight.js/lib/languages/css";
+import js from "highlight.js/lib/languages/javascript";
+import ts from "highlight.js/lib/languages/typescript";
+import html from "highlight.js/lib/languages/xml";
+import json from "highlight.js/lib/languages/json";
+import bash from "highlight.js/lib/languages/bash";
+import python from "highlight.js/lib/languages/python";
+import java from "highlight.js/lib/languages/java";
+import c from "highlight.js/lib/languages/c";
+import cpp from "highlight.js/lib/languages/cpp";
+
+// images
+import Image from "@tiptap/extension-image";
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
+
+// tables
+import Table from "@tiptap/extension-table";
+import TableHeader from "@tiptap/extension-table-header";
+import TableRow from "@tiptap/extension-table-row";
+import TableCell from "@tiptap/extension-table-cell";
+
 interface TiptapProps {
   name: string;
 }
 
 const Tiptap = ({ name }: TiptapProps) => {
+  const supabaseClient = useSupabaseClient();
+
   const [content, setContent] = useState("");
   const [provider, setProvider] = useState<HocuspocusProvider>();
 
   useEffect(() => {
+    lowlight.registerLanguage("html", html);
+    lowlight.registerLanguage("css", css);
+    lowlight.registerLanguage("javascript", js);
+    lowlight.registerLanguage("typescript", ts);
+    lowlight.registerLanguage("json", json);
+    lowlight.registerLanguage("bash", bash);
+    lowlight.registerLanguage("python", python);
+    lowlight.registerLanguage("java", java);
+    lowlight.registerLanguage("c", c);
+    lowlight.registerLanguage("cpp", cpp);
+  }, []);
+
+  useEffect(() => {
     setProvider(
       new HocuspocusProvider({
-        url: "ws://little-rain-5635.fly.dev/",
+        url: "wss://little-rain-5635.fly.dev/",
         // url: "ws://localhost:1234",
         name: "tiptap",
         document: new Y.Doc(),
@@ -95,6 +134,45 @@ const Tiptap = ({ name }: TiptapProps) => {
     return hexColor;
   }
 
+  const commonExtensions = [
+    Color.configure({ types: [TextStyle.name, ListItem.name] }),
+    TextStyle.configure({ types: [ListItem.name] } as any),
+    StarterKit.configure({
+      codeBlock: false,
+      history: false,
+      bulletList: {
+        keepMarks: true,
+        keepAttributes: false, // TODO : Making this as `false` becase marks are not preserved when I try to preserve attrs, awaiting a bit of help
+      },
+      orderedList: {
+        keepMarks: true,
+        keepAttributes: false, // TODO : Making this as `false` becase marks are not preserved when I try to preserve attrs, awaiting a bit of help
+      },
+    }),
+    Placeholder.configure({
+      emptyEditorClass: "is-editor-empty",
+    }),
+    Highlight.configure({
+      multicolor: true,
+    }),
+    TaskList,
+    TaskItem.configure({
+      nested: true,
+    }),
+    CodeBlockLowlight.configure({
+      lowlight,
+    }),
+    Image.configure({
+      inline: true,
+    }),
+    Table.configure({
+      resizable: true,
+    }),
+    TableRow,
+    TableHeader,
+    TableCell,
+  ];
+
   const extensions = provider
     ? [
         Collaboration.configure({
@@ -104,59 +182,12 @@ const Tiptap = ({ name }: TiptapProps) => {
           provider,
           user: {
             name: name,
-            // create a random color
             color: generatePastelColor(),
           },
         }),
-        Color.configure({ types: [TextStyle.name, ListItem.name] }),
-        TextStyle.configure({ types: [ListItem.name] } as any),
-        StarterKit.configure({
-          history: false,
-          bulletList: {
-            keepMarks: true,
-            keepAttributes: false, // TODO : Making this as `false` becase marks are not preserved when I try to preserve attrs, awaiting a bit of help
-          },
-          orderedList: {
-            keepMarks: true,
-            keepAttributes: false, // TODO : Making this as `false` becase marks are not preserved when I try to preserve attrs, awaiting a bit of help
-          },
-        }),
-        Placeholder.configure({
-          emptyEditorClass: "is-editor-empty",
-        }),
-        Highlight.configure({
-          multicolor: true,
-        }),
-        TaskList,
-        TaskItem.configure({
-          nested: true,
-        }),
+        ...commonExtensions,
       ]
-    : [
-        Color.configure({ types: [TextStyle.name, ListItem.name] }),
-        TextStyle.configure({ types: [ListItem.name] } as any),
-        StarterKit.configure({
-          history: false,
-          bulletList: {
-            keepMarks: true,
-            keepAttributes: false, // TODO : Making this as `false` becase marks are not preserved when I try to preserve attrs, awaiting a bit of help
-          },
-          orderedList: {
-            keepMarks: true,
-            keepAttributes: false, // TODO : Making this as `false` becase marks are not preserved when I try to preserve attrs, awaiting a bit of help
-          },
-        }),
-        Placeholder.configure({
-          emptyEditorClass: "is-editor-empty",
-        }),
-        Highlight.configure({
-          multicolor: true,
-        }),
-        TaskList,
-        TaskItem.configure({
-          nested: true,
-        }),
-      ];
+    : [...commonExtensions];
 
   const editor = useEditor(
     {
@@ -164,7 +195,8 @@ const Tiptap = ({ name }: TiptapProps) => {
       editorProps: {
         attributes: {
           class:
-            "prose p-4 prose-md mx-auto mb-12 mx-8 focus:outline-none border-l-2 border-b-2 border-r-2 border-black h-96 max-w-none",
+            "prose p-4 prose-md mx-auto mb-12 mx-8 focus:outline-none border-l-2 border-b-2 border-r-2 border-black max-w-none",
+          style: "min-height: 20em;",
         },
       },
       // content: content,
@@ -172,10 +204,43 @@ const Tiptap = ({ name }: TiptapProps) => {
     [provider]
   );
 
+  async function addImageOnDrop(event: React.DragEvent<HTMLDivElement>) {
+    event.preventDefault();
+    const file = event.dataTransfer?.files[0];
+    if (file) {
+      // generate random string for file name
+      const randomString = Math.random().toString(36).substring(2, 15);
+      const fileName = `${randomString}-${file.name}`;
+
+      if (file) {
+        const { data, error } = await supabaseClient.storage
+          .from("images-editor")
+          .upload(`${fileName}`, file, {
+            cacheControl: "3600",
+            upsert: false,
+          });
+
+        if (error) {
+          console.log("error", error);
+          return;
+        }
+
+        // get a url for the uploaded file
+        const { data: urlData } = await supabaseClient.storage
+          .from("images-editor")
+          .createSignedUrl(`${fileName}`, 365 * 24 * 60 * 60);
+
+        const url = urlData?.signedUrl as string;
+
+        editor?.chain().focus().setImage({ src: url }).run();
+      }
+    }
+  }
+
   return (
     <div>
       <MenuBar editor={editor} />
-      <EditorContent editor={editor} />
+      <EditorContent editor={editor} onDrop={addImageOnDrop} />
     </div>
   );
 };

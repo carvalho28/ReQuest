@@ -1,4 +1,4 @@
-name: Fly Deploy
+name: Fly Deploy Hocuspocus Server
 on:
   push:
     branches:
@@ -10,6 +10,6 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: superfly/flyctl-actions/setup-flyctl@master
-      - run: cd servers && flyctl deploy --remote-only
+      - run: cd servers/hocuspocus && flyctl deploy --remote-only
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
