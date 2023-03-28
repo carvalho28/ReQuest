@@ -353,11 +353,10 @@ export default function Projects({ avatar_url, projects }: any) {
                     {projectsList?.map((item: any) => (
                       <tr
                         key={item.id}
-                        className="divide-x divide-gray-300"
-                        // hover:bg-gray-200 hover:cursor-pointer
-                        // onClick={() => {
-                        //   router.push(`/projects/${item.id}`);
-                        // }}
+                        className="divide-x divide-gray-300 hover:bg-gray-200 hover:cursor-pointer"
+                        onClick={() => {
+                          router.push(`/projects/${item.id}`);
+                        }}
                       >
                         <td className="w-full max-w-0 py-4 pl-4 pr-3 text-sm sm:font-medium text-black sm:w-auto sm:max-w-none sm:pl-0">
                           {item.name}

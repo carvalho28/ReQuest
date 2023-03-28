@@ -1,4 +1,5 @@
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
+import { useState } from "react";
 import {
   RiBold,
   RiCodeBoxLine,
@@ -21,6 +22,7 @@ import {
   RiListUnordered,
   RiMarkPenLine,
   RiParagraph,
+  RiRobotLine,
   RiSeparator,
   RiStrikethrough,
   RiTableLine,
@@ -29,6 +31,7 @@ import {
 
 const MenuBar = ({ editor }: any) => {
   const supabaseClient = useSupabaseClient();
+  const [showModal, setShowModal] = useState(false);
 
   if (!editor) {
     return null;
@@ -81,6 +84,31 @@ const MenuBar = ({ editor }: any) => {
         editor?.chain().focus().setImage({ src: url }).run();
       }
     };
+  }
+
+  async function addNewAi() {
+    // show loading modal
+    setShowModal(true);
+    console.log("modal", showModal);
+
+    const requirement = "The system must allow users to login.";
+    const req = JSON.stringify({ requirement });
+    console.log("req", req);
+
+    const response = await fetch("https://morning-flower-3545.fly.dev/api/ai", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ requirement }),
+    });
+    const data = await response.json();
+    console.log("data", data);
+    const answer = data.answer;
+    setShowModal(false);
+    // add new line
+    editor?.chain().focus().insertContent("<br>").run();
+    editor?.chain().focus().insertContent(answer).run();
   }
 
   return (
@@ -257,6 +285,24 @@ const MenuBar = ({ editor }: any) => {
       <button onClick={() => addNewImage()}>
         <RiImageAddLine size={20} />
       </button>
+
+      {/* divider */}
+      <div className="border-r-2 border-gray-300 h-6"></div>
+
+      {/* ai button */}
+      <button onClick={() => addNewAi()}>
+        <RiRobotLine size={20} />
+      </button>
+
+      {showModal && (
+        <div className="flex flex-col w-full justify-center mt-2 items-center border-2 border-grey-400 rounded-full p-4">
+          <h3 className="font-bold text-lg text-black text-center">
+            AI is generating content that can improve your requirement
+            definition ...
+          </h3>
+          <progress className="progress w-56 mt-3 progress-accent"></progress>
+        </div>
+      )}
     </div>
   );
 };
