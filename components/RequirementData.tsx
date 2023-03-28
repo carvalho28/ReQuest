@@ -1,24 +1,19 @@
-import { renderPriorityBadge } from "@/components/utils/general";
+import {
+  DefaultRequirement,
+  renderPriorityBadge,
+  Requirement,
+} from "@/components/utils/general";
+import { useEffect, useState } from "react";
 import DatePicker from "./DatePicker";
+import Dropdown from "./Dropdown";
 import Tiptap from "./TipTap";
 
 interface RequirementDataProps {
   name: string;
-  reqId: number;
-  reqName: string;
-  reqPriority: number;
-  reqDueDate: string;
-  reqUpdatedAt: string;
+  requirement: Requirement;
 }
 
-const RequirementData = ({
-  name,
-  reqId,
-  reqName,
-  reqPriority,
-  reqDueDate,
-  reqUpdatedAt,
-}: RequirementDataProps) => {
+const RequirementData = ({ name, requirement }: RequirementDataProps) => {
   function daysBetween(date1: Date, date2: Date) {
     // The number of milliseconds in one day
     const ONE_DAY = 1000 * 60 * 60 * 24;
@@ -30,30 +25,112 @@ const RequirementData = ({
     return Math.round(differenceMs / ONE_DAY);
   }
 
+  const [requirementData, setRequirementData] = useState<DefaultRequirement>(
+    {} as DefaultRequirement
+  );
+
+  useEffect(() => {
+    setRequirementData({
+      id: requirement.id,
+      name: requirement.name,
+      description: requirement.description,
+      due_date: requirement.due_date,
+      priority: requirement.priority,
+      updated_at: requirement.updated_at,
+      updated_by: requirement.updated_by,
+      created_at: requirement.created_at,
+      created_by: requirement.created_by,
+      assigned_to: requirement.assigned_to,
+      checked: requirement.checked,
+    });
+  }, [requirement]);
+
+  function changePriority(priority: number) {
+    console.log("change priority");
+    console.log(priority);
+
+    setRequirementData((prevState) => ({
+      ...prevState,
+      priority: priority,
+    }));
+  }
+
+  // console.log("change priority");
+  // setRequirementData({
+  //   ...requirementData,
+  //   priority:
+
+  // });
+
   return (
     <>
       <input type="checkbox" id="my-modal-5" className="modal-toggle" />
       <div className="modal">
         <div className="modal-box w-11/12 max-w-5xl bg-neutral-50">
-          <div>
+          <div className="p-4">
             {/* title */}
-            <h3 className="font-bold text-lg">{reqName}</h3>
-            <div>
+            <h3 className="font-bold text-2xl">{requirement.name}</h3>
+            <div className="flex flex-col justify-center items-center">
               {/* priority badge */}
-              {renderPriorityBadge(reqPriority)}
+              <div className="flex flex-row">
+                <span className="text-md text-black">Priority:</span>{" "}
+                {/* {renderPriorityBadge(requirement.priority)} */}
+                <Dropdown
+                  selected={requirementData.priority}
+                  onSelect={(option) => changePriority(option)}
+                />
+              </div>
+
+              {/* due date */}
+              <DatePicker value={requirementData.due_date.toString()} />
+
+              {/* updated at */}
+              <div className="text-xs text-neutral-400">
+                {daysBetween(new Date(), new Date(requirementData.updated_at))}{" "}
+                days ago
+              </div>
+
+              {/* updated by */}
+              <div className="text-xs text-neutral-400">
+                Updated by {requirementData.updated_by}
+              </div>
+
+              {/* created at */}
+              <div className="text-xs text-neutral-400">
+                {daysBetween(new Date(), new Date(requirementData.created_at))}{" "}
+                days ago
+              </div>
+
+              {/* created by */}
+              <div className="text-xs text-neutral-400">
+                Created by {requirementData.created_by}
+              </div>
+
+              {/* assigned to */}
+              <div className="text-xs text-neutral-400">
+                Assigned to {requirementData.assigned_to}
+              </div>
+
+              {/* checked - checkbox */}
+              <div className="ml-3 flex h-6 items-center">
+                Done
+                <input
+                  id={requirementData.id.toString()}
+                  name="checked"
+                  type="checkbox"
+                  className="h-4 w-4 rounded border-gray-300 text-contrast focus:ring-contrasthover"
+                  checked={requirementData.checked}
+                />
+              </div>
             </div>
-
-            {/* due date */}
-            <DatePicker value={reqDueDate} />
-
-            {/* updated at */}
-            <div className="text-xs text-neutral-400">
-              {daysBetween(new Date(), new Date(reqUpdatedAt))} days ago
-            </div>
-
-            {/* updated by */}
           </div>
-          {reqId && <Tiptap userName={name} reqId={reqId} />}
+          {requirement.id && (
+            <Tiptap
+              userName={name}
+              reqId={requirement.id}
+              reqDescription={requirement.description}
+            />
+          )}
           {/* </div> */}
           <div className="modal-action">
             <label htmlFor="my-modal-5" className="btn">

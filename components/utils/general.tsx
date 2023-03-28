@@ -14,6 +14,22 @@ export type Requirement = {
   checked: boolean;
 };
 
+export class DefaultRequirement implements Requirement {
+  id = 0;
+  name = "";
+  description = "";
+  due_date = new Date();
+  priority = 0;
+  updated_at = new Date();
+  updated_by = "";
+  created_at = new Date();
+  created_by = "";
+  assigned_to = "";
+  checked = false;
+
+  constructor() {}
+}
+
 function renderPriorityBadge(priority: number) {
   if (priority === 1) {
     return (

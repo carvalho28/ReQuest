@@ -22,11 +22,19 @@ const RequirementsTable = ({ name }: RequirementsTableProps) => {
   const [requirements, setRequirements] = useState<Requirement[]>([]);
   const [descriptionOrder, setDescriptionOrder] = useState("");
 
-  const [reqId, setReqId] = useState(0);
-  const [reqName, setReqName] = useState("");
-  const [reqPriority, setReqPriority] = useState(0);
-  const [reqDueDate, setReqDueDate] = useState("");
-  const [reqUpdatedAt, setReqUpdatedAt] = useState("");
+  const [requirement, setRequirement] = useState<Requirement>({
+    id: 0,
+    name: "",
+    description: "",
+    due_date: new Date(),
+    priority: 0,
+    created_at: new Date(),
+    updated_at: new Date(),
+    updated_by: "",
+    created_by: "",
+    assigned_to: "",
+    checked: false,
+  });
 
   const [showReq, setShowReq] = useState(false);
 
@@ -47,7 +55,7 @@ const RequirementsTable = ({ name }: RequirementsTableProps) => {
         created_at: new Date("2021-10-01"),
         updated_at: new Date("2021-08-01"),
         updated_by: "John Doe",
-        created_by: "John Doe",
+        created_by: "Ze Doe",
         assigned_to: "John Doe",
         checked: false,
       },
@@ -246,11 +254,7 @@ const RequirementsTable = ({ name }: RequirementsTableProps) => {
                       <label
                         htmlFor="my-modal-5"
                         onClick={() => {
-                          setReqId(req.id);
-                          setReqName(req.name);
-                          setReqPriority(req.priority);
-                          setReqDueDate(req.due_date.toString());
-                          setReqUpdatedAt(req.updated_at.toString());
+                          setRequirement(req);
                         }}
                         className="btn text-contrast hover:text-contrasthover bg-transparent border-0 hover:bg-purple-200"
                       >
@@ -269,14 +273,7 @@ const RequirementsTable = ({ name }: RequirementsTableProps) => {
           </div>
         </div>
       </div>
-      <RequirementData
-        name={name}
-        reqId={reqId}
-        reqName={reqName}
-        reqPriority={reqPriority}
-        reqDueDate={reqDueDate}
-        reqUpdatedAt={reqUpdatedAt}
-      />
+      <RequirementData name={name} requirement={requirement} />
     </div>
   );
 };

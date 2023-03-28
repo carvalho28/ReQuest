@@ -42,13 +42,14 @@ import TableCell from "@tiptap/extension-table-cell";
 
 interface TiptapProps {
   reqId: number;
+  reqDescription: string;
   userName: string;
 }
 
-const Tiptap = ({ userName, reqId }: TiptapProps) => {
+const Tiptap = ({ userName, reqId, reqDescription }: TiptapProps) => {
   const supabaseClient = useSupabaseClient();
 
-  const [content, setContent] = useState("");
+  const [content, setContent] = useState(reqDescription);
   const [provider, setProvider] = useState<HocuspocusProvider>();
 
   useEffect(() => {
@@ -204,6 +205,7 @@ const Tiptap = ({ userName, reqId }: TiptapProps) => {
         },
       },
       // content: content,
+      content: content,
     },
     [provider]
   );
@@ -242,7 +244,7 @@ const Tiptap = ({ userName, reqId }: TiptapProps) => {
   }
 
   return (
-    <div>
+    <div className="p-2">
       <MenuBar editor={editor} />
       <EditorContent editor={editor} onDrop={addImageOnDrop} />
     </div>
