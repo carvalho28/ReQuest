@@ -16,9 +16,13 @@ const RequirementData = dynamic(() => import("./RequirementData"), {
 
 interface RequirementsTableProps {
   name: string;
+  projectUserNames: string[];
 }
 
-const RequirementsTable = ({ name }: RequirementsTableProps) => {
+const RequirementsTable = ({
+  name,
+  projectUserNames,
+}: RequirementsTableProps) => {
   const [requirements, setRequirements] = useState<Requirement[]>([]);
   const [descriptionOrder, setDescriptionOrder] = useState("");
 
@@ -273,7 +277,11 @@ const RequirementsTable = ({ name }: RequirementsTableProps) => {
           </div>
         </div>
       </div>
-      <RequirementData name={name} requirement={requirement} />
+      <RequirementData
+        name={name}
+        requirement={requirement}
+        projectUserNames={projectUserNames}
+      />
     </div>
   );
 };

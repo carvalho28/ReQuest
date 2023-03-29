@@ -4,27 +4,29 @@ import {
   renderStatusBadge,
   Requirement,
 } from "@/components/utils/general";
-import { ExclamationCircleIcon } from "@heroicons/react/24/outline";
 import { useEffect, useState } from "react";
-import { FaExclamationCircle } from "react-icons/fa";
 import {
   RiBarChartHorizontalLine,
   RiCalendarLine,
   RiErrorWarningLine,
-  RiUser5Fill,
-  RiUser5Line,
   RiUserReceived2Line,
 } from "react-icons/ri";
 import DatePicker from "./DatePicker";
 import Dropdown from "./Dropdown";
+import MultiselectPeople from "./MultiselectPeople";
 import Tiptap from "./TipTap";
 
 interface RequirementDataProps {
   name: string;
   requirement: Requirement;
+  projectUserNames: string[];
 }
 
-const RequirementData = ({ name, requirement }: RequirementDataProps) => {
+const RequirementData = ({
+  name,
+  requirement,
+  projectUserNames,
+}: RequirementDataProps) => {
   function daysBetween(date1: Date, date2: Date) {
     // The number of milliseconds in one day
     const ONE_DAY = 1000 * 60 * 60 * 24;
@@ -91,7 +93,7 @@ const RequirementData = ({ name, requirement }: RequirementDataProps) => {
                 <div className="flex flex-col w-1/3 space-y-5">
                   {/* status */}
                   <div className="flex flex-row space-x-3">
-                    <div className="flex flex-row space-x-4">
+                    <div className="flex flex-row space-x-4 justify-center items-center">
                       <RiBarChartHorizontalLine size={20} />
                       <span className="text-md text-black">Status</span>{" "}
                     </div>
@@ -103,8 +105,8 @@ const RequirementData = ({ name, requirement }: RequirementDataProps) => {
                   </div>
 
                   {/* priority badge */}
-                  <div className="flex flex-row mt-5 space-x-3">
-                    <div className="flex flex-row space-x-4">
+                  <div className="flex flex-row space-x-3">
+                    <div className="flex flex-row space-x-4 justify-center items-center">
                       <RiErrorWarningLine size={20} />
                       <span className="text-md text-black">Priority</span>{" "}
                     </div>
@@ -119,7 +121,7 @@ const RequirementData = ({ name, requirement }: RequirementDataProps) => {
                 <div className="flex flex-col w-1/3 space-y-5">
                   {/* due date */}
                   <div className="flex flex-row space-x-3">
-                    <div className="flex flex-row mt-1.5 space-x-4">
+                    <div className="flex flex-row space-x-4 justify-center items-center">
                       <RiCalendarLine size={20} />
                       <span className="text-md text-black">Due date</span>{" "}
                     </div>
@@ -131,12 +133,12 @@ const RequirementData = ({ name, requirement }: RequirementDataProps) => {
 
                   {/* assigned to */}
                   <div className="flex flex-row space-x-3">
-                    <div className="flex flex-row space-x-4">
+                    <div className="flex flex-row space-x-4 justify-center items-center">
                       <RiUserReceived2Line size={20} />
-                      <span className="text-md text-black">
-                        Assigned to {requirementData.assigned_to}
-                      </span>
+                      {/* Assigned to {requirementData.assigned_to} */}
+                      <span className="text-md text-black">Assigned</span>{" "}
                     </div>
+                    <MultiselectPeople projectUserNames={projectUserNames} />
                   </div>
                 </div>
 

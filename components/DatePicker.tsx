@@ -16,7 +16,7 @@ const DatePicker = ({ value, onDateChange }: DatePickerProps) => {
           type="date"
           name="due_date"
           id="due_date"
-          className="shadow-sm focus:ring-contrast focus:border-contrast block w-32 sm:text-sm border-gray-300 rounded-md"
+          className="shadow-sm focus:ring-contrast focus:border-contrast block w-32 sm:text-sm border-gray-300 rounded-md h-8"
           value={date}
           onChange={(e) => onDateChange(new Date(e.target.value))}
         />
