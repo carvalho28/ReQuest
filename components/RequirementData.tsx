@@ -47,9 +47,6 @@ const RequirementData = ({ name, requirement }: RequirementDataProps) => {
   }, [requirement]);
 
   function changePriority(priority: number) {
-    console.log("change priority");
-    console.log(priority);
-
     setRequirementData((prevState) => ({
       ...prevState,
       priority: priority,
@@ -57,16 +54,18 @@ const RequirementData = ({ name, requirement }: RequirementDataProps) => {
   }
 
   function changeStatus(status: number) {
-    console.log("change status");
-    console.log(status);
-
     setRequirementData((prevState) => ({
       ...prevState,
       checked: status,
     }));
   }
 
-  console.log(requirementData);
+  function changeDueDate(date: Date) {
+    setRequirementData((prevState) => ({
+      ...prevState,
+      due_date: date,
+    }));
+  }
 
   return (
     <>
@@ -77,64 +76,71 @@ const RequirementData = ({ name, requirement }: RequirementDataProps) => {
             <div className="p-4">
               {/* title */}
               <h3 className="font-bold text-2xl">{requirement.name}</h3>
-              <div className="flex flex-col justify-center items-center">
-                {/* priority badge */}
-                <div className="flex flex-row">
-                  <span className="text-md text-black">Priority:</span>{" "}
-                  <Dropdown
-                    func={renderPriorityBadge}
-                    selected={requirementData.priority}
-                    onSelect={(option) => changePriority(option)}
-                  />
+              <div className="flex flex-row justify-between items-center">
+                <div className="flex flex-col w-1/2 space-y-5">
+                  {/* priority badge */}
+                  <div className="flex flex-row mt-5">
+                    <span className="text-md text-black">Priority:</span>{" "}
+                    <Dropdown
+                      func={renderPriorityBadge}
+                      selected={requirementData.priority}
+                      onSelect={(option) => changePriority(option)}
+                    />
+                  </div>
+
+                  {/* due date */}
+                  <div className="flex flex-row">
+                    <span className="text-md text-black">Due date:</span>{" "}
+                    <DatePicker
+                      value={requirementData.due_date.toString()}
+                      onDateChange={(date) => changeDueDate(date)}
+                    />
+                  </div>
+
+                  {/* status */}
+                  <div className="flex flex-row">
+                    <span className="text-md text-black">Status:</span>{" "}
+                    <Dropdown
+                      func={renderStatusBadge}
+                      selected={requirementData.checked}
+                      onSelect={(status) => changeStatus(status)}
+                    />
+                  </div>
                 </div>
 
-                {/* due date */}
-                <div className="flex flex-row">
-                  <span className="text-md text-black mt-2">Due date:</span>{" "}
-                  <DatePicker value={requirementData.due_date.toString()} />
-                </div>
+                <div className="flex flex-col justify-center items-center w-1/2">
+                  {/* updated at */}
+                  <div className="text-xs text-neutral-400">
+                    {daysBetween(
+                      new Date(),
+                      new Date(requirementData.updated_at)
+                    )}{" "}
+                    days ago
+                  </div>
 
-                {/* updated at */}
-                <div className="text-xs text-neutral-400">
-                  {daysBetween(
-                    new Date(),
-                    new Date(requirementData.updated_at)
-                  )}{" "}
-                  days ago
-                </div>
+                  {/* updated by */}
+                  <div className="text-xs text-neutral-400">
+                    Updated by {requirementData.updated_by}
+                  </div>
 
-                {/* updated by */}
-                <div className="text-xs text-neutral-400">
-                  Updated by {requirementData.updated_by}
-                </div>
+                  {/* created at */}
+                  <div className="text-xs text-neutral-400">
+                    {daysBetween(
+                      new Date(),
+                      new Date(requirementData.created_at)
+                    )}{" "}
+                    days ago
+                  </div>
 
-                {/* created at */}
-                <div className="text-xs text-neutral-400">
-                  {daysBetween(
-                    new Date(),
-                    new Date(requirementData.created_at)
-                  )}{" "}
-                  days ago
-                </div>
+                  {/* created by */}
+                  <div className="text-xs text-neutral-400">
+                    Created by {requirementData.created_by}
+                  </div>
 
-                {/* created by */}
-                <div className="text-xs text-neutral-400">
-                  Created by {requirementData.created_by}
-                </div>
-
-                {/* assigned to */}
-                <div className="text-xs text-neutral-400">
-                  Assigned to {requirementData.assigned_to}
-                </div>
-
-                {/* checked - checkbox */}
-                <div className="ml-3 flex h-6 items-center">
-                  Done
-                  <Dropdown
-                    func={renderStatusBadge}
-                    selected={requirementData.checked}
-                    onSelect={(status) => changeStatus(status)}
-                  />
+                  {/* assigned to */}
+                  <div className="text-xs text-neutral-400">
+                    Assigned to {requirementData.assigned_to}
+                  </div>
                 </div>
               </div>
             </div>

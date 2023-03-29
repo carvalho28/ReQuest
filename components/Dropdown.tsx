@@ -18,7 +18,7 @@ export default function Dropdown({ onSelect, selected, func }: DropdownProps) {
   return (
     <Menu as="div" className="relative inline-block text-left">
       <div>
-        <Menu.Button className="inline-flex w-full justify-center gap-x-1.5 rounded-md px-3 mb-5 text-sm font-semibold text-gray-900">
+        <Menu.Button className="inline-flex w-full justify-center gap-x-1.5 rounded-md px-3 text-sm font-semibold text-black">
           {func(selected, 4, 1)}
           <ChevronDownIcon
             className="-mr-1 h-5 w-5 text-black"
