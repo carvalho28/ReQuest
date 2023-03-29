@@ -33,7 +33,7 @@ const RequirementsTable = ({ name }: RequirementsTableProps) => {
     updated_by: "",
     created_by: "",
     assigned_to: "",
-    checked: false,
+    checked: 0,
   });
 
   const [showReq, setShowReq] = useState(false);
@@ -57,7 +57,7 @@ const RequirementsTable = ({ name }: RequirementsTableProps) => {
         updated_by: "John Doe",
         created_by: "Ze Doe",
         assigned_to: "John Doe",
-        checked: false,
+        checked: 2,
       },
       {
         id: 2,
@@ -70,7 +70,7 @@ const RequirementsTable = ({ name }: RequirementsTableProps) => {
         updated_by: "John Doe",
         created_by: "John Doe",
         assigned_to: "John Doe",
-        checked: false,
+        checked: 1,
       },
     ];
     setRequirements(reqs);
@@ -240,7 +240,7 @@ const RequirementsTable = ({ name }: RequirementsTableProps) => {
                         : req.description}
                     </td>
                     <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                      {renderPriorityBadge(req.priority)}
+                      {renderPriorityBadge(req.priority, 2.5, 0.5)}
                     </td>
                     <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                       {req.due_date !== null
