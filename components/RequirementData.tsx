@@ -11,6 +11,9 @@ import {
   RiBarChartHorizontalLine,
   RiCalendarLine,
   RiErrorWarningLine,
+  RiUser5Fill,
+  RiUser5Line,
+  RiUserReceived2Line,
 } from "react-icons/ri";
 import DatePicker from "./DatePicker";
 import Dropdown from "./Dropdown";
@@ -85,37 +88,12 @@ const RequirementData = ({ name, requirement }: RequirementDataProps) => {
               <h3 className="font-bold text-2xl">{requirement.name}</h3>
 
               <div className="flex flex-row justify-between items-center p-4">
-                <div className="flex flex-col w-1/2 space-y-5">
-                  {/* priority badge */}
-                  <div className="flex flex-row mt-5 space-x-3">
-                    <div className="flex flex-row space-x-4">
-                      <RiErrorWarningLine size={20} />
-                      <span className="text-md text-black">Priority:</span>{" "}
-                    </div>
-                    <Dropdown
-                      func={renderPriorityBadge}
-                      selected={requirementData.priority}
-                      onSelect={(option) => changePriority(option)}
-                    />
-                  </div>
-
-                  {/* due date */}
-                  <div className="flex flex-row space-x-3">
-                    <div className="flex flex-row mt-1.5 space-x-4">
-                      <RiCalendarLine size={20} />
-                      <span className="text-md text-black">Due date:</span>{" "}
-                    </div>
-                    <DatePicker
-                      value={requirementData.due_date.toString()}
-                      onDateChange={(date) => changeDueDate(date)}
-                    />
-                  </div>
-
+                <div className="flex flex-col w-1/3 space-y-5">
                   {/* status */}
                   <div className="flex flex-row space-x-3">
                     <div className="flex flex-row space-x-4">
                       <RiBarChartHorizontalLine size={20} />
-                      <span className="text-md text-black">Status:</span>{" "}
+                      <span className="text-md text-black">Status</span>{" "}
                     </div>
                     <Dropdown
                       func={renderStatusBadge}
@@ -123,9 +101,46 @@ const RequirementData = ({ name, requirement }: RequirementDataProps) => {
                       onSelect={(status) => changeStatus(status)}
                     />
                   </div>
+
+                  {/* priority badge */}
+                  <div className="flex flex-row mt-5 space-x-3">
+                    <div className="flex flex-row space-x-4">
+                      <RiErrorWarningLine size={20} />
+                      <span className="text-md text-black">Priority</span>{" "}
+                    </div>
+                    <Dropdown
+                      func={renderPriorityBadge}
+                      selected={requirementData.priority}
+                      onSelect={(option) => changePriority(option)}
+                    />
+                  </div>
                 </div>
 
-                <div className="flex flex-col justify-center items-center w-1/2">
+                <div className="flex flex-col w-1/3 space-y-5">
+                  {/* due date */}
+                  <div className="flex flex-row space-x-3">
+                    <div className="flex flex-row mt-1.5 space-x-4">
+                      <RiCalendarLine size={20} />
+                      <span className="text-md text-black">Due date</span>{" "}
+                    </div>
+                    <DatePicker
+                      value={requirementData.due_date.toString()}
+                      onDateChange={(date) => changeDueDate(date)}
+                    />
+                  </div>
+
+                  {/* assigned to */}
+                  <div className="flex flex-row space-x-3">
+                    <div className="flex flex-row space-x-4">
+                      <RiUserReceived2Line size={20} />
+                      <span className="text-md text-black">
+                        Assigned to {requirementData.assigned_to}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="flex flex-col justify-center items-center w-1/3">
                   {/* updated at */}
                   <div className="text-xs text-neutral-400">
                     {daysBetween(
@@ -152,11 +167,6 @@ const RequirementData = ({ name, requirement }: RequirementDataProps) => {
                   {/* created by */}
                   <div className="text-xs text-neutral-400">
                     Created by {requirementData.created_by}
-                  </div>
-
-                  {/* assigned to */}
-                  <div className="text-xs text-neutral-400">
-                    Assigned to {requirementData.assigned_to}
                   </div>
                 </div>
               </div>
