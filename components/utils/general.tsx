@@ -15,22 +15,22 @@ export type Requirement = {
   updated_by: string;
   created_at: Date;
   created_by: string;
-  assigned_to: string;
+  assigned_to: string[];
   checked: number;
 };
 
 export class DefaultRequirement implements Requirement {
-  id = 0;
-  name = "";
-  description = "";
-  due_date = new Date();
-  priority = 0;
-  updated_at = new Date();
-  updated_by = "";
-  created_at = new Date();
-  created_by = "";
-  assigned_to = "";
-  checked = 0;
+  id = 0 as number;
+  name = "" as string;
+  description = "" as string;
+  due_date = new Date() as Date;
+  priority = 0 as number;
+  updated_at = new Date() as Date;
+  updated_by = "" as string;
+  created_at = new Date() as Date;
+  created_by = "" as string;
+  assigned_to = [] as string[];
+  checked = 0 as number;
 
   constructor() {}
 }

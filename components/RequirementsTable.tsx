@@ -36,7 +36,7 @@ const RequirementsTable = ({
     updated_at: new Date(),
     updated_by: "",
     created_by: "",
-    assigned_to: "",
+    assigned_to: [],
     checked: 0,
   });
 
@@ -60,7 +60,7 @@ const RequirementsTable = ({
         updated_at: new Date("2021-08-01"),
         updated_by: "John Doe",
         created_by: "Ze Doe",
-        assigned_to: "John Doe",
+        assigned_to: ["John Doe"],
         checked: 2,
       },
       {
@@ -73,7 +73,7 @@ const RequirementsTable = ({
         updated_at: new Date("2021-08-01"),
         updated_by: "John Doe",
         created_by: "John Doe",
-        assigned_to: "John Doe",
+        assigned_to: ["Diogo Carvalho"],
         checked: 1,
       },
     ];

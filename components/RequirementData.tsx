@@ -143,7 +143,10 @@ const RequirementData = ({
                       {/* Assigned to {requirementData.assigned_to} */}
                       <span className="text-md text-black">Assigned</span>{" "}
                     </div>
-                    <MultiselectPeople projectUserNames={projectUserNames} />
+                    <MultiselectPeople
+                      projectUserNames={projectUserNames}
+                      selectedUserNames={requirementData.assigned_to}
+                    />
                   </div>
                 </div>
 

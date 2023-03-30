@@ -1,5 +1,5 @@
-import Select from "react-tailwindcss-select";
 import { useEffect, useState } from "react";
+import Select from "react-tailwindcss-select";
 
 const options = [
   { value: "fox", label: "John Doe" },
@@ -10,10 +10,19 @@ const options = [
 
 interface MultiselectPeopleProps {
   projectUserNames: string[];
+  selectedUserNames: string[];
 }
 
-const MultiselectPeople = ({ projectUserNames }: MultiselectPeopleProps) => {
-  const [selected, setSelected] = useState([]);
+const MultiselectPeople = ({
+  projectUserNames,
+  selectedUserNames,
+}: MultiselectPeopleProps) => {
+  const [selected, setSelected] = useState<
+    {
+      value: string;
+      label: string;
+    }[]
+  >([]);
   const [options, setOptions] = useState<
     {
       value: string;
@@ -29,8 +38,11 @@ const MultiselectPeople = ({ projectUserNames }: MultiselectPeopleProps) => {
         label: name.length > 15 ? name.slice(0, 13) + "..." : name,
       }));
       setOptions(options);
+      setSelected(
+        options.filter((option) => selectedUserNames.includes(option.value))
+      );
     }
-  }, [projectUserNames]);
+  }, [projectUserNames, selectedUserNames]);
 
   const handleChange = (value: any) => {
     setSelected(value);
