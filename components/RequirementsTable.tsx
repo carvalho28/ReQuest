@@ -6,6 +6,7 @@ import {
   ChevronUpIcon,
 } from "@heroicons/react/24/outline";
 import { useSupabaseClient, useUser } from "@supabase/auth-helpers-react";
+import { RealtimeChannel } from "@supabase/supabase-js";
 import moment from "moment";
 import dynamic from "next/dynamic";
 import React, { useEffect, useState } from "react";
@@ -59,6 +60,7 @@ const RequirementsTable = ({
   }
 
   useEffect(() => {
+    let req_channel: RealtimeChannel;
     async function getRequirements() {
       const { data, error } = await supabaseClient
         .from("requirements")
@@ -72,8 +74,31 @@ const RequirementsTable = ({
         data as Database["public"]["Tables"]["requirements"]["Row"][]
       );
     }
+
+    async function getProjectsRealTime() {
+      req_channel = supabaseClient
+        .channel("reqs_load")
+        .on(
+          "postgres_changes",
+          {
+            event: "*",
+            schema: "public",
+            table: "requirements",
+          },
+          async (payload: any) => {
+            console.log("payload", payload);
+            getRequirements();
+          }
+        )
+        .subscribe();
+
+      return () => {
+        supabaseClient.removeChannel(req_channel);
+      };
+    }
     getRequirements();
-    setDescriptionOrder("asc");
+    getProjectsRealTime();
+    // setDescriptionOrder("asc");
   }, [projectId, supabaseClient]);
 
   function sortByTitle(column: string, toggleOrder: boolean) {

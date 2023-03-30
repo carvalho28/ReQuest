@@ -75,9 +75,6 @@ const RequirementData = ({
   }
 
   function changeDueDate(date: string) {
-    // if (date == null) {
-    //   date = "";
-    // }
     setRequirementData((prevState) => ({
       ...prevState,
       due_date: date,
@@ -94,8 +91,8 @@ const RequirementData = ({
               {/* title */}
               <h3 className="font-bold text-2xl">{requirement.name}</h3>
 
-              <div className="flex flex-row justify-between items-center p-4">
-                <div className="flex flex-col w-1/3 space-y-5">
+              <div className="flex flex-col md:flex-row justify-between items-center p-4 ">
+                <div className="flex flex-col md:w-1/3 w-full space-y-5">
                   {/* status */}
                   <div className="flex flex-row space-x-3">
                     <div className="flex flex-row space-x-4 justify-center items-center">
@@ -123,7 +120,7 @@ const RequirementData = ({
                   </div>
                 </div>
 
-                <div className="flex flex-col w-1/3 space-y-5">
+                <div className="flex flex-col md:w-1/3 w-full space-y-5">
                   {/* due date */}
                   <div className="flex flex-row space-x-3">
                     <div className="flex flex-row space-x-4 justify-center items-center">
@@ -152,29 +149,21 @@ const RequirementData = ({
                   </div>
                 </div>
 
-                <div className="flex flex-col w-1/3 space-y-8 pl-12">
-                  {/* Updated by */}
-                  <div className="flex flex-row space-x-3">
-                    <div className="flex flex-row space-x-4 justify-center items-center">
-                      <RiUserVoiceLine size={20} />
-                      <span className="text-md text-black">
-                        Last updated by
-                      </span>{" "}
-                    </div>
-                    <div className="text-md text-black">
-                      {requirementData.updated_by}
-                    </div>
+                <div className="flex flex-col md:w-1/3 w-full space-y-3 pl-8">
+                  <div className="flex flex-row justify-center">
+                    <span className="text-md text-black">Last updated</span>{" "}
                   </div>
-
-                  {/* Updated at */}
-                  <div className="flex flex-row space-x-3">
-                    <div className="flex flex-row space-x-4 justify-center items-center">
-                      <RiTimerFlashLine size={20} />
-                      <span className="text-md text-black">
-                        Last updated at
-                      </span>{" "}
-                    </div>
-                    <div className="text-md text-black">
+                  <div className="flex flex-row space-x-3 ml-16">
+                    <RiUserVoiceLine size={20} />
+                    <span className="text-sm text-black">
+                      {requirementData.updated_by?.length! > 15
+                        ? requirementData.updated_by?.slice(0, 15) + "..."
+                        : requirementData.updated_by}
+                    </span>
+                  </div>
+                  <div className="flex flex-row space-x-3 ml-16">
+                    <RiTimerFlashLine size={20} />
+                    <span className="text-sm text-black">
                       {new Date(requirementData.updated_at).toLocaleDateString(
                         "pt-PT",
                         {
@@ -183,7 +172,7 @@ const RequirementData = ({
                           day: "numeric",
                         }
                       )}
-                    </div>
+                    </span>
                   </div>
                 </div>
               </div>
