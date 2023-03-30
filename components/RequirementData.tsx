@@ -8,8 +8,13 @@ import { useEffect, useState } from "react";
 import {
   RiBarChartHorizontalLine,
   RiCalendarLine,
+  RiClockwise2Line,
+  RiClockwiseLine,
   RiErrorWarningLine,
+  RiTimerFlashLine,
+  RiUser4Line,
   RiUserReceived2Line,
+  RiUserVoiceLine,
 } from "react-icons/ri";
 import DatePicker from "./DatePicker";
 import Dropdown from "./Dropdown";
@@ -142,30 +147,34 @@ const RequirementData = ({
                   </div>
                 </div>
 
-                <div className="flex flex-col justify-center items-center w-1/3">
-                  {/* updated at
-                  <div className="text-md text-neutral-400">
-                    {daysBetween(
-                      new Date(),
-                      new Date(requirementData.updated_at)
-                    )}{" "}
-                    days ago
-                  </div> */}
+                <div className="flex flex-col w-1/3 space-y-8 pl-12">
+                  {/* Updated by */}
+                  <div className="flex flex-row space-x-3">
+                    <div className="flex flex-row space-x-4 justify-center items-center">
+                      <RiUserVoiceLine size={20} />
+                      <span className="text-md text-black">
+                        Last updated by
+                      </span>{" "}
+                    </div>
+                    <div className="text-md text-black">
+                      {requirementData.updated_by}
+                    </div>
+                  </div>
 
-                  {/* updated by
-                  <div className="text-xs text-neutral-400">
-                    Updated by {requirementData.updated_by}
-                  </div> */}
-
-                  {/* last updated by ... at 23, April for example */}
-                  <div className="text-md text-neutral-400 text-center">
-                    Last updated by {requirementData.updated_by}
-                    <div>
+                  {/* Updated at */}
+                  <div className="flex flex-row space-x-3">
+                    <div className="flex flex-row space-x-4 justify-center items-center">
+                      <RiTimerFlashLine size={20} />
+                      <span className="text-md text-black">
+                        Last updated at
+                      </span>{" "}
+                    </div>
+                    <div className="text-md text-black">
                       {new Date(requirementData.updated_at).toLocaleDateString(
-                        "en-US",
+                        "pt-PT",
                         {
                           year: "numeric",
-                          month: "long",
+                          month: "numeric",
                           day: "numeric",
                         }
                       )}
