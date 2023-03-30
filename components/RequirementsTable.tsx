@@ -1,9 +1,11 @@
-import { renderPriorityBadge, Requirement } from "@/components/utils/general";
+import { renderPriorityBadge } from "@/components/utils/general";
+import { Database } from "@/types/supabase";
 import {
   ArrowUpRightIcon,
   ChevronDownIcon,
   ChevronUpIcon,
 } from "@heroicons/react/24/outline";
+import { useSupabaseClient, useUser } from "@supabase/auth-helpers-react";
 import moment from "moment";
 import dynamic from "next/dynamic";
 import React, { useEffect, useState } from "react";
@@ -12,74 +14,67 @@ import React, { useEffect, useState } from "react";
 const RequirementData = dynamic(() => import("./RequirementData"), {
   ssr: false,
 });
-// import RequirementData from "./RequirementData";
 
 interface RequirementsTableProps {
   name: string;
   projectUserNames: string[];
+  projectId: string;
 }
 
 const RequirementsTable = ({
   name,
   projectUserNames,
+  projectId,
 }: RequirementsTableProps) => {
-  const [requirements, setRequirements] = useState<Requirement[]>([]);
+  const [requirements, setRequirements] = useState<
+    Database["public"]["Tables"]["requirements"]["Row"][]
+  >([]);
   const [descriptionOrder, setDescriptionOrder] = useState("");
 
-  const [requirement, setRequirement] = useState<Requirement>({
-    id: 0,
+  const supabaseClient = useSupabaseClient();
+  const user = useUser();
+
+  const [requirement, setRequirement] = useState<
+    Database["public"]["Tables"]["requirements"]["Row"]
+  >({
+    id: "0",
     name: "",
     description: "",
-    due_date: new Date(),
+    due_date: new Date().toString(),
     priority: 0,
-    created_at: new Date(),
-    updated_at: new Date(),
+    created_at: new Date().toString(),
+    updated_at: new Date().toString(),
     updated_by: "",
     created_by: "",
     assigned_to: [],
     checked: 0,
+    id_proj: projectId,
   });
 
   const [showReq, setShowReq] = useState(false);
 
   function toggleReq() {
     console.log("toggle");
-
     setShowReq(!showReq);
   }
 
   useEffect(() => {
-    const reqs = [
-      {
-        id: 1,
-        name: "Requirement 1",
-        description: "bbbbbb",
-        due_date: new Date("2021-10-01"),
-        priority: 1,
-        created_at: new Date("2021-10-01"),
-        updated_at: new Date("2021-08-01"),
-        updated_by: "John Doe",
-        created_by: "Ze Doe",
-        assigned_to: ["John Doe"],
-        checked: 2,
-      },
-      {
-        id: 2,
-        name: "Requirement 2",
-        description: "aaaaa",
-        due_date: new Date("2021-10-01"),
-        priority: 2,
-        created_at: new Date("2021-10-01"),
-        updated_at: new Date("2021-08-01"),
-        updated_by: "John Doe",
-        created_by: "John Doe",
-        assigned_to: ["Diogo Carvalho"],
-        checked: 1,
-      },
-    ];
-    setRequirements(reqs);
+    async function getRequirements() {
+      const { data, error } = await supabaseClient
+        .from("requirements")
+        .select("*")
+        .eq("id_proj", projectId);
+
+      if (error) console.log(error);
+      if (!data) throw new Error("No data found");
+
+      setRequirements(
+        data as Database["public"]["Tables"]["requirements"]["Row"][]
+      );
+    }
+    getRequirements();
     setDescriptionOrder("asc");
-  }, []);
+  }, [projectId, supabaseClient]);
 
   function sortByTitle(column: string, toggleOrder: boolean) {
     let order = descriptionOrder;
@@ -94,25 +89,25 @@ const RequirementsTable = ({
       column === "description" ||
       column === "assigned_to"
     ) {
-      const sorted = requirements.slice().sort((a, b) => {
-        if (order === "asc") {
-          if (a[column] < b[column]) {
-            return -1;
-          }
-          if (a[column] > b[column]) {
-            return 1;
-          }
-        } else {
-          if (a[column] > b[column]) {
-            return -1;
-          }
-          if (a[column] < b[column]) {
-            return 1;
-          }
-        }
-        return 0;
-      });
-      setRequirements(sorted);
+      // const sorted = requirements.slice().sort((a, b) => {
+      //   if (order === "asc") {
+      //     if (a[column] < b[column]) {
+      //       return -1;
+      //     }
+      //     if (a[column] > b[column]) {
+      //       return 1;
+      //     }
+      //   } else {
+      //     if (a[column] > b[column]) {
+      //       return -1;
+      //     }
+      //     if (a[column] < b[column]) {
+      //       return 1;
+      //     }
+      //   }
+      //   return 0;
+      // });
+      // setRequirements(sorted);
     }
   }
 
@@ -239,9 +234,11 @@ const RequirementsTable = ({
                     </td>
                     <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                       {/* limit 25 chars */}
-                      {req.description.length > 25
-                        ? req.description.substring(0, 25) + "..."
-                        : req.description}
+                      {req.description
+                        ? req.description.length > 25
+                          ? req.description.substring(0, 25) + "..."
+                          : req.description
+                        : "No description"}
                     </td>
                     <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                       {renderPriorityBadge(req.priority, 2.5, 0.5)}

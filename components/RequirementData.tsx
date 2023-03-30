@@ -1,18 +1,14 @@
 import {
-  DefaultRequirement,
   renderPriorityBadge,
   renderStatusBadge,
-  Requirement,
 } from "@/components/utils/general";
+import { Database } from "@/types/supabase";
 import { useEffect, useState } from "react";
 import {
   RiBarChartHorizontalLine,
   RiCalendarLine,
-  RiClockwise2Line,
-  RiClockwiseLine,
   RiErrorWarningLine,
   RiTimerFlashLine,
-  RiUser4Line,
   RiUserReceived2Line,
   RiUserVoiceLine,
 } from "react-icons/ri";
@@ -23,7 +19,7 @@ import Tiptap from "./TipTap";
 
 interface RequirementDataProps {
   name: string;
-  requirement: Requirement;
+  requirement: Database["public"]["Tables"]["requirements"]["Row"];
   projectUserNames: string[];
 }
 
@@ -43,9 +39,9 @@ const RequirementData = ({
     return Math.round(differenceMs / ONE_DAY);
   }
 
-  const [requirementData, setRequirementData] = useState<DefaultRequirement>(
-    {} as DefaultRequirement
-  );
+  const [requirementData, setRequirementData] = useState<
+    Database["public"]["Tables"]["requirements"]["Row"]
+  >({} as Database["public"]["Tables"]["requirements"]["Row"]);
 
   useEffect(() => {
     setRequirementData({
@@ -60,6 +56,7 @@ const RequirementData = ({
       created_by: requirement.created_by,
       assigned_to: requirement.assigned_to,
       checked: requirement.checked,
+      id_proj: requirement.id_proj,
     });
   }, [requirement]);
 
@@ -77,7 +74,10 @@ const RequirementData = ({
     }));
   }
 
-  function changeDueDate(date: Date) {
+  function changeDueDate(date: string) {
+    // if (date == null) {
+    //   date = "";
+    // }
     setRequirementData((prevState) => ({
       ...prevState,
       due_date: date,
@@ -104,7 +104,7 @@ const RequirementData = ({
                     </div>
                     <Dropdown
                       func={renderStatusBadge}
-                      selected={requirementData.checked}
+                      selected={requirementData.checked as number}
                       onSelect={(status) => changeStatus(status)}
                     />
                   </div>
@@ -131,7 +131,7 @@ const RequirementData = ({
                       <span className="text-md text-black">Due date</span>{" "}
                     </div>
                     <DatePicker
-                      value={requirementData.due_date.toString()}
+                      value={requirementData.due_date as string}
                       onDateChange={(date) => changeDueDate(date)}
                     />
                   </div>
@@ -145,7 +145,9 @@ const RequirementData = ({
                     </div>
                     <MultiselectPeople
                       projectUserNames={projectUserNames}
-                      selectedUserNames={requirementData.assigned_to}
+                      selectedUserNames={
+                        requirementData.assigned_to as string[]
+                      }
                     />
                   </div>
                 </div>
@@ -190,7 +192,7 @@ const RequirementData = ({
           <Tiptap
             userName={name}
             reqId={requirement.id}
-            reqDescription={requirement.description}
+            reqDescription={requirement.description as string}
           />
           <div className="text-md text-neutral-400 flex justify-end mr-4 italic">
             Created by {requirementData.created_by} -{" "}

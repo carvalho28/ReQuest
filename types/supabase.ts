@@ -104,6 +104,50 @@ export interface Database {
           status?: string
         }
       }
+      requirements: {
+        Row: {
+          assigned_to: string[] | null
+          checked: number | null
+          created_at: string
+          created_by: string
+          description: string | null
+          due_date: string | null
+          id: string
+          id_proj: string
+          name: string
+          priority: number
+          updated_at: string
+          updated_by: string
+        }
+        Insert: {
+          assigned_to?: string[] | null
+          checked?: number | null
+          created_at: string
+          created_by: string
+          description?: string | null
+          due_date?: string | null
+          id?: string
+          id_proj: string
+          name: string
+          priority?: number
+          updated_at: string
+          updated_by: string
+        }
+        Update: {
+          assigned_to?: string[] | null
+          checked?: number | null
+          created_at?: string
+          created_by?: string
+          description?: string | null
+          due_date?: string | null
+          id?: string
+          id_proj?: string
+          name?: string
+          priority?: number
+          updated_at?: string
+          updated_by?: string
+        }
+      }
     }
     Views: {
       [_ in never]: never
