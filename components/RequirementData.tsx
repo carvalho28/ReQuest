@@ -143,32 +143,33 @@ const RequirementData = ({
                 </div>
 
                 <div className="flex flex-col justify-center items-center w-1/3">
-                  {/* updated at */}
-                  <div className="text-xs text-neutral-400">
+                  {/* updated at
+                  <div className="text-md text-neutral-400">
                     {daysBetween(
                       new Date(),
                       new Date(requirementData.updated_at)
                     )}{" "}
                     days ago
-                  </div>
+                  </div> */}
 
-                  {/* updated by */}
+                  {/* updated by
                   <div className="text-xs text-neutral-400">
                     Updated by {requirementData.updated_by}
-                  </div>
+                  </div> */}
 
-                  {/* created at */}
-                  <div className="text-xs text-neutral-400">
-                    {daysBetween(
-                      new Date(),
-                      new Date(requirementData.created_at)
-                    )}{" "}
-                    days ago
-                  </div>
-
-                  {/* created by */}
-                  <div className="text-xs text-neutral-400">
-                    Created by {requirementData.created_by}
+                  {/* last updated by ... at 23, April for example */}
+                  <div className="text-md text-neutral-400 text-center">
+                    Last updated by {requirementData.updated_by}
+                    <div>
+                      {new Date(requirementData.updated_at).toLocaleDateString(
+                        "en-US",
+                        {
+                          year: "numeric",
+                          month: "long",
+                          day: "numeric",
+                        }
+                      )}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -179,9 +180,20 @@ const RequirementData = ({
             reqId={requirement.id}
             reqDescription={requirement.description}
           />
-          <div className="modal-action">
-            <label htmlFor="my-modal-5" className="btn">
-              Yay!
+          <div className="text-md text-neutral-400 flex justify-end mr-4 italic">
+            Created by {requirementData.created_by} -{" "}
+            {new Date(requirementData.created_at).toLocaleDateString("pt-PT", {
+              year: "numeric",
+              month: "numeric",
+              day: "numeric",
+            })}
+          </div>
+          <div className="modal-action p-4">
+            <label
+              htmlFor="my-modal-5"
+              className="btn bg-contrast text-white border-0 hover:bg-contrasthover hover:cursor-pointer"
+            >
+              Done
             </label>
           </div>
         </div>

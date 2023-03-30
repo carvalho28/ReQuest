@@ -92,7 +92,7 @@ export default function SingleProject({
     <div>
       <Layout
         currentPage="projects"
-        namePage={project.name}
+        namePage={`Project - ${project.name}`}
         avatar_url={avatar_url}
       >
         <RequirementsTable name={name} projectUserNames={projectUserNames} />

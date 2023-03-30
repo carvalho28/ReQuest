@@ -200,7 +200,7 @@ const Tiptap = ({ userName, reqId, reqDescription }: TiptapProps) => {
       editorProps: {
         attributes: {
           class:
-            "prose p-4 prose-md mx-auto mb-12 mx-8 focus:outline-none border-l-2 border-b-2 border-r-2 border-black max-w-none",
+            "prose p-4 prose-md mx-auto mb-2 mx-8 focus:outline-none border-l-2 border-b-2 border-r-2 border-black max-w-none",
           style: "min-height: 20em;",
         },
       },
