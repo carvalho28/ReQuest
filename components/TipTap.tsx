@@ -41,13 +41,15 @@ import TableRow from "@tiptap/extension-table-row";
 import TableCell from "@tiptap/extension-table-cell";
 
 interface TiptapProps {
-  name: string;
+  reqId: number;
+  reqDescription: string;
+  userName: string;
 }
 
-const Tiptap = ({ name }: TiptapProps) => {
+const Tiptap = ({ userName, reqId, reqDescription }: TiptapProps) => {
   const supabaseClient = useSupabaseClient();
 
-  const [content, setContent] = useState("");
+  const [content, setContent] = useState(reqDescription);
   const [provider, setProvider] = useState<HocuspocusProvider>();
 
   useEffect(() => {
@@ -68,11 +70,14 @@ const Tiptap = ({ name }: TiptapProps) => {
       new HocuspocusProvider({
         url: "wss://little-rain-5635.fly.dev/",
         // url: "ws://localhost:1234",
-        name: "tiptap",
-        document: new Y.Doc(),
+        name: reqId.toString(),
+        document: new Y.Doc({
+          guid: reqId.toString(),
+        }),
       })
     );
-  }, []);
+  }, [reqId]);
+  // console.log("provider", provider?.document);
 
   function generatePastelColor() {
     // Set the saturation and lightness to a fixed value to generate a pastel color
@@ -181,7 +186,7 @@ const Tiptap = ({ name }: TiptapProps) => {
         CollaborationCursor.configure({
           provider,
           user: {
-            name: name,
+            name: userName,
             color: generatePastelColor(),
           },
         }),
@@ -195,11 +200,12 @@ const Tiptap = ({ name }: TiptapProps) => {
       editorProps: {
         attributes: {
           class:
-            "prose p-4 prose-md mx-auto mb-12 mx-8 focus:outline-none border-l-2 border-b-2 border-r-2 border-black max-w-none",
+            "prose p-4 prose-md mx-auto mb-2 mx-8 focus:outline-none border-l-2 border-b-2 border-r-2 border-black max-w-none",
           style: "min-height: 20em;",
         },
       },
       // content: content,
+      content: content,
     },
     [provider]
   );
@@ -238,7 +244,7 @@ const Tiptap = ({ name }: TiptapProps) => {
   }
 
   return (
-    <div>
+    <div className="p-2">
       <MenuBar editor={editor} />
       <EditorContent editor={editor} onDrop={addImageOnDrop} />
     </div>

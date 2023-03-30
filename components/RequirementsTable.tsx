@@ -1,3 +1,4 @@
+import { renderPriorityBadge, Requirement } from "@/components/utils/general";
 import {
   ArrowUpRightIcon,
   ChevronDownIcon,
@@ -11,27 +12,33 @@ import React, { useEffect, useState } from "react";
 const RequirementData = dynamic(() => import("./RequirementData"), {
   ssr: false,
 });
+// import RequirementData from "./RequirementData";
 
 interface RequirementsTableProps {
   name: string;
+  projectUserNames: string[];
 }
 
-const RequirementsTable = ({ name }: RequirementsTableProps) => {
-  type Requirement = {
-    id: number;
-    name: string;
-    description: string;
-    due_date?: Date;
-    priority: number;
-    updated_at: Date;
-    created_at: Date;
-    edited_by: string;
-    created_by: string;
-    assigned_to: string;
-    checked: boolean;
-  };
+const RequirementsTable = ({
+  name,
+  projectUserNames,
+}: RequirementsTableProps) => {
   const [requirements, setRequirements] = useState<Requirement[]>([]);
   const [descriptionOrder, setDescriptionOrder] = useState("");
+
+  const [requirement, setRequirement] = useState<Requirement>({
+    id: 0,
+    name: "",
+    description: "",
+    due_date: new Date(),
+    priority: 0,
+    created_at: new Date(),
+    updated_at: new Date(),
+    updated_by: "",
+    created_by: "",
+    assigned_to: [],
+    checked: 0,
+  });
 
   const [showReq, setShowReq] = useState(false);
 
@@ -51,23 +58,23 @@ const RequirementsTable = ({ name }: RequirementsTableProps) => {
         priority: 1,
         created_at: new Date("2021-10-01"),
         updated_at: new Date("2021-08-01"),
-        edited_by: "John Doe",
-        created_by: "John Doe",
-        assigned_to: "John Doe",
-        checked: false,
+        updated_by: "John Doe",
+        created_by: "Ze Doe",
+        assigned_to: ["John Doe"],
+        checked: 2,
       },
       {
         id: 2,
         name: "Requirement 2",
         description: "aaaaa",
         due_date: new Date("2021-10-01"),
-        priority: 1,
+        priority: 2,
         created_at: new Date("2021-10-01"),
         updated_at: new Date("2021-08-01"),
-        edited_by: "John Doe",
+        updated_by: "John Doe",
         created_by: "John Doe",
-        assigned_to: "John Doe",
-        checked: false,
+        assigned_to: ["Diogo Carvalho"],
+        checked: 1,
       },
     ];
     setRequirements(reqs);
@@ -106,29 +113,6 @@ const RequirementsTable = ({ name }: RequirementsTableProps) => {
         return 0;
       });
       setRequirements(sorted);
-    }
-  }
-
-  // render different badge depending on priority
-  function renderPriorityBadge(priority: number) {
-    if (priority === 1) {
-      return (
-        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
-          High
-        </span>
-      );
-    } else if (priority === 2) {
-      return (
-        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
-          Medium
-        </span>
-      );
-    } else {
-      return (
-        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-          Low
-        </span>
-      );
     }
   }
 
@@ -245,9 +229,6 @@ const RequirementsTable = ({ name }: RequirementsTableProps) => {
                       </span>
                     </a>
                   </th>
-                  <th scope="col" className="relative py-3.5 pl-3 pr-0">
-                    <span className="sr-only">Edit</span>
-                  </th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200">
@@ -263,14 +244,9 @@ const RequirementsTable = ({ name }: RequirementsTableProps) => {
                         : req.description}
                     </td>
                     <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                      {renderPriorityBadge(req.priority)}
+                      {renderPriorityBadge(req.priority, 2.5, 0.5)}
                     </td>
                     <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                      {/* {req.due_date.getDate() +
-                        "/" +
-                        req.due_date.getMonth() +
-                        "/" +
-                        req.due_date.getFullYear()} */}
                       {req.due_date !== null
                         ? moment(req.due_date).format("DD/MM/YYYY")
                         : "No due date"}
@@ -281,6 +257,9 @@ const RequirementsTable = ({ name }: RequirementsTableProps) => {
                     <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm sm:pr-0">
                       <label
                         htmlFor="my-modal-5"
+                        onClick={() => {
+                          setRequirement(req);
+                        }}
                         className="btn text-contrast hover:text-contrasthover bg-transparent border-0 hover:bg-purple-200"
                       >
                         <span className="sr-only">Edit</span>
@@ -298,7 +277,11 @@ const RequirementsTable = ({ name }: RequirementsTableProps) => {
           </div>
         </div>
       </div>
-      <RequirementData name={name} />
+      <RequirementData
+        name={name}
+        requirement={requirement}
+        projectUserNames={projectUserNames}
+      />
     </div>
   );
 };

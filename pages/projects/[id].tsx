@@ -3,6 +3,7 @@ import { createServerSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import { GetServerSidePropsContext } from "next";
 import { Database } from "@/types/supabase";
 import RequirementsTable from "@/components/RequirementsTable";
+import { log } from "console";
 
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   const supabase = createServerSupabaseClient(ctx);
@@ -47,18 +48,41 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   if (userError) console.log(userError);
   if (!userData) throw new Error("No data found");
 
-  // console.log("user data:", userData[0].name);
+  // get all users that are in the project
+  const { data: usersInProject, error: usersInProjectError } = await supabase
+    .from("project_profiles")
+    .select(
+      `id_user, 
+    profiles (
+      name,
+      email
+    )`
+    )
+    .eq("id_proj", id);
+
+  if (usersInProjectError) console.log(usersInProjectError);
+  if (!usersInProject) throw new Error("No data found");
+
+  const projectUserNames = usersInProject.map(
+    (user: any) => user.profiles.name ?? user.profiles.email
+  );
 
   return {
     props: {
       avatar_url: data[0].avatar_url,
       project_data: projectData,
       user: userData[0].name,
+      projectUserNames,
     },
   };
 };
 
-export default function SingleProject({ avatar_url, project_data, user }: any) {
+export default function SingleProject({
+  avatar_url,
+  project_data,
+  user,
+  projectUserNames,
+}: any) {
   const project: Database["public"]["Tables"]["projects"]["Row"] =
     project_data[0];
 
@@ -68,10 +92,10 @@ export default function SingleProject({ avatar_url, project_data, user }: any) {
     <div>
       <Layout
         currentPage="projects"
-        namePage={project.name}
+        namePage={`Project - ${project.name}`}
         avatar_url={avatar_url}
       >
-        <RequirementsTable name={name} />
+        <RequirementsTable name={name} projectUserNames={projectUserNames} />
       </Layout>
     </div>
   );
