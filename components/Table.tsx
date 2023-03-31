@@ -7,11 +7,7 @@ import {
   usePagination,
 } from "react-table";
 import { useRowSelectColumn } from "@lineup-lite/hooks";
-import {
-  RiArrowLeftSLine,
-  RiArrowRightSLine,
-  RiCheckboxBlankCircleFill,
-} from "react-icons/ri";
+import { RiArrowRightSLine, RiCheckboxBlankCircleFill } from "react-icons/ri";
 import { DOTS, useCustomPagination } from "./CustomPagination";
 import "regenerator-runtime/runtime";
 
@@ -146,16 +142,14 @@ function Table({ columns, data }: any) {
     page,
     canPreviousPage,
     canNextPage,
-    pageOptions,
-    pageCount,
-    gotoPage,
     nextPage,
     previousPage,
+    gotoPage,
+    pageCount,
     setPageSize,
-
+    state,
     preGlobalFilteredRows,
     setGlobalFilter,
-    state,
   }: any = useTable(
     {
       columns,
@@ -174,7 +168,7 @@ function Table({ columns, data }: any) {
   }); //new
 
   useEffect(() => {
-    setPageSize(1);
+    setPageSize(5);
   }, [setPageSize]); //set according to your preferrence
 
   // Render the UI for your table and the styles

@@ -12,8 +12,14 @@ export default function Teste() {
   // Table
   const data = useMemo(() => reqData(), []);
 
-  // uplicate data 100 times
-  const data2 = Array(100).fill(data);
+  // copy data 100 times and add to a new array
+  const data2 = useMemo(() => {
+    const arr = [];
+    for (let i = 0; i < 100; i++) {
+      arr.push(...data);
+    }
+    return arr;
+  }, [data]);
 
   const columns = useMemo(
     () => [

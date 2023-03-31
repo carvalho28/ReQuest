@@ -25,9 +25,12 @@ export const useCustomPagination = ({
 
     const leftSiblingIndex = Math.max(currentPage - siblingCount, 1);
     const rightSiblingIndex = Math.min(
-      currentPage + siblingCount,
+      currentPage + siblingCount + 1,
       totalPageCount
     );
+
+    console.log("leftSiblingIndex", leftSiblingIndex);
+    console.log("rightSiblingIndex", rightSiblingIndex);
 
     const shouldShowLeftDots = leftSiblingIndex > 2;
     const shouldShowRightDots = rightSiblingIndex < totalPageCount - 2;
