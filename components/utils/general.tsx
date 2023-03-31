@@ -65,4 +65,8 @@ function renderStatusBadge(status: number, sizex: number, sizey: number) {
   }
 }
 
-export { renderPriorityBadge, renderStatusBadge };
+function classNames(...classes: any[]) {
+  return classes.filter(Boolean).join(" ");
+}
+
+export { renderPriorityBadge, renderStatusBadge, classNames };

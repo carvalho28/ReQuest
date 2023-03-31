@@ -1,5 +1,6 @@
-import Table from "@/components/Table";
+import Table, { PriorityProject, StatusProject } from "@/components/Table";
 import { reqData } from "@/components/dummy";
+import { renderPriorityBadge } from "@/components/utils/general";
 import { useMemo } from "react";
 
 export default function Teste() {
@@ -23,10 +24,12 @@ export default function Teste() {
       {
         Header: "Status",
         accessor: "checked",
+        Cell: StatusProject,
       },
       {
         Header: "Priority",
         accessor: "priority",
+        Cell: PriorityProject,
       },
       {
         Header: "Assigned To",

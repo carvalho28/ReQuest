@@ -6,7 +6,7 @@ export const reqData = () => {
       due_date: null,
       priority: 1,
       assigned_to: [],
-      checked: 1,
+      checked: 3,
     },
     {
       name: "Req2",
@@ -22,7 +22,7 @@ export const reqData = () => {
       due_date: null,
       priority: 1,
       assigned_to: [],
-      checked: 1,
+      checked: 2,
     },
   ];
   return data;

@@ -1,6 +1,64 @@
 import { useState } from "react";
-import { useTable, useGlobalFilter, useAsyncDebounce } from "react-table"; // new
+import {
+  useTable,
+  useGlobalFilter,
+  useAsyncDebounce,
+  useRowSelect,
+} from "react-table";
+import { useRowSelectColumn } from "@lineup-lite/hooks";
 import "regenerator-runtime/runtime";
+import { RiCheckboxBlankCircleFill } from "react-icons/ri";
+
+export function PriorityProject({ value }: any) {
+  const status = value || 3;
+
+  if (status === 1) {
+    return (
+      <span className="px-3 py-1 uppercase leading-wide font-bold text-xs rounded-full shadow-sm bg-red-100 text-red-700">
+        P1
+      </span>
+    );
+  } else if (status === 2) {
+    return (
+      <span className="px-3 py-1 uppercase leading-wide font-bold text-xs rounded-full shadow-sm bg-yellow-100 text-yellow-700">
+        P2
+      </span>
+    );
+  } else {
+    return (
+      <span className="px-3 py-1 uppercase leading-wide font-bold text-xs rounded-full shadow-sm bg-green-100 text-green-700">
+        P3
+      </span>
+    );
+  }
+}
+
+export function StatusProject({ value }: any) {
+  const status = value || 1;
+
+  if (status === 1) {
+    return (
+      <span className="inline-flex items-center px-3 py-1 uppercase font-bold text-xs rounded-full shadow-sm bg-red-100 text-red-700">
+        <RiCheckboxBlankCircleFill className="mr-1" />
+        Not Started
+      </span>
+    );
+  } else if (status === 2) {
+    return (
+      <span className="inline-flex items-center px-3 py-1 uppercase font-bold text-xs rounded-full shadow-sm bg-yellow-100 text-yellow-700">
+        <RiCheckboxBlankCircleFill className="mr-1" />
+        In Progress
+      </span>
+    );
+  } else {
+    return (
+      <span className="inline-flex items-center px-3 py-1 uppercase leading-wide font-bold text-xs rounded-full shadow-sm bg-green-100 text-green-700">
+        <RiCheckboxBlankCircleFill className="mr-1" />
+        Completed
+      </span>
+    );
+  }
+}
 
 function GlobalFilter({ globalFilter, setGlobalFilter, placeholder }: any) {
   const [value, setValue] = useState(globalFilter);
@@ -39,7 +97,9 @@ function Table({ columns, data }: any) {
       columns,
       data,
     },
-    useGlobalFilter
+    useGlobalFilter,
+    useRowSelect,
+    useRowSelectColumn
   );
 
   // Render the UI for your table and the styles
@@ -70,6 +130,7 @@ function Table({ columns, data }: any) {
                         className="px-6 py-5 text-left text-20 font-medium text-gray-400 uppercase rounded-sm tracking-wider"
                       >
                         {column.render("Header")}
+                        {column.id === "selection" && column.render("Summary")}
                       </th>
                     ))}
                   </tr>
