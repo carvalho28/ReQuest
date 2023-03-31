@@ -16,6 +16,8 @@ import {
 } from "react-icons/ri";
 import { DOTS, useCustomPagination } from "./CustomPagination";
 import "regenerator-runtime/runtime";
+import { ArrowUpRightIcon } from "@heroicons/react/24/outline";
+import RequirementData from "./RequirementData";
 
 export function PriorityProject({ value }: any) {
   const status = value || 3;
@@ -113,6 +115,25 @@ export function AssignedToProject({ value }: any) {
     return <div className="flex flex-col justify-center">{users}</div>;
   } else {
     return <span className="italic text-sm text-gray-400">Not assigned</span>;
+  }
+}
+
+export function ProjectName({ value }: any) {
+  if (value) {
+    return (
+      <span>
+        {value}
+        <label
+          htmlFor="my-modal-5"
+          onClick={() => {}}
+          className="btn text-contrast hover:text-contrasthover bg-transparent border-0 hover:bg-purple-200"
+        >
+          <ArrowUpRightIcon className="h-3 w-3" aria-hidden="true" />
+        </label>
+      </span>
+    );
+  } else {
+    return <span className="italic text-sm text-gray-400">No name</span>;
   }
 }
 
@@ -305,6 +326,11 @@ function Table({ columns, data }: any) {
           </div>
         </div>
       </div>
+      {/* <RequirementData
+        name={name}
+        requirement={requirement}
+        projectUserNames={projectUserNames}
+      /> */}
     </div>
   );
 }

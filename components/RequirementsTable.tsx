@@ -115,25 +115,6 @@ const RequirementsTable = ({
       column === "description" ||
       column === "assigned_to"
     ) {
-      // const sorted = requirements.slice().sort((a, b) => {
-      //   if (order === "asc") {
-      //     if (a[column] < b[column]) {
-      //       return -1;
-      //     }
-      //     if (a[column] > b[column]) {
-      //       return 1;
-      //     }
-      //   } else {
-      //     if (a[column] > b[column]) {
-      //       return -1;
-      //     }
-      //     if (a[column] < b[column]) {
-      //       return 1;
-      //     }
-      //   }
-      //   return 0;
-      // });
-      // setRequirements(sorted);
     }
   }
 

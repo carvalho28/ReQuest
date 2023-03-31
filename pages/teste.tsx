@@ -3,6 +3,7 @@ import Table, {
   DescriptionProject,
   DueDateProject,
   PriorityProject,
+  ProjectName,
   StatusProject,
 } from "@/components/Table";
 import { reqData } from "@/components/dummy";
@@ -26,6 +27,7 @@ export default function Teste() {
       {
         Header: "Name",
         accessor: "name",
+        Cell: ProjectName,
       },
       {
         Header: "Description",
