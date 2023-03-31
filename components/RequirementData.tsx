@@ -7,7 +7,10 @@ import { useEffect, useState } from "react";
 import {
   RiBarChartHorizontalLine,
   RiCalendarLine,
+  RiCheckLine,
+  RiCloseLine,
   RiErrorWarningLine,
+  RiPencilLine,
   RiTimerFlashLine,
   RiUserReceived2Line,
   RiUserVoiceLine,
@@ -81,6 +84,54 @@ const RequirementData = ({
     }));
   }
 
+  const [isEditing, setIsEditing] = useState(false);
+
+  function editRequirement() {
+    setIsEditing(true);
+
+    // set requirement name to be editable
+    const requirementName = document.getElementById("requirement-name");
+    if (requirementName) {
+      requirementName.setAttribute("contentEditable", "true");
+
+      // set focus on the requirement name in the last position
+      requirementName.focus();
+      const length = requirementName.innerText.length;
+
+      // set the cursor at the end of the text
+      const range = document.createRange();
+      const sel = window.getSelection();
+      range.setStart(requirementName.childNodes[0], length);
+      range.collapse(true);
+      sel?.removeAllRanges();
+      sel?.addRange(range);
+    }
+  }
+
+  function saveTitle() {
+    const requirementName = document.getElementById("requirement-name");
+    if (requirementName) {
+      requirementName.setAttribute("contentEditable", "false");
+
+      // save the new title
+      setRequirementData((prevState) => ({
+        ...prevState,
+        name: requirementName.innerText,
+      }));
+    }
+
+    setIsEditing(false);
+  }
+
+  function cancelTitle() {
+    const requirementName = document.getElementById("requirement-name");
+    if (requirementName) {
+      requirementName.setAttribute("contentEditable", "false");
+    }
+
+    setIsEditing(false);
+  }
+
   return (
     <>
       <input type="checkbox" id="my-modal-5" className="modal-toggle" />
@@ -89,7 +140,40 @@ const RequirementData = ({
           {requirementData.id != undefined && (
             <div className="p-4">
               {/* title */}
-              <h3 className="font-bold text-2xl">{requirement.name}</h3>
+              <div className="flex flex-row space-x-8">
+                <h3
+                  className="font-bold text-2xl
+                focus:border-contrast focus:border-2 focus:outline-none px-1"
+                  id="requirement-name"
+                >
+                  {requirement.name}
+                </h3>
+                {/* show pencil icon and make it editable, then show a check icon to save or a cross icon to cancel */}
+                <div className="flex flex-row items-center">
+                  {!isEditing ? (
+                    <RiPencilLine
+                      size={20}
+                      className="cursor-pointer hover:scale-110 hover:bg-neutral-200 rounded-full"
+                      onClick={() => editRequirement()}
+                    />
+                  ) : (
+                    <div className="flex flex-row space-x-5">
+                      <RiCheckLine
+                        size={20}
+                        className="cursor-pointer hover:scale-110 hover:bg-neutral-200 rounded-full bg-green-100"
+                        onClick={() => saveTitle()}
+                      />
+
+                      <RiCloseLine
+                        size={20}
+                        color="red"
+                        className="cursor-pointer hover:scale-110 hover:bg-neutral-200 rounded-full bg-red-100"
+                        onClick={() => cancelTitle()}
+                      />
+                    </div>
+                  )}
+                </div>
+              </div>
 
               <div className="flex flex-col md:flex-row justify-between items-center p-4 ">
                 <div className="flex flex-col md:w-1/3 w-full space-y-5">

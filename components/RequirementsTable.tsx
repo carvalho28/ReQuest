@@ -86,7 +86,6 @@ const RequirementsTable = ({
             table: "requirements",
           },
           async (payload: any) => {
-            console.log("payload", payload);
             getRequirements();
           }
         )
