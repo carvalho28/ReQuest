@@ -70,6 +70,8 @@ const RequirementsTable = ({
       if (error) console.log(error);
       if (!data) throw new Error("No data found");
 
+      console.log(data);
+
       setRequirements(
         data as Database["public"]["Tables"]["requirements"]["Row"][]
       );

@@ -3,6 +3,7 @@ import { createServerSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import { GetServerSidePropsContext } from "next";
 import { Database } from "@/types/supabase";
 import RequirementsTable from "@/components/RequirementsTable";
+import Table from "@/components/Table";
 
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   const supabase = createServerSupabaseClient(ctx);
@@ -101,6 +102,8 @@ export default function SingleProject({
           projectUserNames={projectUserNames}
           projectId={projectId}
         />
+
+        {/* <Table /> */}
       </Layout>
     </div>
   );

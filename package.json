@@ -60,6 +60,7 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-icons": "^4.8.0",
+    "react-table": "^7.8.0",
     "react-tailwindcss-select": "^1.8.5",
     "sass": "^1.60.0",
     "typescript": "5.0.2",
@@ -69,6 +70,7 @@
   },
   "devDependencies": {
     "@tailwindcss/typography": "^0.5.9",
+    "@types/react-table": "^7.7.14",
     "autoprefixer": "^10.4.14",
     "cypress": "^12.7.0",
     "netlify-cli": "^13.2.1",
