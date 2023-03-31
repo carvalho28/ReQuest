@@ -41,7 +41,7 @@ import TableRow from "@tiptap/extension-table-row";
 import TableCell from "@tiptap/extension-table-cell";
 
 interface TiptapProps {
-  reqId: number;
+  reqId: string;
   reqDescription: string;
   userName: string;
 }

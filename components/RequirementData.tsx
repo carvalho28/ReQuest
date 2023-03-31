@@ -1,18 +1,17 @@
 import {
-  DefaultRequirement,
   renderPriorityBadge,
   renderStatusBadge,
-  Requirement,
 } from "@/components/utils/general";
+import { Database } from "@/types/supabase";
 import { useEffect, useState } from "react";
 import {
   RiBarChartHorizontalLine,
   RiCalendarLine,
-  RiClockwise2Line,
-  RiClockwiseLine,
+  RiCheckLine,
+  RiCloseLine,
   RiErrorWarningLine,
+  RiPencilLine,
   RiTimerFlashLine,
-  RiUser4Line,
   RiUserReceived2Line,
   RiUserVoiceLine,
 } from "react-icons/ri";
@@ -23,7 +22,7 @@ import Tiptap from "./TipTap";
 
 interface RequirementDataProps {
   name: string;
-  requirement: Requirement;
+  requirement: Database["public"]["Tables"]["requirements"]["Row"];
   projectUserNames: string[];
 }
 
@@ -43,9 +42,9 @@ const RequirementData = ({
     return Math.round(differenceMs / ONE_DAY);
   }
 
-  const [requirementData, setRequirementData] = useState<DefaultRequirement>(
-    {} as DefaultRequirement
-  );
+  const [requirementData, setRequirementData] = useState<
+    Database["public"]["Tables"]["requirements"]["Row"]
+  >({} as Database["public"]["Tables"]["requirements"]["Row"]);
 
   useEffect(() => {
     setRequirementData({
@@ -60,6 +59,7 @@ const RequirementData = ({
       created_by: requirement.created_by,
       assigned_to: requirement.assigned_to,
       checked: requirement.checked,
+      id_proj: requirement.id_proj,
     });
   }, [requirement]);
 
@@ -77,11 +77,59 @@ const RequirementData = ({
     }));
   }
 
-  function changeDueDate(date: Date) {
+  function changeDueDate(date: string) {
     setRequirementData((prevState) => ({
       ...prevState,
       due_date: date,
     }));
+  }
+
+  const [isEditing, setIsEditing] = useState(false);
+
+  function editRequirement() {
+    setIsEditing(true);
+
+    // set requirement name to be editable
+    const requirementName = document.getElementById("requirement-name");
+    if (requirementName) {
+      requirementName.setAttribute("contentEditable", "true");
+
+      // set focus on the requirement name in the last position
+      requirementName.focus();
+      const length = requirementName.innerText.length;
+
+      // set the cursor at the end of the text
+      const range = document.createRange();
+      const sel = window.getSelection();
+      range.setStart(requirementName.childNodes[0], length);
+      range.collapse(true);
+      sel?.removeAllRanges();
+      sel?.addRange(range);
+    }
+  }
+
+  function saveTitle() {
+    const requirementName = document.getElementById("requirement-name");
+    if (requirementName) {
+      requirementName.setAttribute("contentEditable", "false");
+
+      // save the new title
+      setRequirementData((prevState) => ({
+        ...prevState,
+        name: requirementName.innerText,
+      }));
+    }
+
+    setIsEditing(false);
+  }
+
+  function cancelTitle() {
+    const requirementName = document.getElementById("requirement-name");
+    if (requirementName) {
+      requirementName.setAttribute("contentEditable", "false");
+    }
+
+    setIsEditing(false);
   }
 
   return (
@@ -92,10 +140,43 @@ const RequirementData = ({
           {requirementData.id != undefined && (
             <div className="p-4">
               {/* title */}
-              <h3 className="font-bold text-2xl">{requirement.name}</h3>
+              <div className="flex flex-row space-x-8">
+                <h3
+                  className="font-bold text-2xl
+                focus:border-contrast focus:border-2 focus:outline-none px-1"
+                  id="requirement-name"
+                >
+                  {requirement.name}
+                </h3>
+                {/* show pencil icon and make it editable, then show a check icon to save or a cross icon to cancel */}
+                <div className="flex flex-row items-center">
+                  {!isEditing ? (
+                    <RiPencilLine
+                      size={20}
+                      className="cursor-pointer hover:scale-110 hover:bg-neutral-200 rounded-full"
+                      onClick={() => editRequirement()}
+                    />
+                  ) : (
+                    <div className="flex flex-row space-x-5">
+                      <RiCheckLine
+                        size={20}
+                        className="cursor-pointer hover:scale-110 hover:bg-neutral-200 rounded-full bg-green-100"
+                        onClick={() => saveTitle()}
+                      />
 
-              <div className="flex flex-row justify-between items-center p-4">
-                <div className="flex flex-col w-1/3 space-y-5">
+                      <RiCloseLine
+                        size={20}
+                        color="red"
+                        className="cursor-pointer hover:scale-110 hover:bg-neutral-200 rounded-full bg-red-100"
+                        onClick={() => cancelTitle()}
+                      />
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              <div className="flex flex-col md:flex-row justify-between items-center p-4 ">
+                <div className="flex flex-col md:w-1/3 w-full space-y-5">
                   {/* status */}
                   <div className="flex flex-row space-x-3">
                     <div className="flex flex-row space-x-4 justify-center items-center">
@@ -104,7 +185,7 @@ const RequirementData = ({
                     </div>
                     <Dropdown
                       func={renderStatusBadge}
-                      selected={requirementData.checked}
+                      selected={requirementData.checked as number}
                       onSelect={(status) => changeStatus(status)}
                     />
                   </div>
@@ -123,7 +204,7 @@ const RequirementData = ({
                   </div>
                 </div>
 
-                <div className="flex flex-col w-1/3 space-y-5">
+                <div className="flex flex-col md:w-1/3 w-full space-y-5">
                   {/* due date */}
                   <div className="flex flex-row space-x-3">
                     <div className="flex flex-row space-x-4 justify-center items-center">
@@ -131,7 +212,7 @@ const RequirementData = ({
                       <span className="text-md text-black">Due date</span>{" "}
                     </div>
                     <DatePicker
-                      value={requirementData.due_date.toString()}
+                      value={requirementData.due_date as string}
                       onDateChange={(date) => changeDueDate(date)}
                     />
                   </div>
@@ -145,34 +226,28 @@ const RequirementData = ({
                     </div>
                     <MultiselectPeople
                       projectUserNames={projectUserNames}
-                      selectedUserNames={requirementData.assigned_to}
+                      selectedUserNames={
+                        requirementData.assigned_to as string[]
+                      }
                     />
                   </div>
                 </div>
 
-                <div className="flex flex-col w-1/3 space-y-8 pl-12">
-                  {/* Updated by */}
-                  <div className="flex flex-row space-x-3">
-                    <div className="flex flex-row space-x-4 justify-center items-center">
-                      <RiUserVoiceLine size={20} />
-                      <span className="text-md text-black">
-                        Last updated by
-                      </span>{" "}
-                    </div>
-                    <div className="text-md text-black">
-                      {requirementData.updated_by}
-                    </div>
+                <div className="flex flex-col md:w-1/3 w-full space-y-3 pl-8">
+                  <div className="flex flex-row justify-center">
+                    <span className="text-md text-black">Last updated</span>{" "}
                   </div>
-
-                  {/* Updated at */}
-                  <div className="flex flex-row space-x-3">
-                    <div className="flex flex-row space-x-4 justify-center items-center">
-                      <RiTimerFlashLine size={20} />
-                      <span className="text-md text-black">
-                        Last updated at
-                      </span>{" "}
-                    </div>
-                    <div className="text-md text-black">
+                  <div className="flex flex-row space-x-3 ml-16">
+                    <RiUserVoiceLine size={20} />
+                    <span className="text-sm text-black">
+                      {requirementData.updated_by?.length! > 15
+                        ? requirementData.updated_by?.slice(0, 15) + "..."
+                        : requirementData.updated_by}
+                    </span>
+                  </div>
+                  <div className="flex flex-row space-x-3 ml-16">
+                    <RiTimerFlashLine size={20} />
+                    <span className="text-sm text-black">
                       {new Date(requirementData.updated_at).toLocaleDateString(
                         "pt-PT",
                         {
@@ -181,7 +256,7 @@ const RequirementData = ({
                           day: "numeric",
                         }
                       )}
-                    </div>
+                    </span>
                   </div>
                 </div>
               </div>
@@ -190,7 +265,7 @@ const RequirementData = ({
           <Tiptap
             userName={name}
             reqId={requirement.id}
-            reqDescription={requirement.description}
+            reqDescription={requirement.description as string}
           />
           <div className="text-md text-neutral-400 flex justify-end mr-4 italic">
             Created by {requirementData.created_by} -{" "}

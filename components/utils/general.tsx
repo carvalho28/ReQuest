@@ -1,39 +1,6 @@
 // render different badge depending on priority
 
-import {
-  RiCheckboxBlankCircleFill,
-  RiCheckboxCircleFill,
-} from "react-icons/ri";
-
-export type Requirement = {
-  id: number;
-  name: string;
-  description: string;
-  due_date: Date;
-  priority: number;
-  updated_at: Date;
-  updated_by: string;
-  created_at: Date;
-  created_by: string;
-  assigned_to: string[];
-  checked: number;
-};
-
-export class DefaultRequirement implements Requirement {
-  id = 0 as number;
-  name = "" as string;
-  description = "" as string;
-  due_date = new Date() as Date;
-  priority = 0 as number;
-  updated_at = new Date() as Date;
-  updated_by = "" as string;
-  created_at = new Date() as Date;
-  created_by = "" as string;
-  assigned_to = [] as string[];
-  checked = 0 as number;
-
-  constructor() {}
-}
+import { RiCheckboxBlankCircleFill } from "react-icons/ri";
 
 function renderPriorityBadge(priority: number, sizex: number, sizey: number) {
   if (priority === 1) {
