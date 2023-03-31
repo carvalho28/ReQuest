@@ -12,6 +12,9 @@ export default function Teste() {
   // Table
   const data = useMemo(() => reqData(), []);
 
+  // uplicate data 100 times
+  const data2 = Array(100).fill(data);
+
   const columns = useMemo(
     () => [
       {
@@ -48,11 +51,11 @@ export default function Teste() {
   );
 
   return (
-    <>
+    <div className="h-screen bg-gray-100">
       <h1>Hello React!</h1>
       <div>
-        <Table columns={columns} data={data} />
+        <Table columns={columns} data={data2} />
       </div>
-    </>
+    </div>
   );
 }

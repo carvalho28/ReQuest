@@ -1,13 +1,19 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   useTable,
   useGlobalFilter,
   useAsyncDebounce,
   useRowSelect,
+  usePagination,
 } from "react-table";
 import { useRowSelectColumn } from "@lineup-lite/hooks";
+import {
+  RiArrowLeftSLine,
+  RiArrowRightSLine,
+  RiCheckboxBlankCircleFill,
+} from "react-icons/ri";
+import { DOTS, useCustomPagination } from "./CustomPagination";
 import "regenerator-runtime/runtime";
-import { RiArrowRightSLine, RiCheckboxBlankCircleFill } from "react-icons/ri";
 
 export function PriorityProject({ value }: any) {
   const status = value || 3;
@@ -74,8 +80,6 @@ export function DescriptionProject({ value }: any) {
 }
 
 export function DueDateProject({ value }: any) {
-  console.log(value);
-
   if (value) {
     return (
       <span className="text-md text-black" title={value}>
@@ -92,8 +96,6 @@ export function DueDateProject({ value }: any) {
 }
 
 export function AssignedToProject({ value }: any) {
-  console.log(value);
-
   if (value && value.length > 0) {
     const users = value.map((user: string) => (
       <span
@@ -139,8 +141,18 @@ function Table({ columns, data }: any) {
     getTableProps,
     getTableBodyProps,
     headerGroups,
-    rows,
     prepareRow,
+
+    page,
+    canPreviousPage,
+    canNextPage,
+    pageOptions,
+    pageCount,
+    gotoPage,
+    nextPage,
+    previousPage,
+    setPageSize,
+
     preGlobalFilteredRows,
     setGlobalFilter,
     state,
@@ -150,16 +162,27 @@ function Table({ columns, data }: any) {
       data,
     },
     useGlobalFilter,
+    usePagination,
     useRowSelect,
     useRowSelectColumn
   );
+
+  const { pageIndex } = state;
+  const paginationRange = useCustomPagination({
+    totalPageCount: pageCount,
+    currentPage: pageIndex,
+  }); //new
+
+  useEffect(() => {
+    setPageSize(1);
+  }, [setPageSize]); //set according to your preferrence
 
   // Render the UI for your table and the styles
   return (
     <div className="mt-2 flex flex-col">
       <div className="-my-2 overflow-x-auto -mx-4 sm:-mx-6 lg:-mx-8">
         <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
-          <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
+          <div className="overflow-hidden border-gray-200 sm:rounded-lg">
             <GlobalFilter
               preGlobalFilteredRows={preGlobalFilteredRows}
               globalFilter={state.globalFilter}
@@ -167,7 +190,7 @@ function Table({ columns, data }: any) {
             />
             <table
               {...getTableProps()}
-              className="min-w-full divide-y divide-gray-200"
+              className="min-w-full divide-y divide-gray-200 shadow-md"
             >
               <thead className="bg-gray-10">
                 {headerGroups.map((headerGroup: any, i: number) => (
@@ -192,7 +215,7 @@ function Table({ columns, data }: any) {
                 {...getTableBodyProps()}
                 className="bg-white divide-y divide-gray-200"
               >
-                {rows.map((row: any, i: number) => {
+                {page.map((row: any, i: number) => {
                   prepareRow(row);
                   return (
                     <tr {...row.getRowProps()} key={`row-${i}`}>
@@ -212,6 +235,58 @@ function Table({ columns, data }: any) {
                 })}
               </tbody>
             </table>
+
+            {/* pagination */}
+            <div className="py-1 flex items-center text-center justify-center pt-10">
+              <div className="flex-1 flex justify-between md:hidden">
+                <button
+                  onClick={() => previousPage()}
+                  disabled={!canPreviousPage}
+                >
+                  Previous
+                </button>
+                <button onClick={() => nextPage()} disabled={!canNextPage}>
+                  Next
+                </button>
+              </div>
+            </div>
+            <div
+              className="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between mb-4"
+              aria-label="Pagination"
+            >
+              <div
+                className="relative z-0 inline-flex items-center ml-auto mr-auto shadow-lg space-x-6 bg-gray-100 p-2 rounded-lg"
+                aria-label="Pagination"
+              >
+                {paginationRange?.map((pageNumber, index) => {
+                  if (pageNumber === DOTS) {
+                    return <div key={index}>...</div>;
+                  }
+
+                  if (pageNumber - 1 === pageIndex) {
+                    return (
+                      <div
+                        key={index}
+                        className=" bg-contrast text-white border-gray-300 p-2 rounded-md"
+                        onClick={() => gotoPage(pageNumber - 1)}
+                      >
+                        {pageNumber}
+                      </div>
+                    );
+                  }
+
+                  return (
+                    <div
+                      key={index}
+                      className="hover:bg-contrast hover:text-white hover:border-gray-300 hover:rounded-md cursor-pointer p-2"
+                      onClick={() => gotoPage(pageNumber - 1)}
+                    >
+                      {pageNumber}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
           </div>
         </div>
       </div>
