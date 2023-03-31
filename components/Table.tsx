@@ -5,9 +5,15 @@ import {
   useAsyncDebounce,
   useRowSelect,
   usePagination,
+  useSortBy,
 } from "react-table";
 import { useRowSelectColumn } from "@lineup-lite/hooks";
-import { RiArrowRightSLine, RiCheckboxBlankCircleFill } from "react-icons/ri";
+import {
+  RiArrowDownSLine,
+  RiArrowRightSLine,
+  RiArrowUpSLine,
+  RiCheckboxBlankCircleFill,
+} from "react-icons/ri";
 import { DOTS, useCustomPagination } from "./CustomPagination";
 import "regenerator-runtime/runtime";
 
@@ -156,6 +162,7 @@ function Table({ columns, data }: any) {
       data,
     },
     useGlobalFilter,
+    useSortBy,
     usePagination,
     useRowSelect,
     useRowSelectColumn
@@ -195,11 +202,25 @@ function Table({ columns, data }: any) {
                     {headerGroup.headers.map((column: any, j: number) => (
                       <th
                         key={`header-${i}-${j}`}
-                        {...column.getHeaderProps()}
+                        {...column.getHeaderProps(
+                          column.getSortByToggleProps()
+                        )}
                         className="px-6 py-5 text-left text-20 font-medium text-gray-400 uppercase rounded-sm tracking-wider"
                       >
-                        {column.render("Header")}
-                        {column.id === "selection" && column.render("Summary")}
+                        <span className="flex flex-row items-center">
+                          {column.render("Header")}
+                          {column.isSorted ? (
+                            column.isSortedDesc ? (
+                              <RiArrowDownSLine className="ml-1" size={25} />
+                            ) : (
+                              <RiArrowUpSLine className="ml-1" size={25} />
+                            )
+                          ) : (
+                            ""
+                          )}
+                          {column.id === "selection" &&
+                            column.render("Summary")}
+                        </span>
                       </th>
                     ))}
                   </tr>
