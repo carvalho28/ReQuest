@@ -1,6 +1,11 @@
-import Table, { PriorityProject, StatusProject } from "@/components/Table";
+import Table, {
+  AssignedToProject,
+  DescriptionProject,
+  DueDateProject,
+  PriorityProject,
+  StatusProject,
+} from "@/components/Table";
 import { reqData } from "@/components/dummy";
-import { renderPriorityBadge } from "@/components/utils/general";
 import { useMemo } from "react";
 
 export default function Teste() {
@@ -16,10 +21,12 @@ export default function Teste() {
       {
         Header: "Description",
         accessor: "description",
+        Cell: DescriptionProject,
       },
       {
         Header: "Due Date",
         accessor: "due_date",
+        Cell: DueDateProject,
       },
       {
         Header: "Status",
@@ -34,12 +41,11 @@ export default function Teste() {
       {
         Header: "Assigned To",
         accessor: "assigned_to",
+        Cell: AssignedToProject,
       },
     ],
     []
   );
-
-  console.log("Type of data: ", typeof data);
 
   return (
     <>

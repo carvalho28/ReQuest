@@ -18,10 +18,10 @@ export const reqData = () => {
     },
     {
       name: "Req 3",
-      description: null,
-      due_date: null,
+      description: "Hi there sdkhfgjsdfgdjsf",
+      due_date: "2021-05-01",
       priority: 1,
-      assigned_to: [],
+      assigned_to: ["user1", "user2"],
       checked: 2,
     },
   ];

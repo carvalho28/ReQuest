@@ -7,7 +7,7 @@ import {
 } from "react-table";
 import { useRowSelectColumn } from "@lineup-lite/hooks";
 import "regenerator-runtime/runtime";
-import { RiCheckboxBlankCircleFill } from "react-icons/ri";
+import { RiArrowRightSLine, RiCheckboxBlankCircleFill } from "react-icons/ri";
 
 export function PriorityProject({ value }: any) {
   const status = value || 3;
@@ -57,6 +57,58 @@ export function StatusProject({ value }: any) {
         Completed
       </span>
     );
+  }
+}
+
+export function DescriptionProject({ value }: any) {
+  if (value) {
+    return (
+      // if more than 20 characters, show only 17 and add ...
+      <span className="text-md text-black" title={value}>
+        {value.length > 20 ? value.substring(0, 17) + "..." : value}
+      </span>
+    );
+  } else {
+    return <span className="italic text-sm text-gray-400">No description</span>;
+  }
+}
+
+export function DueDateProject({ value }: any) {
+  console.log(value);
+
+  if (value) {
+    return (
+      <span className="text-md text-black" title={value}>
+        {value}
+      </span>
+    );
+  } else {
+    return (
+      <div>
+        <span className="italic text-sm text-gray-400">No due date</span>
+      </div>
+    );
+  }
+}
+
+export function AssignedToProject({ value }: any) {
+  console.log(value);
+
+  if (value && value.length > 0) {
+    const users = value.map((user: string) => (
+      <span
+        key={user}
+        className="text-md text-black flex flex-row items-center"
+        title={user}
+      >
+        <RiArrowRightSLine className="mr-1" />
+        {user}
+      </span>
+    ));
+
+    return <div className="flex flex-col justify-center">{users}</div>;
+  } else {
+    return <span className="italic text-sm text-gray-400">Not assigned</span>;
   }
 }
 
@@ -120,13 +172,13 @@ function Table({ columns, data }: any) {
               <thead className="bg-gray-10">
                 {headerGroups.map((headerGroup: any, i: number) => (
                   <tr
-                    {...headerGroup.getHeaderGroupProps()}
                     key={`header-group-${i}`}
+                    {...headerGroup.getHeaderGroupProps()}
                   >
                     {headerGroup.headers.map((column: any, j: number) => (
                       <th
-                        {...column.getHeaderProps()}
                         key={`header-${i}-${j}`}
+                        {...column.getHeaderProps()}
                         className="px-6 py-5 text-left text-20 font-medium text-gray-400 uppercase rounded-sm tracking-wider"
                       >
                         {column.render("Header")}
