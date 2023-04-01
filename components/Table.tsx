@@ -204,6 +204,7 @@ function Table({ name, projectUserNames, projectId }: RequirementsTableProps) {
       const { data, error } = await supabaseClient
         .from("requirements")
         .select("*")
+        .order("created_at", { ascending: false })
         .eq("id_proj", projectId);
 
       if (error) console.log(error);

@@ -44,12 +44,20 @@ interface TiptapProps {
   reqId: string;
   reqDescription: string;
   userName: string;
+  reqCreatedAt: string;
+  reqCreatedBy: string;
 }
 
-const Tiptap = ({ userName, reqId, reqDescription }: TiptapProps) => {
+const Tiptap = ({
+  userName,
+  reqId,
+  reqDescription,
+  reqCreatedAt,
+  reqCreatedBy,
+}: TiptapProps) => {
   const supabaseClient = useSupabaseClient();
 
-  const [content, setContent] = useState(reqDescription);
+  const [content, setContent] = useState("");
   const [provider, setProvider] = useState<HocuspocusProvider>();
 
   useEffect(() => {
@@ -65,19 +73,36 @@ const Tiptap = ({ userName, reqId, reqDescription }: TiptapProps) => {
     lowlight.registerLanguage("cpp", cpp);
   }, []);
 
+  // console.log("provider", provider);
+
   useEffect(() => {
-    setProvider(
-      new HocuspocusProvider({
-        url: "wss://little-rain-5635.fly.dev/",
-        // url: "ws://localhost:1234",
-        name: reqId.toString(),
-        document: new Y.Doc({
-          guid: reqId.toString(),
-        }),
-      })
-    );
-  }, [reqId]);
-  // console.log("provider", provider?.document);
+    if (provider) {
+      provider.destroy();
+    }
+    setContent(reqDescription);
+    const newProvider = new HocuspocusProvider({
+      url: "wss://little-rain-5635.fly.dev/",
+      // url: "ws://localhost:1234",
+      name: reqId.toString(),
+      document: new Y.Doc({
+        guid: reqId.toString(),
+      }),
+    });
+    setProvider(newProvider);
+
+    // Return a cleanup function that will be called when the component unmounts
+    return () => {
+      newProvider.destroy();
+    };
+  }, [reqDescription]);
+
+  useEffect(() => {
+    if (content === reqDescription) {
+      return;
+    }
+
+    setContent(reqDescription);
+  }, [reqDescription]);
 
   function generatePastelColor() {
     // Set the saturation and lightness to a fixed value to generate a pastel color
@@ -244,10 +269,29 @@ const Tiptap = ({ userName, reqId, reqDescription }: TiptapProps) => {
   }
 
   return (
-    <div className="p-2">
-      <MenuBar editor={editor} />
-      <EditorContent editor={editor} onDrop={addImageOnDrop} />
-    </div>
+    <>
+      <div className="p-2">
+        <MenuBar editor={editor} />
+        <EditorContent editor={editor} onDrop={addImageOnDrop} />
+      </div>
+      <div className="text-md text-neutral-400 flex justify-end mr-4 italic">
+        Created by {reqCreatedBy} on{" "}
+        {new Date(reqCreatedAt).toLocaleDateString("pt-PT", {
+          year: "numeric",
+          month: "numeric",
+          day: "numeric",
+        })}
+      </div>
+      <div className="modal-action p-4">
+        <label
+          htmlFor="my-modal-5"
+          className="btn bg-contrast text-white border-0 hover:bg-contrasthover hover:cursor-pointer"
+          // onClick={() => closeProvider()}
+        >
+          Done
+        </label>
+      </div>
+    </>
   );
 };
 

@@ -56,20 +56,17 @@ const RequirementData = ({
   }, [requirement]);
 
   useEffect(() => {
-    async function saveChanges() {
-      console.log(requirement?.id);
-      console.log(requirement);
-      console.log(requirementData);
-
-      const { error } = await supabaseClient
-        .from("requirements")
-        .update(requirementData)
-        .order("created_at", { ascending: false })
-        .eq("id", requirement?.id);
-
-      if (error) console.log(error);
-    }
-    saveChanges();
+    // async function saveChanges() {
+    //   console.log(requirement?.id);
+    //   console.log(requirement);
+    //   console.log(requirementData);
+    //   const { error } = await supabaseClient
+    //     .from("requirements")
+    //     .update(requirementData)
+    //     .eq("id", requirement?.id);
+    //   if (error) console.log(error);
+    // }
+    // saveChanges();
   }, [requirementData, requirement, supabaseClient]);
 
   function changePriority(priority: string) {
@@ -285,23 +282,9 @@ const RequirementData = ({
             userName={name}
             reqId={requirement.id}
             reqDescription={requirement.description as string}
+            reqCreatedAt={requirement.created_at}
+            reqCreatedBy={requirement.created_by}
           />
-          <div className="text-md text-neutral-400 flex justify-end mr-4 italic">
-            Created by {requirementData.created_by} -{" "}
-            {new Date(requirementData.created_at).toLocaleDateString("pt-PT", {
-              year: "numeric",
-              month: "numeric",
-              day: "numeric",
-            })}
-          </div>
-          <div className="modal-action p-4">
-            <label
-              htmlFor="my-modal-5"
-              className="btn bg-contrast text-white border-0 hover:bg-contrasthover hover:cursor-pointer"
-            >
-              Done
-            </label>
-          </div>
         </div>
       </div>
     </>
