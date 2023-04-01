@@ -42,13 +42,13 @@ const RequirementsTable = ({
     name: "",
     description: "",
     due_date: new Date().toString(),
-    priority: 0,
+    priority: "p3",
     created_at: new Date().toString(),
     updated_at: new Date().toString(),
     updated_by: "",
     created_by: "",
     assigned_to: [],
-    checked: 0,
+    status: "not started",
     id_proj: projectId,
   });
 

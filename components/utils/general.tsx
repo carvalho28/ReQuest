@@ -32,8 +32,9 @@ export type RowReq = {
   updated_by: string;
 };
 
-function renderPriorityBadge(priority: number, sizex: number, sizey: number) {
-  if (priority === 1) {
+function renderPriorityBadge(priority: string, sizex: number, sizey: number) {
+  const p = priority.toLowerCase();
+  if (p === "p1") {
     return (
       <div className="priority-badge">
         <span
@@ -43,7 +44,7 @@ function renderPriorityBadge(priority: number, sizex: number, sizey: number) {
         </span>
       </div>
     );
-  } else if (priority === 2) {
+  } else if (p === "p2") {
     return (
       <span
         className={`inline-flex items-center px-${sizex} py-${sizey} rounded-full text-sm font-medium bg-yellow-100 text-yellow-800`}
@@ -62,8 +63,9 @@ function renderPriorityBadge(priority: number, sizex: number, sizey: number) {
   }
 }
 
-function renderStatusBadge(status: number, sizex: number, sizey: number) {
-  if (status === 1) {
+function renderStatusBadge(status: string, sizex: number, sizey: number) {
+  const s = status.toLowerCase();
+  if (s === "not started") {
     return (
       <div className="priority-badge">
         <span
@@ -74,7 +76,7 @@ function renderStatusBadge(status: number, sizex: number, sizey: number) {
         </span>
       </div>
     );
-  } else if (status === 2) {
+  } else if (s === "in progress") {
     return (
       <span
         className={`inline-flex items-center px-${sizex} py-${sizey} rounded-full text-sm font-medium bg-yellow-100 text-yellow-800`}

@@ -114,7 +114,6 @@ export function AssignedToProject({ value }: any) {
 
 export function NameProject({ value, row, setRequirement }: any) {
   const handleCellClick = (requirement: any) => {
-    console.log("clicked on requirement: ", requirement);
     setRequirement(requirement);
   };
 
@@ -229,8 +228,6 @@ function Table({ name, projectUserNames, projectId }: RequirementsTableProps) {
       setRequirements(
         data as Database["public"]["Tables"]["requirements"]["Row"][]
       );
-
-      console.log(data);
 
       setData(
         data.map((req: any) => {

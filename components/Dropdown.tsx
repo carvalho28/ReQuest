@@ -8,12 +8,18 @@ function classNames(...classes: any[]) {
 
 interface DropdownProps {
   //   function to render the dropdown button
-  func: (selected: number, sizex: number, sizey: number) => JSX.Element;
-  selected: number;
-  onSelect: (option: number) => void;
+  func: (selected: string, sizex: number, sizey: number) => JSX.Element;
+  selected: string;
+  options: string[];
+  onSelect: (option: string) => void;
 }
 
-export default function Dropdown({ onSelect, selected, func }: DropdownProps) {
+export default function Dropdown({
+  onSelect,
+  selected,
+  func,
+  options,
+}: DropdownProps) {
   return (
     <Menu as="div" className="relative inline-block text-left">
       <div>
@@ -44,9 +50,9 @@ export default function Dropdown({ onSelect, selected, func }: DropdownProps) {
                     active ? "bg-gray-100 text-gray-900" : "text-gray-700",
                     "block px-4 py-2 text-sm"
                   )}
-                  onClick={() => onSelect(1)}
+                  onClick={() => onSelect(options[0])}
                 >
-                  {func(1, 4, 1)}
+                  {func(options[0], 4, 1)}
                 </span>
               )}
             </Menu.Item>
@@ -57,9 +63,9 @@ export default function Dropdown({ onSelect, selected, func }: DropdownProps) {
                     active ? "bg-gray-100 text-gray-900" : "text-gray-700",
                     "block px-4 py-2 text-sm"
                   )}
-                  onClick={() => onSelect(2)}
+                  onClick={() => onSelect(options[1])}
                 >
-                  {func(2, 4, 1)}
+                  {func(options[1], 4, 1)}
                 </span>
               )}
             </Menu.Item>
@@ -70,9 +76,9 @@ export default function Dropdown({ onSelect, selected, func }: DropdownProps) {
                     active ? "bg-gray-100 text-gray-900" : "text-gray-700",
                     "block px-4 py-2 text-sm"
                   )}
-                  onClick={() => onSelect(3)}
+                  onClick={() => onSelect(options[2])}
                 >
-                  {func(3, 4, 1)}
+                  {func(options[2], 4, 1)}
                 </span>
               )}
             </Menu.Item>

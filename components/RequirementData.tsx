@@ -47,22 +47,22 @@ const RequirementData = ({
       created_at: requirement.created_at,
       created_by: requirement.created_by,
       assigned_to: requirement.assigned_to,
-      checked: requirement.checked,
+      status: requirement.status,
       id_proj: requirement.id_proj,
     });
   }, [requirement]);
 
-  function changePriority(priority: number) {
+  function changePriority(priority: string) {
     setRequirementData((prevState) => ({
       ...prevState,
       priority: priority,
     }));
   }
 
-  function changeStatus(status: number) {
+  function changeStatus(status: string) {
     setRequirementData((prevState) => ({
       ...prevState,
-      checked: status,
+      status: status,
     }));
   }
 
@@ -174,7 +174,8 @@ const RequirementData = ({
                     </div>
                     <Dropdown
                       func={renderStatusBadge}
-                      selected={requirementData.checked as number}
+                      options={["Not Started", "In Progress", "Completed"]}
+                      selected={requirementData.status as string}
                       onSelect={(status) => changeStatus(status)}
                     />
                   </div>
@@ -187,6 +188,7 @@ const RequirementData = ({
                     </div>
                     <Dropdown
                       func={renderPriorityBadge}
+                      options={["P1", "P2", "P3"]}
                       selected={requirementData.priority}
                       onSelect={(option) => changePriority(option)}
                     />
