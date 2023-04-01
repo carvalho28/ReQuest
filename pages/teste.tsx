@@ -41,7 +41,7 @@ export default function Teste() {
       },
       {
         Header: "Status",
-        accessor: "checked",
+        accessor: "status",
         Cell: StatusProject,
       },
       {

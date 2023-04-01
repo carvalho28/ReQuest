@@ -18,56 +18,48 @@ import { DOTS, useCustomPagination } from "./CustomPagination";
 import "regenerator-runtime/runtime";
 import { ArrowUpRightIcon } from "@heroicons/react/24/outline";
 import RequirementData from "./RequirementData";
+import { classNames } from "./utils/general";
 
 export function PriorityProject({ value }: any) {
-  const status = value || 3;
+  const status = typeof value === "string" ? value.toLowerCase() : "p3";
 
-  if (status === 1) {
-    return (
-      <span className="px-3 py-1 uppercase leading-wide font-bold text-xs rounded-full shadow-sm bg-red-100 text-red-700">
-        P1
-      </span>
-    );
-  } else if (status === 2) {
-    return (
-      <span className="px-3 py-1 uppercase leading-wide font-bold text-xs rounded-full shadow-sm bg-yellow-100 text-yellow-700">
-        P2
-      </span>
-    );
-  } else {
-    return (
-      <span className="px-3 py-1 uppercase leading-wide font-bold text-xs rounded-full shadow-sm bg-green-100 text-green-700">
-        P3
-      </span>
-    );
-  }
+  return (
+    <span
+      className={classNames(
+        status === "p1"
+          ? "bg-red-100 text-red-700"
+          : status === "p2"
+          ? "bg-yellow-100 text-yellow-700"
+          : "bg-green-100 text-green-700",
+        "px-3 py-1 uppercase leading-wide font-bold text-xs rounded-full shadow-sm"
+      )}
+    >
+      {status}
+    </span>
+  );
 }
 
 export function StatusProject({ value }: any) {
-  const status = value || 1;
+  console.log("value", value);
 
-  if (status === 1) {
-    return (
-      <span className="inline-flex items-center px-3 py-1 uppercase font-bold text-xs rounded-full shadow-sm bg-red-100 text-red-700">
-        <RiCheckboxBlankCircleFill className="mr-1" />
-        Not Started
-      </span>
-    );
-  } else if (status === 2) {
-    return (
-      <span className="inline-flex items-center px-3 py-1 uppercase font-bold text-xs rounded-full shadow-sm bg-yellow-100 text-yellow-700">
-        <RiCheckboxBlankCircleFill className="mr-1" />
-        In Progress
-      </span>
-    );
-  } else {
-    return (
-      <span className="inline-flex items-center px-3 py-1 uppercase leading-wide font-bold text-xs rounded-full shadow-sm bg-green-100 text-green-700">
-        <RiCheckboxBlankCircleFill className="mr-1" />
-        Completed
-      </span>
-    );
-  }
+  const status =
+    typeof value === "string" ? value.toLowerCase() : "not started";
+
+  return (
+    <span
+      className={classNames(
+        "px-3 py-1 uppercase leading-wide font-bold text-xs rounded-full shadow-sm inline-flex items-center",
+        status.startsWith("completed") ? "bg-green-100 text-green-700" : null,
+        status.startsWith("in progress")
+          ? "bg-yellow-100 text-yellow-700"
+          : null,
+        status.startsWith("not started") ? "bg-red-100 text-red-700" : null
+      )}
+    >
+      <RiCheckboxBlankCircleFill className="mr-1" />
+      {status}
+    </span>
+  );
 }
 
 export function DescriptionProject({ value }: any) {
