@@ -2,6 +2,36 @@
 
 import { RiCheckboxBlankCircleFill } from "react-icons/ri";
 
+// name: "Req 1",
+//       description: null,
+//       due_date: null,
+//       priority: "P1",
+//       assigned_to: [],
+//       status: "Completed",
+
+export type ColumnsReq = {
+  name: string;
+  description: string | null;
+  due_date: string | null;
+  priority: string;
+  assigned_to: string[];
+  status: string;
+};
+
+export type RowReq = {
+  name: string;
+  description: string | null;
+  due_date: string | null;
+  priority: string;
+  assigned_to: string[];
+  status: string;
+  id: string;
+  created_at: string;
+  created_by: string;
+  updated_at: string;
+  updated_by: string;
+};
+
 function renderPriorityBadge(priority: number, sizex: number, sizey: number) {
   if (priority === 1) {
     return (

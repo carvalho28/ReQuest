@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   useTable,
   useGlobalFilter,
@@ -6,6 +6,8 @@ import {
   useRowSelect,
   usePagination,
   useSortBy,
+  Column,
+  Cell,
 } from "react-table";
 import { useRowSelectColumn } from "@lineup-lite/hooks";
 import {
@@ -17,8 +19,10 @@ import {
 import { DOTS, useCustomPagination } from "./CustomPagination";
 import "regenerator-runtime/runtime";
 import { ArrowUpRightIcon } from "@heroicons/react/24/outline";
+import { ColumnsReq, RowReq, classNames } from "./utils/general";
+import { Database } from "@/types/supabase";
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import RequirementData from "./RequirementData";
-import { classNames } from "./utils/general";
 
 export function PriorityProject({ value }: any) {
   const status = typeof value === "string" ? value.toLowerCase() : "p3";
@@ -40,8 +44,6 @@ export function PriorityProject({ value }: any) {
 }
 
 export function StatusProject({ value }: any) {
-  console.log("value", value);
-
   const status =
     typeof value === "string" ? value.toLowerCase() : "not started";
 
@@ -110,14 +112,19 @@ export function AssignedToProject({ value }: any) {
   }
 }
 
-export function ProjectName({ value }: any) {
+export function NameProject({ value, row, setRequirement }: any) {
+  const handleCellClick = (requirement: any) => {
+    console.log("clicked on requirement: ", requirement);
+    setRequirement(requirement);
+  };
+
   if (value) {
     return (
       <span>
         {value}
         <label
           htmlFor="my-modal-5"
-          onClick={() => {}}
+          onClick={() => handleCellClick(row.original)}
           className="btn text-contrast hover:text-contrasthover bg-transparent border-0 hover:bg-purple-200"
         >
           <ArrowUpRightIcon className="h-3 w-3" aria-hidden="true" />
@@ -151,7 +158,101 @@ function GlobalFilter({ globalFilter, setGlobalFilter, placeholder }: any) {
   );
 }
 
-function Table({ columns, data }: any) {
+interface RequirementsTableProps {
+  name: string;
+  projectUserNames: string[];
+  projectId: string;
+}
+
+function Table({ name, projectUserNames, projectId }: RequirementsTableProps) {
+  const [requirements, setRequirements] = useState<
+    Database["public"]["Tables"]["requirements"]["Row"][]
+  >([]);
+  const [requirement, setRequirement] =
+    useState<Database["public"]["Tables"]["requirements"]["Row"]>();
+
+  const columns: Column<ColumnsReq>[] = useMemo(
+    () => [
+      {
+        Header: "Name",
+        accessor: "name",
+        Cell: ({ value, row }: any) => (
+          <NameProject
+            value={value}
+            row={row}
+            setRequirement={setRequirement}
+          />
+        ),
+      },
+      {
+        Header: "Description",
+        accessor: "description",
+        Cell: DescriptionProject,
+      },
+      {
+        Header: "Due Date",
+        accessor: "due_date",
+        Cell: DueDateProject,
+      },
+      {
+        Header: "Status",
+        accessor: "status",
+        Cell: StatusProject,
+      },
+      {
+        Header: "Priority",
+        accessor: "priority",
+        Cell: PriorityProject,
+      },
+      {
+        Header: "Assigned To",
+        accessor: "assigned_to",
+        Cell: AssignedToProject,
+      },
+    ],
+    []
+  );
+  const [data, setData] = useState<RowReq[]>([]);
+
+  const supabaseClient = useSupabaseClient();
+
+  useEffect(() => {
+    async function getRequirements() {
+      const { data, error } = await supabaseClient
+        .from("requirements")
+        .select("*")
+        .eq("id_proj", projectId);
+
+      if (error) console.log(error);
+      if (!data) throw new Error("No data found");
+
+      setRequirements(
+        data as Database["public"]["Tables"]["requirements"]["Row"][]
+      );
+
+      console.log(data);
+
+      setData(
+        data.map((req: any) => {
+          return {
+            name: req.name,
+            description: req.description,
+            due_date: req.due_date,
+            status: req.status,
+            priority: req.priority,
+            assigned_to: req.assigned_to,
+            id: req.id,
+            created_at: req.created_at,
+            created_by: req.created_by,
+            updated_at: req.updated_at,
+            updated_by: req.updated_by,
+          };
+        })
+      );
+    }
+    getRequirements();
+  }, [supabaseClient, projectId]);
+
   const {
     getTableProps,
     getTableBodyProps,
@@ -318,11 +419,13 @@ function Table({ columns, data }: any) {
           </div>
         </div>
       </div>
-      {/* <RequirementData
-        name={name}
-        requirement={requirement}
-        projectUserNames={projectUserNames}
-      /> */}
+      {requirement && (
+        <RequirementData
+          name={name}
+          requirement={requirement}
+          projectUserNames={projectUserNames}
+        />
+      )}
     </div>
   );
 }

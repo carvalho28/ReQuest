@@ -97,10 +97,16 @@ export default function SingleProject({
         namePage={`Project - ${project.name}`}
         avatar_url={avatar_url}
       >
-        <RequirementsTable
+        {/* <RequirementsTable
           name={name}
           projectUserNames={projectUserNames}
           projectId={projectId}
+        /> */}
+
+        <Table
+          name={name}
+          projectId={projectId}
+          projectUserNames={projectUserNames}
         />
 
         {/* <Table /> */}

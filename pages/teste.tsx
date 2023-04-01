@@ -3,8 +3,8 @@ import Table, {
   DescriptionProject,
   DueDateProject,
   PriorityProject,
-  ProjectName,
   StatusProject,
+  NameProject,
 } from "@/components/Table";
 import { reqData } from "@/components/dummy";
 import { useMemo } from "react";
@@ -27,7 +27,7 @@ export default function Teste() {
       {
         Header: "Name",
         accessor: "name",
-        Cell: ProjectName,
+        Cell: NameProject,
       },
       {
         Header: "Description",
@@ -61,9 +61,7 @@ export default function Teste() {
   return (
     <div className="h-screen bg-gray-100">
       <h1>Hello React!</h1>
-      <div>
-        <Table columns={columns} data={data2} />
-      </div>
+      <div>{/* <Table columns={columns} data={data2} /> */}</div>
     </div>
   );
 }
