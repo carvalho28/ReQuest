@@ -64,6 +64,7 @@ const RequirementData = ({
       const { error } = await supabaseClient
         .from("requirements")
         .update(requirementData)
+        .order("created_at", { ascending: false })
         .eq("id", requirement?.id);
 
       if (error) console.log(error);

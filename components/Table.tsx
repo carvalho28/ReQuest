@@ -65,19 +65,6 @@ export function StatusProject({ value }: any) {
   );
 }
 
-export function DescriptionProject({ value }: any) {
-  if (value) {
-    return (
-      // if more than 20 characters, show only 17 and add ...
-      <span className="text-md text-black" title={value}>
-        {value.length > 20 ? value.substring(0, 17) + "..." : value}
-      </span>
-    );
-  } else {
-    return <span className="italic text-sm text-gray-400">No description</span>;
-  }
-}
-
 export function DueDateProject({ value }: any) {
   if (value) {
     return (
@@ -183,11 +170,6 @@ function Table({ name, projectUserNames, projectId }: RequirementsTableProps) {
             setRequirement={setRequirement}
           />
         ),
-      },
-      {
-        Header: "Description",
-        accessor: "description",
-        Cell: DescriptionProject,
       },
       {
         Header: "Due Date",

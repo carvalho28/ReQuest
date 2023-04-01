@@ -8,7 +8,7 @@ interface DatePickerProps {
 const DatePicker = ({ value, onDateChange }: DatePickerProps) => {
   // if (!value) return null;
 
-  const data = value.substring(0, 10);
+  const data = value?.substring(0, 10) || "";
 
   return (
     <>
