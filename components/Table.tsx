@@ -23,6 +23,7 @@ import { ColumnsReq, RowReq, classNames } from "./utils/general";
 import { Database } from "@/types/supabase";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import RequirementData from "./RequirementData";
+import { RealtimeChannel } from "@supabase/supabase-js";
 
 export function PriorityProject({ value }: any) {
   const status = typeof value === "string" ? value.toLowerCase() : "p3";
@@ -81,7 +82,7 @@ export function DueDateProject({ value }: any) {
   if (value) {
     return (
       <span className="text-md text-black" title={value}>
-        {value}
+        {value.substring(0, 10)}
       </span>
     );
   } else {
@@ -216,6 +217,7 @@ function Table({ name, projectUserNames, projectId }: RequirementsTableProps) {
   const supabaseClient = useSupabaseClient();
 
   useEffect(() => {
+    let req_channel: RealtimeChannel;
     async function getRequirements() {
       const { data, error } = await supabaseClient
         .from("requirements")
@@ -247,7 +249,28 @@ function Table({ name, projectUserNames, projectId }: RequirementsTableProps) {
         })
       );
     }
+    async function getProjectsRealTime() {
+      req_channel = supabaseClient
+        .channel("reqs_load")
+        .on(
+          "postgres_changes",
+          {
+            event: "*",
+            schema: "public",
+            table: "requirements",
+          },
+          async (payload: any) => {
+            getRequirements();
+          }
+        )
+        .subscribe();
+
+      return () => {
+        supabaseClient.removeChannel(req_channel);
+      };
+    }
     getRequirements();
+    getProjectsRealTime();
   }, [supabaseClient, projectId]);
 
   const {

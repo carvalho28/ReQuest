@@ -19,6 +19,7 @@ import DatePicker from "./DatePicker";
 import Dropdown from "./Dropdown";
 import MultiselectPeople from "./MultiselectPeople";
 import Tiptap from "./TipTap";
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
 
 interface RequirementDataProps {
   name: string;
@@ -34,6 +35,8 @@ const RequirementData = ({
   const [requirementData, setRequirementData] = useState<
     Database["public"]["Tables"]["requirements"]["Row"]
   >({} as Database["public"]["Tables"]["requirements"]["Row"]);
+
+  const supabaseClient = useSupabaseClient();
 
   useEffect(() => {
     setRequirementData({
@@ -51,6 +54,22 @@ const RequirementData = ({
       id_proj: requirement.id_proj,
     });
   }, [requirement]);
+
+  useEffect(() => {
+    async function saveChanges() {
+      console.log(requirement?.id);
+      console.log(requirement);
+      console.log(requirementData);
+
+      const { error } = await supabaseClient
+        .from("requirements")
+        .update(requirementData)
+        .eq("id", requirement?.id);
+
+      if (error) console.log(error);
+    }
+    saveChanges();
+  }, [requirementData, requirement, supabaseClient]);
 
   function changePriority(priority: string) {
     setRequirementData((prevState) => ({
@@ -119,6 +138,13 @@ const RequirementData = ({
     }
 
     setIsEditing(false);
+  }
+
+  function changeAssignedTo(assignedTo: string[]) {
+    setRequirementData((prevState) => ({
+      ...prevState,
+      assigned_to: assignedTo,
+    }));
   }
 
   return (
@@ -216,6 +242,7 @@ const RequirementData = ({
                       <span className="text-md text-black">Assigned</span>{" "}
                     </div>
                     <MultiselectPeople
+                      onChange={(assignedTo) => changeAssignedTo(assignedTo)}
                       projectUserNames={projectUserNames}
                       selectedUserNames={
                         requirementData.assigned_to as string[]
