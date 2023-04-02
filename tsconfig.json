@@ -19,6 +19,6 @@
     },
     "types": ["cypress"]
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "components/Table.tsx"],
   "exclude": ["node_modules"]
 }

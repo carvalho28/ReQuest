@@ -42,13 +42,13 @@ const RequirementsTable = ({
     name: "",
     description: "",
     due_date: new Date().toString(),
-    priority: 0,
+    priority: "p3",
     created_at: new Date().toString(),
     updated_at: new Date().toString(),
     updated_by: "",
     created_by: "",
     assigned_to: [],
-    checked: 0,
+    status: "not started",
     id_proj: projectId,
   });
 
@@ -69,6 +69,8 @@ const RequirementsTable = ({
 
       if (error) console.log(error);
       if (!data) throw new Error("No data found");
+
+      console.log(data);
 
       setRequirements(
         data as Database["public"]["Tables"]["requirements"]["Row"][]
@@ -113,25 +115,6 @@ const RequirementsTable = ({
       column === "description" ||
       column === "assigned_to"
     ) {
-      // const sorted = requirements.slice().sort((a, b) => {
-      //   if (order === "asc") {
-      //     if (a[column] < b[column]) {
-      //       return -1;
-      //     }
-      //     if (a[column] > b[column]) {
-      //       return 1;
-      //     }
-      //   } else {
-      //     if (a[column] > b[column]) {
-      //       return -1;
-      //     }
-      //     if (a[column] < b[column]) {
-      //       return 1;
-      //     }
-      //   }
-      //   return 0;
-      // });
-      // setRequirements(sorted);
     }
   }
 

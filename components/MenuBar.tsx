@@ -29,7 +29,7 @@ import {
   RiTextWrap,
 } from "react-icons/ri";
 
-const MenuBar = ({ editor }: any) => {
+const MenuBar = ({ editor, reqName }: any) => {
   const supabaseClient = useSupabaseClient();
   const [showModal, setShowModal] = useState(false);
 
@@ -91,7 +91,11 @@ const MenuBar = ({ editor }: any) => {
     setShowModal(true);
     console.log("modal", showModal);
 
-    const requirement = "The system must allow users to login.";
+    console.log("reqName", reqName);
+
+    const requirement = reqName;
+    console.log("requirement", requirement);
+
     const req = JSON.stringify({ requirement });
     console.log("req", req);
 

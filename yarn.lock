@@ -365,6 +365,21 @@
   resolved "https://registry.yarnpkg.com/@linaria/core/-/core-3.0.0-beta.13.tgz#049c5be5faa67e341e413a0f6b641d5d78d91056"
   integrity sha512-3zEi5plBCOsEzUneRVuQb+2SAx3qaC1dj0FfFAI6zIJQoDWu0dlSwKijMRack7oO9tUWrchfj3OkKQAd1LBdVg==
 
+"@lineup-lite/components@~1.7.0":
+  version "1.7.0"
+  resolved "https://registry.yarnpkg.com/@lineup-lite/components/-/components-1.7.0.tgz#46520cd6db3de75817a537ec652493ba9d2ebe92"
+  integrity sha512-Mrsd4oj75Ozjt6QCQ4iERCJP4ZzTcV70g52jiVctT3zqENRmpqnkydxXvAvjUUdamOM4GJ+J9NJNtspBJw5x4w==
+  dependencies:
+    "@sgratzl/boxplots" "^1.3.0"
+
+"@lineup-lite/hooks@^1.7.0":
+  version "1.7.0"
+  resolved "https://registry.yarnpkg.com/@lineup-lite/hooks/-/hooks-1.7.0.tgz#f9c0429abf0b19bec174d48fb29f8adfeb50e061"
+  integrity sha512-b+7Lw1PXife7WT9Kqiomn57jKOrymsSHJ+yzg9QTPBGgrMXE6H/I8IWQY/UzXCld/APES//wjGXeaLhwul0ezA==
+  dependencies:
+    "@lineup-lite/components" "~1.7.0"
+    date-fns "^2.28.0"
+
 "@lukeed/ms@^2.0.1":
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/@lukeed/ms/-/ms-2.0.1.tgz#3c2bbc258affd9cc0e0cc7828477383c73afa6ee"
@@ -1121,6 +1136,11 @@
   dependencies:
     any-observable "^0.3.0"
 
+"@sgratzl/boxplots@^1.3.0":
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/@sgratzl/boxplots/-/boxplots-1.3.0.tgz#c9063d98e33a15f880cf4bd3531be71497e2a94e"
+  integrity sha512-2BRWv+WOH58pwzSgP50buoXgxQic+4auz3BF0wiIUXS8D3QGkdBNgsNdQO1754Tm/0uEwly0R3WaCiGnoYWcmA==
+
 "@sindresorhus/is@^0.7.0":
   version "0.7.0"
   resolved "https://registry.yarnpkg.com/@sindresorhus/is/-/is-0.7.0.tgz#9a06f4f137ee84d7df0460c1fdb1135ffa6c50fd"
@@ -1657,6 +1677,13 @@
   version "18.0.11"
   resolved "https://registry.yarnpkg.com/@types/react-dom/-/react-dom-18.0.11.tgz#321351c1459bc9ca3d216aefc8a167beec334e33"
   integrity sha512-O38bPbI2CWtgw/OoQoY+BRelw7uysmXbWvw3nLWO21H1HSh+GOlqPuXshJfjmpNlKiiSDG9cc1JZAaMmVdcTlw==
+  dependencies:
+    "@types/react" "*"
+
+"@types/react-table@^7.7.14":
+  version "7.7.14"
+  resolved "https://registry.yarnpkg.com/@types/react-table/-/react-table-7.7.14.tgz#b880f1ae140ed065bca2e21b3008ca1ebe71595a"
+  integrity sha512-TYrv7onCiakaG1uAu/UpQ9FojNEt/4/ht87EgJQaEGFoWV606ZLWUZAcUHzMxgc3v1mywP1cDyz3qB4ho3hWOw==
   dependencies:
     "@types/react" "*"
 
@@ -3482,6 +3509,11 @@ date-fns@^1.27.2:
   resolved "https://registry.yarnpkg.com/date-fns/-/date-fns-1.30.1.tgz#2e71bf0b119153dbb4cc4e88d9ea5acfb50dc05c"
   integrity sha512-hBSVCvSmWC+QypYObzwGOd9wqdDpOt+0wl0KbU+R+uuZBS1jN8VsD1ss3irQDknRj5NvxiTF6oj/nDRnN/UQNw==
 
+date-fns@^2.28.0:
+  version "2.29.3"
+  resolved "https://registry.yarnpkg.com/date-fns/-/date-fns-2.29.3.tgz#27402d2fc67eb442b511b70bbdf98e6411cd68a8"
+  integrity sha512-dDCnyH2WnnKusqvZZ6+jA1O51Ibt8ZMRNkDZdyAyK4YfbDwa/cEmuztzG5pk6hqlp9aSBPYcjOlktquahGwGeA==
+
 date-time@^3.1.0:
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/date-time/-/date-time-3.1.0.tgz#0d1e934d170579f481ed8df1e2b8ff70ee845e1e"
@@ -4636,7 +4668,7 @@ fast-deep-equal@^3.1.1, fast-deep-equal@^3.1.3:
   resolved "https://registry.yarnpkg.com/fast-deep-equal/-/fast-deep-equal-3.1.3.tgz#3a7d56b559d6cbc3eb512325244e619a65c6c525"
   integrity sha512-f3qQ9oQy9j2AhBe/H9VC91wLmKBCCU/gDOnKNAYG5hswO7BLKj09Hc5HYNz9cGI++xlpDCIgDaitVs03ATR84Q==
 
-fast-diff@^1.2.0:
+fast-diff@^1.1.1, fast-diff@^1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/fast-diff/-/fast-diff-1.2.0.tgz#73ee11982d86caaf7959828d519cfe927fac5f03"
   integrity sha512-xJuoT5+L99XlZ8twedaRf6Ax2TgQVxvgZOYoPKqZufmJib0tL2tegPBOZb1pVNgIhlqDlA0eO0c3wBvQcmzx4w==
@@ -8882,6 +8914,11 @@ react-is@^17.0.1:
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-17.0.2.tgz#e691d4a8e9c789365655539ab372762b0efb54f0"
   integrity sha512-w2GsyukL62IJnlaff/nRegPQR94C/XXamvMWmSHRJ4y7Ts/4ocGRmTHvOs8PSE6pB3dWOrD/nueuU5sduBsQ4w==
 
+react-table@^7.8.0:
+  version "7.8.0"
+  resolved "https://registry.yarnpkg.com/react-table/-/react-table-7.8.0.tgz#07858c01c1718c09f7f1aed7034fcfd7bda907d2"
+  integrity sha512-hNaz4ygkZO4bESeFfnfOft73iBUj8K5oKi1EcSHPAibEydfsX2MyU6Z8KCr3mv3C9Kqqh71U+DhZkFvibbnPbA==
+
 react-tailwindcss-select@^1.8.5:
   version "1.8.5"
   resolved "https://registry.yarnpkg.com/react-tailwindcss-select/-/react-tailwindcss-select-1.8.5.tgz#adf752c7e54889c38fd76bd1aa5cf8cf6d2b9788"
@@ -10844,6 +10881,11 @@ xtend@^4.0.0, xtend@^4.0.2, xtend@~4.0.0, xtend@~4.0.1:
   resolved "https://registry.yarnpkg.com/xtend/-/xtend-4.0.2.tgz#bb72779f5fa465186b1f438f674fa347fdb5db54"
   integrity sha512-LKYU1iAXJXUgAXn9URjiu+MWhyUXHsvfp7mcuYm9dSUKK0/CjtrUwFAxD82/mCWbtLsGjFIad0wIsod4zrTAEQ==
 
+y-array@^10.1.4:
+  version "10.1.4"
+  resolved "https://registry.yarnpkg.com/y-array/-/y-array-10.1.4.tgz#e131a5b030d6dcbca10268d4293ecf44bdae7b34"
+  integrity sha512-RuIyy51UA+p20mLmXKpSa16Vur6g2kEPMjdE/zh5lBncfi6YRO8pHog+30GhaRZCUJaAMmeNNm6sD6LJv9ZggA==
+
 y-prosemirror@1.0.20:
   version "1.0.20"
   resolved "https://registry.yarnpkg.com/y-prosemirror/-/y-prosemirror-1.0.20.tgz#1832b5ab29852fc4607e9cf6b0c431e9caeed79e"
@@ -10857,6 +10899,13 @@ y-protocols@^1.0.5:
   integrity sha512-Wil92b7cGk712lRHDqS4T90IczF6RkcvCwAD0A2OPg+adKmOe+nOiT/N2hvpQIWS3zfjmtL4CPaH5sIW1Hkm/A==
   dependencies:
     lib0 "^0.2.42"
+
+y-text@^9.5.1:
+  version "9.5.1"
+  resolved "https://registry.yarnpkg.com/y-text/-/y-text-9.5.1.tgz#8739f42592e73d795c4b56a8de013e46c14170ac"
+  integrity sha512-uwNLY4LeLLR7Cu4xfvh9ZY4gmOYyjii4irDHYRuhPDs1XFcm6krVaALeggA42LevTQ+k5q1eHpdv5jnJha8r6g==
+  dependencies:
+    fast-diff "^1.1.1"
 
 y18n@^5.0.5:
   version "5.0.8"

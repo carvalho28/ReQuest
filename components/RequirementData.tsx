@@ -19,6 +19,7 @@ import DatePicker from "./DatePicker";
 import Dropdown from "./Dropdown";
 import MultiselectPeople from "./MultiselectPeople";
 import Tiptap from "./TipTap";
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
 
 interface RequirementDataProps {
   name: string;
@@ -31,20 +32,11 @@ const RequirementData = ({
   requirement,
   projectUserNames,
 }: RequirementDataProps) => {
-  function daysBetween(date1: Date, date2: Date) {
-    // The number of milliseconds in one day
-    const ONE_DAY = 1000 * 60 * 60 * 24;
-
-    // Calculate the difference in milliseconds
-    const differenceMs = Math.abs(date1.getTime() - date2.getTime());
-
-    // Convert back to days and return
-    return Math.round(differenceMs / ONE_DAY);
-  }
-
   const [requirementData, setRequirementData] = useState<
     Database["public"]["Tables"]["requirements"]["Row"]
   >({} as Database["public"]["Tables"]["requirements"]["Row"]);
+
+  const supabaseClient = useSupabaseClient();
 
   useEffect(() => {
     setRequirementData({
@@ -58,22 +50,36 @@ const RequirementData = ({
       created_at: requirement.created_at,
       created_by: requirement.created_by,
       assigned_to: requirement.assigned_to,
-      checked: requirement.checked,
+      status: requirement.status,
       id_proj: requirement.id_proj,
     });
   }, [requirement]);
 
-  function changePriority(priority: number) {
+  useEffect(() => {
+    async function saveChanges() {
+      console.log(requirement?.id);
+      console.log(requirement);
+      console.log(requirementData);
+      const { error } = await supabaseClient
+        .from("requirements")
+        .update(requirementData)
+        .eq("id", requirement?.id);
+      if (error) console.log(error);
+    }
+    saveChanges();
+  }, [requirementData, requirement, supabaseClient]);
+
+  function changePriority(priority: string) {
     setRequirementData((prevState) => ({
       ...prevState,
       priority: priority,
     }));
   }
 
-  function changeStatus(status: number) {
+  function changeStatus(status: string) {
     setRequirementData((prevState) => ({
       ...prevState,
-      checked: status,
+      status: status,
     }));
   }
 
@@ -132,6 +138,22 @@ const RequirementData = ({
     setIsEditing(false);
   }
 
+  function changeAssignedTo(assignedTo: string[]) {
+    setRequirementData((prevState) => ({
+      ...prevState,
+      assigned_to: assignedTo,
+    }));
+  }
+
+  function changeDescription(description: string) {
+    console.log(description);
+
+    setRequirementData((prevState) => ({
+      ...prevState,
+      description: description,
+    }));
+  }
+
   return (
     <>
       <input type="checkbox" id="my-modal-5" className="modal-toggle" />
@@ -185,7 +207,8 @@ const RequirementData = ({
                     </div>
                     <Dropdown
                       func={renderStatusBadge}
-                      selected={requirementData.checked as number}
+                      options={["Not Started", "In Progress", "Completed"]}
+                      selected={requirementData.status as string}
                       onSelect={(status) => changeStatus(status)}
                     />
                   </div>
@@ -198,6 +221,7 @@ const RequirementData = ({
                     </div>
                     <Dropdown
                       func={renderPriorityBadge}
+                      options={["P1", "P2", "P3"]}
                       selected={requirementData.priority}
                       onSelect={(option) => changePriority(option)}
                     />
@@ -225,6 +249,7 @@ const RequirementData = ({
                       <span className="text-md text-black">Assigned</span>{" "}
                     </div>
                     <MultiselectPeople
+                      onChange={(assignedTo) => changeAssignedTo(assignedTo)}
                       projectUserNames={projectUserNames}
                       selectedUserNames={
                         requirementData.assigned_to as string[]
@@ -266,23 +291,10 @@ const RequirementData = ({
             userName={name}
             reqId={requirement.id}
             reqDescription={requirement.description as string}
+            reqCreatedAt={requirement.created_at}
+            reqCreatedBy={requirement.created_by}
+            reqName={requirement.name}
           />
-          <div className="text-md text-neutral-400 flex justify-end mr-4 italic">
-            Created by {requirementData.created_by} -{" "}
-            {new Date(requirementData.created_at).toLocaleDateString("pt-PT", {
-              year: "numeric",
-              month: "numeric",
-              day: "numeric",
-            })}
-          </div>
-          <div className="modal-action p-4">
-            <label
-              htmlFor="my-modal-5"
-              className="btn bg-contrast text-white border-0 hover:bg-contrasthover hover:cursor-pointer"
-            >
-              Done
-            </label>
-          </div>
         </div>
       </div>
     </>

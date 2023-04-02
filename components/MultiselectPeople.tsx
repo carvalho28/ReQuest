@@ -1,27 +1,23 @@
 import { useEffect, useState } from "react";
 import Select from "react-tailwindcss-select";
 
-const options = [
-  { value: "fox", label: "John Doe" },
-  { value: "Butterfly", label: "Marie Poppins" },
-  { value: "Honeybee", label: "Sherlock Holmes" },
-  { value: "asdfasdf", label: "Asdkfhnjkasdhfjkbnjkasdhfkjsabjkf" },
-];
-
 interface MultiselectPeopleProps {
   projectUserNames: string[];
   selectedUserNames: string[];
+  onChange: (value: any) => void;
 }
 
 const MultiselectPeople = ({
   projectUserNames,
   selectedUserNames,
+  onChange,
 }: MultiselectPeopleProps) => {
   const [selected, setSelected] = useState<
-    {
-      value: string;
-      label: string;
-    }[]
+    | {
+        value: string;
+        label: string;
+      }[]
+    | null
   >([]);
   const [options, setOptions] = useState<
     {
@@ -31,47 +27,53 @@ const MultiselectPeople = ({
   >();
 
   useEffect(() => {
-    if (projectUserNames) {
+    if (projectUserNames && projectUserNames.length > 0) {
       const options = projectUserNames.map((name) => ({
-        // if name is too long, truncate it
         value: name,
         label: name.length > 15 ? name.slice(0, 13) + "..." : name,
       }));
       setOptions(options);
       setSelected(
-        options.filter((option) => selectedUserNames.includes(option.value))
+        selectedUserNames && selectedUserNames.length > 0
+          ? options.filter((option) => selectedUserNames.includes(option.value))
+          : null
       );
+    } else {
+      setOptions([]);
+      setSelected(null);
     }
   }, [projectUserNames, selectedUserNames]);
 
   const handleChange = (value: any) => {
     setSelected(value);
+    // change data onChange, if null send empty array
+    onChange(value?.map((item: any) => item.value) || null);
   };
 
   return (
     <>
-      {options && (
-        <Select
-          value={selected}
-          onChange={handleChange}
-          options={options}
-          isMultiple={true}
-          primaryColor="violet"
-          classNames={{
-            listItem: ({ isSelected }: any) =>
-              `block transition duration-200 px-2 py-2 cursor-pointer select-none truncate rounded ${
-                isSelected
-                  ? `text-white bg-contrast`
-                  : `text-black hover:bg-violet-100 hover:text-contrasthover`
-              }`,
-            tagItem: ({ isSelected }: any) =>
-              `bg-violet-200 border rounded-sm flex space-x-1 ${
-                isSelected ? "border-gray-500 px-1" : "pl-1"
-              }
+      <Select
+        placeholder={"Assign users"}
+        value={selected}
+        onChange={handleChange}
+        options={options || []}
+        isMultiple={true}
+        primaryColor="violet"
+        noOptionsMessage="No users available"
+        classNames={{
+          listItem: ({ isSelected }: any) =>
+            `block transition duration-200 px-2 py-2 cursor-pointer select-none truncate rounded ${
+              isSelected
+                ? `text-white bg-contrast`
+                : `text-black hover:bg-violet-100 hover:text-contrasthover`
+            }`,
+          tagItem: ({ isSelected }: any) =>
+            `bg-violet-200 border rounded-sm flex space-x-1 ${
+              isSelected ? "border-gray-500 px-1" : "pl-1"
+            }
               `,
-          }}
-        />
-      )}
+        }}
+      />
     </>
   );
 };

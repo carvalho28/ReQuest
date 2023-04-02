@@ -3,6 +3,7 @@ import { createServerSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import { GetServerSidePropsContext } from "next";
 import { Database } from "@/types/supabase";
 import RequirementsTable from "@/components/RequirementsTable";
+import Table from "@/components/Table";
 
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   const supabase = createServerSupabaseClient(ctx);
@@ -96,11 +97,19 @@ export default function SingleProject({
         namePage={`Project - ${project.name}`}
         avatar_url={avatar_url}
       >
-        <RequirementsTable
+        {/* <RequirementsTable
           name={name}
           projectUserNames={projectUserNames}
           projectId={projectId}
+        /> */}
+
+        <Table
+          name={name}
+          projectId={projectId}
+          projectUserNames={projectUserNames}
         />
+
+        {/* <Table /> */}
       </Layout>
     </div>
   );
