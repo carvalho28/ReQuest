@@ -107,7 +107,6 @@ export interface Database {
       requirements: {
         Row: {
           assigned_to: string[] | null
-          checked: number | null
           created_at: string
           created_by: string
           description: string | null
@@ -115,13 +114,13 @@ export interface Database {
           id: string
           id_proj: string
           name: string
-          priority: number
+          priority: string
+          status: string | null
           updated_at: string
           updated_by: string
         }
         Insert: {
           assigned_to?: string[] | null
-          checked?: number | null
           created_at: string
           created_by: string
           description?: string | null
@@ -129,13 +128,13 @@ export interface Database {
           id?: string
           id_proj: string
           name: string
-          priority?: number
+          priority?: string
+          status?: string | null
           updated_at: string
           updated_by: string
         }
         Update: {
           assigned_to?: string[] | null
-          checked?: number | null
           created_at?: string
           created_by?: string
           description?: string | null
@@ -143,7 +142,8 @@ export interface Database {
           id?: string
           id_proj?: string
           name?: string
-          priority?: number
+          priority?: string
+          status?: string | null
           updated_at?: string
           updated_by?: string
         }
