@@ -39,6 +39,7 @@ import Table from "@tiptap/extension-table";
 import TableHeader from "@tiptap/extension-table-header";
 import TableRow from "@tiptap/extension-table-row";
 import TableCell from "@tiptap/extension-table-cell";
+import { generatePastelColor } from "./utils/general";
 
 interface TiptapProps {
   reqId: string;
@@ -46,6 +47,7 @@ interface TiptapProps {
   userName: string;
   reqCreatedAt: string;
   reqCreatedBy: string;
+  updateDescription: (description: string) => void;
 }
 
 const Tiptap = ({
@@ -73,16 +75,14 @@ const Tiptap = ({
     lowlight.registerLanguage("cpp", cpp);
   }, []);
 
-  // console.log("provider", provider);
-
   useEffect(() => {
     if (provider) {
       provider.destroy();
     }
-    setContent(reqDescription);
+    // setContent(reqDescription);
     const newProvider = new HocuspocusProvider({
-      url: "wss://little-rain-5635.fly.dev/",
-      // url: "ws://localhost:1234",
+      // url: "wss://little-rain-5635.fly.dev/",
+      url: "ws://localhost:8080",
       name: reqId.toString(),
       document: new Y.Doc({
         guid: reqId.toString(),
@@ -100,69 +100,8 @@ const Tiptap = ({
     if (content === reqDescription) {
       return;
     }
-
-    setContent(reqDescription);
+    // setContent(reqDescription);
   }, [reqDescription]);
-
-  function generatePastelColor() {
-    // Set the saturation and lightness to a fixed value to generate a pastel color
-    const saturation = 50; // 50% saturation
-    const lightness = 75; // 75% lightness
-
-    // Generate a random hue between 0 and 360
-    const hue = Math.floor(Math.random() * 360);
-
-    // Convert the HSL color to RGB
-    const hslToRgb = (h: number, s: number, l: number) => {
-      const c = (1 - Math.abs(2 * l - 1)) * s;
-      const x = c * (1 - Math.abs(((h / 60) % 2) - 1));
-      const m = l - c / 2;
-      let r, g, b;
-      if (h < 60) {
-        r = c;
-        g = x;
-        b = 0;
-      } else if (h < 120) {
-        r = x;
-        g = c;
-        b = 0;
-      } else if (h < 180) {
-        r = 0;
-        g = c;
-        b = x;
-      } else if (h < 240) {
-        r = 0;
-        g = x;
-        b = c;
-      } else if (h < 300) {
-        r = x;
-        g = 0;
-        b = c;
-      } else {
-        r = c;
-        g = 0;
-        b = x;
-      }
-      return {
-        r: Math.round((r + m) * 255),
-        g: Math.round((g + m) * 255),
-        b: Math.round((b + m) * 255),
-      };
-    };
-
-    // Convert the RGB color to a hex string
-    const rgbToHex = (r: number, g: number, b: number) => {
-      return `#${r.toString(16).padStart(2, "0")}${g
-        .toString(16)
-        .padStart(2, "0")}${b.toString(16).padStart(2, "0")}`;
-    };
-
-    // Convert the HSL color to RGB and then to a hex string
-    const { r, g, b } = hslToRgb(hue, saturation / 100, lightness / 100);
-    const hexColor = rgbToHex(r, g, b);
-
-    return hexColor;
-  }
 
   const commonExtensions = [
     Color.configure({ types: [TextStyle.name, ListItem.name] }),
@@ -207,6 +146,7 @@ const Tiptap = ({
     ? [
         Collaboration.configure({
           document: provider.document,
+          // field: "body",
         }),
         CollaborationCursor.configure({
           provider,
@@ -230,7 +170,7 @@ const Tiptap = ({
         },
       },
       // content: content,
-      content: content,
+      // content: content,
     },
     [provider]
   );
@@ -272,7 +212,11 @@ const Tiptap = ({
     <>
       <div className="p-2">
         <MenuBar editor={editor} />
-        <EditorContent editor={editor} onDrop={addImageOnDrop} />
+        <EditorContent
+          editor={editor}
+          onDrop={addImageOnDrop}
+          className="element"
+        />
       </div>
       <div className="text-md text-neutral-400 flex justify-end mr-4 italic">
         Created by {reqCreatedBy} on{" "}
