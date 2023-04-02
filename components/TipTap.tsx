@@ -47,7 +47,7 @@ interface TiptapProps {
   userName: string;
   reqCreatedAt: string;
   reqCreatedBy: string;
-  updateDescription: (description: string) => void;
+  reqName: string;
 }
 
 const Tiptap = ({
@@ -56,6 +56,7 @@ const Tiptap = ({
   reqDescription,
   reqCreatedAt,
   reqCreatedBy,
+  reqName,
 }: TiptapProps) => {
   const supabaseClient = useSupabaseClient();
 
@@ -169,8 +170,6 @@ const Tiptap = ({
           style: "min-height: 20em;",
         },
       },
-      // content: content,
-      // content: content,
     },
     [provider]
   );
@@ -211,7 +210,7 @@ const Tiptap = ({
   return (
     <>
       <div className="p-2">
-        <MenuBar editor={editor} />
+        <MenuBar editor={editor} reqName={reqName} />
         <EditorContent
           editor={editor}
           onDrop={addImageOnDrop}

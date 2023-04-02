@@ -42,7 +42,23 @@ server.configure({
     // Save to database
     const proseMirrorJSON = TiptapTransformer.fromYdoc(
       data.document,
-      "default"
+      "default"[
+        (StarterKit,
+        TextStyle,
+        Placeholder,
+        Highlight,
+        TaskList,
+        TaskItem,
+        CodeBlockLowlight,
+        Color,
+        Image,
+        Table,
+        TableRow,
+        TableHeader,
+        TableCell,
+        Collaboration,
+        CollaborationCursor)
+      ]
     );
     const { errordb } = await supabase
       .from("requirements")

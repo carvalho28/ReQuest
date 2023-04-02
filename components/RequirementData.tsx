@@ -293,7 +293,7 @@ const RequirementData = ({
             reqDescription={requirement.description as string}
             reqCreatedAt={requirement.created_at}
             reqCreatedBy={requirement.created_by}
-            updateDescription={changeDescription}
+            reqName={requirement.name}
           />
         </div>
       </div>
