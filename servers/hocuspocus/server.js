@@ -40,8 +40,10 @@ const server = new Hocuspocus({
 server.configure({
   async onStoreDocument(data) {
     // Save to database
-    const proseMirrorJSON = TiptapTransformer.fromYdoc(data.document);
-    //   //   // console.log("saving", data.documentName);
+    const proseMirrorJSON = TiptapTransformer.fromYdoc(
+      data.document,
+      "default"
+    );
     const { errordb } = await supabase
       .from("requirements")
       .update({ description: proseMirrorJSON })
@@ -64,11 +66,26 @@ server.configure({
       return;
     }
     const desc = JSON.parse(datadb[0].description);
-    const content = TiptapTransformer.toYdoc(
-      desc.default,
-      "default"[(Document, Paragraph, Text)]
-    );
 
+    const content = TiptapTransformer.toYdoc(desc.default, "default", [
+      StarterKit.configure({
+        codeBlock: false,
+      }),
+      TextStyle,
+      Placeholder,
+      Highlight,
+      TaskList,
+      TaskItem,
+      CodeBlockLowlight,
+      Color,
+      Image,
+      Table,
+      TableRow,
+      TableHeader,
+      TableCell,
+      Collaboration,
+      CollaborationCursor,
+    ]);
     // set the document's content to the loaded content
     data.document.merge(content);
   },
