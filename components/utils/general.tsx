@@ -2,13 +2,6 @@
 
 import { RiCheckboxBlankCircleFill } from "react-icons/ri";
 
-// name: "Req 1",
-//       description: null,
-//       due_date: null,
-//       priority: "P1",
-//       assigned_to: [],
-//       status: "Completed",
-
 export type ColumnsReq = {
   name: string;
   description: string | null;

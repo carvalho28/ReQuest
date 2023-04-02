@@ -4,6 +4,14 @@ import { GetServerSidePropsContext } from "next";
 import { Database } from "@/types/supabase";
 import RequirementsTable from "@/components/RequirementsTable";
 import Table from "@/components/Table";
+import {
+  RiArrowLeftCircleFill,
+  RiArrowRightCircleFill,
+  RiUser3Line,
+} from "react-icons/ri";
+import { useEffect, useState } from "react";
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
+import { RealtimeChannel } from "@supabase/supabase-js";
 
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   const supabase = createServerSupabaseClient(ctx);
@@ -85,10 +93,95 @@ export default function SingleProject({
 }: any) {
   const project: Database["public"]["Tables"]["projects"]["Row"] =
     project_data[0];
-
   const name = user;
-
   const projectId = project.id;
+
+  const supabaseClient = useSupabaseClient();
+
+  const [totalRequirements, setTotalRequirements] = useState(0);
+  const [requirementsCompleted, setRequirementsCompleted] = useState(0);
+  const [requirementsInProgress, setRequirementsInProgress] = useState(0);
+  const [requirementsNotStarted, setRequirementsNotStarted] = useState(0);
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  const itemsCarrousel = [
+    { label: "Total Requirements", value: totalRequirements },
+    { label: "Requirements Completed", value: requirementsCompleted },
+    { label: "Requirements In Progress", value: requirementsInProgress },
+    { label: "Requirements Not Started", value: requirementsNotStarted },
+  ];
+
+  const handleLeftArrow = () => {
+    setCurrentIndex(
+      (currentIndex - 1 + itemsCarrousel.length) % itemsCarrousel.length
+    );
+  };
+
+  const handleRightArrow = () => {
+    setCurrentIndex((currentIndex + 1) % itemsCarrousel.length);
+  };
+
+  useEffect(() => {
+    const getRequirements = async () => {
+      const { data, error } = await supabaseClient
+        .from("requirements")
+        .select("*")
+        .eq("id_proj", projectId);
+
+      if (error) console.log(error);
+      if (!data) throw new Error("No data found");
+
+      setTotalRequirements(data.length);
+      setRequirementsCompleted(
+        data.filter(
+          (requirement: any) => requirement.status.toLowerCase() === "done"
+        ).length
+      );
+      setRequirementsInProgress(
+        data.filter(
+          (requirement: any) =>
+            requirement.status.toLowerCase() === "in progress"
+        ).length
+      );
+      setRequirementsNotStarted(
+        data.filter(
+          (requirement: any) =>
+            requirement.status.toLowerCase() === "not started"
+        ).length
+      );
+    };
+
+    let req_channel: RealtimeChannel;
+    async function getProjectsRealTime() {
+      req_channel = supabaseClient
+        .channel("reqs_load")
+        .on(
+          "postgres_changes",
+          {
+            event: "*",
+            schema: "public",
+            table: "requirements",
+          },
+          async (payload: any) => {
+            getRequirements();
+          }
+        )
+        .subscribe();
+
+      return () => {
+        supabaseClient.removeChannel(req_channel);
+      };
+    }
+
+    getRequirements();
+    getProjectsRealTime();
+  }, [
+    requirementsCompleted,
+    requirementsInProgress,
+    requirementsNotStarted,
+    projectId,
+    supabaseClient,
+  ]);
 
   return (
     <div>
@@ -97,11 +190,45 @@ export default function SingleProject({
         namePage={`Project - ${project.name}`}
         avatar_url={avatar_url}
       >
-        {/* <RequirementsTable
-          name={name}
-          projectUserNames={projectUserNames}
-          projectId={projectId}
-        /> */}
+        <div className="flex gap-x-4 mt-8 flex-col sm:flex-row gap-y-8">
+          <div className="flex flex-col p-6 bg-white rounded-lg shadow-lg justify-center sm:w-1/3 w-full">
+            <h3 className="text-xl font-bold flex justify-center items-center text-center">
+              Requirements Overview
+            </h3>
+            <div className="flex flex-col justify-center items-center mt-8">
+              <div className="text-6xl font-extrabold">
+                {itemsCarrousel[currentIndex].value}
+              </div>
+              <div className="text-md mt-2 text-gray-700">
+                {itemsCarrousel[currentIndex].label}
+              </div>
+              <div className="flex justify-center items-center mt-8">
+                <RiArrowLeftCircleFill
+                  className="h-10 w-10 text-black mr-2 hover:cursor-pointer"
+                  onClick={() => handleLeftArrow()}
+                />
+                <RiArrowRightCircleFill
+                  className="h-10 w-10 text-black ml-2 hover:cursor-pointer"
+                  onClick={() => handleRightArrow()}
+                />
+              </div>
+            </div>
+          </div>
+          <div className="flex flex-col p-6 bg-white rounded-lg shadow-lg sm:w-1/3 w-full">
+            <h3 className="text-xl font-bold flex justify-center">
+              Team Members
+            </h3>
+            <div className="flex flex-col justify-center mt-8 ml-2">
+              {/* print user names next to  an icon */}
+              {projectUserNames.map((user: any) => (
+                <div className="flex gap-x-2 mt-4" key={user}>
+                  <RiUser3Line className="h-6 w-6" />
+                  <div className="text-md">{user}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
 
         <Table
           name={name}
