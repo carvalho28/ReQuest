@@ -48,6 +48,8 @@ interface TiptapProps {
   reqCreatedAt: string;
   reqCreatedBy: string;
   reqName: string;
+  reqUpdatedBy: string;
+  reqUpdatedAt: string;
 }
 
 const Tiptap = ({
@@ -57,6 +59,8 @@ const Tiptap = ({
   reqCreatedAt,
   reqCreatedBy,
   reqName,
+  reqUpdatedBy,
+  reqUpdatedAt,
 }: TiptapProps) => {
   const supabaseClient = useSupabaseClient();
 
@@ -84,6 +88,9 @@ const Tiptap = ({
     const newProvider = new HocuspocusProvider({
       url: "wss://little-rain-5635.fly.dev/",
       // url: "ws://localhost:8080",
+      parameters: {
+        userName: userName,
+      },
       name: reqId.toString(),
       document: new Y.Doc({
         guid: reqId.toString(),

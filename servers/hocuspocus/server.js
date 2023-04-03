@@ -39,6 +39,8 @@ const server = new Hocuspocus({
 
 server.configure({
   async onStoreDocument(data) {
+    const userName = data.requestParameters.get("userName");
+    const newDate = new Date();
     // Save to database
     const proseMirrorJSON = TiptapTransformer.fromYdoc(
       data.document,
@@ -62,7 +64,11 @@ server.configure({
     );
     const { errordb } = await supabase
       .from("requirements")
-      .update({ description: proseMirrorJSON })
+      .update({
+        description: proseMirrorJSON,
+        updated_at: newDate,
+        updated_by: userName,
+      })
       .eq("id", data.documentName);
     if (errordb) {
       console.log("error", errordb);
@@ -73,6 +79,7 @@ server.configure({
   async onLoadDocument(data) {
     // Load from database
     const documentName = data.document.name;
+
     const { data: datadb, error: errordb } = await supabase
       .from("requirements")
       .select("description")

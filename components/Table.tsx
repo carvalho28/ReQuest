@@ -199,7 +199,7 @@ function Table({ name, projectUserNames, projectId }: RequirementsTableProps) {
   const supabaseClient = useSupabaseClient();
 
   useEffect(() => {
-    let req_channel: RealtimeChannel;
+    let req_channel2: RealtimeChannel;
     async function getRequirements() {
       const { data, error } = await supabaseClient
         .from("requirements")
@@ -233,8 +233,8 @@ function Table({ name, projectUserNames, projectId }: RequirementsTableProps) {
       );
     }
     async function getProjectsRealTime() {
-      req_channel = supabaseClient
-        .channel("reqs_load")
+      req_channel2 = supabaseClient
+        .channel("reqs_load2")
         .on(
           "postgres_changes",
           {
@@ -249,7 +249,7 @@ function Table({ name, projectUserNames, projectId }: RequirementsTableProps) {
         .subscribe();
 
       return () => {
-        supabaseClient.removeChannel(req_channel);
+        supabaseClient.removeChannel(req_channel2);
       };
     }
     getRequirements();

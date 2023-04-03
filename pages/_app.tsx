@@ -41,7 +41,7 @@ function Loading() {
       router.events.off("routeChangeComplete", handleComplete);
       router.events.off("routeChangeError", handleComplete);
     };
-  }, []);
+  });
 
   return (
     <>
