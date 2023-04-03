@@ -40,6 +40,8 @@ const RequirementData = ({
   const supabaseClient = useSupabaseClient();
   const user = useUser();
 
+  const [isUpdatingUpdatedBy, setIsUpdatingUpdatedBy] = useState(false);
+
   useEffect(() => {
     setRequirementData({
       id: requirement.id,
@@ -59,9 +61,6 @@ const RequirementData = ({
 
   useEffect(() => {
     async function saveChanges() {
-      // console.log(requirement?.id);
-      // console.log(requirement);
-      // console.log(requirementData);
       console.log("saving changes ---");
 
       const { error } = await supabaseClient
@@ -70,8 +69,43 @@ const RequirementData = ({
         .eq("id", requirement?.id);
       if (error) console.log(error);
     }
-    saveChanges();
+    if (!isUpdatingUpdatedBy) saveChanges();
+    else setIsUpdatingUpdatedBy(false);
   }, [requirementData, supabaseClient]);
+
+  // realtime updates for the requirement updated by and updated at
+  useEffect(() => {
+    let channel: RealtimeChannel;
+    async function updatedByAt() {
+      channel = supabaseClient
+        .channel("project_load")
+        .on(
+          "postgres_changes",
+          {
+            event: "UPDATE",
+            schema: "public",
+            table: "requirements",
+          },
+          async (payload: any) => {
+            if (payload.new.id === requirement?.id) {
+              setIsUpdatingUpdatedBy(true);
+              setRequirementData((prevState) => ({
+                ...prevState,
+                updated_at: payload.new.updated_at,
+                updated_by: payload.new.updated_by,
+              }));
+            }
+          }
+        )
+        .subscribe();
+
+      return () => {
+        supabaseClient.removeChannel(channel);
+      };
+    }
+
+    updatedByAt();
+  }, [requirement?.id, supabaseClient]);
 
   function changePriority(priority: string) {
     setRequirementData((prevState) => ({
@@ -274,6 +308,8 @@ const RequirementData = ({
                           year: "numeric",
                           month: "numeric",
                           day: "numeric",
+                          hour: "numeric",
+                          minute: "numeric",
                         }
                       )}
                     </span>
