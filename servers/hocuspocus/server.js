@@ -39,11 +39,16 @@ const server = new Hocuspocus({
 
 server.configure({
   async onStoreDocument(data) {
+
+    const userName = data.requestParameters.get("userName");
+    console.log(userName);
+    const newDate = new Date();
+    console.log(newDate);
     // Save to database
     const proseMirrorJSON = TiptapTransformer.fromYdoc(
       data.document,
       "default"[
-        (StarterKit,
+      (StarterKit,
         TextStyle,
         Placeholder,
         Highlight,
@@ -62,49 +67,50 @@ server.configure({
     );
     const { errordb } = await supabase
       .from("requirements")
-      .update({ description: proseMirrorJSON })
+      .update({ description: proseMirrorJSON, updated_at: newDate, updated_by: userName })
       .eq("id", data.documentName);
-    if (errordb) {
-      console.log("error", errordb);
-      return;
-    }
-  },
+  if(errordb) {
+    console.log("error", errordb);
+    return;
+  }
+},
 
   async onLoadDocument(data) {
-    // Load from database
-    const documentName = data.document.name;
-    const { data: datadb, error: errordb } = await supabase
-      .from("requirements")
-      .select("description")
-      .eq("id", documentName);
-    if (errordb) {
-      console.log("error", errordb);
-      return;
-    }
+  // Load from database
+  const documentName = data.document.name;
+
+  const { data: datadb, error: errordb } = await supabase
+    .from("requirements")
+    .select("description")
+    .eq("id", documentName);
+  if(errordb) {
+    console.log("error", errordb);
+    return;
+  }
     const desc = JSON.parse(datadb[0].description);
 
-    const content = TiptapTransformer.toYdoc(desc.default, "default", [
-      StarterKit.configure({
-        codeBlock: false,
-      }),
-      TextStyle,
-      Placeholder,
-      Highlight,
-      TaskList,
-      TaskItem,
-      CodeBlockLowlight,
-      Color,
-      Image,
-      Table,
-      TableRow,
-      TableHeader,
-      TableCell,
-      Collaboration,
-      CollaborationCursor,
-    ]);
-    // set the document's content to the loaded content
-    data.document.merge(content);
-  },
+  const content = TiptapTransformer.toYdoc(desc.default, "default", [
+    StarterKit.configure({
+      codeBlock: false,
+    }),
+    TextStyle,
+    Placeholder,
+    Highlight,
+    TaskList,
+    TaskItem,
+    CodeBlockLowlight,
+    Color,
+    Image,
+    Table,
+    TableRow,
+    TableHeader,
+    TableCell,
+    Collaboration,
+    CollaborationCursor,
+  ]);
+  // set the document's content to the loaded content
+  data.document.merge(content);
+},
 });
 
 server.listen();

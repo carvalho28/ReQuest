@@ -19,7 +19,8 @@ import DatePicker from "./DatePicker";
 import Dropdown from "./Dropdown";
 import MultiselectPeople from "./MultiselectPeople";
 import Tiptap from "./TipTap";
-import { useSupabaseClient } from "@supabase/auth-helpers-react";
+import { useSupabaseClient, useUser } from "@supabase/auth-helpers-react";
+import { RealtimeChannel } from "@supabase/supabase-js";
 
 interface RequirementDataProps {
   name: string;
@@ -37,6 +38,7 @@ const RequirementData = ({
   >({} as Database["public"]["Tables"]["requirements"]["Row"]);
 
   const supabaseClient = useSupabaseClient();
+  const user = useUser();
 
   useEffect(() => {
     setRequirementData({
@@ -57,9 +59,11 @@ const RequirementData = ({
 
   useEffect(() => {
     async function saveChanges() {
-      console.log(requirement?.id);
-      console.log(requirement);
-      console.log(requirementData);
+      // console.log(requirement?.id);
+      // console.log(requirement);
+      // console.log(requirementData);
+      console.log("saving changes ---");
+
       const { error } = await supabaseClient
         .from("requirements")
         .update(requirementData)
@@ -67,7 +71,7 @@ const RequirementData = ({
       if (error) console.log(error);
     }
     saveChanges();
-  }, [requirementData, requirement, supabaseClient]);
+  }, [requirementData, supabaseClient]);
 
   function changePriority(priority: string) {
     setRequirementData((prevState) => ({
@@ -142,15 +146,6 @@ const RequirementData = ({
     setRequirementData((prevState) => ({
       ...prevState,
       assigned_to: assignedTo,
-    }));
-  }
-
-  function changeDescription(description: string) {
-    console.log(description);
-
-    setRequirementData((prevState) => ({
-      ...prevState,
-      description: description,
     }));
   }
 
@@ -294,6 +289,8 @@ const RequirementData = ({
             reqCreatedAt={requirement.created_at}
             reqCreatedBy={requirement.created_by}
             reqName={requirement.name}
+            reqUpdatedBy={requirement.updated_by}
+            reqUpdatedAt={requirement.updated_at}
           />
         </div>
       </div>
