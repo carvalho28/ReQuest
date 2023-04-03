@@ -86,8 +86,8 @@ const Tiptap = ({
     }
     // setContent(reqDescription);
     const newProvider = new HocuspocusProvider({
-      // url: "wss://little-rain-5635.fly.dev/",
-      url: "ws://localhost:8080",
+      url: "wss://little-rain-5635.fly.dev/",
+      // url: "ws://localhost:8080",
       parameters: {
         userName: userName,
       },
