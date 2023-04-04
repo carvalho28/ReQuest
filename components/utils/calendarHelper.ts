@@ -148,6 +148,8 @@ export type Days = {
     time: string;
     datetime: string;
     href: string;
+    isProject?: boolean;
+    priority?: string;
   }>;
 };
 
@@ -167,6 +169,8 @@ function getProjectsAsDays(
       time: string;
       datetime: string;
       href: string;
+      isProject?: boolean;
+      priority?: string;
     }>;
   }> = [];
 
@@ -239,6 +243,7 @@ function getProjectsAsDays(
         }),
         // 2023-03-29T00:00:00+00:00 -> 2023-03-29T00:00
         datetime: project.deadline.substring(0, 16),
+        isProject: true,
         href: "#",
       });
     }
@@ -291,6 +296,8 @@ function addRequirementsAsDays(
           minute: "numeric",
           hour12: true,
         }),
+        isProject: false,
+        priority: requirement.priority,
         // 2023-03-29T00:00:00+00:00 -> 2023-03-29T00:00
         datetime: requirement.due_date.substring(0, 16),
         href: "#",

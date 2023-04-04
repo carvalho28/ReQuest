@@ -12,7 +12,6 @@ import format from "date-fns/format";
 import {
   addRequirementsAsDays,
   getProjectsAsDays,
-  getRequirementsAsDays,
 } from "./utils/calendarHelper";
 import { Days } from "./utils/calendarHelper";
 
@@ -58,6 +57,8 @@ const CalendarView = ({ projects, requirements }: CalendarViewProps) => {
     // set selected day to new day
     setSelectedDay(days[newDayIndex]);
   }
+
+  console.log("days", days);
 
   return (
     <div className="lg:flex lg:h-full lg:flex-col">
@@ -184,13 +185,13 @@ const CalendarView = ({ projects, requirements }: CalendarViewProps) => {
                 </Menu.Items>
               </Transition>
             </Menu>
-            <div className="ml-6 h-6 w-px bg-gray-300" />
+            {/* <div className="ml-6 h-6 w-px bg-gray-300" />
             <button
               type="button"
               className="ml-6 rounded-md  bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
             >
               Add event
-            </button>
+            </button> */}
           </div>
           <Menu as="div" className="relative ml-6 md:hidden">
             <Menu.Button className="-mx-2 flex items-center rounded-full border border-transparent p-2 text-gray-400 hover:text-gray-500">
@@ -357,21 +358,64 @@ const CalendarView = ({ projects, requirements }: CalendarViewProps) => {
                   <ol className="mt-2">
                     {day.events.slice(0, 2).map((event: any) => (
                       <li key={event.id}>
-                        <a href={event.href} className="group flex">
-                          <p
-                            className="flex-auto truncate font-medium text-gray-900 group-hover:text-contrast"
-                            onClick={() => {
-                              changeSelectedDay(day.date);
-                            }}
-                          >
-                            {event.name}
-                          </p>
-                          <time
-                            dateTime={event.datetime}
-                            className="ml-3 hidden flex-none text-gray-500 group-hover:text-indigo-600 xl:block"
-                          >
-                            {event.time}
-                          </time>
+                        <a
+                          href={event.href}
+                          className="group flex mt-3 items-center p-2 rounded-md border border-gray-300"
+                        >
+                          <div className="flex flex-col">
+                            <p
+                              className="flex-auto truncate font-medium text-black group-hover:text-contrast"
+                              onClick={() => {
+                                changeSelectedDay(day.date);
+                              }}
+                            >
+                              {/* {event.name} */}
+                              {/* for medium screens add ... to name */}
+                              <span className="hidden lg2:flex">
+                                {event.name}
+                              </span>
+                              <span className="lg2:hidden">
+                                {event.name.length > 10
+                                  ? event.name.substring(0, 10) + "..."
+                                  : event.name}
+                              </span>
+                            </p>
+                            {/* tag with Project if isProject is true or Requirement if false */}
+
+                            <div className="flex flex-row">
+                              <span
+                                className={classNames(
+                                  event.isProject
+                                    ? "bg-sky-500 text-white"
+                                    : "bg-pink-400 text-white",
+                                  "inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium text-center justify-center"
+                                )}
+                              >
+                                {/* {event.isProject ? "Project" : "Requirement"}*/}
+                                {/* for larger screens display Requirement for small just Req */}
+                                <span className="hidden lg2:flex">
+                                  {event.isProject ? "Project" : "Requirement"}
+                                </span>
+                                <span className="lg2:hidden">
+                                  {event.isProject ? "Project" : "Req."}
+                                </span>
+                              </span>
+                              {event.priority && (
+                                <span
+                                  className={classNames(
+                                    event.priority === "P1"
+                                      ? "bg-red-100 text-red-800"
+                                      : event.priority === "P2"
+                                      ? "bg-yellow-100 text-yellow-800"
+                                      : "bg-green-100 text-green-800",
+                                    "ml-1 rounded-md px-1"
+                                  )}
+                                >
+                                  {event.priority}
+                                </span>
+                              )}
+                            </div>
+                          </div>
                         </a>
                       </li>
                     ))}
@@ -445,22 +489,38 @@ const CalendarView = ({ projects, requirements }: CalendarViewProps) => {
                 {selectedDay?.events.map((event) => (
                   <li
                     key={event.id}
-                    className="group flex p-4 pr-6 focus-within:bg-gray-50 hover:bg-gray-50"
+                    className="group flex p-4 pr-6 focus-within:bg-gray-50 hover:bg-gray-50 space-y-4"
                   >
-                    <div className="flex-auto">
+                    <div className="flex-auto items-center justify-center">
                       <p className="font-semibold text-gray-900">
                         {event.name}
                       </p>
-                      <time
-                        dateTime={event.datetime}
-                        className="mt-2 flex items-center text-gray-700"
-                      >
-                        <ClockIcon
-                          className="mr-2 h-5 w-5 text-gray-400"
-                          aria-hidden="true"
-                        />
-                        {event.time}
-                      </time>
+                      <div className="flex flex-row items-center">
+                        <span
+                          className={classNames(
+                            event.isProject
+                              ? "bg-cyan-500 text-white"
+                              : "bg-pink-400 text-white",
+                            "inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium text-center justify-center mt-2"
+                          )}
+                        >
+                          {event.isProject ? "Project" : "Requirement"}
+                        </span>
+                        {event.priority && (
+                          <span
+                            className={classNames(
+                              event.priority === "P1"
+                                ? "bg-red-100 text-red-800"
+                                : event.priority === "P2"
+                                ? "bg-yellow-100 text-yellow-800"
+                                : "bg-green-100 text-green-800",
+                              "ml-1 rounded-md px-2 py-1 text-xs justify-center mt-2"
+                            )}
+                          >
+                            {event.priority}
+                          </span>
+                        )}
+                      </div>
                     </div>
                     <a
                       href={event.href}

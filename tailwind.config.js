@@ -17,6 +17,9 @@ module.exports = {
         white2: "#FAFDFE",
         whitepages: "#F5F5F7",
       },
+      screens: {
+        lg2: "1440px",
+      },
     },
   },
   daisyui: {
