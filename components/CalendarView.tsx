@@ -9,14 +9,19 @@ import {
 import { Menu, Transition } from "@headlessui/react";
 import { classNames } from "./utils/general";
 import format from "date-fns/format";
-import { getProjectsAsDays } from "./utils/calendarHelper";
+import {
+  addRequirementsAsDays,
+  getProjectsAsDays,
+  getRequirementsAsDays,
+} from "./utils/calendarHelper";
 import { Days } from "./utils/calendarHelper";
 
 interface CalendarViewProps {
   projects: any;
+  requirements: any;
 }
 
-const CalendarView = ({ projects }: CalendarViewProps) => {
+const CalendarView = ({ projects, requirements }: CalendarViewProps) => {
   // const days = getProjectsAsDays(projects);
 
   const [days, setDays] = useState<Days[]>([]);
@@ -29,9 +34,17 @@ const CalendarView = ({ projects }: CalendarViewProps) => {
   }, [projects]);
 
   useEffect(() => {
+    // setDays(getRequirementsAsDays(requirements, days));
+    const addRequirements = () => {
+      addRequirementsAsDays(requirements, days);
+    };
+    addRequirements();
+  }, [requirements, days]);
+
+  useEffect(() => {
     const selected = days[19];
     if (selected) {
-      days[19].isSelected = true;
+      selected.isSelected = true;
       setSelectedDay(selected);
     }
   }, [days]);

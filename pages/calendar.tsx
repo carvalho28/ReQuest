@@ -32,20 +32,27 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
     { user_id: user?.id }
   );
 
+  // get user requirements info
+  const { data: dataRequirements, error: errorRequirements } =
+    await supabase.rpc("requirements_user", { user_id: user?.id });
+
+  console.log(dataRequirements);
+
   return {
     props: {
       avatar_url: avatar_url,
       projects: dataProjects,
+      requirements: dataRequirements,
     },
   };
 };
 
-export default function Calendar({ avatar_url, projects }: any) {
+export default function Calendar({ avatar_url, projects, requirements }: any) {
   return (
     <div>
       <Layout currentPage="Calendar" avatar_url={avatar_url}>
         <div>
-          <CalendarView projects={projects} />
+          <CalendarView projects={projects} requirements={requirements} />
         </div>
       </Layout>
     </div>

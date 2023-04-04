@@ -155,14 +155,6 @@ export type Days = {
 function getProjectsAsDays(
   projects: Database["public"]["Tables"]["projects"]["Row"][]
 ) {
-  console.log(projects);
-  // get how many days are in the current month
-  const daysInMonth = new Date(
-    new Date().getFullYear(),
-    new Date().getMonth() + 1,
-    0
-  ).getDate();
-
   // create an array with the month, having some days of the previous month and some days of the next month, isCurrentMonth = false and Events = []
   const days: Array<{
     date: string;
@@ -188,7 +180,6 @@ function getProjectsAsDays(
   // define the number of days in the previous and next months
   const daysInPrevMonth = new Date(currentYear, currentMonth - 1, 0).getDate();
   const daysInCurrentMonth = new Date(currentYear, currentMonth, 0).getDate();
-  const daysInNextMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
 
   // define the number of days to show from the previous and next months
   const daysToShowFromPrevMonth =
@@ -260,9 +251,56 @@ function getProjectsAsDays(
     today.isToday = true;
   }
 
-  console.log("after adding projects: ", days);
+  return days;
+}
+
+// [
+//   {
+//     id: 'bfc68220-0cb1-4605-bdda-73e2158d30db',
+//     name: 'Login page',
+//     due_date: '2023-04-11T00:00:00+00:00',
+//     priority: 'P1',
+//     status: 'In Progress'
+//   },
+//   {
+//     id: '885280dd-4cc4-45fe-9b92-2a913f613d2f',
+//     name: 'Register Page',
+//     due_date: '2023-04-04T00:00:00+00:00',
+//     priority: 'P3',
+//     status: 'In Progress'
+//   }
+// ]
+
+function addRequirementsAsDays(
+  requirements: Database["public"]["Tables"]["requirements"]["Row"][],
+  days: Days[]
+) {
+  console.log(requirements);
+  console.log(days);
+
+  requirements.forEach((requirement: any) => {
+    const day = days.find(
+      (day) => day.date === requirement.due_date.split("T")[0]
+    );
+    if (day) {
+      day.events.push({
+        id: requirement.id,
+        name: requirement.name,
+        time: new Date(requirement.due_date).toLocaleTimeString("en-US", {
+          hour: "numeric",
+          minute: "numeric",
+          hour12: true,
+        }),
+        // 2023-03-29T00:00:00+00:00 -> 2023-03-29T00:00
+        datetime: requirement.due_date.substring(0, 16),
+        href: "#",
+      });
+    }
+  });
+
+  console.log("days in getRequirementsAsDays: ", days);
 
   return days;
 }
 
-export { getProjectsAsDays };
+export { getProjectsAsDays, addRequirementsAsDays };
