@@ -41,8 +41,6 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
 };
 
 export default function Calendar({ avatar_url, projects }: any) {
-  console.log(projects);
-
   return (
     <div>
       <Layout currentPage="Calendar" avatar_url={avatar_url}>

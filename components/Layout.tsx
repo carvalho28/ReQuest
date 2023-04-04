@@ -43,7 +43,13 @@ const navigation = [
     count: 0,
     current: false,
   },
-  { name: "Calendar", icon: CalendarIcon, href: "#", count: 0, current: false },
+  {
+    name: "Calendar",
+    icon: CalendarIcon,
+    href: "/calendar",
+    count: 0,
+    current: false,
+  },
   { name: "Documents", icon: InboxIcon, href: "#", count: 0, current: false },
   {
     name: "Settings",
