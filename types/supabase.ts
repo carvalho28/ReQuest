@@ -153,6 +153,18 @@ export interface Database {
       [_ in never]: never
     }
     Functions: {
+      projects_user: {
+        Args: {
+          user_id: string
+        }
+        Returns: {
+          id: string
+          name: string
+          description: string
+          status: string
+          deadline: string
+        }[]
+      }
       projects_user_people: {
         Args: {
           user_id: string
