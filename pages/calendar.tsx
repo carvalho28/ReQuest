@@ -52,9 +52,9 @@ export default function Calendar({ avatar_url, projects, requirements }: any) {
     <div>
       <Layout currentPage="Calendar" avatar_url={avatar_url}>
         <div>
-          <CalendarHeader />
+          <CalendarHeader projects={projects} requirements={requirements} />
           {/* <CalendarViewMonth projects={projects} requirements={requirements} /> */}
-          <CalendarViewYear projects={projects} requirements={requirements} />
+          {/* <CalendarViewYear projects={projects} requirements={requirements} /> */}
         </div>
       </Layout>
     </div>
