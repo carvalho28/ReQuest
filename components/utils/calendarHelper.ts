@@ -1,141 +1,5 @@
 import { Database } from "@/types/supabase";
-
-// const days = [
-//   { date: "2021-12-27", events: [] },
-//   { date: "2021-12-28", events: [] },
-//   { date: "2021-12-29", events: [] },
-//   { date: "2021-12-30", events: [] },
-//   { date: "2021-12-31", events: [] },
-//   { date: "2022-01-01", isCurrentMonth: true, events: [] },
-//   { date: "2022-01-02", isCurrentMonth: true, events: [] },
-//   {
-//     date: "2022-01-03",
-//     isCurrentMonth: true,
-//     events: [
-//       {
-//         id: 1,
-//         name: "Design review",
-//         time: "10AM",
-//         datetime: "2022-01-03T10:00",
-//         href: "#",
-//       },
-//       {
-//         id: 2,
-//         name: "Sales meeting",
-//         time: "2PM",
-//         datetime: "2022-01-03T14:00",
-//         href: "#",
-//       },
-//     ],
-//   },
-//   { date: "2022-01-04", isCurrentMonth: true, events: [] },
-//   { date: "2022-01-05", isCurrentMonth: true, events: [] },
-//   { date: "2022-01-06", isCurrentMonth: true, events: [] },
-//   {
-//     date: "2022-01-07",
-//     isCurrentMonth: true,
-//     events: [
-//       {
-//         id: 3,
-//         name: "Date night",
-//         time: "6PM",
-//         datetime: "2022-01-08T18:00",
-//         href: "#",
-//       },
-//     ],
-//   },
-//   { date: "2022-01-08", isCurrentMonth: true, events: [] },
-//   { date: "2022-01-09", isCurrentMonth: true, events: [] },
-//   { date: "2022-01-10", isCurrentMonth: true, events: [] },
-//   { date: "2022-01-11", isCurrentMonth: true, events: [] },
-//   {
-//     date: "2022-01-12",
-//     isCurrentMonth: true,
-//     isToday: true,
-//     events: [
-//       {
-//         id: 6,
-//         name: "Sam's birthday party",
-//         time: "2PM",
-//         datetime: "2022-01-25T14:00",
-//         href: "#",
-//       },
-//     ],
-//   },
-//   { date: "2022-01-13", isCurrentMonth: true, events: [] },
-//   { date: "2022-01-14", isCurrentMonth: true, events: [] },
-//   { date: "2022-01-15", isCurrentMonth: true, events: [] },
-//   { date: "2022-01-16", isCurrentMonth: true, events: [] },
-//   { date: "2022-01-17", isCurrentMonth: true, events: [] },
-//   { date: "2022-01-18", isCurrentMonth: true, events: [] },
-//   { date: "2022-01-19", isCurrentMonth: true, events: [] },
-//   { date: "2022-01-20", isCurrentMonth: true, events: [] },
-//   { date: "2022-01-21", isCurrentMonth: true, events: [] },
-//   {
-//     date: "2022-01-22",
-//     isCurrentMonth: true,
-//     isSelected: true,
-//     events: [
-//       {
-//         id: 4,
-//         name: "Maple syrup museum",
-//         time: "3PM",
-//         datetime: "2022-01-22T15:00",
-//         href: "#",
-//       },
-//       {
-//         id: 5,
-//         name: "Hockey game",
-//         time: "7PM",
-//         datetime: "2022-01-22T19:00",
-//         href: "#",
-//       },
-//     ],
-//   },
-//   { date: "2022-01-23", isCurrentMonth: true, events: [] },
-//   { date: "2022-01-24", isCurrentMonth: true, events: [] },
-//   { date: "2022-01-25", isCurrentMonth: true, events: [] },
-//   { date: "2022-01-26", isCurrentMonth: true, events: [] },
-//   { date: "2022-01-27", isCurrentMonth: true, events: [] },
-//   { date: "2022-01-28", isCurrentMonth: true, events: [] },
-//   { date: "2022-01-29", isCurrentMonth: true, events: [] },
-//   { date: "2022-01-30", isCurrentMonth: true, events: [] },
-//   { date: "2022-01-31", isCurrentMonth: true, events: [] },
-//   { date: "2022-02-01", events: [] },
-//   { date: "2022-02-02", events: [] },
-//   {
-//     date: "2022-02-03",
-//     events: [
-//       {
-//         id: 7,
-//         name: "Cinema with friends",
-//         time: "9PM",
-//         datetime: "2022-02-04T21:00",
-//         href: "#",
-//       },
-//     ],
-//   },
-//   { date: "2022-02-04", events: [] },
-//   { date: "2022-02-05", events: [] },
-//   { date: "2022-02-06", events: [] },
-// ];
-
-// [
-//     {
-//       id: 'dd06e9a6-7346-4f6d-9a1b-4ef5ba195cd2',
-//       name: 'Projeto SO',
-//       description: 'Tiny web server.',
-//       status: 'Active',
-//       deadline: '2023-03-30T00:00:00+00:00'
-//     },
-//     {
-//       id: '200d20db-9526-4d27-bf54-52c31bba8acd',
-//       name: 'Diogo',
-//       description: 'dfgdfsgsdf',
-//       status: 'Active',
-//       deadline: '2023-03-29T00:00:00+00:00'
-//     }
-//   ]
+import { classNames } from "./general";
 
 export type Days = {
   date: string;
@@ -259,23 +123,6 @@ function getProjectsAsDays(
   return days;
 }
 
-// [
-//   {
-//     id: 'bfc68220-0cb1-4605-bdda-73e2158d30db',
-//     name: 'Login page',
-//     due_date: '2023-04-11T00:00:00+00:00',
-//     priority: 'P1',
-//     status: 'In Progress'
-//   },
-//   {
-//     id: '885280dd-4cc4-45fe-9b92-2a913f613d2f',
-//     name: 'Register Page',
-//     due_date: '2023-04-04T00:00:00+00:00',
-//     priority: 'P3',
-//     status: 'In Progress'
-//   }
-// ]
-
 function addRequirementsAsDays(
   requirements: Database["public"]["Tables"]["requirements"]["Row"][],
   days: Days[]
@@ -310,4 +157,85 @@ function addRequirementsAsDays(
   return days;
 }
 
-export { getProjectsAsDays, addRequirementsAsDays };
+export type DaysYear = {
+  id: string;
+  name: string;
+  date: string;
+  isCurrentMonth: boolean;
+  isToday?: boolean;
+  events: Array<{
+    id: string;
+    name: string;
+    isProject: boolean;
+    priority?: string;
+    date: string;
+    href: string;
+  }>;
+};
+
+export type MonthYear = {
+  name: string;
+  days: DaysYear[];
+};
+
+// convert the requirements and projects into days
+function getProjReqYear(
+  proj: Database["public"]["Tables"]["projects"]["Row"][],
+  req: Database["public"]["Tables"]["requirements"]["Row"][],
+  year: number
+) {
+  const months: MonthYear[] = [];
+  const currentMonth = new Date().getMonth() + 1; // adding 1 to get the correct month number
+  const todayDay = new Date().getDate();
+  for (let i = 0; i < 12; i++) {
+    const numDays = new Date(year, i + 1, 0).getDate(); // get number of days in month
+    const month: MonthYear = {
+      name: new Date(year, i).toLocaleString("en-US", { month: "long" }),
+      days: [],
+    };
+    for (let j = 1; j <= numDays; j++) {
+      // add isCurrentMonth to the days in the current month, and istoday to the day that is today
+      const day: DaysYear = {
+        id: `${year}-${i}-${j}`,
+        name: `${j}`,
+        date: `${year}-${i}-${j}`,
+        isCurrentMonth: i === currentMonth - 1,
+        isToday: i === currentMonth - 1 && j === todayDay,
+        events: [],
+      };
+      month.days.push(day);
+    }
+    months.push(month);
+  }
+
+  // add the projects to the days
+  proj.forEach((project: any) => {
+    const month = months[new Date(project.deadline).getMonth()];
+    const day = month.days[new Date(project.deadline).getDate() - 1];
+    day.events.push({
+      id: project.id,
+      name: project.name,
+      isProject: true,
+      date: project.deadline,
+      href: "#",
+    });
+  });
+
+  // add the requirements to the days
+  req.forEach((requirement: any) => {
+    const month = months[new Date(requirement.due_date).getMonth()];
+    const day = month.days[new Date(requirement.due_date).getDate() - 1];
+    day.events.push({
+      id: requirement.id,
+      name: requirement.name,
+      isProject: false,
+      priority: requirement.priority,
+      date: requirement.due_date,
+      href: "#",
+    });
+  });
+
+  return months;
+}
+
+export { getProjectsAsDays, addRequirementsAsDays, getProjReqYear };

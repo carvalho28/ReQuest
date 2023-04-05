@@ -1,4 +1,6 @@
-import CalendarView from "@/components/CalendarView";
+import CalendarHeader from "@/components/CalendarHeader";
+import CalendarViewMonth from "@/components/CalendarViewMonth";
+import CalendarViewYear from "@/components/CalendarViewYear";
 import Layout from "@/components/Layout";
 import { createServerSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import { GetServerSidePropsContext } from "next";
@@ -52,7 +54,9 @@ export default function Calendar({ avatar_url, projects, requirements }: any) {
     <div>
       <Layout currentPage="Calendar" avatar_url={avatar_url}>
         <div>
-          <CalendarView projects={projects} requirements={requirements} />
+          <CalendarHeader />
+          {/* <CalendarViewMonth projects={projects} requirements={requirements} /> */}
+          <CalendarViewYear projects={projects} requirements={requirements} />
         </div>
       </Layout>
     </div>
