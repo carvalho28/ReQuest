@@ -31,8 +31,33 @@ const CalendarViewYear = ({
   const [months, setMonths] = useState<any>([]);
 
   function handleDayClick(day: any) {
-    setSelectedEvents(day.events);
+    // console.log(day);
+    const events = day.events;
+    setSelectedEvents(events);
+
+    months.forEach((month: any) => {
+      month.days.forEach((d: any) => {
+        if (d.date === day.date) {
+          d.isSelected = true;
+        } else {
+          d.isSelected = false;
+        }
+      });
+    });
+
+    console.log(events);
+
+    // scroll to the event list and a bit more
+    const eventList = document.getElementById("event-list");
+    if (events.length !== 0 && eventList) {
+      eventList.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
   }
+
+  //   update useSelectedEvents
+  useEffect(() => {
+    setSelectedEvents(selectedEvents);
+  }, [selectedEvents]);
 
   useEffect(() => {
     // get current year
@@ -80,7 +105,8 @@ const CalendarViewYear = ({
                       dateTime={day.date}
                       className={classNames(
                         day.isToday && "bg-contrast font-semibold text-white",
-                        "mx-auto flex h-7 w-7 items-center justify-center rounded-full relative"
+                        day.isSelected && "bg-gray-300 text-white",
+                        "mx-auto flex h-7 w-7 items-center justify-center rounded-full relative m-2"
                       )}
                     >
                       {day.date.split("-").pop().replace(/^0/, "")}
@@ -125,32 +151,50 @@ const CalendarViewYear = ({
           ))}
         </div>
       </div>
-      <div>Events</div>
-      {/* {selectedEvents && (
-        <ul>
-          {selectedEvents.map((event) => (
-            <li key={event.id}>{event.title}</li>
-          ))}
-        </ul>
-      )} */}
+      {selectedEvents && (
+        <div className="px-4 py-10 sm:px-6" id="event-list">
+          <ol className="divide-y divide-gray-100 overflow-hidden rounded-lg bg-white text-sm shadow ring-1 ring-black ring-opacity-5">
+            {selectedEvents?.map((event: any) => (
+              <li
+                key={event.id}
+                className="group flex p-4 pr-6 focus-within:bg-gray-50 hover:bg-gray-50 space-y-4"
+              >
+                <div className="flex-auto items-center justify-center">
+                  <p className="font-semibold text-gray-900">{event.name}</p>
+                  <div className="flex flex-row items-center">
+                    <span
+                      className={classNames(
+                        event.isProject
+                          ? "bg-cyan-500 text-white"
+                          : "bg-pink-400 text-white",
+                        "inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium text-center justify-center mt-2"
+                      )}
+                    >
+                      {event.isProject ? "Project" : "Requirement"}
+                    </span>
+                    {event.priority && (
+                      <span
+                        className={classNames(
+                          event.priority === "P1"
+                            ? "bg-red-100 text-red-800"
+                            : event.priority === "P2"
+                            ? "bg-yellow-100 text-yellow-800"
+                            : "bg-green-100 text-green-800",
+                          "ml-1 rounded-md px-2 py-1 text-xs justify-center mt-2"
+                        )}
+                      >
+                        {event.priority}
+                      </span>
+                    )}
+                  </div>
+                </div>
+              </li>
+            ))}
+          </ol>
+        </div>
+      )}
     </div>
   );
 };
 
 export default CalendarViewYear;
-
-// {day.events && (
-//     <div className="-mt-4">
-//       {day.events.length > 0 && (
-//         <span className="text-gray-400">•</span>
-//       )}
-//       {day.events.length > 1 && (
-//         <span className="text-gray-400">•</span>
-//       )}
-//       {day.events.length > 2 && (
-//         <span className="text-gray-400">•</span>
-//       )}
-//       {day.events.length > 3 && (
-//         <span className="text-gray-400">+</span>
-//       )}
-//   )}

@@ -163,6 +163,7 @@ export type DaysYear = {
   date: string;
   isCurrentMonth: boolean;
   isToday?: boolean;
+  isSelected?: boolean;
   events: Array<{
     id: string;
     name: string;
@@ -202,6 +203,7 @@ function getProjReqYear(
         isCurrentMonth: i === currentMonth - 1,
         isToday: i === currentMonth - 1 && j === todayDay,
         events: [],
+        isSelected: false,
       };
       month.days.push(day);
     }
