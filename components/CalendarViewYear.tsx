@@ -1,27 +1,11 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { classNames } from "./utils/general";
-import { getProjReqYear, MonthYear, DaysYear } from "./utils/calendarHelper";
+import { getProjReqYear, MonthYear } from "./utils/calendarHelper";
 
 interface CalendarViewYearProps {
   projects: any;
   requirements: any;
 }
-
-interface DayProps {
-  events: any[]; // assuming each event is an object with some properties
-}
-
-// function to render dots for the number of events on a day, if more than 3 events, add + after the 3rd
-// const Day = ({ events }: DayProps) => {
-//   return (
-//     <div className="flex justify-center">
-//       {events && events.length > 0 && <span className="text-gray-400">•</span>}
-//       {events && events.length > 1 && <span className="text-gray-400">•</span>}
-//       {events && events.length > 2 && <span className="text-gray-400">•</span>}
-//       {events && events.length > 3 && <span className="text-gray-400">+</span>}
-//     </div>
-//   );
-// };
 
 const CalendarViewYear = ({
   projects,
@@ -44,8 +28,6 @@ const CalendarViewYear = ({
         }
       });
     });
-
-    console.log(events);
 
     // scroll to the event list and a bit more
     const eventList = document.getElementById("event-list");

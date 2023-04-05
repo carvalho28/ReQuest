@@ -152,8 +152,6 @@ function addRequirementsAsDays(
     }
   });
 
-  console.log("days in getRequirementsAsDays: ", days);
-
   return days;
 }
 

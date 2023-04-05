@@ -38,8 +38,6 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   const { data: dataRequirements, error: errorRequirements } =
     await supabase.rpc("requirements_user", { user_id: user?.id });
 
-  console.log(dataRequirements);
-
   return {
     props: {
       avatar_url: avatar_url,
