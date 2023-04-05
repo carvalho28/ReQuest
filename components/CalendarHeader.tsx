@@ -23,22 +23,46 @@ const CalendarHeader = ({ projects, requirements }: CalendarHeaderProps) => {
   const [month, setMonth] = useState(new Date());
   const [year, setYear] = useState(new Date());
 
-  function addMonthOrYear() {
+  function addMonth() {
     let currentMonth = month.getMonth();
     let currentYear = year.getFullYear();
-
     let newMonth = new Date(currentYear, currentMonth + 1, 1);
-
     setMonth(newMonth);
   }
 
-  function subtractMonthOrYear() {
+  function subtractMonth() {
     let currentMonth = month.getMonth();
     let currentYear = year.getFullYear();
-
     let newMonth = new Date(currentYear, currentMonth - 1, 1);
-
     setMonth(newMonth);
+  }
+
+  function addYear() {
+    let currentYear = year.getFullYear();
+    let newYear = new Date(currentYear + 1, 0, 1);
+    setYear(newYear);
+  }
+
+  function subtractYear() {
+    let currentYear = year.getFullYear();
+    let newYear = new Date(currentYear - 1, 0, 1);
+    setYear(newYear);
+  }
+
+  function addMonthOrYear() {
+    if (isMonthView) {
+      addMonth();
+    } else if (isYearView) {
+      addYear();
+    }
+  }
+
+  function subtractMonthOrYear() {
+    if (isMonthView) {
+      subtractMonth();
+    } else if (isYearView) {
+      subtractYear();
+    }
   }
 
   return (
@@ -215,7 +239,11 @@ const CalendarHeader = ({ projects, requirements }: CalendarHeaderProps) => {
         <CalendarViewMonth projects={projects} requirements={requirements} />
       )}
       {isYearView && (
-        <CalendarViewYear projects={projects} requirements={requirements} />
+        <CalendarViewYear
+          projects={projects}
+          requirements={requirements}
+          year={year}
+        />
       )}
     </div>
   );

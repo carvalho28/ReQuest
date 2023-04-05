@@ -5,11 +5,13 @@ import { getProjReqYear, MonthYear } from "./utils/calendarHelper";
 interface CalendarViewYearProps {
   projects: any;
   requirements: any;
+  year: any;
 }
 
 const CalendarViewYear = ({
   projects,
   requirements,
+  year,
 }: CalendarViewYearProps) => {
   const [selectedEvents, setSelectedEvents] = useState([]);
   const [months, setMonths] = useState<any>([]);
@@ -42,11 +44,11 @@ const CalendarViewYear = ({
   }, [selectedEvents]);
 
   useEffect(() => {
-    // get current year
-    const currentYear = new Date().getFullYear();
-    const months = getProjReqYear(projects, requirements, currentYear);
+    console.log("year useEffect", year);
+
+    const months = getProjReqYear(projects, requirements, year.getFullYear());
     setMonths(months);
-  }, [projects, requirements]);
+  }, [projects, requirements, year]);
 
   return (
     <div>
