@@ -55,7 +55,7 @@ function getProjectsAsDays(
   const daysToShowFromPrevMonth =
     firstDayOfMonth !== 0 ? firstDayOfMonth - 1 : 6; // adjust for Sunday being 0
   const daysToShowFromNextMonth =
-    7 - ((daysToShowFromPrevMonth + daysInCurrentMonth) % 7);
+    42 - (daysInCurrentMonth + daysToShowFromPrevMonth);
 
   // create the array
   for (
