@@ -1,13 +1,5 @@
-import { Fragment, useEffect, useState } from "react";
-import {
-  ChevronDownIcon,
-  ChevronLeftIcon,
-  ChevronRightIcon,
-  EllipsisHorizontalIcon,
-} from "@heroicons/react/20/solid";
-import { Menu, Transition } from "@headlessui/react";
+import { useEffect, useState } from "react";
 import { classNames } from "./utils/general";
-import format from "date-fns/format";
 import {
   addRequirementsAsDays,
   getProjectsAsDays,
@@ -17,9 +9,14 @@ import { Days } from "./utils/calendarHelper";
 interface CalendarViewProps {
   projects: any;
   requirements: any;
+  monthYear: any;
 }
 
-const CalendarViewMonth = ({ projects, requirements }: CalendarViewProps) => {
+const CalendarViewMonth = ({
+  projects,
+  requirements,
+  monthYear,
+}: CalendarViewProps) => {
   // const days = getProjectsAsDays(projects);
 
   const [days, setDays] = useState<Days[]>([]);
@@ -28,8 +25,8 @@ const CalendarViewMonth = ({ projects, requirements }: CalendarViewProps) => {
   const [selectedDay, setSelectedDay] = useState<Days>();
 
   useEffect(() => {
-    setDays(getProjectsAsDays(projects));
-  }, [projects]);
+    setDays(getProjectsAsDays(projects, monthYear));
+  }, [projects, monthYear]);
 
   useEffect(() => {
     // setDays(getRequirementsAsDays(requirements, days));

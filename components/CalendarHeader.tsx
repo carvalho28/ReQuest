@@ -236,7 +236,11 @@ const CalendarHeader = ({ projects, requirements }: CalendarHeaderProps) => {
         </div>
       </header>
       {isMonthView && (
-        <CalendarViewMonth projects={projects} requirements={requirements} />
+        <CalendarViewMonth
+          projects={projects}
+          requirements={requirements}
+          monthYear={month}
+        />
       )}
       {isYearView && (
         <CalendarViewYear

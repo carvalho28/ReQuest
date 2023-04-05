@@ -1,6 +1,4 @@
 import { Database } from "@/types/supabase";
-import { classNames } from "./general";
-import moment from "moment";
 
 export type Days = {
   date: string;
@@ -20,7 +18,8 @@ export type Days = {
 
 // write a function that returns the projects in the form of the days array
 function getProjectsAsDays(
-  projects: Database["public"]["Tables"]["projects"]["Row"][]
+  projects: Database["public"]["Tables"]["projects"]["Row"][],
+  monthYear: Date
 ) {
   // create an array with the month, having some days of the previous month and some days of the next month, isCurrentMonth = false and Events = []
   const days: Array<{
@@ -39,9 +38,11 @@ function getProjectsAsDays(
     }>;
   }> = [];
 
-  // define the current month and year
-  const currentMonth = new Date().getMonth() + 1; // adding 1 to get the correct month number
-  const currentYear = new Date().getFullYear();
+  console.log("MonthYear", monthYear);
+
+  // define the month and year to use
+  const currentMonth = monthYear.getMonth() + 1;
+  const currentYear = monthYear.getFullYear();
 
   // define the first day of the month
   const firstDayOfMonth = new Date(currentYear, currentMonth - 1, 1).getDay();
