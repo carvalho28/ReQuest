@@ -178,6 +178,18 @@ export interface Database {
           project_users: string[]
         }[]
       }
+      requirements_user: {
+        Args: {
+          user_id: string
+        }
+        Returns: {
+          id: string
+          name: string
+          due_date: string
+          priority: string
+          status: string
+        }[]
+      }
     }
     Enums: {
       [_ in never]: never
