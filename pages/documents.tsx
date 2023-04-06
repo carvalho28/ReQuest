@@ -1,7 +1,7 @@
-import CalendarHeader from "@/components/CalendarHeader";
 import Layout from "@/components/Layout";
 import { createServerSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import { GetServerSidePropsContext } from "next";
+import { useState } from "react";
 
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   const supabase = createServerSupabaseClient(ctx);
@@ -26,34 +26,18 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   if (!data) throw new Error("No data found");
   const avatar_url = data[0].avatar_url;
 
-  // get user projects info
-  const { data: dataProjects, error: errorProjects } = await supabase.rpc(
-    "projects_user",
-    { user_id: user?.id }
-  );
-
-  // get user requirements info
-  const { data: dataRequirements, error: errorRequirements } =
-    await supabase.rpc("requirements_user", { user_id: user?.id });
-
   return {
     props: {
       avatar_url: avatar_url,
-      projects: dataProjects,
-      requirements: dataRequirements,
     },
   };
 };
 
-export default function Calendar({ avatar_url, projects, requirements }: any) {
+export default function Documents({ avatar_url }: any) {
   return (
     <div>
-      <Layout currentPage="Calendar" avatar_url={avatar_url}>
-        <div>
-          <CalendarHeader projects={projects} requirements={requirements} />
-          {/* <CalendarViewMonth projects={projects} requirements={requirements} /> */}
-          {/* <CalendarViewYear projects={projects} requirements={requirements} /> */}
-        </div>
+      <Layout currentPage="Documents" avatar_url={avatar_url}>
+        <div>ad</div>
       </Layout>
     </div>
   );
