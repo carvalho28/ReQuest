@@ -4,6 +4,8 @@ import {
   Bars3Icon,
   CalendarIcon,
   ChatBubbleBottomCenterTextIcon,
+  ChevronLeftIcon,
+  ChevronRightIcon,
   Cog6ToothIcon,
   FolderIcon,
   InboxIcon,
@@ -80,6 +82,20 @@ const Layout = ({
 
   const [isProfile, setIsProfile] = useState<boolean>(false);
   const [navItems, setNavItems] = useState([...navigation]);
+
+  const [isCollapsed, setIsCollapsed] = useState<boolean>(false);
+
+  function getIsCollapsed() {
+    setIsCollapsed(!isCollapsed);
+    localStorage.setItem("isCollapsed", JSON.stringify(!isCollapsed));
+  }
+
+  useEffect(() => {
+    const isCollapsed = localStorage.getItem("isCollapsed");
+    if (isCollapsed) {
+      setIsCollapsed(JSON.parse(isCollapsed));
+    }
+  }, []);
 
   useEffect(() => {
     setNavItems((prevNavItems) =>
@@ -268,103 +284,225 @@ const Layout = ({
         </Transition.Root>
 
         {/* Static sidebar for desktop */}
-        <div className="hidden lg:fixed lg:inset-y-0 lg:flex lg:w-64 lg:flex-col sidebar-background">
-          {/* Sidebar component, swap this element with another sidebar if you like */}
-          <div className="flex min-h-0 flex-1 flex-col mt-4">
-            <div className="flex flex-1 flex-col overflow-y-auto pt-5 pb-4">
-              <div className="flex flex-shrink-0 items-center px-4">
-                <Image
-                  className="h-8 w-auto hover:cursor-pointer"
-                  src="/logo.svg"
-                  alt="ReQuest"
-                  width={175}
-                  height={150}
-                  priority={true}
-                  onClick={() => router.push("/dashboard")}
-                />
-              </div>
-
-              <div
-                className={classNames(
-                  isProfile
-                    ? "bg-whitepages rounded-l-3xl"
-                    : "hover:bg-whitepages rounded-l-3xl hover:cursor-pointer",
-                  "flex text-center justify-center mt-10 ml-6"
-                )}
-              >
-                {avatar_url ? (
+        {!isCollapsed ? (
+          <div className="hidden lg:fixed lg:inset-y-0 lg:flex lg:w-64 lg:flex-col sidebar-background">
+            {/* Sidebar component, swap this element with another sidebar if you like */}
+            <div className="flex min-h-0 flex-1 flex-col mt-4">
+              <div className="flex flex-1 flex-col overflow-y-auto pt-5 pb-4">
+                <div className="flex flex-shrink-0 items-center px-4">
                   <Image
-                    id="Profile"
-                    className="h-auto w-48 pb-5"
-                    src={avatar_url}
-                    alt="Avatar"
+                    className="h-8 w-auto hover:cursor-pointer"
+                    src="/logo.svg"
+                    alt="ReQuest"
+                    width={175}
+                    height={150}
                     priority={true}
-                    width={32}
-                    height={32}
-                    onClick={() => profileClick()}
+                    onClick={() => router.push("/dashboard")}
                   />
-                ) : (
-                  <></>
-                )}
-              </div>
-              {/* <div className="mt-12 flex flex-grow flex-col"> */}
-              <nav className="mt-5 flex-1 space-y-4 pl-6" aria-label="Sidebar">
-                {navItems.map((item) => (
-                  <Link
-                    key={item.name}
-                    href={item.href}
-                    className={classNames(
-                      item.current
-                        ? "bg-whitepages text-black"
-                        : "text-white hover:bg-whitepages hover:text-black",
-                      "group flex items-center px-2 pl-5 py-4 text-md font-medium rounded-l-full"
-                    )}
-                  >
-                    <item.icon
+
+                  {/* collapse icon if true chevron right if false chevron left */}
+                  <div className="flex flex-grow justify-end">
+                    <button
+                      type="button"
+                      className="ml-1 flex h-10 w-10 items-center justify-center rounded-full focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
+                      onClick={() => getIsCollapsed()}
+                    >
+                      {isCollapsed ? (
+                        <ChevronRightIcon
+                          className="h-6 w-6 text-white"
+                          aria-hidden="true"
+                        />
+                      ) : (
+                        <ChevronLeftIcon
+                          className="h-6 w-6 text-white"
+                          aria-hidden="true"
+                        />
+                      )}
+                    </button>
+                  </div>
+                </div>
+
+                <div
+                  className={classNames(
+                    isProfile
+                      ? "bg-whitepages rounded-l-3xl"
+                      : "hover:bg-whitepages rounded-l-3xl hover:cursor-pointer",
+                    "flex text-center justify-center mt-10 ml-6"
+                  )}
+                >
+                  {avatar_url ? (
+                    <Image
+                      id="Profile"
+                      className="h-auto w-48 pb-5"
+                      src={avatar_url}
+                      alt="Avatar"
+                      priority={true}
+                      width={32}
+                      height={32}
+                      onClick={() => profileClick()}
+                    />
+                  ) : (
+                    <></>
+                  )}
+                </div>
+                {/* <div className="mt-12 flex flex-grow flex-col"> */}
+                <nav
+                  className="mt-5 flex-1 space-y-4 pl-6"
+                  aria-label="Sidebar"
+                >
+                  {navItems.map((item) => (
+                    <Link
+                      key={item.name}
+                      href={item.href}
                       className={classNames(
                         item.current
-                          ? "text-primarygreen"
-                          : "text-whitepages group-hover:text-primarygreen",
-                        "mr-3 h-6 w-6 flex-shrink-0"
+                          ? "bg-whitepages text-black"
+                          : "text-white hover:bg-whitepages hover:text-black",
+                        "group flex items-center px-2 pl-5 py-4 text-md font-medium rounded-l-full"
                       )}
-                      aria-hidden="true"
-                    />
-                    <span className="flex-1">{item.name}</span>
-                    {item.count ? (
-                      <span
+                    >
+                      <item.icon
                         className={classNames(
                           item.current
-                            ? "bg-primarygreen text-white"
-                            : "bg-whitepages group-hover:bg-gray-400 text-black",
-                          "ml-3 mr-2 inline-block rounded-full py-0.5 px-3 text-xs font-medium"
+                            ? "text-primarygreen"
+                            : "text-whitepages group-hover:text-primarygreen",
+                          "mr-3 h-6 w-6 flex-shrink-0"
                         )}
-                      >
-                        {item.count}
-                      </span>
-                    ) : null}
-                  </Link>
-                ))}
-              </nav>
-              {/* </div> */}
-            </div>
-            <div className="flex flex-shrink p-8 justify-center">
-              <button
-                className="flex items-center justify-center w-10 h-10 rounded-full bg-white hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
-                onClick={userLogout}
-              >
-                <ArrowRightOnRectangleIcon
-                  className="text-black h-6 w-6"
-                  aria-hidden="true"
-                />
-              </button>
+                        aria-hidden="true"
+                      />
+                      <span className="flex-1">{item.name}</span>
+                      {item.count ? (
+                        <span
+                          className={classNames(
+                            item.current
+                              ? "bg-primarygreen text-white"
+                              : "bg-whitepages group-hover:bg-gray-400 text-black",
+                            "ml-3 mr-2 inline-block rounded-full py-0.5 px-3 text-xs font-medium"
+                          )}
+                        >
+                          {item.count}
+                        </span>
+                      ) : null}
+                    </Link>
+                  ))}
+                </nav>
+                {/* </div> */}
+              </div>
+              <div className="flex flex-shrink p-8 justify-center">
+                <button
+                  className="flex items-center justify-center w-10 h-10 rounded-full bg-white hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
+                  onClick={userLogout}
+                >
+                  <ArrowRightOnRectangleIcon
+                    className="text-black h-6 w-6"
+                    aria-hidden="true"
+                  />
+                </button>
+              </div>
             </div>
           </div>
-        </div>
-        <div className="flex flex-1 flex-col lg:pl-64">
+        ) : (
+          <div className="hidden lg:fixed lg:inset-y-0 lg:flex lg:w-16 lg:flex-col sidebar-background">
+            {/* Sidebar component, swap this element with another sidebar if you like */}
+            <div className="flex min-h-0 flex-1 flex-col mt-4">
+              <div className="flex flex-1 flex-col overflow-y-auto pt-5 pb-4">
+                <div className="flex flex-shrink-0 items-center px-4 flex-col">
+                  <Image
+                    className="h-8 w-auto hover:cursor-pointer"
+                    src="/logo.svg"
+                    alt="ReQuest"
+                    width={175}
+                    height={150}
+                    priority={true}
+                    onClick={() => router.push("/dashboard")}
+                  />
+
+                  {/* collapse icon if true chevron right if false chevron left */}
+                  <div className="flex flex-grow justify-end mt-5">
+                    <button
+                      type="button"
+                      className="ml-1 flex h-10 w-10 items-center justify-center rounded-full focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
+                      onClick={() => getIsCollapsed()}
+                    >
+                      {isCollapsed ? (
+                        <ChevronRightIcon
+                          className="h-6 w-6 text-white"
+                          aria-hidden="true"
+                        />
+                      ) : (
+                        <ChevronLeftIcon
+                          className="h-6 w-6 text-white"
+                          aria-hidden="true"
+                        />
+                      )}
+                    </button>
+                  </div>
+                </div>
+
+                <div
+                  className={classNames(
+                    isProfile
+                      ? "bg-whitepages rounded-l-3xl"
+                      : "hover:bg-whitepages rounded-l-3xl hover:cursor-pointer",
+                    "flex text-center justify-center mt-10"
+                  )}
+                >
+                  {avatar_url ? (
+                    <Image
+                      id="Profile"
+                      className="h-auto pb-2 w-14"
+                      src={avatar_url}
+                      alt="Avatar"
+                      priority={true}
+                      width={32}
+                      height={32}
+                      onClick={() => profileClick()}
+                    />
+                  ) : (
+                    <></>
+                  )}
+                </div>
+                <nav
+                  className="mt-5 flex-1 space-y-4 pl-1"
+                  aria-label="Sidebar"
+                >
+                  {navItems.map((item) => (
+                    <Link
+                      key={item.name}
+                      href={item.href}
+                      className={classNames(
+                        item.current
+                          ? "bg-whitepages text-black"
+                          : "text-white hover:bg-whitepages hover:text-black",
+                        "group flex items-center py-4 text-md font-medium rounded-l-full pl-4"
+                      )}
+                    >
+                      <item.icon
+                        className={classNames(
+                          item.current
+                            ? "text-primarygreen"
+                            : "text-whitepages group-hover:text-primarygreen",
+                          "mr-3 h-6 w-6 flex-shrink-0"
+                        )}
+                        aria-hidden="true"
+                      />
+                    </Link>
+                  ))}
+                </nav>
+              </div>
+            </div>
+          </div>
+        )}
+        <div
+          className={classNames(
+            isCollapsed ? "lg:ml-16" : "lg:ml-64",
+            "flex flex-1 flex-col"
+          )}
+        >
           <div className="sticky top-0 z-10 bg-gray-100 pl-1 pt-1 sm:pl-3 sm:pt-3 lg:hidden">
             <button
               type="button"
-              className="-ml-0.5 -mt-0.5 inline-flex h-12 w-12 items-center justify-center rounded-md text-black focus:outline-none focus:ring-2 focus:ring-inset focus:ring-contrast"
+              className="-ml-0.5 -mt-0.5 inline-flex h-12 w-12 items-center justify-center rounded-md text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-contrast bg-contrast hover:bg-contrasthover"
               onClick={() => setSidebarOpen(true)}
             >
               <span className="sr-only">Open sidebar</span>

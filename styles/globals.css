@@ -22,3 +22,16 @@ body {
 .sidebar-background {
   background: linear-gradient(to top, #32c487 6%, #0998b7 30%);
 }
+
+/* set scroll-bar colors with #0998b7 and #32c487 */
+/* ::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+  cursor: pointer;
+  background-color: #f5f5f7;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #0998b7;
+  border-radius: 10px;
+} */
