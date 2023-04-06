@@ -3,6 +3,7 @@ import Loading from "./Loading";
 import { EllipsisVerticalIcon } from "@heroicons/react/24/outline";
 import { FileIcon } from "react-file-utils";
 import Image from "next/image";
+import { RiDownload2Line, RiDownloadLine } from "react-icons/ri";
 
 interface CardFileProps {
   files: any;
@@ -20,6 +21,11 @@ const CardFile = ({ files }: CardFileProps) => {
 
   function handleClose() {
     setIsModalOpen(false);
+  }
+
+  function downloadOnClick(url: string) {
+    // start download of file
+    window.open(url, "_blank");
   }
 
   if (!files) {
@@ -115,12 +121,13 @@ const CardFile = ({ files }: CardFileProps) => {
                   <div className="flex-shrink-0 pr-2">
                     <button
                       type="button"
-                      className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-transparent bg-white text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                      className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-transparent bg-white text-gray-400 hover:text-black focus:outline-none focus:ring-2 focus:ring-contrast focus:ring-offset-2"
                     >
                       <span className="sr-only">Open options</span>
-                      <EllipsisVerticalIcon
-                        className="h-5 w-5"
+                      <RiDownloadLine
+                        className="h-6 w-6"
                         aria-hidden="true"
+                        onClick={() => downloadOnClick(file.url)}
                       />
                     </button>
                   </div>
