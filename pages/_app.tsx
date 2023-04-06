@@ -1,5 +1,8 @@
 import "@/styles/globals.css";
 import "@/styles/tiptap.scss";
+import "@uppy/core/dist/style.min.css";
+import "@uppy/dashboard/dist/style.min.css";
+import "@uppy/progress-bar/dist/style.min.css";
 
 import type { AppProps } from "next/app";
 import { Inter } from "next/font/google";
