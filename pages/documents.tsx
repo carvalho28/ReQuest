@@ -6,14 +6,6 @@ import { GetServerSidePropsContext } from "next";
 import { Dashboard } from "@uppy/react";
 import { useSupabaseClient, useUser } from "@supabase/auth-helpers-react";
 import { useEffect, useState } from "react";
-import {
-  FaFile,
-  FaFileExcel,
-  FaFilePdf,
-  FaFilePowerpoint,
-  FaFileVideo,
-  FaFileWord,
-} from "react-icons/fa";
 import CardFile from "@/components/CardFile";
 
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
@@ -122,10 +114,7 @@ export default function Documents({ avatar_url }: any) {
             <ProgressBar uppy={uppy} />
           </div>
           {/* show user files */}
-          <div>
-            <h1>My Files</h1>
-            {files && <CardFile files={files} />}
-          </div>
+          <div>{files && <CardFile files={files} />}</div>
         </div>
       </Layout>
     </div>
