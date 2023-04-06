@@ -17,17 +17,15 @@ interface CardFileProps {
 }
 
 const CardFile = ({ files }: CardFileProps) => {
-  console.log("files in cardfile: ", files);
-
   if (!files) {
     return <Loading />;
   } else {
     return (
-      <div>
-        <h2 className="text-sm font-medium text-gray-500">My Files</h2>
+      <div className="bg-white p-4 rounded-lg shadow-md">
+        <h2 className="text-xl font-medium text-black text-center">My Files</h2>
         <ul
           role="list"
-          className="mt-3 grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-4"
+          className="mt-8 grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-4"
         >
           {files.map((file: any) => {
             return (

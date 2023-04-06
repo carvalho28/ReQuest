@@ -2,7 +2,7 @@ import Layout from "@/components/Layout";
 import Uppy from "@uppy/core";
 import { createServerSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import { GetServerSidePropsContext } from "next";
-import { Dashboard, ProgressBar } from "@uppy/react";
+import { Dashboard } from "@uppy/react";
 import { useSupabaseClient, useUser } from "@supabase/auth-helpers-react";
 import { useEffect, useState } from "react";
 import CardFile from "@/components/CardFile";
@@ -113,19 +113,19 @@ export default function Documents({ avatar_url }: any) {
     <div>
       <Layout currentPage="Documents" avatar_url={avatar_url}>
         <div>
-          <div>
+          <div>{files && <CardFile files={files} />}</div>
+
+          <div className="mt-5">
             <Dashboard
+              className="mx-auto"
               uppy={uppy}
               proudlyDisplayPoweredByUppy={false}
               // allow images to be edited
-
               metaFields={[
                 { id: "name", name: "Name", placeholder: "file name" },
               ]}
             />
           </div>
-          {/* show user files */}
-          <div>{files && <CardFile files={files} />}</div>
         </div>
       </Layout>
     </div>
