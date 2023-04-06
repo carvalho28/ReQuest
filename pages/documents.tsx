@@ -1,9 +1,8 @@
 import Layout from "@/components/Layout";
 import Uppy from "@uppy/core";
-import { ProgressBar } from "@uppy/react";
 import { createServerSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import { GetServerSidePropsContext } from "next";
-import { Dashboard } from "@uppy/react";
+import { Dashboard, ProgressBar } from "@uppy/react";
 import { useSupabaseClient, useUser } from "@supabase/auth-helpers-react";
 import { useEffect, useState } from "react";
 import CardFile from "@/components/CardFile";
@@ -56,20 +55,36 @@ export default function Documents({ avatar_url }: any) {
   uppy.on("complete", async (result) => {
     const uuid = user?.id;
     if (!uuid) return;
-    const { error } = await supabaseClient.storage
-      .from("user-files")
-      .upload(
-        `${uuid}/${result.successful[0].name}`,
-        result.successful[0].data
-      );
-    if (error) {
-      if (error.message === "The resource already exists") {
+
+    // upload multiple files
+    for (let i = 0; i < result.successful.length; i++) {
+      const { error } = await supabaseClient.storage
+        .from("user-files")
+        .upload(
+          `${uuid}/${result.successful[i].name}`,
+          result.successful[i].data
+        );
+
+      if (error) {
+        if (error.message === "The resource already exists") {
+          uppy.info(
+            `File ${result.successful[i].name} already exists`,
+            "error",
+            3000
+          );
+          return;
+        } else {
+          uppy.info(`Failed to upload ${result.successful[i].name}`, "error");
+          return;
+        }
       } else {
-        console.log(error);
+        // show progress details
+        uppy.info(`Uploaded ${result.successful[i].name}`, "info", 1000);
+        // remove file from uppy
+        uppy.removeFile(result.successful[i].id);
       }
-    } else {
-      uppy.info("Upload complete", "info", 3000);
     }
+    uppy.info("Upload complete", "info", 3000);
   });
 
   useEffect(() => {
@@ -99,19 +114,15 @@ export default function Documents({ avatar_url }: any) {
       <Layout currentPage="Documents" avatar_url={avatar_url}>
         <div>
           <div>
-            {/* <Dashboard uppy={uppy} showProgressDetails={true} /> */}
-            {/* load dashboard without powered by uppy */}
             <Dashboard
               uppy={uppy}
-              showProgressDetails={true}
               proudlyDisplayPoweredByUppy={false}
-              // allow editing of file names
+              // allow images to be edited
+
               metaFields={[
                 { id: "name", name: "Name", placeholder: "file name" },
               ]}
             />
-            {/* progress bar */}
-            <ProgressBar uppy={uppy} />
           </div>
           {/* show user files */}
           <div>{files && <CardFile files={files} />}</div>
