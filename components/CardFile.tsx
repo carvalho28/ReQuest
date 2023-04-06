@@ -1,13 +1,4 @@
-import React from "react";
-import {
-  FaFile,
-  FaFileExcel,
-  FaFileImage,
-  FaFilePdf,
-  FaFilePowerpoint,
-  FaFileVideo,
-  FaFileWord,
-} from "react-icons/fa";
+import React, { useState } from "react";
 import Loading from "./Loading";
 import { EllipsisVerticalIcon } from "@heroicons/react/24/outline";
 import { FileIcon } from "react-file-utils";
@@ -18,6 +9,19 @@ interface CardFileProps {
 }
 
 const CardFile = ({ files }: CardFileProps) => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [imageSelected, setImageSelected] = useState("");
+
+  function handleClick(url: string) {
+    setIsModalOpen(true);
+    setImageSelected(url);
+    console.log("clicked");
+  }
+
+  function handleClose() {
+    setIsModalOpen(false);
+  }
+
   if (!files) {
     return <Loading />;
   } else {
@@ -38,13 +42,37 @@ const CardFile = ({ files }: CardFileProps) => {
                   {file.metadata.mimetype.includes("image") ? (
                     // <FileIcon mimeType="image/png" filename="image.png" big />
                     // render image
-                    <Image
-                      src={file.url}
-                      alt="image"
-                      width={500}
-                      height={500}
-                      className="object-cover h-16 w-auto"
-                    />
+                    <>
+                      <Image
+                        src={file.url}
+                        alt="image"
+                        width={500}
+                        height={500}
+                        className="object-cover h-16 w-auto hover:cursor-pointer"
+                        onClick={() => handleClick(file.url)}
+                      />
+                      {isModalOpen && (
+                        <div className="fixed z-10 inset-0 overflow-y-auto bg-white p-2 bg-opacity-50">
+                          <div className="flex items-center justify-center min-h-screen">
+                            <div className="relative max-w-2xl mx-auto">
+                              <button
+                                className="absolute top-0 right-0 m-4 text-white bg-gray-800 rounded-full h-8 w-8 flex items-center justify-center"
+                                onClick={handleClose}
+                              >
+                                &times;
+                              </button>
+                              <Image
+                                src={imageSelected}
+                                alt="image"
+                                width={500}
+                                height={500}
+                                className="object-contain max-h-screen mx-auto"
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                    </>
                   ) : file.metadata.mimetype.includes("video") ? (
                     <FileIcon mimeType="video/mp4" filename="video.mp4" big />
                   ) : file.metadata.mimetype.includes("pdf") ? (

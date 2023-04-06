@@ -78,6 +78,7 @@
   },
   "devDependencies": {
     "@tailwindcss/typography": "^0.5.9",
+    "@types/react-modal": "^3.13.1",
     "@types/react-table": "^7.7.14",
     "autoprefixer": "^10.4.14",
     "cypress": "^12.7.0",
