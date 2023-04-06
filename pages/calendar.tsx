@@ -1,0 +1,62 @@
+import CalendarHeader from "@/components/CalendarHeader";
+import CalendarViewMonth from "@/components/CalendarViewMonth";
+import CalendarViewYear from "@/components/CalendarViewYear";
+import Layout from "@/components/Layout";
+import { createServerSupabaseClient } from "@supabase/auth-helpers-nextjs";
+import { GetServerSidePropsContext } from "next";
+
+export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
+  const supabase = createServerSupabaseClient(ctx);
+
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
+  if (!session)
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+
+  const user = session.user;
+  const { data, error } = await supabase
+    .from("profiles")
+    .select("avatar_url")
+    .eq("id", user?.id);
+  if (error) console.log(error);
+  if (!data) throw new Error("No data found");
+  const avatar_url = data[0].avatar_url;
+
+  // get user projects info
+  const { data: dataProjects, error: errorProjects } = await supabase.rpc(
+    "projects_user",
+    { user_id: user?.id }
+  );
+
+  // get user requirements info
+  const { data: dataRequirements, error: errorRequirements } =
+    await supabase.rpc("requirements_user", { user_id: user?.id });
+
+  return {
+    props: {
+      avatar_url: avatar_url,
+      projects: dataProjects,
+      requirements: dataRequirements,
+    },
+  };
+};
+
+export default function Calendar({ avatar_url, projects, requirements }: any) {
+  return (
+    <div>
+      <Layout currentPage="Calendar" avatar_url={avatar_url}>
+        <div>
+          <CalendarHeader projects={projects} requirements={requirements} />
+          {/* <CalendarViewMonth projects={projects} requirements={requirements} /> */}
+          {/* <CalendarViewYear projects={projects} requirements={requirements} /> */}
+        </div>
+      </Layout>
+    </div>
+  );
+}
