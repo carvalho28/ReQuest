@@ -386,7 +386,6 @@ const Layout = ({
                     </Link>
                   ))}
                 </nav>
-                {/* </div> */}
               </div>
               <div className="flex flex-shrink p-8 justify-center">
                 <button
@@ -489,6 +488,17 @@ const Layout = ({
                     </Link>
                   ))}
                 </nav>
+              </div>
+              <div className="flex flex-shrink p-2 justify-center mb-10">
+                <button
+                  className="flex items-center justify-center w-10 h-10 rounded-full bg-white hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
+                  onClick={userLogout}
+                >
+                  <ArrowRightOnRectangleIcon
+                    className="text-black h-6 w-6"
+                    aria-hidden="true"
+                  />
+                </button>
               </div>
             </div>
           </div>
