@@ -6,6 +6,15 @@ import { GetServerSidePropsContext } from "next";
 import { Dashboard } from "@uppy/react";
 import { useSupabaseClient, useUser } from "@supabase/auth-helpers-react";
 import { useEffect, useState } from "react";
+import {
+  FaFile,
+  FaFileExcel,
+  FaFilePdf,
+  FaFilePowerpoint,
+  FaFileVideo,
+  FaFileWord,
+} from "react-icons/fa";
+import CardFile from "@/components/CardFile";
 
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   const supabase = createServerSupabaseClient(ctx);
@@ -46,7 +55,7 @@ export default function Documents({ avatar_url }: any) {
   const uppy = new Uppy({
     restrictions: {
       maxNumberOfFiles: 10,
-      allowedFileTypes: ["image/*", "video/*", "application/pdf"],
+      allowedFileTypes: ["image/*", "video/*", "application/*"],
       maxFileSize: 10000000,
     },
   });
@@ -63,12 +72,12 @@ export default function Documents({ avatar_url }: any) {
       );
     if (error) {
       if (error.message === "The resource already exists") {
+      } else {
+        console.log(error);
       }
+    } else {
+      uppy.info("Upload complete", "info", 3000);
     }
-
-    // clear all files and show success message
-    // uppy.getPlugin("Dashboard").closeModal();
-    uppy.info("Upload complete", "info", 3000);
   });
 
   useEffect(() => {
@@ -76,25 +85,17 @@ export default function Documents({ avatar_url }: any) {
       // get user files from supabase storage
       const { data, error } = await supabaseClient.storage
         .from("user-files")
-        .list(user?.id);
+        .list(`${user?.id}/`);
 
       if (error) console.log(error);
       if (!data) throw new Error("No data found");
 
-      // remove . (hidden files)
-      data.filter((file: any) => !file.name.startsWith("."));
+      console.log("data: ", data);
 
-      // generate url for each file if doesn't exist
-      data.map(async (file: any) => {
-        if (!file.url) {
-          let url = await supabaseClient.storage
-            .from("user-files")
-            .createSignedUrl(`${user?.id}/${file.name}`, 60 * 5);
-          file.url = url;
-        }
-      });
-      // set files
-      setFiles(data);
+      // remove . (hidden files)
+      const filesData = data.filter((file: any) => !file.name.startsWith("."));
+
+      setFiles(filesData);
     }
     getUserFiles();
   }, [user?.id]);
@@ -121,7 +122,10 @@ export default function Documents({ avatar_url }: any) {
             <ProgressBar uppy={uppy} />
           </div>
           {/* show user files */}
-          <div></div>
+          <div>
+            <h1>My Files</h1>
+            {files && <CardFile files={files} />}
+          </div>
         </div>
       </Layout>
     </div>
