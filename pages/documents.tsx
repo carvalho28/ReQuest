@@ -100,7 +100,30 @@ export default function Documents({ avatar_url }: any) {
       console.log("data: ", data);
 
       // remove . (hidden files)
-      const filesData = data.filter((file: any) => !file.name.startsWith("."));
+      const filesData: any = data.filter(
+        (file: any) => !file.name.startsWith(".")
+      );
+
+      // if it is an image, add the url to the file object
+      for (let i = 0; i < filesData.length; i++) {
+        if (filesData[i].metadata?.mimetype.includes("image")) {
+          const { data: urlData, error: urlError } =
+            await supabaseClient.storage
+              .from("user-files")
+              .createSignedUrl(
+                `${user?.id}/${filesData[i].name}`,
+                60 * 60 * 24
+              );
+
+          if (urlError) console.log(urlError);
+          if (!urlData) throw new Error("No data found");
+
+          // add url to file object
+          if (urlData) {
+            filesData[i].url = urlData.signedUrl as string;
+          }
+        }
+      }
 
       setFiles(filesData);
     }

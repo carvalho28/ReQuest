@@ -11,6 +11,7 @@ import {
 import Loading from "./Loading";
 import { EllipsisVerticalIcon } from "@heroicons/react/24/outline";
 import { FileIcon } from "react-file-utils";
+import Image from "next/image";
 
 interface CardFileProps {
   files: any;
@@ -31,11 +32,19 @@ const CardFile = ({ files }: CardFileProps) => {
             return (
               <li
                 key={file.name}
-                className="col-span-1 flex rounded-md shadow-sm"
+                className="col-span-1 flex rounded-md shadow-sm border-2 border-gray-200"
               >
                 <div className="flex-shrink-0 flex items-center justify-center w-16 bg-white text-black text-sm font-medium rounded-l-md">
                   {file.metadata.mimetype.includes("image") ? (
-                    <FileIcon mimeType="image/png" filename="image.png" big />
+                    // <FileIcon mimeType="image/png" filename="image.png" big />
+                    // render image
+                    <Image
+                      src={file.url}
+                      alt="image"
+                      width={500}
+                      height={500}
+                      className="object-cover h-16 w-auto"
+                    />
                   ) : file.metadata.mimetype.includes("video") ? (
                     <FileIcon mimeType="video/mp4" filename="video.mp4" big />
                   ) : file.metadata.mimetype.includes("pdf") ? (
@@ -66,7 +75,7 @@ const CardFile = ({ files }: CardFileProps) => {
                     <FileIcon mimeType="text/plain" filename="text.txt" big />
                   )}
                 </div>
-                <div className="flex flex-1 items-center justify-between truncate rounded-r-md border-b border-r border-t border-gray-200 bg-white">
+                <div className="flex flex-1 items-center justify-between truncate rounded-r-md bg-white">
                   <div className="flex-1 truncate px-4 py-2 text-sm">
                     <p className="text-black font-medium truncate">
                       {file.name}
