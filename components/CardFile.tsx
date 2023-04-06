@@ -10,6 +10,7 @@ import {
 } from "react-icons/fa";
 import Loading from "./Loading";
 import { EllipsisVerticalIcon } from "@heroicons/react/24/outline";
+import { FileIcon } from "react-file-utils";
 
 interface CardFileProps {
   files: any;
@@ -36,19 +37,35 @@ const CardFile = ({ files }: CardFileProps) => {
               >
                 <div className="flex-shrink-0 flex items-center justify-center w-16 bg-white text-black text-sm font-medium rounded-l-md">
                   {file.metadata.mimetype.includes("image") ? (
-                    <FaFileImage size={50} />
+                    <FileIcon mimeType="image/png" filename="image.png" big />
                   ) : file.metadata.mimetype.includes("video") ? (
-                    <FaFileVideo size={50} />
+                    <FileIcon mimeType="video/mp4" filename="video.mp4" big />
                   ) : file.metadata.mimetype.includes("pdf") ? (
-                    <FaFilePdf size={50} />
+                    <FileIcon
+                      mimeType="application/pdf"
+                      filename="pdf.pdf"
+                      big
+                    />
                   ) : file.metadata.mimetype.includes("word") ? (
-                    <FaFileWord size={50} />
-                  ) : file.metadata.mimetype.includes("excel") ? (
-                    <FaFileExcel size={50} />
+                    <FileIcon
+                      mimeType="application/msword"
+                      filename="word.doc"
+                      big
+                    />
+                  ) : file.metadata.mimetype.includes("sheet") ? (
+                    <FileIcon
+                      mimeType="application/vnd.ms-excel"
+                      filename="excel.xls"
+                      big
+                    />
                   ) : file.metadata.mimetype.includes("powerpoint") ? (
-                    <FaFilePowerpoint size={50} />
+                    <FileIcon
+                      mimeType="application/vnd.ms-powerpoint"
+                      filename="powerpoint.ppt"
+                      big
+                    />
                   ) : (
-                    <FaFile size={50} />
+                    <FileIcon mimeType="text/plain" filename="text.txt" big />
                   )}
                 </div>
                 <div className="flex flex-1 items-center justify-between truncate rounded-r-md border-b border-r border-t border-gray-200 bg-white">
