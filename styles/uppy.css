@@ -1,0 +1,29 @@
+.uppy-Dashboard-inner {
+  background-color: #fafdfe !important;
+}
+
+.uppy-Dashboard-browse {
+  color: #845ec2 !important;
+  /* underline */
+  text-decoration: underline !important;
+}
+
+.uppy-Root {
+  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1) !important;
+}
+
+.uppy-StatusBar.is-waiting .uppy-StatusBar-actionBtn--upload {
+  background-color: #32c487 !important;
+}
+
+.uppy-DashboardContent-back {
+  color: #0998b7 !important;
+  /* bold */
+  font-weight: 600 !important;
+}
+
+.uppy-DashboardContent-addMore {
+  color: #0998b7 !important;
+  /* bold */
+  font-weight: 600 !important;
+}

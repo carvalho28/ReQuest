@@ -117,7 +117,8 @@ export default function Documents({ avatar_url }: any) {
 
           <div className="mt-5">
             <Dashboard
-              className="mx-auto"
+              height={500}
+              width="100%"
               uppy={uppy}
               proudlyDisplayPoweredByUppy={false}
               // allow images to be edited
