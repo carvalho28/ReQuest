@@ -10,7 +10,6 @@ import {
   FolderIcon,
   InboxIcon,
   Squares2X2Icon,
-  UsersIcon,
   XMarkIcon,
 } from "@heroicons/react/24/outline";
 import Image from "next/image";
@@ -52,7 +51,13 @@ const navigation = [
     count: 0,
     current: false,
   },
-  { name: "Documents", icon: InboxIcon, href: "#", count: 0, current: false },
+  {
+    name: "Documents",
+    icon: InboxIcon,
+    href: "/documents",
+    count: 0,
+    current: false,
+  },
   {
     name: "Settings",
     icon: Cog6ToothIcon,
@@ -402,7 +407,6 @@ const Layout = ({
           </div>
         ) : (
           <div className="hidden lg:fixed lg:inset-y-0 lg:flex lg:w-16 lg:flex-col sidebar-background">
-            {/* Sidebar component, swap this element with another sidebar if you like */}
             <div className="flex min-h-0 flex-1 flex-col mt-4">
               <div className="flex flex-1 flex-col overflow-y-auto pt-5 pb-4">
                 <div className="flex flex-shrink-0 items-center px-4 flex-col">

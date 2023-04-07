@@ -1,6 +1,4 @@
 import CalendarHeader from "@/components/CalendarHeader";
-import CalendarViewMonth from "@/components/CalendarViewMonth";
-import CalendarViewYear from "@/components/CalendarViewYear";
 import Layout from "@/components/Layout";
 import { createServerSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import { GetServerSidePropsContext } from "next";
