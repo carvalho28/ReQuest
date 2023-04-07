@@ -452,7 +452,7 @@ const Layout = ({
                           <>
                             {showProjectChildren ? (
                               <ChevronDownIcon
-                                className="h-8 w-8 text-black mr-2 hover:cursor-pointer hover:text-white hover:bg-contrast rounded-full p-1"
+                                className="h-8 w-8 text-primarygreen mr-2 hover:cursor-pointer hover:text-white hover:bg-contrast rounded-full p-1"
                                 aria-hidden="true"
                                 onClick={(event) => {
                                   event.stopPropagation();
@@ -461,7 +461,8 @@ const Layout = ({
                               />
                             ) : (
                               <ChevronRightIcon
-                                className="h-8 w-8 mr-2 hover:cursor-pointer text-black hover:bg-contrast rounded-full p-1 hover:text-white"
+                                className="h-8 w-8 mr-2 hover:cursor-pointer text-green-300 hover:bg-contrast rounded-full p-1 hover:text-white"
+                                strokeWidth={3}
                                 aria-hidden="true"
                                 onClick={(event) => {
                                   event.stopPropagation();

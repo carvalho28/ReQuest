@@ -7,7 +7,7 @@ describe("Dashboard page load", () => {
     cy.get("button").contains("Login").click();
 
     // check "Teams" is working
-    cy.get("a").contains("Projects").click();
+    cy.get("span").contains("Projects").click();
     cy.url().should("include", "/projects");
   });
 });
