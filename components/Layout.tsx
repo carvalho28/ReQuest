@@ -375,41 +375,6 @@ const Layout = ({
                   className="mt-5 flex-1 space-y-4 pl-6"
                   aria-label="Sidebar"
                 >
-                  {/* {navItems.map((item) => (
-                    <Link
-                      key={item.name}
-                      href={item.href}
-                      className={classNames(
-                        item.current
-                          ? "bg-whitepages text-black"
-                          : "text-white hover:bg-whitepages hover:text-black",
-                        "group flex items-center px-2 pl-5 py-4 text-md font-medium rounded-l-full"
-                      )}
-                    >
-                      <item.icon
-                        className={classNames(
-                          item.current
-                            ? "text-primarygreen"
-                            : "text-whitepages group-hover:text-primarygreen",
-                          "mr-3 h-6 w-6 flex-shrink-0"
-                        )}
-                        aria-hidden="true"
-                      />
-                      <span className="flex-1">{item.name}</span>
-                      {item.count ? (
-                        <span
-                          className={classNames(
-                            item.current
-                              ? "bg-primarygreen text-white"
-                              : "bg-whitepages group-hover:bg-gray-400 text-black",
-                            "ml-3 mr-2 inline-block rounded-full py-0.5 px-3 text-xs font-medium"
-                          )}
-                        >
-                          {item.count}
-                        </span>
-                      ) : null}
-                    </Link>
-                  ))} */}
                   {/* render projects children */}
                   {navItems.map((item) => (
                     <div key={item.name}>
