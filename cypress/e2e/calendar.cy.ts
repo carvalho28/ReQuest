@@ -6,7 +6,7 @@ beforeEach(() => {
   cy.get("button").contains("Login").click();
 });
 
-describe("Calendar page load", () => {
+describe("Calendar page", () => {
   it("should navigate to the calendar page", () => {
     // go to calendar
     cy.get("span").contains("Calendar").click();
