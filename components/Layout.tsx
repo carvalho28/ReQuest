@@ -17,6 +17,8 @@ import { useRouter } from "next/router";
 import { Fragment, useEffect, useState } from "react";
 import { useUser, useSupabaseClient, User } from "@supabase/auth-helpers-react";
 import Link from "next/link";
+import { ChevronDownIcon } from "@heroicons/react/20/solid";
+import { ProjectChildren } from "./utils/sidebarHelper";
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
@@ -34,8 +36,9 @@ const navigation = [
     name: "Projects",
     icon: FolderIcon,
     href: "/projects/table",
-    count: 1,
+    count: 0,
     current: false,
+    children: [] as ProjectChildren[],
   },
   {
     name: "Chat",
@@ -72,6 +75,7 @@ interface LayoutProps {
   currentPage: string;
   avatar_url: string;
   namePage?: string;
+  projectChildren?: ProjectChildren[];
 }
 
 const Layout = ({
@@ -79,6 +83,7 @@ const Layout = ({
   currentPage,
   avatar_url,
   namePage,
+  projectChildren,
 }: LayoutProps) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const router = useRouter();
@@ -89,6 +94,9 @@ const Layout = ({
   const [navItems, setNavItems] = useState([...navigation]);
 
   const [isCollapsed, setIsCollapsed] = useState<boolean>(false);
+
+  const [showProjectChildren, setShowProjectChildren] =
+    useState<boolean>(false);
 
   function getIsCollapsed() {
     setIsCollapsed(!isCollapsed);
@@ -112,7 +120,19 @@ const Layout = ({
         }
       })
     );
-  }, [currentPage]);
+    // add project children to navItems
+    if (projectChildren) {
+      setNavItems((prevNavItems) =>
+        prevNavItems.map((item) => {
+          if (item.name.toLowerCase() === "projects") {
+            return { ...item, children: projectChildren };
+          } else {
+            return item;
+          }
+        })
+      );
+    }
+  }, [currentPage, projectChildren]);
 
   useEffect(() => {
     if (currentPage === "profile") {
@@ -355,7 +375,7 @@ const Layout = ({
                   className="mt-5 flex-1 space-y-4 pl-6"
                   aria-label="Sidebar"
                 >
-                  {navItems.map((item) => (
+                  {/* {navItems.map((item) => (
                     <Link
                       key={item.name}
                       href={item.href}
@@ -389,6 +409,87 @@ const Layout = ({
                         </span>
                       ) : null}
                     </Link>
+                  ))} */}
+                  {/* render projects children */}
+                  {navItems.map((item) => (
+                    <div key={item.name}>
+                      <div
+                        className={classNames(
+                          item.current
+                            ? "bg-whitepages text-black"
+                            : "text-white hover:bg-whitepages hover:text-black",
+                          "group flex items-center px-2 pl-5 py-4 text-md font-medium rounded-l-full hover:cursor-pointer"
+                        )}
+                        onClick={() => {
+                          router.push(item.href);
+                        }}
+                      >
+                        <item.icon
+                          className={classNames(
+                            item.current
+                              ? "text-primarygreen"
+                              : "text-whitepages group-hover:text-primarygreen",
+                            "mr-3 h-6 w-6 flex-shrink-0"
+                          )}
+                          aria-hidden="true"
+                        />
+                        <span className="flex-1">{item.name}</span>
+                        {item.count ? (
+                          <span
+                            className={classNames(
+                              item.current
+                                ? "bg-primarygreen text-white"
+                                : "bg-whitepages group-hover:bg-gray-400 text-black",
+                              "ml-3 mr-2 inline-block rounded-full py-0.5 px-3 text-xs font-medium"
+                            )}
+                          >
+                            {item.count}
+                          </span>
+                        ) : null}
+                        {/* if it is projects then render the chevron if projectChildren is true, and other chevron if false */}
+                        {item.name === "Projects" &&
+                        item?.children?.length !== 0 ? (
+                          <>
+                            {showProjectChildren ? (
+                              <ChevronDownIcon
+                                className="h-8 w-8 text-black mr-2 hover:cursor-pointer hover:text-white hover:bg-contrast rounded-full p-1"
+                                aria-hidden="true"
+                                onClick={(event) => {
+                                  event.stopPropagation();
+                                  setShowProjectChildren(false);
+                                }}
+                              />
+                            ) : (
+                              <ChevronRightIcon
+                                className="h-8 w-8 mr-2 hover:cursor-pointer text-black hover:bg-contrast rounded-full p-1 hover:text-white"
+                                aria-hidden="true"
+                                onClick={(event) => {
+                                  event.stopPropagation();
+                                  setShowProjectChildren(true);
+                                }}
+                              />
+                            )}
+                          </>
+                        ) : null}
+                      </div>
+                      {showProjectChildren && (
+                        <>
+                          {item.children && (
+                            <>
+                              {item.children.map((child) => (
+                                <Link
+                                  key={child?.name}
+                                  href={child?.href}
+                                  className="flex items-center px-4 pl-10 py-1 my-2 text-md font-medium rounded-l-full truncate hover:bg-whitepages hover:text-black text-white"
+                                >
+                                  <span>{child?.name}</span>
+                                </Link>
+                              ))}
+                            </>
+                          )}
+                        </>
+                      )}
+                    </div>
                   ))}
                 </nav>
               </div>

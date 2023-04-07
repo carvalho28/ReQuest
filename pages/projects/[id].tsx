@@ -12,6 +12,7 @@ import {
 import { useEffect, useState } from "react";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { RealtimeChannel } from "@supabase/supabase-js";
+import { ProjectChildren } from "@/components/utils/sidebarHelper";
 
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   const supabase = createServerSupabaseClient(ctx);
@@ -75,12 +76,29 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
     (user: any) => user.profiles.name ?? user.profiles.email
   );
 
+  // get user projects info
+  const { data: dataProjects, error: errorProjects } = await supabase.rpc(
+    "projects_user",
+    { user_id: user?.id }
+  );
+
+  // convert to a ProjectChildren type where href is the /projects/[id] route
+  const projectsChildren: ProjectChildren[] = dataProjects.map(
+    (project: any) => {
+      return {
+        name: project.name,
+        href: `/projects/${project.id}`,
+      };
+    }
+  );
+
   return {
     props: {
       avatar_url: data[0].avatar_url,
       project_data: projectData,
       user: userData[0].name,
       projectUserNames,
+      projectsChildren: projectsChildren,
     },
   };
 };
@@ -90,6 +108,7 @@ export default function SingleProject({
   project_data,
   user,
   projectUserNames,
+  projectsChildren,
 }: any) {
   const project: Database["public"]["Tables"]["projects"]["Row"] =
     project_data[0];
@@ -189,6 +208,7 @@ export default function SingleProject({
         currentPage="projects"
         namePage={`Project - ${project.name}`}
         avatar_url={avatar_url}
+        projectChildren={projectsChildren}
       >
         <div className="flex gap-x-4 mt-8 flex-col sm:flex-row gap-y-8">
           <div className="flex flex-col p-6 bg-white rounded-lg shadow-lg justify-center sm:w-1/3 w-full">
