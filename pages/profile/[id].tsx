@@ -8,6 +8,7 @@ import { FaPen, FaStar } from "react-icons/fa";
 import { Black_Ops_One } from "next/font/google";
 import { RiArrowRightCircleFill, RiArrowLeftCircleFill } from "react-icons/ri";
 import dynamic from "next/dynamic";
+import { ProjectChildren } from "@/components/utils/sidebarHelper";
 
 // dynamic
 const ModalAddProject = dynamic(() => import("@/components/ModalAddProject"), {
@@ -51,10 +52,27 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   if (!dataRpc) throw new Error("No user data found");
   const userData = dataRpc[0];
 
+  // get user projects info
+  const { data: dataProjects, error: errorProjects } = await supabase.rpc(
+    "projects_user",
+    { user_id: user?.id }
+  );
+
+  // convert to a ProjectChildren type where href is the /projects/[id] route
+  const projectsChildren: ProjectChildren[] = dataProjects.map(
+    (project: any) => {
+      return {
+        name: project.name,
+        href: `/projects/${project.id}`,
+      };
+    }
+  );
+
   return {
     props: {
       avatar_url: data[0].avatar_url,
       user_data: userData,
+      projectsChildren: projectsChildren,
     },
   };
 };
@@ -64,7 +82,11 @@ type ItemCarrousel = {
   value: number;
 };
 
-export default function Profile({ avatar_url, user_data }: any) {
+export default function Profile({
+  avatar_url,
+  user_data,
+  projectsChildren,
+}: any) {
   const supabaseClient = useSupabaseClient();
   const user = useUser();
 
@@ -124,7 +146,11 @@ export default function Profile({ avatar_url, user_data }: any) {
   }, [userData]);
 
   return (
-    <Layout currentPage="profile" avatar_url={avatar_url}>
+    <Layout
+      currentPage="profile"
+      avatar_url={avatar_url}
+      projectChildren={projectsChildren}
+    >
       <div className="flex gap-x-2 flex-col gap-y-4 sm:flex-row">
         <div className="flex p-5 md:p-6 bg-white rounded-lg shadow-lg sm:w-3/5 w-full">
           <div className="w-2/5 flex flex-col justify-center items-center">

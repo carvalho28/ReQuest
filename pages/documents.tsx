@@ -6,6 +6,8 @@ import { Dashboard } from "@uppy/react";
 import { useSupabaseClient, useUser } from "@supabase/auth-helpers-react";
 import { useEffect, useState } from "react";
 import CardFile from "@/components/CardFile";
+import { ProjectChildren } from "@/components/utils/sidebarHelper";
+import Loading from "@/components/Loading";
 
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   const supabase = createServerSupabaseClient(ctx);
@@ -30,14 +32,31 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   if (!data) throw new Error("No data found");
   const avatar_url = data[0].avatar_url;
 
+  // get user projects info
+  const { data: dataProjects, error: errorProjects } = await supabase.rpc(
+    "projects_user",
+    { user_id: user?.id }
+  );
+
+  // convert to a ProjectChildren type where href is the /projects/[id] route
+  const projectsChildren: ProjectChildren[] = dataProjects.map(
+    (project: any) => {
+      return {
+        name: project.name,
+        href: `/projects/${project.id}`,
+      };
+    }
+  );
+
   return {
     props: {
       avatar_url: avatar_url,
+      projectsChildren: projectsChildren,
     },
   };
 };
 
-export default function Documents({ avatar_url }: any) {
+export default function Documents({ avatar_url, projectsChildren }: any) {
   const supabaseClient = useSupabaseClient();
   const user = useUser();
 
@@ -124,13 +143,28 @@ export default function Documents({ avatar_url }: any) {
     getUserFiles();
   }, [user?.id]);
 
-  console.log(files);
-
   return (
     <div>
-      <Layout currentPage="Documents" avatar_url={avatar_url}>
+      <Layout
+        currentPage="Documents"
+        avatar_url={avatar_url}
+        projectChildren={projectsChildren}
+      >
         <div>
-          <div>{files && <CardFile files={files} />}</div>
+          <div>
+            {files.length > 0 ? (
+              <CardFile files={files} />
+            ) : (
+              <div className="bg-white p-4 rounded-lg shadow-md">
+                <h2 className="text-xl font-medium text-black text-center">
+                  My Files
+                </h2>
+                <div>
+                  <Loading />
+                </div>
+              </div>
+            )}
+          </div>
 
           <div className="mt-5">
             <Dashboard

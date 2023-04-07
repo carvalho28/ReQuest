@@ -75,7 +75,7 @@ export default function App({
         supabaseClient={supabaseClient}
         initialSession={pageProps.initialSession}
       >
-        <Loading />
+        {/* <Loading /> */}
         <Component {...pageProps} />
       </SessionContextProvider>
     </main>

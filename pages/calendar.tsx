@@ -1,5 +1,6 @@
 import CalendarHeader from "@/components/CalendarHeader";
 import Layout from "@/components/Layout";
+import { ProjectChildren } from "@/components/utils/sidebarHelper";
 import { createServerSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import { GetServerSidePropsContext } from "next";
 
@@ -36,19 +37,42 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   const { data: dataRequirements, error: errorRequirements } =
     await supabase.rpc("requirements_user", { user_id: user?.id });
 
+  // get user projects info
+  const { data: dataProjectsChildren, error: errorProjectsChildren } =
+    await supabase.rpc("projects_user", { user_id: user?.id });
+  // convert to a ProjectChildren type where href is the /projects/[id] route
+  const projectsChildren: ProjectChildren[] = dataProjects.map(
+    (project: any) => {
+      return {
+        name: project.name,
+        href: `/projects/${project.id}`,
+      };
+    }
+  );
+
   return {
     props: {
       avatar_url: avatar_url,
       projects: dataProjects,
       requirements: dataRequirements,
+      projectsChildren: projectsChildren,
     },
   };
 };
 
-export default function Calendar({ avatar_url, projects, requirements }: any) {
+export default function Calendar({
+  avatar_url,
+  projects,
+  requirements,
+  projectsChildren,
+}: any) {
   return (
     <div>
-      <Layout currentPage="Calendar" avatar_url={avatar_url}>
+      <Layout
+        currentPage="Calendar"
+        avatar_url={avatar_url}
+        projectChildren={projectsChildren}
+      >
         <div>
           <CalendarHeader projects={projects} requirements={requirements} />
           {/* <CalendarViewMonth projects={projects} requirements={requirements} /> */}

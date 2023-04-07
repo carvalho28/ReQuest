@@ -28,8 +28,8 @@ const CardFile = ({ files }: CardFileProps) => {
     window.open(url, "_blank");
   }
 
-  if (!files) {
-    return <Loading />;
+  if (files.length <= 0) {
+    return <></>;
   } else {
     return (
       <div className="bg-white p-4 rounded-lg shadow-md">

@@ -12,6 +12,7 @@ import Tabs from "@/components/Tabs";
 
 // dynamic imports
 import dynamic from "next/dynamic";
+import { ProjectChildren } from "@/components/utils/sidebarHelper";
 const ErrorMessage = dynamic(() => import("@/components/ErrorMessage"), {
   ssr: false,
 });
@@ -70,15 +71,36 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
 
   const projects = rpcData;
 
+  // get user projects info
+  const { data: dataProjects, error: errorProjects } = await supabase.rpc(
+    "projects_user",
+    { user_id: user?.id }
+  );
+
+  // convert to a ProjectChildren type where href is the /projects/[id] route
+  const projectsChildren: ProjectChildren[] = dataProjects.map(
+    (project: any) => {
+      return {
+        name: project.name,
+        href: `/projects/${project.id}`,
+      };
+    }
+  );
+
   return {
     props: {
       avatar_url: avatar_url,
       projects: projects,
+      projectsChildren: projectsChildren,
     },
   };
 };
 
-export default function Projects({ avatar_url, projects }: any) {
+export default function Projects({
+  avatar_url,
+  projects,
+  projectsChildren,
+}: any) {
   const tabs = [
     { name: "Table", href: "/projects/table", current: true },
     { name: "Cards", href: "/projects/cards", current: false },
@@ -289,7 +311,11 @@ export default function Projects({ avatar_url, projects }: any) {
 
   return (
     <div>
-      <Layout currentPage="projects" avatar_url={avatar_url}>
+      <Layout
+        currentPage="projects"
+        avatar_url={avatar_url}
+        projectChildren={projectsChildren}
+      >
         <Tabs currentPage="table" tabs={tabs} />
         <div className="mt-10">
           <div className="px-4 sm:px-2">
