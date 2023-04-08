@@ -84,7 +84,7 @@ function renderStatusBadge(status: string, sizex: number, sizey: number) {
         className={`inline-flex items-center px-${sizex} py-${sizey} rounded-full text-sm font-medium bg-green-100 text-green-800`}
       >
         <RiCheckboxBlankCircleFill className="mr-1" />
-        Done
+        Completed
       </span>
     );
   }

@@ -2,7 +2,6 @@ import Layout from "@/components/Layout";
 import { createServerSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import { GetServerSidePropsContext } from "next";
 import { Database } from "@/types/supabase";
-import RequirementsTable from "@/components/RequirementsTable";
 import Table from "@/components/Table";
 import {
   RiArrowLeftCircleFill,
@@ -13,6 +12,14 @@ import { useEffect, useState } from "react";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { RealtimeChannel } from "@supabase/supabase-js";
 import { ProjectChildren } from "@/components/utils/sidebarHelper";
+import Image from "next/image";
+import { Rubik_Glitch } from "next/font/google";
+import CountdownTimer from "@/components/CountdownTimer";
+
+const rubikGlitch = Rubik_Glitch({
+  subsets: ["latin"],
+  weight: ["400"],
+});
 
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   const supabase = createServerSupabaseClient(ctx);
@@ -153,7 +160,7 @@ export default function SingleProject({
       setTotalRequirements(data.length);
       setRequirementsCompleted(
         data.filter(
-          (requirement: any) => requirement.status.toLowerCase() === "done"
+          (requirement: any) => requirement.status.toLowerCase() === "completed"
         ).length
       );
       setRequirementsInProgress(
@@ -202,6 +209,12 @@ export default function SingleProject({
     supabaseClient,
   ]);
 
+  // function to get a color based on a %, given that the % is between 0 and 100, and the gradient between red for low values, than starts to turn yellow and ends in green for high values
+  const getColor = (percentage: number) => {
+    const hue = ((percentage - 0) * 120) / (100 - 0);
+    return `hsl(${hue}, 80%, 60%)`;
+  };
+
   return (
     <div>
       <Layout
@@ -211,7 +224,63 @@ export default function SingleProject({
         projectChildren={projectsChildren}
       >
         <div className="flex gap-x-4 mt-8 flex-col sm:flex-row gap-y-8">
-          <div className="flex flex-col p-6 bg-white rounded-lg shadow-lg justify-center sm:w-1/3 w-full">
+          <div className="flex flex-col p-6 bg-white rounded-lg shadow-lg justify-center sm:w-1/4 w-full">
+            <h3 className="text-xl font-bold flex justify-center items-center text-center">
+              Progress
+            </h3>
+            {/* render svg spaceship */}
+            <div className="text-center flex justify-center items-center">
+              <Image
+                alt="Rocketship"
+                src="/rocketship.svg"
+                width={100}
+                height={100}
+                className="mt-8"
+              />
+            </div>
+            <div className="w-full h-4 mb-4 bg-gray-200 rounded-full mt-6">
+              <div
+                className="h-4 rounded-full"
+                style={{
+                  width: `${
+                    (requirementsCompleted / totalRequirements) * 100
+                  }%`,
+                  backgroundColor: getColor(
+                    (requirementsCompleted / totalRequirements) * 100
+                  ),
+                }}
+              ></div>
+              <div className="flex justify-end text-xs text-gray-600 mt-2">
+                <span className={`text-2xl trucate ${rubikGlitch.className}`}>
+                  {Math.round(
+                    (requirementsCompleted / totalRequirements) * 100
+                  )}
+                  %
+                </span>
+              </div>
+            </div>
+          </div>
+          <div className="flex flex-col p-6 bg-white rounded-lg shadow-lg justify-center sm:w-1/4 w-full">
+            <h3 className="text-xl font-bold flex justify-center items-center text-center">
+              Deadline
+            </h3>
+            <div className="text-center flex justify-center items-center">
+              <Image
+                alt="Hourglass"
+                src="/hourglass.svg"
+                width={100}
+                height={100}
+                className="mt-8"
+              />
+            </div>
+            {/* show a countdown to the deadline */}
+            <div className="flex justify-center items-center">
+              <div className="flex flex-col justify-center items-center mt-3">
+                <CountdownTimer dateString={project.deadline} />
+              </div>
+            </div>
+          </div>
+          <div className="flex flex-col p-6 bg-white rounded-lg shadow-lg justify-center sm:w-1/4 w-full">
             <h3 className="text-xl font-bold flex justify-center items-center text-center">
               Requirements Overview
             </h3>
@@ -234,7 +303,7 @@ export default function SingleProject({
               </div>
             </div>
           </div>
-          <div className="flex flex-col p-6 bg-white rounded-lg shadow-lg sm:w-1/3 w-full">
+          <div className="flex flex-col p-6 bg-white rounded-lg shadow-lg sm:w-1/4 w-full">
             <h3 className="text-xl font-bold flex justify-center">
               Team Members
             </h3>
