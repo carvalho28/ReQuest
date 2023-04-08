@@ -50,6 +50,7 @@ const RequirementsTable = ({
     assigned_to: [],
     status: "not started",
     id_proj: projectId,
+    closed_at: null,
   });
 
   const [showReq, setShowReq] = useState(false);
