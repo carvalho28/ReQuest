@@ -43,6 +43,8 @@ const RequirementData = ({
   const [isUpdatingUpdatedBy, setIsUpdatingUpdatedBy] = useState(false);
 
   useEffect(() => {
+    console.log(requirement.closed_at);
+
     setRequirementData({
       id: requirement.id,
       name: requirement.name,
@@ -66,7 +68,10 @@ const RequirementData = ({
 
       // check if requirement.status is changed to completed
       console.log(requirementData.status);
-      if (requirementData.status?.toLowerCase() === "completed") {
+      if (
+        requirement.status?.toLowerCase() !== "completed" &&
+        requirementData.status?.toLowerCase() === "completed"
+      ) {
         // add a closed_at date
         requirementData.closed_at = new Date().toISOString();
       }

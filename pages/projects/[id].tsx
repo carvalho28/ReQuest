@@ -304,9 +304,7 @@ export default function SingleProject({
             </div>
           </div>
           <div className="flex flex-col p-6 bg-white rounded-lg shadow-lg md:w-1/4 w-full">
-            <h3 className="text-xl font-bold flex justify-center">
-              Team Members
-            </h3>
+            <h3 className="text-xl font-bold flex justify-center">Ranking</h3>
             <div className="flex flex-col justify-center mt-8 ml-2">
               {/* print user names next to  an icon */}
               {projectUserNames.map((user: any) => (
