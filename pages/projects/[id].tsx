@@ -10,6 +10,7 @@ import { RealtimeChannel } from "@supabase/supabase-js";
 import { ProjectChildren } from "@/components/utils/sidebarHelper";
 import Image from "next/image";
 import { Rubik_Glitch } from "next/font/google";
+import { Rubik_Bubbles } from "next/font/google";
 import CountdownTimer from "@/components/CountdownTimer";
 import { FaMedal } from "react-icons/fa";
 import { UserIdAndName } from "@/components/utils/general";
@@ -18,6 +19,18 @@ const rubikGlitch = Rubik_Glitch({
   subsets: ["latin"],
   weight: ["400"],
 });
+
+const rubikBubbles = Rubik_Bubbles({
+  subsets: ["latin"],
+  weight: ["400"],
+});
+
+type Rankings = {
+  id: string;
+  name: string;
+  requirements_closed: number;
+  // avatar_url: string;
+};
 
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   const supabase = createServerSupabaseClient(ctx);
@@ -228,6 +241,26 @@ export default function SingleProject({
     return `hsl(${hue}, 80%, 60%)`;
   };
 
+  // use Effect to get ranking
+  const [ranking, setRanking] = useState<Rankings[]>([]);
+  useEffect(() => {
+    console.log(projectId);
+
+    const getRanking = async () => {
+      const { data, error } = await supabaseClient.rpc("ranking_req", {
+        proj_id: projectId,
+      });
+
+      if (error) console.log(error);
+      if (!data) throw new Error("No data found");
+
+      console.log(data);
+      setRanking(data);
+    };
+
+    getRanking();
+  }, [projectId, supabaseClient, requirementsCompleted]);
+
   return (
     <div>
       <Layout
@@ -320,33 +353,37 @@ export default function SingleProject({
             <h3 className="text-xl font-bold flex justify-center">Ranking</h3>
             <div className="flex flex-col justify-center mt-8 ml-2 space-y-4">
               {/* {projectUserIdsAndNames.map((user: any, index: number) => ( */}
-              {projectUserIdsAndNames.map(
-                (userIdAndName: UserIdAndName, index: any) => {
-                  return (
+              {ranking.map((item: Rankings, index: any) => {
+                return (
+                  <div className="flex gap-x-2 items-center" key={item.id}>
+                    {index === 0 && (
+                      <div className="text-2xl font-bold text-yellow-500">
+                        <FaMedal />
+                      </div>
+                    )}
+                    {index === 1 && (
+                      <div className="text-2xl font-bold text-gray-500">
+                        <FaMedal />
+                      </div>
+                    )}
+                    {index === 2 && (
+                      <div className="text-2xl font-bold text-orange-400">
+                        <FaMedal />
+                      </div>
+                    )}
+                    <div>{item.name}</div>
+                    <div className="text-gray-500 text-sm">with</div>
                     <div
-                      className="flex gap-x-2 items-center"
-                      key={userIdAndName.id}
+                      className={`text-2xl font-bold ${rubikBubbles.className}`}
                     >
-                      {index === 0 && (
-                        <div className="text-2xl font-bold text-yellow-500">
-                          <FaMedal />
-                        </div>
-                      )}
-                      {index === 1 && (
-                        <div className="text-2xl font-bold text-gray-500">
-                          <FaMedal />
-                        </div>
-                      )}
-                      {index === 2 && (
-                        <div className="text-2xl font-bold text-orange-400">
-                          <FaMedal />
-                        </div>
-                      )}
-                      <div>{userIdAndName.name}</div>
+                      {item.requirements_closed}
                     </div>
-                  );
-                }
-              )}
+                    <div className="text-gray-500 text-sm">
+                      requirements closed
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           </div>
         </div>
