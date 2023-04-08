@@ -130,14 +130,14 @@ function GlobalFilter({ globalFilter, setGlobalFilter, placeholder }: any) {
   }, 200);
 
   return (
-    <span className="flex pt-10 pb-10 items-center justify-center">
+    <span className="flex flex-col pt-10 pb-10 md:items-center justify-center">
       <input
         value={value || ""}
         onChange={(e) => {
           setValue(e.target.value);
           onChange(e.target.value);
         }}
-        className="w-8/12 rounded-xl border p-4 text-gray-500 cursor-pointer"
+        className="md:w-8/12 w-1/3 items-start rounded-xl border p-4 text-gray-500 cursor-pointer"
         type="search"
         placeholder="Search..."
       />

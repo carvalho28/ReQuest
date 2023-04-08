@@ -223,8 +223,8 @@ export default function SingleProject({
         avatar_url={avatar_url}
         projectChildren={projectsChildren}
       >
-        <div className="flex gap-x-4 mt-8 flex-col sm:flex-row gap-y-8">
-          <div className="flex flex-col p-6 bg-white rounded-lg shadow-lg justify-center sm:w-1/4 w-full">
+        <div className="flex gap-x-4 mt-8 flex-col md:flex-row gap-y-8">
+          <div className="flex flex-col p-6 bg-white rounded-lg shadow-lg justify-center md:w-1/4 w-full">
             <h3 className="text-xl font-bold flex justify-center items-center text-center">
               Progress
             </h3>
@@ -260,7 +260,7 @@ export default function SingleProject({
               </div>
             </div>
           </div>
-          <div className="flex flex-col p-6 bg-white rounded-lg shadow-lg justify-center sm:w-1/4 w-full">
+          <div className="flex flex-col p-6 bg-white rounded-lg shadow-lg justify-center md:w-1/4 w-full">
             <h3 className="text-xl font-bold flex justify-center items-center text-center">
               Deadline
             </h3>
@@ -280,7 +280,7 @@ export default function SingleProject({
               </div>
             </div>
           </div>
-          <div className="flex flex-col p-6 bg-white rounded-lg shadow-lg justify-center sm:w-1/4 w-full">
+          <div className="flex flex-col p-6 bg-white rounded-lg shadow-lg justify-center md:w-1/4 w-full">
             <h3 className="text-xl font-bold flex justify-center items-center text-center">
               Requirements Overview
             </h3>
@@ -303,7 +303,7 @@ export default function SingleProject({
               </div>
             </div>
           </div>
-          <div className="flex flex-col p-6 bg-white rounded-lg shadow-lg sm:w-1/4 w-full">
+          <div className="flex flex-col p-6 bg-white rounded-lg shadow-lg md:w-1/4 w-full">
             <h3 className="text-xl font-bold flex justify-center">
               Team Members
             </h3>
@@ -312,7 +312,7 @@ export default function SingleProject({
               {projectUserNames.map((user: any) => (
                 <div className="flex gap-x-2 mt-4" key={user}>
                   <RiUser3Line className="h-6 w-6" />
-                  <div className="text-md">{user}</div>
+                  <div className="text-md truncate">{user}</div>
                 </div>
               ))}
             </div>
