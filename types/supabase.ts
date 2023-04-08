@@ -107,6 +107,7 @@ export interface Database {
       requirements: {
         Row: {
           assigned_to: string[] | null
+          closed_at: string | null
           created_at: string
           created_by: string
           description: string | null
@@ -121,6 +122,7 @@ export interface Database {
         }
         Insert: {
           assigned_to?: string[] | null
+          closed_at?: string | null
           created_at: string
           created_by: string
           description?: string | null
@@ -135,6 +137,7 @@ export interface Database {
         }
         Update: {
           assigned_to?: string[] | null
+          closed_at?: string | null
           created_at?: string
           created_by?: string
           description?: string | null

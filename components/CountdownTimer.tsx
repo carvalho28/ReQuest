@@ -17,8 +17,6 @@ interface Style extends CSSProperties {
 }
 
 const CountdownTimer = ({ dateString }: Props) => {
-  console.log(dateString);
-
   const date = new Date(dateString);
 
   const [timeLeft, setTimeLeft] = useState(getTimeLeft());

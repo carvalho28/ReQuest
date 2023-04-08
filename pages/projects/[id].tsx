@@ -324,8 +324,6 @@ export default function SingleProject({
           projectId={projectId}
           projectUserNames={projectUserNames}
         />
-
-        {/* <Table /> */}
       </Layout>
     </div>
   );

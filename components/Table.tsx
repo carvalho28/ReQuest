@@ -136,7 +136,7 @@ function GlobalFilter({ globalFilter, setGlobalFilter, placeholder }: any) {
           setValue(e.target.value);
           onChange(e.target.value);
         }}
-        className="md:w-5/12 w-1/3 rounded-xl border p-3 text-gray-500 cursor-pointer"
+        className="md:w-5/12 w-2/4 rounded-xl border p-3 text-gray-500 cursor-pointer"
         type="search"
         placeholder="🔎   Search..."
       />

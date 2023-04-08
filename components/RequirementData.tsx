@@ -56,12 +56,20 @@ const RequirementData = ({
       assigned_to: requirement.assigned_to,
       status: requirement.status,
       id_proj: requirement.id_proj,
+      closed_at: requirement.closed_at,
     });
   }, [requirement]);
 
   useEffect(() => {
     async function saveChanges() {
       console.log("saving changes ---");
+
+      // check if requirement.status is changed to completed
+      console.log(requirementData.status);
+      if (requirementData.status?.toLowerCase() === "completed") {
+        // add a closed_at date
+        requirementData.closed_at = new Date().toISOString();
+      }
 
       const { error } = await supabaseClient
         .from("requirements")
