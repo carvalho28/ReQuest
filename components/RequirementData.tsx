@@ -66,7 +66,6 @@ const RequirementData = ({
       updated_by: requirement.updated_by,
       created_at: requirement.created_at,
       created_by: requirement.created_by,
-      // assigned_to: getUserNamesFromIds(requirement.assigned_to),
       assigned_to: requirement.assigned_to,
       status: requirement.status,
       id_proj: requirement.id_proj,
@@ -88,7 +87,7 @@ const RequirementData = ({
         // add a closed_at date
         requirementData.closed_at = new Date().toISOString();
         // copy assigned_to to closed_by
-        // requirementData.closed_by = requirementData.assigned_to;
+        requirementData.closed_by = requirementData.assigned_to;
       }
 
       const { error } = await supabaseClient
