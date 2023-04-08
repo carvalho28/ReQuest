@@ -7,6 +7,9 @@ import {
   RiArrowLeftCircleFill,
   RiArrowRightCircleFill,
   RiUser3Line,
+  RiVipCrown2Line,
+  RiVipCrownFill,
+  RiVipCrownLine,
 } from "react-icons/ri";
 import { useEffect, useState } from "react";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
@@ -15,6 +18,7 @@ import { ProjectChildren } from "@/components/utils/sidebarHelper";
 import Image from "next/image";
 import { Rubik_Glitch } from "next/font/google";
 import CountdownTimer from "@/components/CountdownTimer";
+import { FaMedal } from "react-icons/fa";
 
 const rubikGlitch = Rubik_Glitch({
   subsets: ["latin"],
@@ -305,12 +309,25 @@ export default function SingleProject({
           </div>
           <div className="flex flex-col p-6 bg-white rounded-lg shadow-lg md:w-1/4 w-full">
             <h3 className="text-xl font-bold flex justify-center">Ranking</h3>
-            <div className="flex flex-col justify-center mt-8 ml-2">
-              {/* print user names next to  an icon */}
-              {projectUserNames.map((user: any) => (
-                <div className="flex gap-x-2 mt-4" key={user}>
-                  <RiUser3Line className="h-6 w-6" />
-                  <div className="text-md truncate">{user}</div>
+            <div className="flex flex-col justify-center mt-8 ml-2 space-y-4">
+              {projectUserNames.map((user: any, index: number) => (
+                <div className="flex gap-x-2 items-center" key={user}>
+                  {index === 0 && (
+                    <div className="text-2xl font-bold text-yellow-500">
+                      <FaMedal />
+                    </div>
+                  )}
+                  {index === 1 && (
+                    <div className="text-2xl font-bold text-gray-500">
+                      <FaMedal />
+                    </div>
+                  )}
+                  {index === 2 && (
+                    <div className="text-2xl font-bold text-orange-400">
+                      <FaMedal />
+                    </div>
+                  )}
+                  <div>{user}</div>
                 </div>
               ))}
             </div>
