@@ -7,7 +7,6 @@ import {
   usePagination,
   useSortBy,
   Column,
-  Cell,
 } from "react-table";
 import { useRowSelectColumn } from "@lineup-lite/hooks";
 import {
@@ -36,7 +35,7 @@ export function PriorityProject({ value }: any) {
           : status === "p2"
           ? "bg-yellow-100 text-yellow-700"
           : "bg-green-100 text-green-700",
-        "px-3 py-1 uppercase leading-wide font-bold text-xs rounded-full shadow-sm"
+        "px-2 md:px-3 py-1 md:uppercase capitalize leading-wide font-bold text-xs rounded-full shadow-sm"
       )}
     >
       {status}
@@ -51,7 +50,7 @@ export function StatusProject({ value }: any) {
   return (
     <span
       className={classNames(
-        "px-3 py-1 uppercase leading-wide font-bold text-xs rounded-full shadow-sm inline-flex items-center",
+        "px-2 md:px-3 py-1 md:uppercase capitalize leading-wide font-bold text-xs rounded-full shadow-sm inline-flex items-center",
         status.startsWith("completed") ? "bg-green-100 text-green-700" : null,
         status.startsWith("in progress")
           ? "bg-yellow-100 text-yellow-700"
@@ -130,16 +129,16 @@ function GlobalFilter({ globalFilter, setGlobalFilter, placeholder }: any) {
   }, 200);
 
   return (
-    <span className="flex flex-col pt-10 pb-10 md:items-center justify-center">
+    <span className="flex flex-col pt-10 pb-10 items-center justify-center">
       <input
         value={value || ""}
         onChange={(e) => {
           setValue(e.target.value);
           onChange(e.target.value);
         }}
-        className="md:w-8/12 w-1/3 items-start rounded-xl border p-4 text-gray-500 cursor-pointer"
+        className="md:w-5/12 w-1/3 rounded-xl border p-3 text-gray-500 cursor-pointer"
         type="search"
-        placeholder="Search..."
+        placeholder="🔎   Search..."
       />
     </span>
   );
@@ -322,7 +321,7 @@ function Table({ name, projectUserNames, projectId }: RequirementsTableProps) {
                         {...column.getHeaderProps(
                           column.getSortByToggleProps()
                         )}
-                        className="px-6 py-5 text-left text-20 font-medium text-gray-400 uppercase rounded-sm tracking-wider"
+                        className="md:px-5 px-2 py-5 text-medium md:text-left md:text-[16px] font-medium text-gray-400 uppercase rounded-sm tracking-wider text-xs"
                       >
                         <span className="flex flex-row items-center">
                           {column.render("Header")}
@@ -356,7 +355,7 @@ function Table({ name, projectUserNames, projectId }: RequirementsTableProps) {
                           <td
                             {...cell.getCellProps()}
                             key={`cell-${i}-${j}`}
-                            className="px-6 py-10 whitespace-nowrap"
+                            className="md:px-5 px-2 py-5 whitespace-nowrap truncate text-sm md:text-[16px]"
                           >
                             {cell.render("Cell")}
                           </td>
