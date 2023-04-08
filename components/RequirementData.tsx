@@ -1,4 +1,5 @@
 import {
+  UserIdAndName,
   renderPriorityBadge,
   renderStatusBadge,
 } from "@/components/utils/general";
@@ -25,13 +26,13 @@ import { RealtimeChannel } from "@supabase/supabase-js";
 interface RequirementDataProps {
   name: string;
   requirement: Database["public"]["Tables"]["requirements"]["Row"];
-  projectUserNames: string[];
+  projectUserIdsAndNames: UserIdAndName[];
 }
 
 const RequirementData = ({
   name,
   requirement,
-  projectUserNames,
+  projectUserIdsAndNames,
 }: RequirementDataProps) => {
   const [requirementData, setRequirementData] = useState<
     Database["public"]["Tables"]["requirements"]["Row"]
@@ -40,11 +41,21 @@ const RequirementData = ({
   const supabaseClient = useSupabaseClient();
   const user = useUser();
 
+  function getUserNamesFromIds(ids: string[] | null) {
+    if (!ids) return [];
+    const names: string[] = [];
+    ids.forEach((id) => {
+      const { name } = projectUserIdsAndNames?.find(
+        (user) => user.id === id
+      ) as UserIdAndName;
+      names.push(name);
+    });
+    return names;
+  }
+
   const [isUpdatingUpdatedBy, setIsUpdatingUpdatedBy] = useState(false);
 
   useEffect(() => {
-    console.log(requirement.closed_at);
-
     setRequirementData({
       id: requirement.id,
       name: requirement.name,
@@ -55,10 +66,12 @@ const RequirementData = ({
       updated_by: requirement.updated_by,
       created_at: requirement.created_at,
       created_by: requirement.created_by,
+      // assigned_to: getUserNamesFromIds(requirement.assigned_to),
       assigned_to: requirement.assigned_to,
       status: requirement.status,
       id_proj: requirement.id_proj,
       closed_at: requirement.closed_at,
+      closed_by: requirement.closed_by,
     });
   }, [requirement]);
 
@@ -74,6 +87,8 @@ const RequirementData = ({
       ) {
         // add a closed_at date
         requirementData.closed_at = new Date().toISOString();
+        // copy assigned_to to closed_by
+        // requirementData.closed_by = requirementData.assigned_to;
       }
 
       const { error } = await supabaseClient
@@ -292,10 +307,12 @@ const RequirementData = ({
                     </div>
                     <MultiselectPeople
                       onChange={(assignedTo) => changeAssignedTo(assignedTo)}
-                      projectUserNames={projectUserNames}
-                      selectedUserNames={
-                        requirementData.assigned_to as string[]
-                      }
+                      // projectUserNames={projectUserIdsAndNames}
+                      projectUserIdsAndNames={projectUserIdsAndNames}
+                      // selectedUserNames={
+                      //   requirementData.assigned_to as string[]
+                      // }
+                      selectedUsers={requirementData.assigned_to as string[]}
                     />
                   </div>
                 </div>

@@ -18,7 +18,7 @@ import {
 import { DOTS, useCustomPagination } from "./CustomPagination";
 import "regenerator-runtime/runtime";
 import { ArrowUpRightIcon } from "@heroicons/react/24/outline";
-import { ColumnsReq, RowReq, classNames } from "./utils/general";
+import { ColumnsReq, RowReq, UserIdAndName, classNames } from "./utils/general";
 import { Database } from "@/types/supabase";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import RequirementData from "./RequirementData";
@@ -78,6 +78,15 @@ export function DueDateProject({ value }: any) {
       </div>
     );
   }
+}
+
+function getUserNamesFromIds(ids: string[], projectUserIdsAndNames: any) {
+  const names: string[] = [];
+  ids.forEach((id) => {
+    const name = projectUserIdsAndNames.find((user: any) => user.id === id);
+    if (name) names.push(name.name);
+  });
+  return names;
 }
 
 export function AssignedToProject({ value }: any) {
@@ -146,11 +155,15 @@ function GlobalFilter({ globalFilter, setGlobalFilter, placeholder }: any) {
 
 interface RequirementsTableProps {
   name: string;
-  projectUserNames: string[];
+  projectUserIdsAndNames: UserIdAndName[];
   projectId: string;
 }
 
-function Table({ name, projectUserNames, projectId }: RequirementsTableProps) {
+function Table({
+  name,
+  projectUserIdsAndNames,
+  projectId,
+}: RequirementsTableProps) {
   const [requirements, setRequirements] = useState<
     Database["public"]["Tables"]["requirements"]["Row"][]
   >([]);
@@ -188,7 +201,11 @@ function Table({ name, projectUserNames, projectId }: RequirementsTableProps) {
       {
         Header: "Assigned To",
         accessor: "assigned_to",
-        Cell: AssignedToProject,
+        Cell: ({ value }: any) => (
+          <AssignedToProject
+            value={getUserNamesFromIds(value, projectUserIdsAndNames)}
+          />
+        ),
       },
     ],
     []
@@ -425,7 +442,7 @@ function Table({ name, projectUserNames, projectId }: RequirementsTableProps) {
         <RequirementData
           name={name}
           requirement={requirement}
-          projectUserNames={projectUserNames}
+          projectUserIdsAndNames={projectUserIdsAndNames}
         />
       )}
     </div>

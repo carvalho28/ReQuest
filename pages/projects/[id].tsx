@@ -3,14 +3,7 @@ import { createServerSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import { GetServerSidePropsContext } from "next";
 import { Database } from "@/types/supabase";
 import Table from "@/components/Table";
-import {
-  RiArrowLeftCircleFill,
-  RiArrowRightCircleFill,
-  RiUser3Line,
-  RiVipCrown2Line,
-  RiVipCrownFill,
-  RiVipCrownLine,
-} from "react-icons/ri";
+import { RiArrowLeftCircleFill, RiArrowRightCircleFill } from "react-icons/ri";
 import { useEffect, useState } from "react";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { RealtimeChannel } from "@supabase/supabase-js";
@@ -19,6 +12,7 @@ import Image from "next/image";
 import { Rubik_Glitch } from "next/font/google";
 import CountdownTimer from "@/components/CountdownTimer";
 import { FaMedal } from "react-icons/fa";
+import { UserIdAndName } from "@/components/utils/general";
 
 const rubikGlitch = Rubik_Glitch({
   subsets: ["latin"],
@@ -74,6 +68,7 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
     .select(
       `id_user, 
     profiles (
+      id,
       name,
       email
     )`
@@ -83,8 +78,20 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   if (usersInProjectError) console.log(usersInProjectError);
   if (!usersInProject) throw new Error("No data found");
 
-  const projectUserNames = usersInProject.map(
-    (user: any) => user.profiles.name ?? user.profiles.email
+  // const projectUserIds = usersInProject.map((user: any) => user.id_user);
+
+  // const projectUserNames = usersInProject.map(
+  //   (user: any) => user.profiles.name ?? user.profiles.email
+  // );
+
+  // tuple of user ids and user names
+  const projectUserIdsAndNames: UserIdAndName[] = usersInProject.map(
+    (user: any) => {
+      return {
+        id: user.id_user,
+        name: user.profiles.name ?? user.profiles.email,
+      };
+    }
   );
 
   // get user projects info
@@ -108,7 +115,7 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
       avatar_url: data[0].avatar_url,
       project_data: projectData,
       user: userData[0].name,
-      projectUserNames,
+      projectUserIdsAndNames: projectUserIdsAndNames,
       projectsChildren: projectsChildren,
     },
   };
@@ -118,7 +125,9 @@ export default function SingleProject({
   avatar_url,
   project_data,
   user,
-  projectUserNames,
+  // projectUserNames,
+  // projectUserIds,
+  projectUserIdsAndNames,
   projectsChildren,
 }: any) {
   const project: Database["public"]["Tables"]["projects"]["Row"] =
@@ -310,26 +319,34 @@ export default function SingleProject({
           <div className="flex flex-col p-6 bg-white rounded-lg shadow-lg md:w-1/4 w-full">
             <h3 className="text-xl font-bold flex justify-center">Ranking</h3>
             <div className="flex flex-col justify-center mt-8 ml-2 space-y-4">
-              {projectUserNames.map((user: any, index: number) => (
-                <div className="flex gap-x-2 items-center" key={user}>
-                  {index === 0 && (
-                    <div className="text-2xl font-bold text-yellow-500">
-                      <FaMedal />
+              {/* {projectUserIdsAndNames.map((user: any, index: number) => ( */}
+              {projectUserIdsAndNames.map(
+                (userIdAndName: UserIdAndName, index: any) => {
+                  return (
+                    <div
+                      className="flex gap-x-2 items-center"
+                      key={userIdAndName.id}
+                    >
+                      {index === 0 && (
+                        <div className="text-2xl font-bold text-yellow-500">
+                          <FaMedal />
+                        </div>
+                      )}
+                      {index === 1 && (
+                        <div className="text-2xl font-bold text-gray-500">
+                          <FaMedal />
+                        </div>
+                      )}
+                      {index === 2 && (
+                        <div className="text-2xl font-bold text-orange-400">
+                          <FaMedal />
+                        </div>
+                      )}
+                      <div>{userIdAndName.name}</div>
                     </div>
-                  )}
-                  {index === 1 && (
-                    <div className="text-2xl font-bold text-gray-500">
-                      <FaMedal />
-                    </div>
-                  )}
-                  {index === 2 && (
-                    <div className="text-2xl font-bold text-orange-400">
-                      <FaMedal />
-                    </div>
-                  )}
-                  <div>{user}</div>
-                </div>
-              ))}
+                  );
+                }
+              )}
             </div>
           </div>
         </div>
@@ -337,7 +354,7 @@ export default function SingleProject({
         <Table
           name={name}
           projectId={projectId}
-          projectUserNames={projectUserNames}
+          projectUserIdsAndNames={projectUserIdsAndNames}
         />
       </Layout>
     </div>
