@@ -1,0 +1,238 @@
+@import url('https://fonts.googleapis.com/css?family=Amatic+SC');
+
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@300&display=swap');
+
+.list::-webkit-scrollbar-track
+{
+  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+  background-color: #F5F5F5;
+}
+
+.list::-webkit-scrollbar
+{
+  width: 6px;
+  background-color: #845EC2;
+}
+
+.list::-webkit-scrollbar-thumb
+{
+  background-color: #32C487;
+}
+
+.container-leader {
+//   width: 445px;
+//   height: 600px;
+//   background-color: black;
+//   background-color: #0998B7;
+  margin: auto;
+  font-family: 'Amatic SC';
+  margin: auto;
+  padding: 1rem;
+  border-radius: 5px;
+  box-shadow: 7px 9px 7px #00000052;
+  
+  .leader {
+    display: flex;
+  }
+
+  .crown {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+
+    svg {
+      width: 3rem;
+    }
+  }
+
+  .image {
+    height: 58px;
+    object-fit: cover;
+    width: 58px;
+    background-color: black;
+    border-radius: 50%;
+  }
+
+  .topLeadersList {
+    display: flex;
+    position: relative;
+    min-height: 120px;
+    padding-top: 1em;
+
+    .image {
+      border-radius: 50%;
+      border: 3px solid #b159ffcc;
+    }
+
+    .leader:nth-child(1) {
+      color: black;
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+
+      .image {
+        width: 130px;
+        height: 130px;
+      }
+
+      .crown {
+        top: -40%;
+
+        svg {
+          fill: #ffc500;
+        }
+      }
+
+    }
+
+    .leader:nth-child(2) {
+      color: black;
+      position: absolute;
+      left: 15%;
+      transform: translateX(-15%);
+    //   bottom: -10%;
+
+      .image {
+        width: 110px;
+        height: 110px;
+      }
+
+      .crown {
+        top: -40%;
+
+        svg {
+          fill: #d4d4d4;
+        }
+      }
+    }
+
+    .leader:nth-child(3) {
+      color: black;
+      position: absolute;
+      left: 85%;
+      transform: translateX(-85%);
+    //   bottom: 5%;
+
+      .image {
+        width: 110px;
+        height: 110px;
+      }
+
+      .crown {
+        top: -40%;
+
+        svg {
+          fill: #ab6528;
+        }
+      }
+    }
+  }
+
+  .leaderName {
+    position: absolute;
+    text-align: center;
+    color: black;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 22px;
+  }
+
+  .first {
+    position: absolute;
+    text-align: center;
+    color: black;
+    background-color: #ffc500;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 30px;
+    margin-top: 1em;
+    width: 1.5em;
+    height: 3.0em;
+  }
+
+  .second {
+    position: absolute;
+    text-align: center;
+    color: black;
+    background-color: #d4d4d4;
+    left: 15%;
+    transform: translateX(-15%);
+    font-size: 30px;
+    margin-top: 1em;
+    width: 1.5em;
+    height: 3.0em;
+  }
+
+  .third {
+    position: absolute;
+    text-align: center;
+    color: black;
+    background-color: #ab6528;
+    left: 85%;
+    transform: translateX(-85%);
+    font-size: 30px;
+    margin-top: 1em;
+    width: 1.7em;
+    height: 3.0em;
+  }
+
+  .player {
+    background-color: #330b7775;
+    display: grid;
+    grid-template-columns: 0.6fr 2fr 1fr;
+
+    align-items: center;
+    min-height: 42px;
+    text-align: center;
+     padding-right: 0.4rem;
+    
+    .image {
+      width: 28px;
+      height: 28px;
+      border: 1.5px solid white;
+    }
+  }
+
+  .table {
+    margin-right: 0.1rem;
+    display: grid;
+    font-size: 14px;
+    grid-template-columns: 0.6fr 2fr 1fr;
+    text-align: center;
+
+    div:nth-child(2) {
+      text-align: left;
+      margin-left: 5px;
+    }
+
+    .image {
+      width: 20px;
+      height: 20px;
+    }
+  }
+
+  .playerslist {
+    margin-top: 6rem;
+    font-size: 16px;
+    overflow: hidden;
+    color: white;
+        font-family: 'Roboto Condensed', sans-serif;
+    
+    .player:nth-child(odd) {
+      background-color: #65b8db;
+      align-items: center;
+    }
+  }
+
+  .user {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+//   .list {
+//     // overflow: scroll;
+//     // height: fit-content;
+//     // overflow-x: hidden;
+//   }
+}

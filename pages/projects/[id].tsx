@@ -10,22 +10,18 @@ import { RealtimeChannel } from "@supabase/supabase-js";
 import { ProjectChildren } from "@/components/utils/sidebarHelper";
 import Image from "next/image";
 import { Rubik_Glitch } from "next/font/google";
-import { Rubik_Bubbles } from "next/font/google";
 import CountdownTimer from "@/components/CountdownTimer";
 import { FaMedal } from "react-icons/fa";
 import { UserIdAndName } from "@/components/utils/general";
+import Leaderboard from "@/components/Leaderboard";
+import ListRanking from "@/components/ListRanking";
 
 const rubikGlitch = Rubik_Glitch({
   subsets: ["latin"],
   weight: ["400"],
 });
 
-const rubikBubbles = Rubik_Bubbles({
-  subsets: ["latin"],
-  weight: ["400"],
-});
-
-type Rankings = {
+export type Rankings = {
   id: string;
   name: string;
   requirements_closed: number;
@@ -261,6 +257,8 @@ export default function SingleProject({
     getRanking();
   }, [projectId, supabaseClient, requirementsCompleted]);
 
+  console.log(ranking);
+
   return (
     <div>
       <Layout
@@ -352,52 +350,8 @@ export default function SingleProject({
           <div className="flex flex-col p-6 bg-white rounded-lg shadow-lg md:w-1/4 w-full">
             <h3 className="text-xl font-bold flex justify-center">Ranking</h3>
             <div className="flex flex-col justify-center mt-8 ml-2 space-y-4 items-center">
-              <table className="table table-compact w-full">
-                <thead>
-                  <tr className="text-black">
-                    <th className="text-center ">Rank</th>
-                    <th className="text-center">Name</th>
-                    <th className="text-center">Completed</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {ranking.map((item: Rankings, index: any) => (
-                    <tr key={item.id}>
-                      <td className="pl-10">
-                        {index === 0 && (
-                          <FaMedal className="text-2xl font-bold text-yellow-500" />
-                        )}
-                        {index === 1 && (
-                          <FaMedal className="text-2xl font-bold text-gray-500" />
-                        )}
-                        {index === 2 && (
-                          <FaMedal className="text-2xl font-bold text-orange-400" />
-                        )}
-                        {index > 2 && <span>{index + 1}</span>}
-                      </td>
-                      {/* <td className="truncate">
-                        {}
-                        {item.name}</td> */}
-                      {/* render avatar followed by name */}
-                      <td className="flex items-center justify-start pl-16">
-                        <Image
-                          alt="Avatar"
-                          src={item.avatar_url}
-                          width={30}
-                          height={30}
-                          className="rounded-full"
-                        />
-                        <span className="ml-2 mt-0.5">{item.name}</span>
-                      </td>
-                      <td
-                        className={`text-2xl font-bold ${rubikBubbles.className} text-center`}
-                      >
-                        {item.requirements_closed}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+              {ranking.length > 0 && <Leaderboard rankings={ranking} />}
+              {/* <ListRanking rankings={ranking} /> */}
             </div>
           </div>
         </div>
