@@ -29,7 +29,7 @@ type Rankings = {
   id: string;
   name: string;
   requirements_closed: number;
-  // avatar_url: string;
+  avatar_url: string;
 };
 
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
@@ -351,39 +351,53 @@ export default function SingleProject({
           </div>
           <div className="flex flex-col p-6 bg-white rounded-lg shadow-lg md:w-1/4 w-full">
             <h3 className="text-xl font-bold flex justify-center">Ranking</h3>
-            <div className="flex flex-col justify-center mt-8 ml-2 space-y-4">
-              {/* {projectUserIdsAndNames.map((user: any, index: number) => ( */}
-              {ranking.map((item: Rankings, index: any) => {
-                return (
-                  <div className="flex gap-x-2 items-center" key={item.id}>
-                    {index === 0 && (
-                      <div className="text-2xl font-bold text-yellow-500">
-                        <FaMedal />
-                      </div>
-                    )}
-                    {index === 1 && (
-                      <div className="text-2xl font-bold text-gray-500">
-                        <FaMedal />
-                      </div>
-                    )}
-                    {index === 2 && (
-                      <div className="text-2xl font-bold text-orange-400">
-                        <FaMedal />
-                      </div>
-                    )}
-                    <div>{item.name}</div>
-                    <div className="text-gray-500 text-sm">with</div>
-                    <div
-                      className={`text-2xl font-bold ${rubikBubbles.className}`}
-                    >
-                      {item.requirements_closed}
-                    </div>
-                    <div className="text-gray-500 text-sm">
-                      requirements closed
-                    </div>
-                  </div>
-                );
-              })}
+            <div className="flex flex-col justify-center mt-8 ml-2 space-y-4 items-center">
+              <table className="table table-compact w-full">
+                <thead>
+                  <tr className="text-black">
+                    <th className="text-center ">Rank</th>
+                    <th className="text-center">Name</th>
+                    <th className="text-center">Completed</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {ranking.map((item: Rankings, index: any) => (
+                    <tr key={item.id}>
+                      <td className="pl-10">
+                        {index === 0 && (
+                          <FaMedal className="text-2xl font-bold text-yellow-500" />
+                        )}
+                        {index === 1 && (
+                          <FaMedal className="text-2xl font-bold text-gray-500" />
+                        )}
+                        {index === 2 && (
+                          <FaMedal className="text-2xl font-bold text-orange-400" />
+                        )}
+                        {index > 2 && <span>{index + 1}</span>}
+                      </td>
+                      {/* <td className="truncate">
+                        {}
+                        {item.name}</td> */}
+                      {/* render avatar followed by name */}
+                      <td className="flex items-center justify-start pl-16">
+                        <Image
+                          alt="Avatar"
+                          src={item.avatar_url}
+                          width={30}
+                          height={30}
+                          className="rounded-full"
+                        />
+                        <span className="ml-2 mt-0.5">{item.name}</span>
+                      </td>
+                      <td
+                        className={`text-2xl font-bold ${rubikBubbles.className} text-center`}
+                      >
+                        {item.requirements_closed}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
           </div>
         </div>
