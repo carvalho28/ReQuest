@@ -47,18 +47,18 @@ export default function Leaderboard({ rankings }: LeaderboardProps) {
   });
 
   return (
-    <div className="grid grid-rows-4 grid-cols-3 w-2/3 md:w-full text-center">
+    <div className="grid grid-rows-4 grid-cols-3 w-full text-center h-[200px]">
       <div></div>
       <div className="flex flex-col items-center">
         <div>
           <Image
             src={top3[0].avatar_url}
             alt="Picture of the author"
-            width={50}
-            height={50}
+            width={30}
+            height={30}
           />
         </div>
-        <div className="truncate">{top3[0].name}</div>
+        <div className="truncate text-sm">{top3[0].name}</div>
       </div>
       <div></div>
       <div className="flex flex-col items-center">
@@ -66,37 +66,36 @@ export default function Leaderboard({ rankings }: LeaderboardProps) {
           <Image
             src={top3[1].avatar_url}
             alt="Picture of the author"
-            width={50}
-            height={50}
+            width={30}
+            height={30}
           />
         </div>
-        <div className="truncate">{top3[1].name}</div>
+        <div className="truncate text-sm">{top3[1].name}</div>
       </div>
-      <div className={`bg-gold text-5xl ${rubik.className}`}>🥇</div>
+      <div className={`bg-gold text-3xl ${rubik.className} flex flex-col`}>
+        <span className="mt-2">🥇</span>
+      </div>
       <div></div>
-      <div className={`bg-silver text-5xl ${rubik.className}`}>🥈</div>
+      <div className={`bg-silver text-3xl ${rubik.className} flex flex-col`}>
+        <span className="mt-2">🥈</span>
+      </div>
       <div className="bg-gold"></div>
       <div className="flex flex-col items-center">
         <div>
           <Image
             src={top3[2].avatar_url}
             alt="Picture of the author"
-            width={50}
-            height={50}
+            width={30}
+            height={30}
           />
         </div>
-        <div className="truncate">{top3[2].name}</div>
+        <div className="truncate text-sm">{top3[2].name}</div>
       </div>
-      <div className="bg-silver flex flex-col justify-end">
-        {/* completed x requirements */}
-        <div className="text-xs">Completed</div>
-        <div className={`text-2xl ${rubik.className}`}>
-          {top3[2].requirements_closed}
-        </div>
-        <div className="text-xs">requirements</div>
+      <div className="bg-silver flex flex-col justify-end"></div>
+      <div className="bg-gold flex flex-col justify-end"></div>
+      <div className={`bg-bronze text-3xl ${rubik.className} flex flex-col`}>
+        <span className="mt-2">🥉</span>
       </div>
-      <div className="bg-gold"></div>
-      <div className={`bg-bronze text-5xl ${rubik.className}`}>🥉</div>
     </div>
   );
 }

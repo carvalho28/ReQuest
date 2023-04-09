@@ -14,58 +14,68 @@ interface ListRankingProps {
 }
 
 const ListRanking = ({ rankings }: ListRankingProps) => {
+  const rankings3 = [...rankings, ...rankings, ...rankings];
   return (
-    <div>
-      <dl className="mt-5 grid grid-cols-1 divide-y divide-gray-200 overflow-hidden rounded-lg bg-white shadow-lg">
-        {rankings.map((item, index) => (
-          <div key={item.id} className=" flex flex-row px-4 py-5 sm:p-6">
-            <dt
-              className={classNames(
-                index === 1
-                  ? "text-yellow-500"
-                  : index === 2
-                  ? "text-gray-500"
-                  : index === 3
-                  ? "text-orange-500"
-                  : "text-gray-500",
-                "text-base font-normal text-gray-900"
-              )}
-            >
-              {index === 0 ? (
-                <span className="text-7xl font-bold">🥇</span>
-              ) : index === 1 ? (
-                <span className="text-7xl font-bold">🥈</span>
-              ) : index === 2 ? (
-                <span className="text-7xl font-bold">🥉</span>
-              ) : (
-                <span className="text-7xl font-bold">{item.id}</span>
-              )}
+    <div className="overflow-y-scroll w-full h-60 scroll scrollbar-thumb-blue-500 scrollbar-track-gray-200 scrollbar-thin">
+      <dl className="grid grid-cols-1 divide-y divide-gray-400 rounded-lg bg-white border border-gray-400 h-54 overflow-y-scroll">
+        {rankings3.map((item, index) => (
+          <div key={item.id} className=" flex flex-row p-2">
+            {/* <dt>{index}</dt> */}
+            <dt className="flex flex-col items-center justify-center border-r border-gray-200 pr-2">
+              {/* {index + 1} */}
+              {/* index inside a circle */}
+              <div
+                className={`flex flex-row items-center justify-center rounded-full w-8 h-8 
+                ${index === 0 && "bg-yellow-400"}
+                ${index === 1 && "bg-gray-400"}
+                ${index === 2 && "bg-yellow-600"}
+                ${index > 2 && "bg-purple-300"}
+                `}
+              >
+                {index + 1}
+                {/* if 1 write st, 2 write sd ... */}
+                {index === 0 && <div className="text-xs">st</div>}
+                {index === 1 && <div className="text-xs">nd</div>}
+                {index === 2 && <div className="text-xs">rd</div>}
+                {index > 2 && <div className="text-xs">th</div>}
+              </div>
             </dt>
             {/* image */}
-            <div className="flex flex-col items-start">
+            <div className="flex flex-col items-start ml-4">
               {/* <div className="flex-shrink-0">
                 <img className="h-10 w-10 rounded-full" alt="avatar" />
               </div> */}
               <div className="flex flex-row items-center">
-                <Image
+                {/* <Image
                   className="h-12 w-12 rounded-full"
                   alt="avatar"
                   src={item.avatar_url}
                   width={40}
                   height={40}
-                />
+                /> */}
+                {/* <div className="flex flex-col items-start">{index}</div> */}
                 <div className="ml-2 text-md font-medium text-gray-900">
                   {item.name}
                 </div>
               </div>
-              <div
-                className={`flex flex-row items-center ${rubikBubbles.className}`}
-              >
-                <div className="ml-2 text-md font-medium text-gray-900">
+              <div className={`flex flex-row items-center`}>
+                {/* <div
+                  className={`ml-2 text-md font-medium text-gray-900 ${rubikBubbles.className}`}
+                >
                   {item.requirements_closed}
                 </div>
-                <div className="ml-2 text-sm text-gray-500 truncate">
+                <div className="ml-2 text-xs text-gray-500 truncate">
                   requirements closed
+                </div> */}
+                {/* Requirements closed: */}
+                <div className="ml-2 text-xs text-gray-500 truncate">
+                  Requirements closed:
+                </div>
+
+                <div
+                  className={`ml-2 text-md font-medium text-gray-900 ${rubikBubbles.className}`}
+                >
+                  {item.requirements_closed}
                 </div>
               </div>
             </div>

@@ -324,7 +324,7 @@ export default function SingleProject({
               </div>
             </div>
           </div>
-          <div className="flex flex-col p-6 bg-white rounded-lg shadow-lg justify-center md:w-1/4 w-full">
+          {/* <div className="flex flex-col p-6 bg-white rounded-lg shadow-lg justify-center md:w-1/4 w-full">
             <h3 className="text-xl font-bold flex justify-center items-center text-center">
               Requirements Overview
             </h3>
@@ -346,12 +346,20 @@ export default function SingleProject({
                 />
               </div>
             </div>
-          </div>
-          <div className="flex flex-col p-6 bg-white rounded-lg shadow-lg md:w-1/4 w-full">
+          </div> */}
+          <div className="flex flex-col p-6 bg-white rounded-lg shadow-lg md:w-2/4 w-full">
             <h3 className="text-xl font-bold flex justify-center">Ranking</h3>
-            <div className="flex flex-col justify-center mt-8 ml-2 space-y-4 items-center">
-              {ranking.length > 0 && <Leaderboard rankings={ranking} />}
-              {/* <ListRanking rankings={ranking} /> */}
+            <div className="flex flex-col justify-center mt-8 space-y-4 items-center">
+              <div className="flex flex-row w-full space-x-8 justify-center">
+                <div className="w-1/2">
+                  {ranking.length > 0 && <Leaderboard rankings={ranking} />}
+                </div>
+                {/* divider line */}
+                <div className="border-r-2 border-gray-300"></div>
+                <div className="w-1/2">
+                  <ListRanking rankings={ranking} />
+                </div>
+              </div>
             </div>
           </div>
         </div>
