@@ -16,8 +16,8 @@ interface ListRankingProps {
 const ListRanking = ({ rankings }: ListRankingProps) => {
   const rankings3 = [...rankings, ...rankings, ...rankings];
   return (
-    <div className="overflow-y-scroll w-full h-60 scroll scrollbar-thumb-blue-500 scrollbar-track-gray-200 scrollbar-thin">
-      <dl className="grid grid-cols-1 divide-y divide-gray-400 rounded-lg bg-white border border-gray-400 h-54 overflow-y-scroll">
+    <div className="overflow-y-scroll w-full h-60 scroll">
+      <dl className="grid grid-cols-1 divide-y divide-gray-400 rounded-lg bg-white border border-gray-400 h-54">
         {rankings3.map((item, index) => (
           <div key={item.id} className=" flex flex-row p-2">
             {/* <dt>{index}</dt> */}

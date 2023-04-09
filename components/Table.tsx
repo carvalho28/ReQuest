@@ -14,6 +14,10 @@ import {
   RiArrowRightSLine,
   RiArrowUpSLine,
   RiCheckboxBlankCircleFill,
+  RiDownload2Line,
+  RiDownloadLine,
+  RiFileExcel2Line,
+  RiFileExcelLine,
 } from "react-icons/ri";
 import { DOTS, useCustomPagination } from "./CustomPagination";
 import "regenerator-runtime/runtime";
@@ -23,6 +27,7 @@ import { Database } from "@/types/supabase";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import RequirementData from "./RequirementData";
 import { RealtimeChannel } from "@supabase/supabase-js";
+import { CSVLink, CSVDownload } from "react-csv";
 
 export function PriorityProject({ value }: any) {
   const status = typeof value === "string" ? value.toLowerCase() : "p3";
@@ -131,25 +136,46 @@ export function NameProject({ value, row, setRequirement }: any) {
   }
 }
 
-function GlobalFilter({ globalFilter, setGlobalFilter, placeholder }: any) {
+function GlobalFilter({
+  globalFilter,
+  setGlobalFilter,
+  placeholder,
+  requirements,
+}: any) {
   const [value, setValue] = useState(globalFilter);
   const onChange = useAsyncDebounce((value) => {
     setGlobalFilter(value || undefined);
   }, 200);
 
   return (
-    <span className="flex flex-col pt-10 pb-10 items-center justify-center">
-      <input
-        value={value || ""}
-        onChange={(e) => {
-          setValue(e.target.value);
-          onChange(e.target.value);
-        }}
-        className="md:w-5/12 w-2/4 rounded-xl border p-3 text-gray-500 cursor-pointer"
-        type="search"
-        placeholder="🔎   Search..."
-      />
-    </span>
+    <div>
+      <span className="flex flex-row pt-10 pb-5 items-center justify-center">
+        <input
+          value={value || ""}
+          onChange={(e) => {
+            setValue(e.target.value);
+            onChange(e.target.value);
+          }}
+          className="md:w-5/12 w-2/4 rounded-xl border p-3 text-gray-500 cursor-pointer"
+          type="search"
+          placeholder="🔎   Search..."
+        />
+      </span>
+      <span className="flex flex-row items-end justify-end">
+        <CSVLink
+          data={requirements}
+          filename={"requirements.csv"}
+          className="btn text-contrast hover:text-contrasthover bg-transparent border-0 hover:bg-purple-200"
+        >
+          {/* download to excel icon */}
+          <RiDownloadLine
+            className="h-5 w-5"
+            aria-hidden="true"
+            title="Download to Excel"
+          />
+        </CSVLink>
+      </span>
+    </div>
   );
 }
 
@@ -321,6 +347,7 @@ function Table({
               preGlobalFilteredRows={preGlobalFilteredRows}
               globalFilter={state.globalFilter}
               setGlobalFilter={setGlobalFilter}
+              requirements={requirements}
             />
             <table
               {...getTableProps()}

@@ -351,12 +351,12 @@ export default function SingleProject({
             <h3 className="text-xl font-bold flex justify-center">Ranking</h3>
             <div className="flex flex-col justify-center mt-8 space-y-4 items-center">
               <div className="flex flex-row w-full space-x-8 justify-center">
-                <div className="w-1/2">
+                <div className="w-2/5">
                   {ranking.length > 0 && <Leaderboard rankings={ranking} />}
                 </div>
                 {/* divider line */}
                 <div className="border-r-2 border-gray-300"></div>
-                <div className="w-1/2">
+                <div className="w-3/5">
                   <ListRanking rankings={ranking} />
                 </div>
               </div>
