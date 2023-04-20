@@ -1,4 +1,4 @@
-import { renderPriorityBadge } from "@/components/utils/general";
+import { UserIdAndName, renderPriorityBadge } from "@/components/utils/general";
 import { Database } from "@/types/supabase";
 import {
   ArrowUpRightIcon,
@@ -18,13 +18,14 @@ const RequirementData = dynamic(() => import("./RequirementData"), {
 
 interface RequirementsTableProps {
   name: string;
-  projectUserNames: string[];
+  // projectUserNames: string[];
+  projectUserIdsAndNames: UserIdAndName[];
   projectId: string;
 }
 
 const RequirementsTable = ({
   name,
-  projectUserNames,
+  projectUserIdsAndNames,
   projectId,
 }: RequirementsTableProps) => {
   const [requirements, setRequirements] = useState<
@@ -51,6 +52,7 @@ const RequirementsTable = ({
     status: "not started",
     id_proj: projectId,
     closed_at: null,
+    closed_by: null,
   });
 
   const [showReq, setShowReq] = useState(false);
@@ -285,7 +287,7 @@ const RequirementsTable = ({
       <RequirementData
         name={name}
         requirement={requirement}
-        projectUserNames={projectUserNames}
+        projectUserIdsAndNames={projectUserIdsAndNames}
       />
     </div>
   );

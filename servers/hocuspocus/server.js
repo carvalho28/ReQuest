@@ -1,11 +1,9 @@
 import { Hocuspocus } from "@hocuspocus/server";
 import { createClient } from "@supabase/supabase-js";
 import {
-  ProsemirrorTransformer,
   TiptapTransformer,
 } from "@hocuspocus/transformer";
 import StarterKit from "@tiptap/starter-kit";
-import { Doc } from "yjs";
 import dotenv from "dotenv";
 import TextStyle from "@tiptap/extension-text-style";
 import Placeholder from "@tiptap/extension-placeholder";
@@ -22,9 +20,6 @@ import TableCell from "@tiptap/extension-table-cell";
 import Collaboration from "@tiptap/extension-collaboration";
 import CollaborationCursor from "@tiptap/extension-collaboration-cursor";
 
-import Document from "@tiptap/extension-document";
-import Paragraph from "@tiptap/extension-paragraph";
-import Text from "@tiptap/extension-text";
 dotenv.config();
 
 const supabaseUrl = process.env.SUPABASE_URL ?? "";
@@ -45,7 +40,7 @@ server.configure({
     const proseMirrorJSON = TiptapTransformer.fromYdoc(
       data.document,
       "default"[
-        (StarterKit,
+      (StarterKit,
         TextStyle,
         Placeholder,
         Highlight,

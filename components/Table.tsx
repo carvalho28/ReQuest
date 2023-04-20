@@ -14,15 +14,17 @@ import {
   RiArrowRightSLine,
   RiArrowUpSLine,
   RiCheckboxBlankCircleFill,
+  RiDownloadLine,
 } from "react-icons/ri";
 import { DOTS, useCustomPagination } from "./CustomPagination";
 import "regenerator-runtime/runtime";
 import { ArrowUpRightIcon } from "@heroicons/react/24/outline";
-import { ColumnsReq, RowReq, classNames } from "./utils/general";
+import { ColumnsReq, RowReq, UserIdAndName, classNames } from "./utils/general";
 import { Database } from "@/types/supabase";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import RequirementData from "./RequirementData";
 import { RealtimeChannel } from "@supabase/supabase-js";
+import { CSVLink } from "react-csv";
 
 export function PriorityProject({ value }: any) {
   const status = typeof value === "string" ? value.toLowerCase() : "p3";
@@ -33,8 +35,8 @@ export function PriorityProject({ value }: any) {
         status === "p1"
           ? "bg-red-100 text-red-700"
           : status === "p2"
-          ? "bg-yellow-100 text-yellow-700"
-          : "bg-green-100 text-green-700",
+            ? "bg-yellow-100 text-yellow-700"
+            : "bg-green-100 text-green-700",
         "px-2 md:px-3 py-1 md:uppercase capitalize leading-wide font-bold text-xs rounded-full shadow-sm"
       )}
     >
@@ -80,6 +82,15 @@ export function DueDateProject({ value }: any) {
   }
 }
 
+function getUserNamesFromIds(ids: string[], projectUserIdsAndNames: any) {
+  const names: string[] = [];
+  ids.forEach((id) => {
+    const name = projectUserIdsAndNames.find((user: any) => user.id === id);
+    if (name) names.push(name.name);
+  });
+  return names;
+}
+
 export function AssignedToProject({ value }: any) {
   if (value && value.length > 0) {
     const users = value.map((user: string) => (
@@ -122,35 +133,60 @@ export function NameProject({ value, row, setRequirement }: any) {
   }
 }
 
-function GlobalFilter({ globalFilter, setGlobalFilter, placeholder }: any) {
+function GlobalFilter({
+  globalFilter,
+  setGlobalFilter,
+  placeholder,
+  requirements,
+}: any) {
   const [value, setValue] = useState(globalFilter);
   const onChange = useAsyncDebounce((value) => {
     setGlobalFilter(value || undefined);
   }, 200);
 
   return (
-    <span className="flex flex-col pt-10 pb-10 items-center justify-center">
-      <input
-        value={value || ""}
-        onChange={(e) => {
-          setValue(e.target.value);
-          onChange(e.target.value);
-        }}
-        className="md:w-5/12 w-2/4 rounded-xl border p-3 text-gray-500 cursor-pointer"
-        type="search"
-        placeholder="🔎   Search..."
-      />
-    </span>
+    <div className="flex flex-row items-center justify-center w-full pt-20 pb-2">
+      <div className="flex items-center ml-20 flex-grow">
+        <input
+          value={value || ""}
+          onChange={(e) => {
+            setValue(e.target.value);
+            onChange(e.target.value);
+          }}
+          className="mx-auto md:w-4/12 w-2/4 rounded-xl border p-3 text-gray-500 cursor-pointer"
+          type="search"
+          placeholder="🔎   Search..."
+        />
+      </div>
+      <div className="flex items-end">
+        <CSVLink
+          data={requirements}
+          filename={"requirements.csv"}
+          className="btn text-contrast hover:text-contrasthover bg-transparent border-0 hover:bg-purple-200"
+        >
+          {/* download to excel icon */}
+          <RiDownloadLine
+            className="h-5 w-5"
+            aria-hidden="true"
+            title="Download to Excel"
+          />
+        </CSVLink>
+      </div>
+    </div>
   );
 }
 
 interface RequirementsTableProps {
   name: string;
-  projectUserNames: string[];
+  projectUserIdsAndNames: UserIdAndName[];
   projectId: string;
 }
 
-function Table({ name, projectUserNames, projectId }: RequirementsTableProps) {
+function Table({
+  name,
+  projectUserIdsAndNames,
+  projectId,
+}: RequirementsTableProps) {
   const [requirements, setRequirements] = useState<
     Database["public"]["Tables"]["requirements"]["Row"][]
   >([]);
@@ -188,7 +224,11 @@ function Table({ name, projectUserNames, projectId }: RequirementsTableProps) {
       {
         Header: "Assigned To",
         accessor: "assigned_to",
-        Cell: AssignedToProject,
+        Cell: ({ value }: any) => (
+          <AssignedToProject
+            value={getUserNamesFromIds(value, projectUserIdsAndNames)}
+          />
+        ),
       },
     ],
     []
@@ -304,6 +344,7 @@ function Table({ name, projectUserNames, projectId }: RequirementsTableProps) {
               preGlobalFilteredRows={preGlobalFilteredRows}
               globalFilter={state.globalFilter}
               setGlobalFilter={setGlobalFilter}
+              requirements={requirements}
             />
             <table
               {...getTableProps()}
@@ -355,7 +396,7 @@ function Table({ name, projectUserNames, projectId }: RequirementsTableProps) {
                           <td
                             {...cell.getCellProps()}
                             key={`cell-${i}-${j}`}
-                            className="md:px-5 px-2 py-5 whitespace-nowrap truncate text-sm md:text-[16px]"
+                            className="md:px-5 px-2 py-4 whitespace-nowrap truncate text-sm md:text-[16px]"
                           >
                             {cell.render("Cell")}
                           </td>
@@ -425,7 +466,7 @@ function Table({ name, projectUserNames, projectId }: RequirementsTableProps) {
         <RequirementData
           name={name}
           requirement={requirement}
-          projectUserNames={projectUserNames}
+          projectUserIdsAndNames={projectUserIdsAndNames}
         />
       )}
     </div>

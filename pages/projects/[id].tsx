@@ -3,11 +3,6 @@ import { createServerSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import { GetServerSidePropsContext } from "next";
 import { Database } from "@/types/supabase";
 import Table from "@/components/Table";
-import {
-  RiArrowLeftCircleFill,
-  RiArrowRightCircleFill,
-  RiUser3Line,
-} from "react-icons/ri";
 import { useEffect, useState } from "react";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { RealtimeChannel } from "@supabase/supabase-js";
@@ -15,11 +10,21 @@ import { ProjectChildren } from "@/components/utils/sidebarHelper";
 import Image from "next/image";
 import { Rubik_Glitch } from "next/font/google";
 import CountdownTimer from "@/components/CountdownTimer";
+import { UserIdAndName } from "@/components/utils/general";
+import Leaderboard from "@/components/Leaderboard";
+import ListRanking from "@/components/ListRanking";
 
 const rubikGlitch = Rubik_Glitch({
   subsets: ["latin"],
   weight: ["400"],
 });
+
+export type Rankings = {
+  id: string;
+  name: string;
+  requirements_closed: number;
+  avatar_url: string;
+};
 
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   const supabase = createServerSupabaseClient(ctx);
@@ -70,6 +75,7 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
     .select(
       `id_user, 
     profiles (
+      id,
       name,
       email
     )`
@@ -79,8 +85,20 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   if (usersInProjectError) console.log(usersInProjectError);
   if (!usersInProject) throw new Error("No data found");
 
-  const projectUserNames = usersInProject.map(
-    (user: any) => user.profiles.name ?? user.profiles.email
+  // const projectUserIds = usersInProject.map((user: any) => user.id_user);
+
+  // const projectUserNames = usersInProject.map(
+  //   (user: any) => user.profiles.name ?? user.profiles.email
+  // );
+
+  // tuple of user ids and user names
+  const projectUserIdsAndNames: UserIdAndName[] = usersInProject.map(
+    (user: any) => {
+      return {
+        id: user.id_user,
+        name: user.profiles.name ?? user.profiles.email,
+      };
+    }
   );
 
   // get user projects info
@@ -104,7 +122,7 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
       avatar_url: data[0].avatar_url,
       project_data: projectData,
       user: userData[0].name,
-      projectUserNames,
+      projectUserIdsAndNames: projectUserIdsAndNames,
       projectsChildren: projectsChildren,
     },
   };
@@ -114,7 +132,9 @@ export default function SingleProject({
   avatar_url,
   project_data,
   user,
-  projectUserNames,
+  // projectUserNames,
+  // projectUserIds,
+  projectUserIdsAndNames,
   projectsChildren,
 }: any) {
   const project: Database["public"]["Tables"]["projects"]["Row"] =
@@ -128,24 +148,6 @@ export default function SingleProject({
   const [requirementsCompleted, setRequirementsCompleted] = useState(0);
   const [requirementsInProgress, setRequirementsInProgress] = useState(0);
   const [requirementsNotStarted, setRequirementsNotStarted] = useState(0);
-  const [currentIndex, setCurrentIndex] = useState(0);
-
-  const itemsCarrousel = [
-    { label: "Total Requirements", value: totalRequirements },
-    { label: "Requirements Completed", value: requirementsCompleted },
-    { label: "Requirements In Progress", value: requirementsInProgress },
-    { label: "Requirements Not Started", value: requirementsNotStarted },
-  ];
-
-  const handleLeftArrow = () => {
-    setCurrentIndex(
-      (currentIndex - 1 + itemsCarrousel.length) % itemsCarrousel.length
-    );
-  };
-
-  const handleRightArrow = () => {
-    setCurrentIndex((currentIndex + 1) % itemsCarrousel.length);
-  };
 
   useEffect(() => {
     const getRequirements = async () => {
@@ -215,6 +217,26 @@ export default function SingleProject({
     return `hsl(${hue}, 80%, 60%)`;
   };
 
+  // use Effect to get ranking
+  const [ranking, setRanking] = useState<Rankings[]>([]);
+  useEffect(() => {
+    console.log(projectId);
+
+    const getRanking = async () => {
+      const { data, error } = await supabaseClient.rpc("ranking_req", {
+        proj_id: projectId,
+      });
+
+      if (error) console.log(error);
+      if (!data) throw new Error("No data found");
+
+      console.log(data);
+      setRanking(data);
+    };
+
+    getRanking();
+  }, [projectId, supabaseClient, requirementsCompleted]);
+
   return (
     <div>
       <Layout
@@ -242,9 +264,8 @@ export default function SingleProject({
               <div
                 className="h-4 rounded-full"
                 style={{
-                  width: `${
-                    (requirementsCompleted / totalRequirements) * 100
-                  }%`,
+                  width: `${(requirementsCompleted / totalRequirements) * 100
+                    }%`,
                   backgroundColor: getColor(
                     (requirementsCompleted / totalRequirements) * 100
                   ),
@@ -280,39 +301,20 @@ export default function SingleProject({
               </div>
             </div>
           </div>
-          <div className="flex flex-col p-6 bg-white rounded-lg shadow-lg justify-center md:w-1/4 w-full">
-            <h3 className="text-xl font-bold flex justify-center items-center text-center">
-              Requirements Overview
-            </h3>
-            <div className="flex flex-col justify-center items-center mt-8">
-              <div className="text-6xl font-extrabold">
-                {itemsCarrousel[currentIndex].value}
-              </div>
-              <div className="text-md mt-2 text-gray-700">
-                {itemsCarrousel[currentIndex].label}
-              </div>
-              <div className="flex justify-center items-center mt-8">
-                <RiArrowLeftCircleFill
-                  className="h-10 w-10 text-black mr-2 hover:cursor-pointer"
-                  onClick={() => handleLeftArrow()}
-                />
-                <RiArrowRightCircleFill
-                  className="h-10 w-10 text-black ml-2 hover:cursor-pointer"
-                  onClick={() => handleRightArrow()}
-                />
-              </div>
-            </div>
-          </div>
-          <div className="flex flex-col p-6 bg-white rounded-lg shadow-lg md:w-1/4 w-full">
+
+          <div className="flex flex-col p-6 bg-white rounded-lg shadow-lg md:w-2/4 w-full">
             <h3 className="text-xl font-bold flex justify-center">Ranking</h3>
-            <div className="flex flex-col justify-center mt-8 ml-2">
-              {/* print user names next to  an icon */}
-              {projectUserNames.map((user: any) => (
-                <div className="flex gap-x-2 mt-4" key={user}>
-                  <RiUser3Line className="h-6 w-6" />
-                  <div className="text-md truncate">{user}</div>
+            <div className="flex flex-col justify-center mt-8 space-y-4 items-center">
+              <div className="flex flex-row w-full lg2:space-x-8 justify-center">
+                <div className="w-2/5 hidden lg2:flex">
+                  {ranking.length > 0 && <Leaderboard rankings={ranking} />}
                 </div>
-              ))}
+                {/* divider line */}
+                <div className="border-r-2 border-gray-300 hidden lg2:flex"></div>
+                <div className="lg2:w-3/5 w-full">
+                  <ListRanking rankings={ranking} />
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -320,7 +322,7 @@ export default function SingleProject({
         <Table
           name={name}
           projectId={projectId}
-          projectUserNames={projectUserNames}
+          projectUserIdsAndNames={projectUserIdsAndNames}
         />
       </Layout>
     </div>

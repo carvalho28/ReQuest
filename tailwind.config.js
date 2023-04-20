@@ -16,6 +16,9 @@ module.exports = {
         black: "#1E1E1E",
         white2: "#FAFDFE",
         whitepages: "#F5F5F7",
+        bronze: "#CD7F32",
+        silver: "#d6d6d6",
+        gold: "#FFD700",
       },
       screens: {
         lg2: "1440px",

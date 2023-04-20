@@ -1,15 +1,16 @@
 import { useEffect, useState } from "react";
 import Select from "react-tailwindcss-select";
+import { UserIdAndName } from "./utils/general";
 
 interface MultiselectPeopleProps {
-  projectUserNames: string[];
-  selectedUserNames: string[];
+  selectedUsers: string[];
+  projectUserIdsAndNames: UserIdAndName[];
   onChange: (value: any) => void;
 }
 
 const MultiselectPeople = ({
-  projectUserNames,
-  selectedUserNames,
+  projectUserIdsAndNames,
+  selectedUsers,
   onChange,
 }: MultiselectPeopleProps) => {
   const [selected, setSelected] = useState<
@@ -27,22 +28,23 @@ const MultiselectPeople = ({
   >();
 
   useEffect(() => {
-    if (projectUserNames && projectUserNames.length > 0) {
-      const options = projectUserNames.map((name) => ({
-        value: name,
-        label: name.length > 15 ? name.slice(0, 13) + "..." : name,
+    if (projectUserIdsAndNames && projectUserIdsAndNames.length > 0) {
+      const options = projectUserIdsAndNames.map((user) => ({
+        value: user.id,
+        label:
+          user.name.length > 15 ? user.name.slice(0, 13) + "..." : user.name,
       }));
       setOptions(options);
       setSelected(
-        selectedUserNames && selectedUserNames.length > 0
-          ? options.filter((option) => selectedUserNames.includes(option.value))
+        selectedUsers && selectedUsers.length > 0
+          ? options.filter((option) => selectedUsers.includes(option.value))
           : null
       );
     } else {
       setOptions([]);
       setSelected(null);
     }
-  }, [projectUserNames, selectedUserNames]);
+  }, [projectUserIdsAndNames, selectedUsers]);
 
   const handleChange = (value: any) => {
     setSelected(value);

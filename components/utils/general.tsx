@@ -154,6 +154,11 @@ function generatePastelColor() {
   return hexColor;
 }
 
+export type UserIdAndName = {
+  id: string;
+  name: string;
+};
+
 export {
   renderPriorityBadge,
   renderStatusBadge,
