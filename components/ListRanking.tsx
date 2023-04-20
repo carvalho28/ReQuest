@@ -22,8 +22,6 @@ const ListRanking = ({ rankings }: ListRankingProps) => {
           <div key={item.id} className=" flex flex-row p-2">
             {/* <dt>{index}</dt> */}
             <dt className="flex flex-col items-center justify-center border-r border-gray-200 pr-2">
-              {/* {index + 1} */}
-              {/* index inside a circle */}
               <div
                 className={`flex flex-row items-center justify-center rounded-full w-8 h-8 
                 ${index === 0 && "bg-yellow-400"}
@@ -59,15 +57,6 @@ const ListRanking = ({ rankings }: ListRankingProps) => {
                 </div>
               </div>
               <div className={`flex flex-row items-center`}>
-                {/* <div
-                  className={`ml-2 text-md font-medium text-gray-900 ${rubikBubbles.className}`}
-                >
-                  {item.requirements_closed}
-                </div>
-                <div className="ml-2 text-xs text-gray-500 truncate">
-                  requirements closed
-                </div> */}
-                {/* Requirements closed: */}
                 <div className="ml-2 text-xs text-gray-500 truncate">
                   Requirements closed:
                 </div>
