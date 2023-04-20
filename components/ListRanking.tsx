@@ -1,6 +1,3 @@
-import { ArrowDownIcon, ArrowUpIcon } from "@heroicons/react/20/solid";
-import { classNames } from "./utils/general";
-import Image from "next/image";
 import { Rankings } from "@/pages/projects/[id]";
 import { Rubik_Bubbles } from "next/font/google";
 

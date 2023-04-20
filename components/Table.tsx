@@ -14,10 +14,7 @@ import {
   RiArrowRightSLine,
   RiArrowUpSLine,
   RiCheckboxBlankCircleFill,
-  RiDownload2Line,
   RiDownloadLine,
-  RiFileExcel2Line,
-  RiFileExcelLine,
 } from "react-icons/ri";
 import { DOTS, useCustomPagination } from "./CustomPagination";
 import "regenerator-runtime/runtime";
@@ -27,7 +24,7 @@ import { Database } from "@/types/supabase";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import RequirementData from "./RequirementData";
 import { RealtimeChannel } from "@supabase/supabase-js";
-import { CSVLink, CSVDownload } from "react-csv";
+import { CSVLink } from "react-csv";
 
 export function PriorityProject({ value }: any) {
   const status = typeof value === "string" ? value.toLowerCase() : "p3";
@@ -38,8 +35,8 @@ export function PriorityProject({ value }: any) {
         status === "p1"
           ? "bg-red-100 text-red-700"
           : status === "p2"
-          ? "bg-yellow-100 text-yellow-700"
-          : "bg-green-100 text-green-700",
+            ? "bg-yellow-100 text-yellow-700"
+            : "bg-green-100 text-green-700",
         "px-2 md:px-3 py-1 md:uppercase capitalize leading-wide font-bold text-xs rounded-full shadow-sm"
       )}
     >
@@ -148,20 +145,20 @@ function GlobalFilter({
   }, 200);
 
   return (
-    <div>
-      <span className="flex flex-row pt-10 pb-5 items-center justify-center">
+    <div className="flex flex-row items-center justify-center w-full pt-20 pb-2">
+      <div className="flex items-center ml-20 flex-grow">
         <input
           value={value || ""}
           onChange={(e) => {
             setValue(e.target.value);
             onChange(e.target.value);
           }}
-          className="md:w-5/12 w-2/4 rounded-xl border p-3 text-gray-500 cursor-pointer"
+          className="mx-auto md:w-4/12 w-2/4 rounded-xl border p-3 text-gray-500 cursor-pointer"
           type="search"
           placeholder="🔎   Search..."
         />
-      </span>
-      <span className="flex flex-row items-end justify-end">
+      </div>
+      <div className="flex items-end">
         <CSVLink
           data={requirements}
           filename={"requirements.csv"}
@@ -174,7 +171,7 @@ function GlobalFilter({
             title="Download to Excel"
           />
         </CSVLink>
-      </span>
+      </div>
     </div>
   );
 }
@@ -399,7 +396,7 @@ function Table({
                           <td
                             {...cell.getCellProps()}
                             key={`cell-${i}-${j}`}
-                            className="md:px-5 px-2 py-5 whitespace-nowrap truncate text-sm md:text-[16px]"
+                            className="md:px-5 px-2 py-4 whitespace-nowrap truncate text-sm md:text-[16px]"
                           >
                             {cell.render("Cell")}
                           </td>

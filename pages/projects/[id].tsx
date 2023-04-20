@@ -148,25 +148,7 @@ export default function SingleProject({
   const [requirementsCompleted, setRequirementsCompleted] = useState(0);
   const [requirementsInProgress, setRequirementsInProgress] = useState(0);
   const [requirementsNotStarted, setRequirementsNotStarted] = useState(0);
-  // const [currentIndex, setCurrentIndex] = useState(0);
 
-  // const itemsCarrousel = [
-  //   { label: "Total Requirements", value: totalRequirements },
-  //   { label: "Requirements Completed", value: requirementsCompleted },
-  //   { label: "Requirements In Progress", value: requirementsInProgress },
-  //   { label: "Requirements Not Started", value: requirementsNotStarted },
-  // ];
-  //
-  // const handleLeftArrow = () => {
-  //   setCurrentIndex(
-  //     (currentIndex - 1 + itemsCarrousel.length) % itemsCarrousel.length
-  //   );
-  // };
-  //
-  // const handleRightArrow = () => {
-  //   setCurrentIndex((currentIndex + 1) % itemsCarrousel.length);
-  // };
-  //
   useEffect(() => {
     const getRequirements = async () => {
       const { data, error } = await supabaseClient
@@ -282,9 +264,8 @@ export default function SingleProject({
               <div
                 className="h-4 rounded-full"
                 style={{
-                  width: `${
-                    (requirementsCompleted / totalRequirements) * 100
-                  }%`,
+                  width: `${(requirementsCompleted / totalRequirements) * 100
+                    }%`,
                   backgroundColor: getColor(
                     (requirementsCompleted / totalRequirements) * 100
                   ),
@@ -320,29 +301,7 @@ export default function SingleProject({
               </div>
             </div>
           </div>
-          {/* <div className="flex flex-col p-6 bg-white rounded-lg shadow-lg justify-center md:w-1/4 w-full">
-            <h3 className="text-xl font-bold flex justify-center items-center text-center">
-              Requirements Overview
-            </h3>
-            <div className="flex flex-col justify-center items-center mt-8">
-              <div className="text-6xl font-extrabold">
-                {itemsCarrousel[currentIndex].value}
-              </div>
-              <div className="text-md mt-2 text-gray-700">
-                {itemsCarrousel[currentIndex].label}
-              </div>
-              <div className="flex justify-center items-center mt-8">
-                <RiArrowLeftCircleFill
-                  className="h-10 w-10 text-black mr-2 hover:cursor-pointer"
-                  onClick={() => handleLeftArrow()}
-                />
-                <RiArrowRightCircleFill
-                  className="h-10 w-10 text-black ml-2 hover:cursor-pointer"
-                  onClick={() => handleRightArrow()}
-                />
-              </div>
-            </div>
-          </div> */}
+
           <div className="flex flex-col p-6 bg-white rounded-lg shadow-lg md:w-2/4 w-full">
             <h3 className="text-xl font-bold flex justify-center">Ranking</h3>
             <div className="flex flex-col justify-center mt-8 space-y-4 items-center">
