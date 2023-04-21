@@ -17,6 +17,7 @@ const RequirementData = dynamic(() => import("./RequirementData"), {
 });
 
 interface RequirementsTableProps {
+  userId: string;
   name: string;
   // projectUserNames: string[];
   projectUserIdsAndNames: UserIdAndName[];
@@ -24,6 +25,7 @@ interface RequirementsTableProps {
 }
 
 const RequirementsTable = ({
+  userId,
   name,
   projectUserIdsAndNames,
   projectId,
@@ -285,6 +287,7 @@ const RequirementsTable = ({
         </div>
       </div>
       <RequirementData
+        userId={userId}
         name={name}
         requirement={requirement}
         projectUserIdsAndNames={projectUserIdsAndNames}
