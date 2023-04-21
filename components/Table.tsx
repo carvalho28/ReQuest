@@ -211,6 +211,14 @@ function Table({
 
   const [showPopup, setShowPopup] = useState(false);
 
+  // requirements properties for creating new requirement
+  const [requirementName, setRequirementName] = useState("");
+  const [requirementProjectId, setRequirementProjectId] = useState(projectId);
+
+  const [requirementCreatedAt, setRequirementCreatedAt] = useState("");
+  const [requirementCreatedBy, setRequirementUpdatedBy] = useState("");
+
+
   function handleClickPopup() {
     setShowPopup(!showPopup);
   }
@@ -268,16 +276,45 @@ function Table({
     async function getRequirements() {
       const { data, error } = await supabaseClient
         .from("requirements")
-        .select("*")
+        // get all fields, and get the name of the user in created_by 
+        // and updated_by name in the profiles table
+
+        .select(
+          `
+            id,
+            id_proj,
+            name,
+            description,
+            due_date,            
+            priority,
+            created_at,
+            created_by (name),
+            updated_at,
+            updated_by (name),
+            assigned_to,
+            status,
+            closed_at,
+            closed_by
+          `)
+
         .order("created_at", { ascending: false })
         .eq("id_proj", projectId);
+
+      
+      // destructuring the data for the created_by and updated_by fields
+      data?.map((req: any) => {
+        req.created_by = req.created_by.name;
+        req.updated_by = req.updated_by.name;
+      });
+
+      console.log("data", data);
 
       if (error) console.log(error);
       if (!data) throw new Error("No data found");
 
-      setRequirements(
-        data as Database["public"]["Tables"]["requirements"]["Row"][]
-      );
+      // setRequirements(
+      //   data as Database["public"]["Tables"]["requirements"]["Row"][]
+      // );
 
       setData(
         data.map((req: any) => {
