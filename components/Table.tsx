@@ -10,6 +10,7 @@ import {
 } from "react-table";
 import { useRowSelectColumn } from "@lineup-lite/hooks";
 import {
+  RiAddLine,
   RiArrowDownSLine,
   RiArrowRightSLine,
   RiArrowUpSLine,
@@ -133,11 +134,16 @@ export function NameProject({ value, row, setRequirement }: any) {
   }
 }
 
+function createNewRequirement(handleClickPopup: any) {
+  handleClickPopup();
+}
+
 function GlobalFilter({
   globalFilter,
   setGlobalFilter,
   placeholder,
   requirements,
+  handleClickPopup,
 }: any) {
   const [value, setValue] = useState(globalFilter);
   const onChange = useAsyncDebounce((value) => {
@@ -145,8 +151,18 @@ function GlobalFilter({
   }, 200);
 
   return (
-    <div className="flex flex-row items-center justify-center w-full pt-20 pb-2">
-      <div className="flex items-center ml-20 flex-grow">
+    <div className="flex flex-row items-center justify-between w-full pt-20 pb-2">
+      {/* button to create new requirement */}
+      <div className="flex items-center ">
+        <button
+          onClick={() => createNewRequirement(handleClickPopup)}
+          className="btn text-contrast hover:text-contrasthover bg-transparent border-0 hover:bg-purple-200"
+        >
+          <RiAddLine className="h-5 w-5" aria-hidden="true" />
+          New Requirement
+        </button>
+      </div>
+      <div className="flex items-center w-full">
         <input
           value={value || ""}
           onChange={(e) => {
@@ -192,6 +208,16 @@ function Table({
   >([]);
   const [requirement, setRequirement] =
     useState<Database["public"]["Tables"]["requirements"]["Row"]>();
+
+  const [showPopup, setShowPopup] = useState(false);
+
+  function handleClickPopup() {
+    setShowPopup(!showPopup);
+  }
+
+  useEffect(() => {
+    console.log(showPopup);
+  }, [showPopup]);
 
   const columns: Column<ColumnsReq>[] = useMemo(
     () => [
@@ -345,6 +371,7 @@ function Table({
               globalFilter={state.globalFilter}
               setGlobalFilter={setGlobalFilter}
               requirements={requirements}
+              handleClickPopup={handleClickPopup}
             />
             <table
               {...getTableProps()}
@@ -468,6 +495,41 @@ function Table({
           requirement={requirement}
           projectUserIdsAndNames={projectUserIdsAndNames}
         />
+      )}
+      {showPopup && (
+        // popup 
+        <div className="fixed z-10 inset-0 overflow-y-auto">
+          <div className="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+            <div
+              className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
+              aria-hidden="true"
+            ></div>
+
+            <span
+              className="hidden sm:inline-block sm:align-middle sm:h-screen"
+              aria-hidden="true"
+            >
+              &#8203;
+            </span>
+
+            <div className="inline-block bg-neutral-50 rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 align-middle w-8/12">
+              <div className="px-4 pt-4 pb-4 sm:p-6 sm:pb-4 flex justify-center items-center">
+                <div className="flex flex-col">
+                  <div className="md:text-left text-center">
+                    <h3
+                      className="text-2xl text-black font-semibold"
+                      id="modal-headline"
+                    >
+                      New Project
+                    </h3>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
       )}
     </div>
   );
