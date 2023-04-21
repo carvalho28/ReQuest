@@ -126,6 +126,7 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
       avatar_url: data[0].avatar_url,
       project_data: projectData,
       user: userData[0].name,
+      userId: user?.id,
       projectUserIdsAndNames: projectUserIdsAndNames,
       projectsChildren: projectsChildren,
     },
@@ -136,6 +137,7 @@ export default function SingleProject({
   avatar_url,
   project_data,
   user,
+  userId,
   // projectUserNames,
   // projectUserIds,
   projectUserIdsAndNames,
@@ -326,6 +328,7 @@ export default function SingleProject({
 
         <Table
           name={name}
+          userId={userId}
           projectId={projectId}
           projectUserIdsAndNames={projectUserIdsAndNames}
         />

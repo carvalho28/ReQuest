@@ -42,6 +42,7 @@ import TableCell from "@tiptap/extension-table-cell";
 import { generatePastelColor } from "./utils/general";
 
 interface TiptapProps {
+  userId: string;
   reqId: string;
   reqDescription: string;
   userName: string;
@@ -53,6 +54,7 @@ interface TiptapProps {
 }
 
 const Tiptap = ({
+  userId,
   userName,
   reqId,
   reqDescription,
@@ -89,7 +91,7 @@ const Tiptap = ({
       url: "wss://little-rain-5635.fly.dev/",
       // url: "ws://localhost:8080",
       parameters: {
-        userName: userName,
+        userId: userId,
       },
       name: reqId.toString(),
       document: new Y.Doc({

@@ -193,12 +193,14 @@ function GlobalFilter({
 }
 
 interface RequirementsTableProps {
+  userId: string;
   name: string;
   projectUserIdsAndNames: UserIdAndName[];
   projectId: string;
 }
 
 function Table({
+  userId,
   name,
   projectUserIdsAndNames,
   projectId,
@@ -306,8 +308,6 @@ function Table({
         req.created_by = req.created_by.name;
         req.updated_by = req.updated_by.name;
       });
-
-      console.log("data", data);
 
       if (error) console.log(error);
       if (!data) throw new Error("No data found");
@@ -528,6 +528,7 @@ function Table({
       </div>
       {requirement && (
         <RequirementData
+          userId={userId}
           name={name}
           requirement={requirement}
           projectUserIdsAndNames={projectUserIdsAndNames}
