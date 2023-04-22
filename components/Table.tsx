@@ -670,7 +670,28 @@ function Table({
                             onChange={(e) => setRequirementName(e.target.value)}
                           />
                         </div>
+                      </div>
 
+                      <div
+                        className={`carousel-slide ${currentSlide === 1 ? "active" : "hidden"
+                          }`}
+                      >
+                        <label
+                          htmlFor="deadline"
+                          className="block text-md font-medium text-gray-700"
+                        >
+                          Due date
+                        </label>
+                        <div className="mt-1">
+                          <input
+                            min={new Date().toISOString().split("T")[0]}
+                            type="date"
+                            name="deadline"
+                            id="deadline"
+                            className="shadow-sm focus:ring-contrast focus:border-contrast block w-36 sm:text-sm border-gray-300 rounded-md"
+                            onChange={(e) => setRequirementDueDate(e.target.value)}
+                          />
+                        </div>
                       </div>
 
                     </div>
@@ -694,7 +715,7 @@ function Table({
                           <button
                             type="submit"
                             className="flex w-fit h-fit rounded-md bg-contrast py-2 px-3 text-sm font-semibold text-white shadow-sm hover:bg-contrasthover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-contrast"
-                            // onClick={}
+                          // onClick={}
                           >
                             Create
                           </button>
