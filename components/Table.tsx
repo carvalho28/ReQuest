@@ -299,20 +299,20 @@ function Table({
 
 
   async function btnCreateNewRequirement() {
-    const {data, error} = await supabaseClient
+    const { data, error } = await supabaseClient
       .from("requirements")
       .insert([
-          {
-            name: requirementName,
-            id_proj: requirementProjectId,
-            created_by: requirementCreatedBy,
-            updated_by: requirementUpdatedBy,
-            due_date: requirementDueDate,
-            type: requirementType,
-            }
+        {
+          name: requirementName,
+          id_proj: requirementProjectId,
+          created_by: requirementCreatedBy,
+          updated_by: requirementUpdatedBy,
+          due_date: requirementDueDate,
+          type: requirementType,
+        }
       ])
       .select("id");
-      
+
     if (error) {
       console.log(error);
     }
@@ -512,7 +512,8 @@ function Table({
     const requirement = requirementName;
     const req = JSON.stringify({ requirement });
 
-    const response = await fetch("http://localhost:8080/api/ai/functional", {
+    // const response = await fetch("http://localhost:8080/api/ai/functional", {
+    const response = await fetch("https://morning-flower-3545.fly.dev/api/ai/functional", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -528,9 +529,8 @@ function Table({
     }
     const data = await response.json();
     let answer = data.answer;
+    
     // remove the . in the end
-    console.log(data);
-
     answer = answer.replace(".", "");
 
     setRequirementType(answer);
@@ -829,7 +829,7 @@ function Table({
                           <button
                             type="submit"
                             className="flex w-fit h-fit rounded-md bg-contrast py-2 px-3 text-sm font-semibold text-white shadow-sm hover:bg-contrasthover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-contrast"
-                          onClick={btnCreateNewRequirement}
+                            onClick={btnCreateNewRequirement}
                           >
                             Create
                           </button>
