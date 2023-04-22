@@ -302,19 +302,20 @@ function Table({
         .order("created_at", { ascending: false })
         .eq("id_proj", projectId);
 
-      
-      // destructuring the data for the created_by and updated_by fields
-      data?.map((req: any) => {
-        req.created_by = req.created_by.name;
-        req.updated_by = req.updated_by.name;
-      });
-
       if (error) console.log(error);
       if (!data) throw new Error("No data found");
 
-      // setRequirements(
-      //   data as Database["public"]["Tables"]["requirements"]["Row"][]
-      // );
+      // destructuring the data for the created_by and updated_by fields
+      data?.map((req: any) => {
+        req.created_by = req.created_by.name as string;
+        req.updated_by = req.updated_by.name as string;
+      });
+
+      // if there is property of created_by and updated_by, then set the data
+      setRequirements(
+        // data as Database["public"]["Tables"]["requirements"]["Row"][]
+        data as any
+      );
 
       setData(
         data.map((req: any) => {
