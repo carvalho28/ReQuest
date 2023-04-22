@@ -11,6 +11,7 @@ import {
 import { useRowSelectColumn } from "@lineup-lite/hooks";
 import {
   RiAddLine,
+  RiAliensLine,
   RiArrowDownSLine,
   RiArrowLeftCircleFill,
   RiArrowRightCircleFill,
@@ -18,6 +19,7 @@ import {
   RiArrowUpSLine,
   RiCheckboxBlankCircleFill,
   RiDownloadLine,
+  RiRobotLine,
 } from "react-icons/ri";
 import { DOTS, useCustomPagination } from "./CustomPagination";
 import "regenerator-runtime/runtime";
@@ -490,8 +492,11 @@ function Table({
       return;
     }
     const data = await response.json();
-    const answer = data.answer;
+    let answer = data.answer;
+    // remove the . in the end
     console.log(data);
+
+    answer = answer.replace(".", "");
 
     setRequirementType(answer);
     setRequirementTypeAI(answer);
@@ -664,7 +669,7 @@ function Table({
                   </div>
                   {/* name */}
 
-                  <div className="px-5 pt-5">
+                  <div className="px-5 pt-5 text-center items-center flex justify-center flex-grow">
                     <Stepper steps={steps} />
                   </div>
 
@@ -735,23 +740,34 @@ function Table({
                           }`}
                       >
                         {/*  show requirement type */}
-                        <div>
+                        <div className="m-4 pl-2 w-8/12 text-justify items-center flex flex-col mx-auto">
                           {requirementType !== undefined && (
-                            <div className="flex flex-col justify-center items-center">
-                              Base on our AI, your requirement is most likely to be a <span className="font-bold">{requirementTypeAI}</span> requirement.
+                            <>
+                              <div className="chat chat-start"
+                              >
+                                <div className="chat chat-bubble chat-bubble-primary text-black" data-theme="mytheme2">
+                                  Base on our AI, your requirement is most likely to be a <span className="font-bold">{requirementTypeAI}</span> requirement.
+                                  <br />
+                                  However, you can use the dropdown below to change it.
+                                </div>
+                                {/* render an alien icon*/}
+                                <div>
+                                  <RiRobotLine className="h-24 w-24 -mt-12 text-primaryblue" />
+                                </div>
+                              </div>
+                              <div className="mt-2 mb-5 shadow-sm focus:ring-contrast focus:border-contrast border-slate-400 border rounded-md p-2">
+                                {requirementType && (
 
+                                  <Dropdown
+                                    func={renderTypeBadge}
+                                    options={["Functional", "Non-functional"]}
+                                    selected={requirementType}
+                                    onSelect={(e) => setRequirementType(e)}
+                                  />
+                                )}
 
-                              {requirementType && (
-
-                                <Dropdown
-                                  func={renderTypeBadge}
-                                  options={["Functional", "Non-functional"]}
-                                  selected={requirementType}
-                                  onSelect={(e) => setRequirementType(e)}
-                                />
-                              )}
-
-                            </div>
+                              </div>
+                            </>
                           )}
                         </div>
 
