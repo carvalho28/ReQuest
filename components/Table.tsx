@@ -12,6 +12,8 @@ import { useRowSelectColumn } from "@lineup-lite/hooks";
 import {
   RiAddLine,
   RiArrowDownSLine,
+  RiArrowLeftCircleFill,
+  RiArrowRightCircleFill,
   RiArrowRightSLine,
   RiArrowUpSLine,
   RiCheckboxBlankCircleFill,
@@ -26,6 +28,15 @@ import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import RequirementData from "./RequirementData";
 import { RealtimeChannel } from "@supabase/supabase-js";
 import { CSVLink } from "react-csv";
+import Stepper from "./Stepper";
+import { XMarkIcon } from "@heroicons/react/20/solid";
+
+
+// dynamic imports
+import dynamic from "next/dynamic";
+const ErrorMessage = dynamic(() => import("@/components/ErrorMessage"), {
+  ssr: false,
+});
 
 export function PriorityProject({ value }: any) {
   const status = typeof value === "string" ? value.toLowerCase() : "p3";
@@ -162,7 +173,7 @@ function GlobalFilter({
           New Requirement
         </button>
       </div>
-      <div className="flex items-center w-full">
+      <div className="flex items-center w-full mr-24">
         <input
           value={value || ""}
           onChange={(e) => {
@@ -192,6 +203,19 @@ function GlobalFilter({
   );
 }
 
+type Step = {
+  id: string;
+  name: string;
+  href: string;
+  status: "complete" | "current" | "upcoming";
+};
+
+const steps: Step[] = [
+  { id: "01", name: "Name", href: "#", status: "current" },
+  { id: "02", name: "Due date", href: "#", status: "upcoming" },
+  { id: "03", name: "Type", href: "#", status: "upcoming" },
+];
+
 interface RequirementsTableProps {
   userId: string;
   name: string;
@@ -217,13 +241,54 @@ function Table({
   const [requirementName, setRequirementName] = useState("");
   const [requirementProjectId, setRequirementProjectId] = useState(projectId);
 
-  const [requirementCreatedAt, setRequirementCreatedAt] = useState("");
   const [requirementCreatedBy, setRequirementUpdatedBy] = useState("");
+  const [requirementUpdatedBy, setRequirementCreatedBy] = useState("");
+  const [requirementDueDate, setRequirementDueDate] = useState("");
 
+  const [error, setError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
-  function handleClickPopup() {
+  const [currentSlide, setCurrentSlide] = useState(0);
+
+  function handleClickPopup(cross?: boolean) {
+    if (cross) {
+      clearSteps();
+    }
     setShowPopup(!showPopup);
   }
+
+  const clearSteps = () => {
+    steps.forEach((step) => (step.status = "upcoming"));
+    steps[0].status = "current";
+  };
+
+  const handleLeftArrow = () => {
+    setCurrentSlide(currentSlide === 0 ? 2 : currentSlide - 1);
+    steps[currentSlide].status = "upcoming";
+    steps[currentSlide === 0 ? 2 : currentSlide - 1].status = "current";
+  }
+
+  const handleRightArrow = () => {
+    if (requirementName === "" || requirementName == undefined) {
+      setErrorMessage("Please enter a name for the requirement");
+      setError(true);
+      return;
+    }
+
+    if (currentSlide === 1) {
+      if (requirementDueDate === "" || requirementDueDate == undefined) {
+        setErrorMessage("Please enter a due date for the requirement");
+        setError(true);
+        return;
+      }
+    }
+
+    steps[currentSlide].status = "complete";
+    steps[currentSlide === 2 ? 0 : currentSlide + 1].status = "current";
+    setError(false);
+    setCurrentSlide(currentSlide === 2 ? 0 : currentSlide + 1);
+  }
+
 
   useEffect(() => {
     console.log(showPopup);
@@ -551,18 +616,94 @@ function Table({
               &#8203;
             </span>
 
-            <div className="inline-block bg-neutral-50 rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 align-middle w-8/12">
+            <div className="inline-block bg-neutral-50 rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 align-middle w-6/12">
               <div className="px-4 pt-4 pb-4 sm:p-6 sm:pb-4 flex justify-center items-center">
                 <div className="flex flex-col">
                   <div className="md:text-left text-center">
                     <h3
-                      className="text-2xl text-black font-semibold"
+                      className="text-2xl text-black font-semibold text-center"
                       id="modal-headline"
                     >
                       New Project
                     </h3>
+                  </div>
+                  {/* name */}
+
+                  <div className="px-5 pt-5">
+                    <Stepper steps={steps} />
+                  </div>
+
+                  <button
+                    className="absolute top-0 right-0 m-4 text-gray-500 hover:text-gray-800"
+                    onClick={() => handleClickPopup()}
+                  >
+                    <XMarkIcon className="h-6 w-6" />
+                  </button>
+
+                  <div className="carousel-container mt-8 md:text-left text-center flex-col space-y-2 w-full">
+                    <div className="flex flex-col justify-center items-center">
+                      <div
+                        className={classNames(
+                          error ? "mb-2" : "mb-0",
+                          "w-80 md:w-96"
+                        )}
+                      >
+                        {error && <ErrorMessage message={errorMessage} />}
+                      </div>
+                      <div
+                        className={`carousel-slide ${currentSlide === 0 ? "active" : "hidden"
+                          }`}
+                      >
+                        <label
+                          htmlFor="name"
+                          className="block text-md font-medium text-gray-700"
+                        >
+                          Name
+                        </label>
+                        <div className="mt-1">
+                          <input
+                            type="text"
+                            name="name"
+                            id="name"
+                            required
+                            className="shadow-sm focus:ring-contrat focus:border-contrast block w-80 md:w-96 sm:text-sm border-gray-300 rounded-md"
+                            onChange={(e) => setRequirementName(e.target.value)}
+                          />
+                        </div>
+
+                      </div>
+
+                    </div>
+                    <div className="px-4 py-3 flex flex-col">
+                      <div className="flex flex-row justify-center">
+                        {currentSlide > 0 && (
+                          <RiArrowLeftCircleFill
+                            className="h-12 w-12 text-contrast hover:cursor-pointer"
+                            onClick={() => handleLeftArrow()}
+                          />
+                        )}
+                        {currentSlide < 3 && (
+                          <RiArrowRightCircleFill
+                            className="h-12 w-12 text-contrast hover:cursor-pointer"
+                            onClick={() => handleRightArrow()}
+                          />
+                        )}
+                      </div>
+                      <div className="flex flex-row justify-end mb-5 mr-5">
+                        {currentSlide === 3 && (
+                          <button
+                            type="submit"
+                            className="flex w-fit h-fit rounded-md bg-contrast py-2 px-3 text-sm font-semibold text-white shadow-sm hover:bg-contrasthover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-contrast"
+                            // onClick={}
+                          >
+                            Create
+                          </button>
+                        )}
+                      </div>
+                    </div>
 
                   </div>
+
                 </div>
               </div>
             </div>
