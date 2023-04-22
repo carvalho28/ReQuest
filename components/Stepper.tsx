@@ -20,7 +20,7 @@ const Stepper = ({ steps }: StepperProps) => {
           className="divide-y divide-gray-300 rounded-md border border-gray-300 md:flex md:divide-y-0"
         >
           {steps.map((step, stepIdx) => (
-            <li key={step.name} className="relative md:flex md:flex-1">
+            <li key={step.name} className="relative md:flex md:flex-2">
               {step.status === "complete" ? (
                 <button className="group flex w-full items-center">
                   <span className="flex items-center px-6 py-4 text-sm font-medium">
@@ -30,7 +30,7 @@ const Stepper = ({ steps }: StepperProps) => {
                         aria-hidden="true"
                       />
                     </span>
-                    <span className="ml-4 text-sm font-medium text-gray-900">
+                    <span className="ml-4 text-sm font-medium text-gray-900 whitespace-nowrap">
                       {step.name}
                     </span>
                   </span>

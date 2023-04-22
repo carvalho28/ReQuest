@@ -2,7 +2,7 @@ import Layout from "@/components/Layout";
 import { createServerSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import { GetServerSidePropsContext } from "next";
 import { Database } from "@/types/supabase";
-import Table from "@/components/Table";
+// import Table from "@/components/Table";
 import { useEffect, useState } from "react";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { RealtimeChannel } from "@supabase/supabase-js";
@@ -13,6 +13,10 @@ import CountdownTimer from "@/components/CountdownTimer";
 import { UserIdAndName } from "@/components/utils/general";
 import Leaderboard from "@/components/Leaderboard";
 import ListRanking from "@/components/ListRanking";
+import dynamic from "next/dynamic";
+
+// import Table dynamicaly
+const Table = dynamic(() => import("@/components/Table"), { ssr: false });
 
 const rubikGlitch = Rubik_Glitch({
   subsets: ["latin"],
@@ -122,6 +126,7 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
       avatar_url: data[0].avatar_url,
       project_data: projectData,
       user: userData[0].name,
+      userId: user?.id,
       projectUserIdsAndNames: projectUserIdsAndNames,
       projectsChildren: projectsChildren,
     },
@@ -132,6 +137,7 @@ export default function SingleProject({
   avatar_url,
   project_data,
   user,
+  userId,
   // projectUserNames,
   // projectUserIds,
   projectUserIdsAndNames,
@@ -294,6 +300,7 @@ export default function SingleProject({
                 className="mt-8"
               />
             </div>
+
             {/* show a countdown to the deadline */}
             <div className="flex justify-center items-center">
               <div className="flex flex-col justify-center items-center mt-3">
@@ -321,6 +328,7 @@ export default function SingleProject({
 
         <Table
           name={name}
+          userId={userId}
           projectId={projectId}
           projectUserIdsAndNames={projectUserIdsAndNames}
         />

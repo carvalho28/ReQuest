@@ -34,7 +34,7 @@ const server = new Hocuspocus({
 
 server.configure({
   async onStoreDocument(data) {
-    const userName = data.requestParameters.get("userName");
+    const userId = data.requestParameters.get("userId");
     const newDate = new Date();
     // Save to database
     const proseMirrorJSON = TiptapTransformer.fromYdoc(
@@ -62,7 +62,7 @@ server.configure({
       .update({
         description: proseMirrorJSON,
         updated_at: newDate,
-        updated_by: userName,
+        updated_by: userId,
       })
       .eq("id", data.documentName);
     if (errordb) {

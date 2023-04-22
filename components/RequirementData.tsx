@@ -24,12 +24,14 @@ import { useSupabaseClient, useUser } from "@supabase/auth-helpers-react";
 import { RealtimeChannel } from "@supabase/supabase-js";
 
 interface RequirementDataProps {
+  userId: string;
   name: string;
   requirement: Database["public"]["Tables"]["requirements"]["Row"];
   projectUserIdsAndNames: UserIdAndName[];
 }
 
 const RequirementData = ({
+  userId,
   name,
   requirement,
   projectUserIdsAndNames,
@@ -116,10 +118,17 @@ const RequirementData = ({
           async (payload: any) => {
             if (payload.new.id === requirement?.id) {
               setIsUpdatingUpdatedBy(true);
+              // get the name from the id of updated_by
+              const { data: updatedByName, error } = await supabaseClient
+                .from("profiles")
+                .select("name")
+                .eq("id", payload.new.updated_by);
+              if (error) console.log(error);
+              if (!updatedByName) return;
               setRequirementData((prevState) => ({
                 ...prevState,
                 updated_at: payload.new.updated_at,
-                updated_by: payload.new.updated_by,
+                updated_by: updatedByName[0].name,
               }));
             }
           }
@@ -349,6 +358,7 @@ const RequirementData = ({
           )}
           <Tiptap
             userName={name}
+            userId={userId}
             reqId={requirement.id}
             reqDescription={requirement.description as string}
             reqCreatedAt={requirement.created_at}

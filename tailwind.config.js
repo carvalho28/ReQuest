@@ -36,6 +36,15 @@ module.exports = {
           "base-100": "#F5F5F7",
         },
       },
+      {
+        mytheme2: {
+          primary: "#84cbdb",
+          secondary: "#a3e635",
+          accent: "#FFD700",
+          neutral: "#1E1E1E",
+          "base-100": "#1e1e1e",
+        },
+      }
     ],
   },
   plugins: [
