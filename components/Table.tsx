@@ -22,7 +22,7 @@ import {
 import { DOTS, useCustomPagination } from "./CustomPagination";
 import "regenerator-runtime/runtime";
 import { ArrowUpRightIcon } from "@heroicons/react/24/outline";
-import { ColumnsReq, RowReq, UserIdAndName, classNames } from "./utils/general";
+import { ColumnsReq, RowReq, UserIdAndName, classNames, renderTypeBadge } from "./utils/general";
 import { Database } from "@/types/supabase";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import RequirementData from "./RequirementData";
@@ -34,6 +34,7 @@ import { XMarkIcon } from "@heroicons/react/20/solid";
 
 // dynamic imports
 import dynamic from "next/dynamic";
+import Dropdown from "./Dropdown";
 const ErrorMessage = dynamic(() => import("@/components/ErrorMessage"), {
   ssr: false,
 });
@@ -468,6 +469,7 @@ function Table({
 
 
   const [requirementType, setRequirementType] = useState<undefined | string>("");
+  const [requirementTypeAI, setRequirementTypeAI] = useState<undefined | string>("");
   // call api to verify functional/non-functional
   async function isFunctional() {
     const requirement = requirementName;
@@ -492,6 +494,7 @@ function Table({
     console.log(data);
 
     setRequirementType(answer);
+    setRequirementTypeAI(answer);
 
   }
 
@@ -735,7 +738,19 @@ function Table({
                         <div>
                           {requirementType !== undefined && (
                             <div className="flex flex-col justify-center items-center">
-                              {requirementType}
+                              Base on our AI, your requirement is most likely to be a <span className="font-bold">{requirementTypeAI}</span> requirement.
+
+
+                              {requirementType && (
+
+                                <Dropdown
+                                  func={renderTypeBadge}
+                                  options={["Functional", "Non-functional"]}
+                                  selected={requirementType}
+                                  onSelect={(e) => setRequirementType(e)}
+                                />
+                              )}
+
                             </div>
                           )}
                         </div>

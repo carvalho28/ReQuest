@@ -90,6 +90,30 @@ function renderStatusBadge(status: string, sizex: number, sizey: number) {
   }
 }
 
+function renderTypeBadge(type: string, sizex: number, sizey: number) {
+  console.log(type);
+  const t = type.toLowerCase();
+  if (t === "functional") {
+    return (
+      <div className="priority-badge">
+        <span
+          className={`inline-flex items-center px-${sizex} py-${sizey} rounded-full text-sm font-medium bg-green-100 text-green-800`}
+        >
+          Functional
+        </span>
+      </div>
+    );
+  } else {
+    return (
+      <span
+        className={`inline-flex items-center px-${sizex} py-${sizey} rounded-full text-sm font-medium bg-cyan-100 text-cyan-800`}
+      >
+        Non-Functional
+      </span>
+    );
+  }
+}
+
 function classNames(...classes: any[]) {
   return classes.filter(Boolean).join(" ");
 }
@@ -162,6 +186,7 @@ export type UserIdAndName = {
 export {
   renderPriorityBadge,
   renderStatusBadge,
+  renderTypeBadge,
   classNames,
   generatePastelColor,
 };
