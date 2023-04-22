@@ -244,8 +244,8 @@ function Table({
   const [requirementName, setRequirementName] = useState("");
   const [requirementProjectId, setRequirementProjectId] = useState(projectId);
 
-  const [requirementCreatedBy, setRequirementUpdatedBy] = useState("");
-  const [requirementUpdatedBy, setRequirementCreatedBy] = useState("");
+  const [requirementCreatedBy, setRequirementUpdatedBy] = useState(userId);
+  const [requirementUpdatedBy, setRequirementCreatedBy] = useState(userId);
   const [requirementDueDate, setRequirementDueDate] = useState("");
 
   const [error, setError] = useState(false);
@@ -263,6 +263,7 @@ function Table({
   const clearSteps = () => {
     steps.forEach((step) => (step.status = "upcoming"));
     steps[0].status = "current";
+    setCurrentSlide(0);
   };
 
   const handleLeftArrow = () => {
@@ -293,8 +294,40 @@ function Table({
     steps[currentSlide === 2 ? 0 : currentSlide + 1].status = "current";
     setError(false);
     setCurrentSlide(currentSlide === 2 ? 0 : currentSlide + 1);
+
   }
 
+
+  async function btnCreateNewRequirement() {
+    const {data, error} = await supabaseClient
+      .from("requirements")
+      .insert([
+          {
+            name: requirementName,
+            id_proj: requirementProjectId,
+            created_by: requirementCreatedBy,
+            updated_by: requirementUpdatedBy,
+            due_date: requirementDueDate,
+            type: requirementType,
+            }
+      ])
+      .select("id");
+      
+    if (error) {
+      console.log(error);
+    }
+
+    if (data) {
+      console.log(data);
+    }
+
+    handleClickPopup();
+    clearSteps();
+    setRequirementName("");
+    setRequirementDueDate("");
+    setRequirementType("");
+    setRequirementTypeAI("");
+  }
 
   useEffect(() => {
     console.log(showPopup);
@@ -375,6 +408,8 @@ function Table({
 
       if (error) console.log(error);
       if (!data) throw new Error("No data found");
+
+      console.log(data);
 
       // destructuring the data for the created_by and updated_by fields
       data?.map((req: any) => {
@@ -746,7 +781,7 @@ function Table({
                               <div className="chat chat-start"
                               >
                                 <div className="chat chat-bubble chat-bubble-primary text-black" data-theme="mytheme2">
-                                  Base on our AI, your requirement is most likely to be a <span className="font-bold">{requirementTypeAI}</span> requirement.
+                                  Base on our AI, your requirement is most likely to be a <span className="font-bold text-xl">{requirementTypeAI}</span> requirement.
                                   <br />
                                   However, you can use the dropdown below to change it.
                                 </div>
@@ -782,7 +817,7 @@ function Table({
                             onClick={() => handleLeftArrow()}
                           />
                         )}
-                        {currentSlide < 3 && (
+                        {currentSlide < 2 && (
                           <RiArrowRightCircleFill
                             className="h-12 w-12 text-contrast hover:cursor-pointer"
                             onClick={() => handleRightArrow()}
@@ -790,11 +825,11 @@ function Table({
                         )}
                       </div>
                       <div className="flex flex-row justify-end mb-5 mr-5">
-                        {currentSlide === 3 && (
+                        {currentSlide === 2 && (
                           <button
                             type="submit"
                             className="flex w-fit h-fit rounded-md bg-contrast py-2 px-3 text-sm font-semibold text-white shadow-sm hover:bg-contrasthover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-contrast"
-                          // onClick={}
+                          onClick={btnCreateNewRequirement}
                           >
                             Create
                           </button>
