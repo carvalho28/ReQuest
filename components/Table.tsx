@@ -465,6 +465,10 @@ function Table({
     getProjectsRealTime();
   }, [supabaseClient, projectId]);
 
+  // track ids of requirements selected
+  const [selectedRequirementIds, setSelectedRequirementIds] = useState<
+    string[]>([]);
+
   const {
     getTableProps,
     getTableBodyProps,
@@ -482,6 +486,7 @@ function Table({
     state,
     preGlobalFilteredRows,
     setGlobalFilter,
+    selectedFlatRows,
   }: any = useTable(
     {
       columns,
@@ -493,6 +498,10 @@ function Table({
     useRowSelect,
     useRowSelectColumn
   );
+
+  const handleSelectedRows = () => {
+    console.log(selectedFlatRows)
+  }
 
   const { pageIndex } = state;
   const paginationRange = useCustomPagination({
@@ -529,7 +538,7 @@ function Table({
     }
     const data = await response.json();
     let answer = data.answer;
-    
+
     // remove the . in the end
     answer = answer.replace(".", "");
 
@@ -541,6 +550,7 @@ function Table({
   // Render the UI for your table and the styles
   return (
     <div className="mt-2 flex flex-col">
+    <button onClick={handleSelectedRows}>Selected Rows</button>
       <div className="-my-2 overflow-x-auto -mx-4 sm:-mx-6 lg:-mx-8">
         <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
           <div className="overflow-hidden border-gray-200 sm:rounded-lg">
