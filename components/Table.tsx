@@ -274,6 +274,9 @@ function Table({
       setError(true);
       return;
     }
+    if (currentSlide === 0) {
+      isFunctional();
+    }
 
     if (currentSlide === 1) {
       if (requirementDueDate === "" || requirementDueDate == undefined) {
@@ -462,6 +465,35 @@ function Table({
   useEffect(() => {
     setPageSize(5);
   }, [setPageSize]); //set according to your preferrence
+
+
+  const [requirementType, setRequirementType] = useState<undefined | string>("");
+  // call api to verify functional/non-functional
+  async function isFunctional() {
+    const requirement = requirementName;
+    const req = JSON.stringify({ requirement });
+
+    const response = await fetch("http://localhost:8080/api/ai/functional", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: req,
+    });
+
+    // if there was an error, then return
+    if (!response.ok) {
+      setErrorMessage("There was an error");
+      setError(true);
+      return;
+    }
+    const data = await response.json();
+    const answer = data.answer;
+    console.log(data);
+
+    setRequirementType(answer);
+
+  }
 
   // Render the UI for your table and the styles
   return (
@@ -692,6 +724,22 @@ function Table({
                             onChange={(e) => setRequirementDueDate(e.target.value)}
                           />
                         </div>
+                      </div>
+
+
+                      <div
+                        className={`carousel-slide ${currentSlide === 2 ? "active" : "hidden"
+                          }`}
+                      >
+                        {/*  show requirement type */}
+                        <div>
+                          {requirementType !== undefined && (
+                            <div className="flex flex-col justify-center items-center">
+                              {requirementType}
+                            </div>
+                          )}
+                        </div>
+
                       </div>
 
                     </div>
