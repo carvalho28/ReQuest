@@ -78,6 +78,7 @@ const RequirementData = ({
       id_proj: requirement.id_proj,
       closed_at: requirement.closed_at,
       closed_by: requirement.closed_by,
+      type: null,
     });
   }, [requirement]);
 
@@ -202,6 +203,8 @@ const RequirementData = ({
     const requirementName = document.getElementById("requirement-name");
     if (requirementName) {
       requirementName.setAttribute("contentEditable", "true");
+      // set max length of requirement name to 100
+      requirementName.setAttribute("maxlength", "100");
 
       // set focus on the requirement name in the last position
       requirementName.focus();
@@ -239,6 +242,15 @@ const RequirementData = ({
     }
 
     setIsEditing(false);
+
+    setRequirementData((prevState) => ({
+      ...prevState,
+      name: uneditedReqName,
+    }));
+
+    if (requirementName) {
+      requirementName.innerText = uneditedReqName;
+    }
   }
 
   function changeAssignedTo(assignedTo: string[]) {
@@ -247,6 +259,12 @@ const RequirementData = ({
       assigned_to: assignedTo,
     }));
   }
+
+  const [uneditedReqName, setUneditedReqName] = useState("");
+
+  useEffect(() => {
+    setUneditedReqName(requirement.name);
+  }, [requirement.name]);
 
   return (
     <>
