@@ -55,6 +55,11 @@ const RequirementData = ({
     return names;
   }
 
+  useEffect(() => {
+    console.log("updating updated by");
+    console.log("dataReqData", requirementData);
+  }, [requirementData]);
+
   const [isUpdatingUpdatedBy, setIsUpdatingUpdatedBy] = useState(false);
 
   useEffect(() => {
@@ -76,6 +81,24 @@ const RequirementData = ({
     });
   }, [requirement]);
 
+
+  const [createdBy, setCreatedBy] = useState("");
+  useEffect(() => {
+    async function getCreatedByName() {
+      const { data, error } = await supabaseClient
+        .from("profiles")
+        .select("name")
+        .eq("id", requirement.created_by)
+        .single()
+
+      if (error) console.log(error);
+      if (data) setCreatedBy(data.name);
+    }
+    getCreatedByName();
+
+  }, [requirement.created_by, supabaseClient]);
+
+
   useEffect(() => {
     async function saveChanges() {
       console.log("saving changes ---");
@@ -92,6 +115,9 @@ const RequirementData = ({
         requirementData.closed_by = requirementData.assigned_to;
       }
 
+      console.log(requirement?.id);
+      console.log(requirementData);
+
       const { error } = await supabaseClient
         .from("requirements")
         .update(requirementData)
@@ -101,6 +127,8 @@ const RequirementData = ({
     if (!isUpdatingUpdatedBy) saveChanges();
     else setIsUpdatingUpdatedBy(false);
   }, [requirementData, supabaseClient]);
+
+  const [lastEditedName, setLastEditedName] = useState("");
 
   // realtime updates for the requirement updated by and updated at
   useEffect(() => {
@@ -128,8 +156,9 @@ const RequirementData = ({
               setRequirementData((prevState) => ({
                 ...prevState,
                 updated_at: payload.new.updated_at,
-                updated_by: updatedByName[0].name,
+                updated_by: payload.new.updated_by,
               }));
+              setLastEditedName(updatedByName[0].name);
             }
           }
         )
@@ -331,10 +360,9 @@ const RequirementData = ({
                   </div>
                   <div className="flex flex-row space-x-3 ml-16">
                     <RiUserVoiceLine size={20} />
-                    <span className="text-sm text-black">
-                      {requirementData.updated_by?.length! > 15
-                        ? requirementData.updated_by?.slice(0, 15) + "..."
-                        : requirementData.updated_by}
+                    <span className="text-sm text-black truncate">
+                      {/* {requirementData.updated_by} */}
+                      {lastEditedName}
                     </span>
                   </div>
                   <div className="flex flex-row space-x-3 ml-16">
@@ -366,6 +394,7 @@ const RequirementData = ({
             reqName={requirement.name}
             reqUpdatedBy={requirement.updated_by}
             reqUpdatedAt={requirement.updated_at}
+            createdBy={createdBy}
           />
         </div>
       </div>
