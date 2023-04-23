@@ -37,6 +37,7 @@ import { XMarkIcon } from "@heroicons/react/20/solid";
 // dynamic imports
 import dynamic from "next/dynamic";
 import Dropdown from "./Dropdown";
+import supabase from "@/utils/supabaseClient";
 const ErrorMessage = dynamic(() => import("@/components/ErrorMessage"), {
   ssr: false,
 });
@@ -152,12 +153,31 @@ function createNewRequirement(handleClickPopup: any) {
   handleClickPopup();
 }
 
+async function deleteRequirement(selectedFlatRows : any) {
+  let ids: string[] = [];
+  selectedFlatRows.forEach((row: any) => {
+    ids.push(row.original.id);
+  });
+  
+  // alert asking if user is sure they want to delete
+  const confirmDelete = confirm("Are you sure you want to delete these requirements?");
+  if (!confirmDelete) return;
+  // use supabase to delete all the rows in ids
+  const { error } = await supabase
+   .from("requirements")
+   .delete()
+   .match({id : ids})
+
+   if (error) return;
+}
+
 function GlobalFilter({
   globalFilter,
   setGlobalFilter,
   placeholder,
   requirements,
   handleClickPopup,
+  selectedFlatRows,
 }: any) {
   const [value, setValue] = useState(globalFilter);
   const onChange = useAsyncDebounce((value) => {
@@ -165,25 +185,33 @@ function GlobalFilter({
   }, 200);
 
   return (
-    <div className="flex flex-row items-center justify-between w-full pt-20 pb-2">
+    <div className="flex flex-row items-center justify-center w-full pt-20 pb-2">
       {/* button to create new requirement */}
-      <div className="flex items-center ">
+      <div className="flex items-center">
+        {selectedFlatRows.length !== 0 && (
+          <button
+            onClick={() => deleteRequirement(selectedFlatRows)}
+            className="btn text-white hover:text-red-400 bg-red-500 border-0 hover:bg-red-200 truncate mr-4"
+          >
+            Delete
+          </button>
+        )}
         <button
           onClick={() => createNewRequirement(handleClickPopup)}
-          className="btn text-contrast hover:text-contrasthover bg-transparent border-0 hover:bg-purple-200"
+          className="btn text-whitepages hover:text-contrasthover bg-contrast border-0 hover:bg-purple-200 truncate"
         >
           <RiAddLine className="h-5 w-5" aria-hidden="true" />
-          New Requirement
+          Requirement
         </button>
       </div>
-      <div className="flex items-center w-full mr-24">
+      <div className="flex items-center w-full">
         <input
           value={value || ""}
           onChange={(e) => {
             setValue(e.target.value);
             onChange(e.target.value);
           }}
-          className="mx-auto md:w-4/12 w-2/4 rounded-xl border p-3 text-gray-500 cursor-pointer"
+          className="mx-auto lg:w-4/12 w-2/4 rounded-xl border p-3 text-gray-500 cursor-pointer"
           type="search"
           placeholder="🔎   Search..."
         />
@@ -465,10 +493,6 @@ function Table({
     getProjectsRealTime();
   }, [supabaseClient, projectId]);
 
-  // track ids of requirements selected
-  const [selectedRequirementIds, setSelectedRequirementIds] = useState<
-    string[]>([]);
-
   const {
     getTableProps,
     getTableBodyProps,
@@ -500,7 +524,6 @@ function Table({
   );
 
   const handleSelectedRows = () => {
-    console.log(selectedFlatRows)
   }
 
   const { pageIndex } = state;
@@ -550,7 +573,7 @@ function Table({
   // Render the UI for your table and the styles
   return (
     <div className="mt-2 flex flex-col">
-    <button onClick={handleSelectedRows}>Selected Rows</button>
+      <button onClick={handleSelectedRows}>Selected Rows</button>
       <div className="-my-2 overflow-x-auto -mx-4 sm:-mx-6 lg:-mx-8">
         <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
           <div className="overflow-hidden border-gray-200 sm:rounded-lg">
@@ -560,6 +583,7 @@ function Table({
               setGlobalFilter={setGlobalFilter}
               requirements={requirements}
               handleClickPopup={handleClickPopup}
+              selectedFlatRows={selectedFlatRows}
             />
             <table
               {...getTableProps()}
