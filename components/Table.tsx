@@ -11,7 +11,6 @@ import {
 import { useRowSelectColumn } from "@lineup-lite/hooks";
 import {
   RiAddLine,
-  RiAliensLine,
   RiArrowDownSLine,
   RiArrowLeftCircleFill,
   RiArrowRightCircleFill,
