@@ -2,6 +2,7 @@ import {
   UserIdAndName,
   renderPriorityBadge,
   renderStatusBadge,
+  renderTypeBadge,
 } from "@/components/utils/general";
 import { Database } from "@/types/supabase";
 import { useEffect, useState } from "react";
@@ -78,7 +79,7 @@ const RequirementData = ({
       id_proj: requirement.id_proj,
       closed_at: requirement.closed_at,
       closed_by: requirement.closed_by,
-      type: null,
+      type: requirement.type,
     });
   }, [requirement]);
 
@@ -194,6 +195,13 @@ const RequirementData = ({
     }));
   }
 
+  function changeType(type: string) {
+    setRequirementData((prevState) => ({
+      ...prevState,
+      type: type,
+    }));
+  }
+
   const [isEditing, setIsEditing] = useState(false);
 
   function editRequirement() {
@@ -274,38 +282,50 @@ const RequirementData = ({
           {requirementData.id != undefined && (
             <div className="p-4">
               {/* title */}
-              <div className="flex flex-row space-x-8">
-                <h3
-                  className="font-bold text-2xl
-                focus:border-contrast focus:border-2 focus:outline-none px-1"
-                  id="requirement-name"
-                >
-                  {requirement.name}
-                </h3>
-                {/* show pencil icon and make it editable, then show a check icon to save or a cross icon to cancel */}
-                <div className="flex flex-row items-center">
-                  {!isEditing ? (
-                    <RiPencilLine
-                      size={20}
-                      className="cursor-pointer hover:scale-110 hover:bg-neutral-200 rounded-full"
-                      onClick={() => editRequirement()}
-                    />
-                  ) : (
-                    <div className="flex flex-row space-x-5">
-                      <RiCheckLine
+              <div className="flex flex-row">
+                <div className="flex flex-row w-9/12 space-x-3 items-center">
+                  <h3
+                    className="font-bold text-2xl
+              focus:border-contrast focus:border-2 focus:outline-none px-1"
+                    id="requirement-name"
+                  >
+                    {requirement.name}
+                  </h3>
+                  {/* show pencil icon and make it editable, then show a check icon to save or a cross icon to cancel */}
+                  <div className="flex flex-row items-center">
+                    {!isEditing ? (
+                      <RiPencilLine
                         size={20}
-                        className="cursor-pointer hover:scale-110 hover:bg-neutral-200 rounded-full bg-green-100"
-                        onClick={() => saveTitle()}
+                        className="cursor-pointer hover:scale-110 hover:bg-neutral-200 rounded-full"
+                        onClick={() => editRequirement()}
                       />
+                    ) : (
+                      <div className="flex flex-row space-x-5">
+                        <RiCheckLine
+                          size={20}
+                          className="cursor-pointer hover:scale-110 hover:bg-neutral-200 rounded-full bg-green-100"
+                          onClick={() => saveTitle()}
+                        />
 
-                      <RiCloseLine
-                        size={20}
-                        color="red"
-                        className="cursor-pointer hover:scale-110 hover:bg-neutral-200 rounded-full bg-red-100"
-                        onClick={() => cancelTitle()}
-                      />
-                    </div>
-                  )}
+                        <RiCloseLine
+                          size={20}
+                          color="red"
+                          className="cursor-pointer hover:scale-110 hover:bg-neutral-200 rounded-full bg-red-100"
+                          onClick={() => cancelTitle()}
+                        />
+                      </div>
+                    )}
+                  </div>
+
+                </div>
+                {/* render type of requirement */}
+                <div className="flex flex-row items-center justify-center w-3/12">
+                  <Dropdown
+                    func={renderTypeBadge}
+                    options={["Functional", "Non-Functional"]}
+                    selected={requirementData.type as string}
+                    onSelect={(type) => changeType(type)}
+                  />
                 </div>
               </div>
 

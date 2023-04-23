@@ -428,7 +428,8 @@ function Table({
             assigned_to,
             status,
             closed_at,
-            closed_by
+            closed_by,
+            type
           `)
 
         .order("created_at", { ascending: false })
@@ -437,15 +438,13 @@ function Table({
       if (error) console.log(error);
       if (!data) throw new Error("No data found");
 
-      console.log(data);
+      console.log("obter requisito",data);
 
       // destructuring the data for the created_by and updated_by fields
       data?.map((req: any) => {
         req.created_by = req.created_by.id as string;
         req.updated_by = req.updated_by.id as string;
       });
-
-      console.log("data depois de mudanca", data);
 
       // if there is property of created_by and updated_by, then set the data
       setRequirements(
@@ -468,6 +467,7 @@ function Table({
             created_by: req.created_by,
             updated_at: req.updated_at,
             updated_by: req.updated_by,
+            type: req.type,
           };
         })
       );
