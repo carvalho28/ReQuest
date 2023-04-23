@@ -118,6 +118,7 @@ export interface Database {
           name: string
           priority: string
           status: string | null
+          type: string | null
           updated_at: string
           updated_by: string
         }
@@ -125,7 +126,7 @@ export interface Database {
           assigned_to?: string[] | null
           closed_at?: string | null
           closed_by?: string[] | null
-          created_at: string
+          created_at?: string
           created_by: string
           description?: string | null
           due_date?: string | null
@@ -134,7 +135,8 @@ export interface Database {
           name: string
           priority?: string
           status?: string | null
-          updated_at: string
+          type?: string | null
+          updated_at?: string
           updated_by: string
         }
         Update: {
@@ -150,6 +152,7 @@ export interface Database {
           name?: string
           priority?: string
           status?: string | null
+          type?: string | null
           updated_at?: string
           updated_by?: string
         }
