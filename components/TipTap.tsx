@@ -51,6 +51,7 @@ interface TiptapProps {
   reqName: string;
   reqUpdatedBy: string;
   reqUpdatedAt: string;
+  createdBy: string;
 }
 
 const Tiptap = ({
@@ -61,8 +62,7 @@ const Tiptap = ({
   reqCreatedAt,
   reqCreatedBy,
   reqName,
-  reqUpdatedBy,
-  reqUpdatedAt,
+  createdBy,
 }: TiptapProps) => {
   const supabaseClient = useSupabaseClient();
 
@@ -227,7 +227,7 @@ const Tiptap = ({
         />
       </div>
       <div className="text-md text-neutral-400 flex justify-end mr-4 italic">
-        Created by {reqCreatedBy} on{" "}
+        Created by {createdBy} on{" "}
         {new Date(reqCreatedAt).toLocaleDateString("pt-PT", {
           year: "numeric",
           month: "numeric",

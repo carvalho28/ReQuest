@@ -422,9 +422,9 @@ function Table({
             due_date,            
             priority,
             created_at,
-            created_by (name),
+            created_by (id, name),
             updated_at,
-            updated_by (name),
+            updated_by (id, name),
             assigned_to,
             status,
             closed_at,
@@ -441,9 +441,11 @@ function Table({
 
       // destructuring the data for the created_by and updated_by fields
       data?.map((req: any) => {
-        req.created_by = req.created_by.name as string;
-        req.updated_by = req.updated_by.name as string;
+        req.created_by = req.created_by.id as string;
+        req.updated_by = req.updated_by.id as string;
       });
+
+      console.log("data depois de mudanca", data);
 
       // if there is property of created_by and updated_by, then set the data
       setRequirements(
@@ -461,6 +463,7 @@ function Table({
             priority: req.priority,
             assigned_to: req.assigned_to,
             id: req.id,
+            id_proj: req.id_proj,
             created_at: req.created_at,
             created_by: req.created_by,
             updated_at: req.updated_at,
