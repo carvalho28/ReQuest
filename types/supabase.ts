@@ -9,6 +9,31 @@ export type Json =
 export interface Database {
   public: {
     Tables: {
+      chat_users: {
+        Row: {
+          id: string
+          user_id: string | null
+        }
+        Insert: {
+          id: string
+          user_id?: string | null
+        }
+        Update: {
+          id?: string
+          user_id?: string | null
+        }
+      }
+      chats: {
+        Row: {
+          id: string
+        }
+        Insert: {
+          id?: string
+        }
+        Update: {
+          id?: string
+        }
+      }
       levels: {
         Row: {
           created_at: string | null
@@ -27,6 +52,29 @@ export interface Database {
           denomination?: string | null
           id?: number
           xp_needed?: number | null
+        }
+      }
+      messages: {
+        Row: {
+          author_id: string | null
+          chat_id: string | null
+          content: string | null
+          created_at: string | null
+          id: string
+        }
+        Insert: {
+          author_id?: string | null
+          chat_id?: string | null
+          content?: string | null
+          created_at?: string | null
+          id?: string
+        }
+        Update: {
+          author_id?: string | null
+          chat_id?: string | null
+          content?: string | null
+          created_at?: string | null
+          id?: string
         }
       }
       profiles: {
