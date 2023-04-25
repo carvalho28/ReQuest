@@ -88,7 +88,7 @@ const ChatConversation = () => {
       >
         {/* if message */}
         {messages.map((message) => (
-          <>
+          <div key={message.id}>
             {message.is_user ? (
               <div className="flex flex-row chat chat-end justify-end">
                 <div
@@ -108,10 +108,10 @@ const ChatConversation = () => {
                 </div>
               </div>
             )}
-          </>
+          </div>
         ))}
       </div>
-      <div className="absolute bottom-0 w-full bg-white  border-t-2 border-b-2">
+      <div className="absolute bottom-0 w-full bg-white border-t-2 border-b-2">
         <div className="flex flex-row justify-center h-auto min-h-12 p-3">
           <textarea
             rows={1}

@@ -5,6 +5,7 @@ import { ProjectChildren } from "@/components/utils/sidebarHelper";
 import { createServerSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import { useSupabaseClient, useUser } from "@supabase/auth-helpers-react";
 import { GetServerSidePropsContext } from "next";
+import { useEffect, useState } from "react";
 
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   const supabase = createServerSupabaseClient(ctx);
@@ -46,21 +47,17 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   );
 
   // get all users i have interected with, which means are in a project with me
-  const {data: connectedUsers, error: errorConnectedUsers} = await supabase.rpc(
-    "get_connected_users",
-    {my_user_id: user?.id}
-  );
+  const { data: connectedUsers, error: errorConnectedUsers } =
+    await supabase.rpc("get_connected_users", { my_user_id: user?.id });
   if (errorConnectedUsers) console.log(errorConnectedUsers);
 
   console.log(connectedUsers);
-
-
 
   return {
     props: {
       avatar_url: avatar_url,
       projectsChildren: projectsChildren,
-      connectedUsers: connectedUsers
+      connectedUsers: connectedUsers,
     },
   };
 };
@@ -73,9 +70,11 @@ export type connectedUsers = {
   selected: boolean;
 };
 
-
-
-export default function Chat({ avatar_url, projectsChildren, connectedUsers }: any) {
+export default function Chat({
+  avatar_url,
+  projectsChildren,
+  connectedUsers,
+}: any) {
   const supabaseClient = useSupabaseClient();
   const user = useUser();
 
@@ -83,6 +82,21 @@ export default function Chat({ avatar_url, projectsChildren, connectedUsers }: a
   connectedUsers.forEach((user: connectedUsers) => {
     user.selected = false;
   });
+
+  const [connUserId, setConnUserId] = useState<number>(-1);
+
+  useEffect(() => {
+    console.log("connUserId: ", connUserId);
+    if (connUserId === -1) return;
+
+  }, [connUserId]);
+
+  // verify if the user logged in has already a chat with the user selected
+  // if not, create a new chat and add the users to it
+  // if yes, get the chat id and set it to the state
+  // const verifyChat = async (connUserId: number) => {
+  //   const { data: chat, error: errorChat } = await supabaseClient
+  //   .from("chats
 
   return (
     <div>
@@ -92,12 +106,20 @@ export default function Chat({ avatar_url, projectsChildren, connectedUsers }: a
         projectChildren={projectsChildren}
       >
         {/* chat layout  */}
-        <div className="flex flex-row bg-whitepages border-gray-200 rounded-lg 
-        border-2" style={{ height: "calc(100vh - 12em)" }}>
+        <div
+          className="flex flex-row bg-whitepages border-gray-200 rounded-lg 
+        border-2"
+          style={{ height: "calc(100vh - 12em)" }}
+        >
           {/* first column for chat selection */}
-          <div className="flex flex-col w-1/4 overflow-y-auto 
-          scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
-            <ChatList connectedUsers={connectedUsers} />
+          <div
+            className="flex flex-col w-1/4 overflow-y-auto 
+          scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100"
+          >
+            <ChatList
+              connectedUsers={connectedUsers}
+              onUserSelect={setConnUserId}
+            />
           </div>
           {/* second column for chat */}
           <div className="flex flex-col w-3/4">
