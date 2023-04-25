@@ -74,8 +74,7 @@ export default function Chat({ avatar_url, projectsChildren }: any) {
             <ChatList />
           </div>
           {/* second column for chat */}
-          <div className="flex flex-col w-3/4 overflow-y-auto
-          scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
+          <div className="flex flex-col w-3/4">
             <ChatConversation />
           </div>
         </div>
