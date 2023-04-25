@@ -80,7 +80,7 @@ const ChatConversation = () => {
   }, []);
 
   return (
-    <div className="relative" style={{ height: "calc(100vh - 12em)" }}>
+    <div className="relative bg-gray-50" style={{ height: "calc(100vh - 12em)" }}>
       <div
         className="p-4 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100 h-full bg-transparent"
         id="chat-messages"
@@ -111,7 +111,7 @@ const ChatConversation = () => {
           </>
         ))}
       </div>
-      <div className="absolute bottom-0 w-full bg-white">
+      <div className="absolute bottom-0 w-full bg-white  border-t-2 border-b-2">
         <div className="flex flex-row justify-center h-auto min-h-12 p-3">
           <textarea
             rows={1}

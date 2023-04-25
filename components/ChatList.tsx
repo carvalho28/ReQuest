@@ -1,3 +1,4 @@
+import { connectedUsers } from "@/pages/chat";
 import { useState } from "react";
 import { useAsyncDebounce } from "react-table";
 import "regenerator-runtime/runtime";
@@ -26,17 +27,14 @@ let peopleA = [
   },
 ];
 
-const ChatList = () => {
+interface ChatListProps {
+  connectedUsers: connectedUsers[];
+}
 
-  let peopleExceptFirst = peopleA.slice(1);
-  console.log(peopleExceptFirst);
+const ChatList = ( { connectedUsers }: ChatListProps ) => {
+
   let people = [
-    ...peopleA,
-    ...peopleExceptFirst,
-    ...peopleExceptFirst,
-    ...peopleExceptFirst,
-    ...peopleExceptFirst,
-    ...peopleExceptFirst,
+    ...connectedUsers,
   ];
 
   const [searchTerm, setSearchTerm] = useState("");
@@ -45,7 +43,7 @@ const ChatList = () => {
   }, 200);
 
   return (
-    <div className="border-r-2 border-slate-300">
+    <div className="border-r-2 border-slate-300 h-full bg-gray-50">
       {/*  search bar */}
       <div className="flex items-center w-full justify-center mt-4 mb-2">
         <input
@@ -64,7 +62,7 @@ const ChatList = () => {
           <li key={person.email} className={`flex justify-between gap-x-6 
           py-5 px-4 hover:bg-gray-200 cursor-pointer border-b border-gray-300 ${person.selected ? 'bg-gray-200' : 'bg-white2'}`}>
             <div className="flex gap-x-4">
-              <img className="h-12 w-12 flex-none rounded-full bg-gray-50" src={person.imageUrl} alt="" />
+              <img className="h-12 w-12 flex-none rounded-full bg-gray-50" src={person.avatar_url} alt="" />
               <div className="min-w-0 flex-auto">
                 <p className="text-sm font-semibold leading-6 text-gray-900">{person.name}</p>
                 <p className="mt-1 truncate text-xs leading-5 text-gray-500">{person.email}</p>

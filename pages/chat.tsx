@@ -45,18 +45,44 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
     }
   );
 
+  // get all users i have interected with, which means are in a project with me
+  const {data: connectedUsers, error: errorConnectedUsers} = await supabase.rpc(
+    "get_connected_users",
+    {my_user_id: user?.id}
+  );
+  if (errorConnectedUsers) console.log(errorConnectedUsers);
+
+  console.log(connectedUsers);
+
+
+
   return {
     props: {
       avatar_url: avatar_url,
       projectsChildren: projectsChildren,
+      connectedUsers: connectedUsers
     },
   };
 };
 
+export type connectedUsers = {
+  id: number;
+  name: string;
+  email: string;
+  avatar_url: string;
+  selected: boolean;
+};
 
-export default function Chat({ avatar_url, projectsChildren }: any) {
+
+
+export default function Chat({ avatar_url, projectsChildren, connectedUsers }: any) {
   const supabaseClient = useSupabaseClient();
   const user = useUser();
+
+  // set selected to false for all users
+  connectedUsers.forEach((user: connectedUsers) => {
+    user.selected = false;
+  });
 
   return (
     <div>
@@ -66,12 +92,12 @@ export default function Chat({ avatar_url, projectsChildren }: any) {
         projectChildren={projectsChildren}
       >
         {/* chat layout  */}
-        <div className="flex flex-row bg-whitepages border 
-        border-gray-300 rounded-lg" style={{ height: "calc(100vh - 12em)" }}>
+        <div className="flex flex-row bg-whitepages border-gray-200 rounded-lg 
+        border-2" style={{ height: "calc(100vh - 12em)" }}>
           {/* first column for chat selection */}
           <div className="flex flex-col w-1/4 overflow-y-auto 
           scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
-            <ChatList />
+            <ChatList connectedUsers={connectedUsers} />
           </div>
           {/* second column for chat */}
           <div className="flex flex-col w-3/4">
