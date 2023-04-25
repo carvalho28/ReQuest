@@ -44,7 +44,17 @@ module.exports = {
           neutral: "#1E1E1E",
           "base-100": "#1e1e1e",
         },
-      }
+      },
+      {
+        chat: {
+          primary: "#845ec2",
+          secondary: "#ECECEC",
+          accent: "#121212",
+          neutral: "#121212",
+          "base-100": "#121212",
+        },
+      },
+
     ],
   },
   plugins: [

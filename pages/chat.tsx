@@ -1,3 +1,4 @@
+import ChatConversation from "@/components/ChatConversation";
 import ChatList from "@/components/ChatList";
 import Layout from "@/components/Layout";
 import { ProjectChildren } from "@/components/utils/sidebarHelper";
@@ -68,14 +69,14 @@ export default function Chat({ avatar_url, projectsChildren }: any) {
         <div className="flex flex-row bg-whitepages border 
         border-gray-300 rounded-lg" style={{ height: "calc(100vh - 12em)" }}>
           {/* first column for chat selection */}
-          <div className="flex flex-col w-1/4 bg-gray-100 overflow-y-auto 
+          <div className="flex flex-col w-1/4 overflow-y-auto 
           scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
             <ChatList />
           </div>
           {/* second column for chat */}
-          <div className="flex flex-col w-3/4 bg-gray-200 overflow-y-auto
+          <div className="flex flex-col w-3/4 overflow-y-auto
           scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
-            Chat
+            <ChatConversation />
           </div>
         </div>
       </Layout>
