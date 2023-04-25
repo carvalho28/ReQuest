@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { RiSendPlaneFill } from "react-icons/ri";
 
 const messages = [
@@ -52,10 +53,37 @@ const messages = [
 ];
 
 const ChatConversation = () => {
+  const [message, setMessage] = useState("");
+  const maxRows = 5;
+
+  function handleInput(event: any) {
+    setMessage(event.target.value);
+    event.target.style.height = "auto"; // reset the height to auto to recalculate the number of rows
+    event.target.style.height = `${Math.min(
+      event.target.scrollHeight,
+      maxRows * 20
+    )}px`; // set the height based on the number of rows and a row height of 20px
+
+    // adjust the height of the chat-messages container based on the number of rows
+    const chatMessages = document.getElementById("chat-messages");
+    if (chatMessages) {
+      chatMessages.style.height = `calc(100% - ${event.target.style.height})`;
+    }
+  }
+
+  // useEffect to scroll to the bottom of the chat-messages container
+  useEffect(() => {
+    const chatMessages = document.getElementById("chat-messages");
+    if (chatMessages) {
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+  }, []);
+
   return (
     <div className="relative" style={{ height: "calc(100vh - 12em)" }}>
       <div
-        className="p-4 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100 h-full"
+        className="p-4 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100 h-full bg-transparent"
+        id="chat-messages"
         style={{ height: "calc(100% - 4em)" }}
       >
         {/* if message */}
@@ -84,18 +112,22 @@ const ChatConversation = () => {
         ))}
       </div>
       <div className="absolute bottom-0 w-full bg-white">
-        <div className="flex flex-row items-center justify-center h-14">
-          <input
+        <div className="flex flex-row justify-center h-auto min-h-12 p-3">
+          <textarea
+            rows={1}
             name="message"
             id="message"
             className="block w-full text-gray-900 px-4 ring-0 border-0 
-            focus:outline-none resize-none h-auto bg-gray-100 rounded-full py-1 ml-2"
+            focus:outline-none resize-none h-auto bg-gray-100 rounded-md
+            py-1 ml-2 overflow-y-scroll"
             placeholder="Type a message..."
+            value={message}
+            onChange={handleInput}
           />
           {/* icon of send*/}
-          <div className="ml-2 flex items-center justify-center">
+          <div className="ml-2 flex items-end align-middle">
             <RiSendPlaneFill
-              className="text-gray-400 h-8 w-8 mr-4 
+              className="text-gray-400 h-6 w-6 mr-4 
             hover:text-gray-800 hover:cursor-pointer"
             />
           </div>
