@@ -1,5 +1,6 @@
 import { Database } from "@/types/supabase";
 import { useSupabaseClient, useUser } from "@supabase/auth-helpers-react";
+import { RealtimeChannel } from "@supabase/supabase-js";
 import { useEffect, useState } from "react";
 import { RiSendPlaneFill } from "react-icons/ri";
 
@@ -94,7 +95,9 @@ const ChatConversation = ({ chatId }: ChatConversationProps) => {
     }
   }, [chatId]);
 
-  const [messages, setMessages] = useState<Database["public"]["Tables"]["messages"]["Row"][]>([]);
+  const [messages, setMessages] = useState<
+    Database["public"]["Tables"]["messages"]["Row"][]
+  >([]);
   // retrieve messages from the database
   useEffect(() => {
     if (chatId === undefined || chatId === -1) {
@@ -105,17 +108,74 @@ const ChatConversation = ({ chatId }: ChatConversationProps) => {
         .from("messages")
         .select("*")
         .eq("chat_id", chatId)
-        .order("id", { ascending: true });
+        .order("created_at", { ascending: true });
       if (errorMessages) {
         console.log("error", errorMessages);
       }
       if (messages) {
         console.log("messages", messages);
-        setMessages(messages as Database["public"]["Tables"]["messages"]["Row"][]);
+        setMessages(
+          messages as Database["public"]["Tables"]["messages"]["Row"][]
+        );
       }
     };
+
+    let mess_channel: RealtimeChannel;
+    async function getMessagesRealtime() {
+      mess_channel = supabaseClient
+        .channel(`messages:chat_id=eq.${chatId}`)
+        .on(
+          "postgres_changes",
+          {
+            event: "INSERT",
+            schema: "public",
+            table: "messages",
+          },
+          async () => {
+            // get the new message
+            getMessages();
+          }
+        )
+        .subscribe();
+
+      return () => {
+        supabaseClient.removeChannel(mess_channel);
+      };
+    }
     getMessages();
+    getMessagesRealtime();
   }, [chatId]);
+
+  // send message
+  const sendMessage = async () => {
+    if (message === "") {
+      return;
+    }
+    const { data: newMessage, error: errorNewMessage } = await supabaseClient
+      .from("messages")
+      .insert([
+        {
+          chat_id: chatId,
+          author_id: user?.id,
+          content: message,
+        },
+      ]);
+    if (errorNewMessage) {
+      return;
+    }
+    setMessage("");
+    // clear the textarea
+    const textarea = document.getElementById("message") as HTMLTextAreaElement;
+    textarea.value = "";
+  };
+
+  // on enter send message
+  function handleKeyDown(event: any) {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      sendMessage();
+    }
+  }
 
   return (
     <>
@@ -168,12 +228,14 @@ const ChatConversation = ({ chatId }: ChatConversationProps) => {
                 placeholder="Type a message..."
                 value={message}
                 onChange={handleInput}
+                onKeyDown={handleKeyDown}
               />
               {/* icon of send*/}
               <div className="ml-2 flex items-end align-middle">
                 <RiSendPlaneFill
                   className="text-gray-400 h-6 w-6 mr-4 
             hover:text-gray-800 hover:cursor-pointer"
+                  onClick={sendMessage}
                 />
               </div>
             </div>

@@ -43,7 +43,7 @@ const navigation = [
   {
     name: "Chat",
     icon: ChatBubbleBottomCenterTextIcon,
-    href: "#",
+    href: "/chat", 
     count: 0,
     current: false,
   },
