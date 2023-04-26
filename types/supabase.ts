@@ -11,15 +11,18 @@ export interface Database {
     Tables: {
       chat_users: {
         Row: {
-          id: string
+          chat_id: string | null
+          id: number
           user_id: string | null
         }
         Insert: {
-          id: string
+          chat_id?: string | null
+          id?: number
           user_id?: string | null
         }
         Update: {
-          id?: string
+          chat_id?: string | null
+          id?: number
           user_id?: string | null
         }
       }
@@ -210,6 +213,17 @@ export interface Database {
       [_ in never]: never
     }
     Functions: {
+      get_connected_users: {
+        Args: {
+          my_user_id: string
+        }
+        Returns: {
+          id: string
+          email: string
+          name: string
+          avatar_url: string
+        }[]
+      }
       projects_user: {
         Args: {
           user_id: string
