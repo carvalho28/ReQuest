@@ -2,7 +2,7 @@ import { Database } from "@/types/supabase";
 import { useSupabaseClient, useUser } from "@supabase/auth-helpers-react";
 import { RealtimeChannel } from "@supabase/supabase-js";
 import { useEffect, useState } from "react";
-import { RiChat3Fill, RiMessage2Fill, RiMessage3Fill, RiSendPlaneFill } from "react-icons/ri";
+import { RiMessage2Fill, RiSendPlaneFill } from "react-icons/ri";
 
 interface ChatConversationProps {
   chatId: number;

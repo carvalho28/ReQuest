@@ -90,20 +90,40 @@ export default function Chat({
     console.log("connUserId: ", connUserId);
     if (connUserId === -1) return;
     const verifyChat = async (connUserId: number) => {
-      console.log("user01 id: ", user?.id);
-      console.log("user02 id: ", connUserId);
       const { data: chat, error: errorChat } = await supabaseClient.rpc(
         "get_chat_id",
         { user_id_1: user?.id, user_id_2: connUserId }
       );
 
       if (errorChat) console.log(errorChat);
-      if (!chat || chat.length === 0) {
-        console.log("No chat found");
-        return;
+      console.log("chat: ", chat);
+      console.log("chat.length: ", chat?.length);
+      if (!chat || chat?.length === 0) {
+        // create chat and and add both users to it
+        const { data: newChat, error: errorNewChat } = await supabaseClient
+          .from("chats")
+          .insert({})
+          .select();
+        if (errorNewChat) console.log(errorNewChat);
+        if (newChat) {
+          let newChatID = newChat[0].id;
+          const { data: addUsers, error: errorAddUsers } = await supabaseClient
+            .from("chat_users")
+            .insert([
+              { chat_id: newChatID, user_id: user?.id },
+              { chat_id: newChatID, user_id: connUserId },
+            ])
+            .select();
+          if (errorAddUsers) console.log(errorAddUsers);
+          if (addUsers) {
+            setChatId(newChatID);
+          }
+          //
+          console.log("newChat: ", newChat);
+        }
+      } else {
+        setChatId(chat[0].id);
       }
-
-      setChatId(chat[0].chat_id);
     };
 
     verifyChat(connUserId);
