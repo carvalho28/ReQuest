@@ -1,3 +1,4 @@
+import { useUser } from "@supabase/auth-helpers-react";
 import { useEffect, useState } from "react";
 import { RiSendPlaneFill } from "react-icons/ri";
 
@@ -52,9 +53,19 @@ const messages = [
   },
 ];
 
-const ChatConversation = () => {
+interface ChatConversationProps {
+  chatId: number;
+}
+
+const ChatConversation = ({ chatId }: ChatConversationProps) => {
   const [message, setMessage] = useState("");
   const maxRows = 5;
+
+  const user = useUser();
+
+  // useEffect(() => {
+  //   console.log("chat_id", chatId);
+  // }, [chatId]);
 
   function handleInput(event: any) {
     setMessage(event.target.value);
@@ -77,63 +88,72 @@ const ChatConversation = () => {
     if (chatMessages) {
       chatMessages.scrollTop = chatMessages.scrollHeight;
     }
-  }, []);
+  }, [chatId]);
 
   return (
-    <div className="relative bg-gray-50" style={{ height: "calc(100vh - 12em)" }}>
-      <div
-        className="p-4 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100 h-full bg-transparent"
-        id="chat-messages"
-        style={{ height: "calc(100% - 4em)" }}
-      >
-        {/* if message */}
-        {messages.map((message) => (
-          <div key={message.id}>
-            {message.is_user ? (
-              <div className="flex flex-row chat chat-end justify-end">
-                <div
-                  className="chat chat-bubble chat-bubble-primary text-white text-justify"
-                  data-theme="chat"
-                >
-                  {message.content}
-                </div>
+    <>
+      {chatId === undefined || chatId === -1 ? (
+        <div>No chat selected</div>
+      ) : (
+        <div
+          className="relative bg-gray-50"
+          style={{ height: "calc(100vh - 12em)" }}
+        >
+          <div
+            className="p-4 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100 h-full bg-transparent"
+            id="chat-messages"
+            style={{ height: "calc(100% - 4em)" }}
+          >
+            {/* if message */}
+            {messages.map((message) => (
+              <div key={message.id}>
+                {message.is_user ? (
+                  <div className="flex flex-row chat chat-end justify-end">
+                    <div
+                      className="chat chat-bubble chat-bubble-primary text-white text-justify"
+                      data-theme="chat"
+                    >
+                      {message.content}
+                    </div>
+                  </div>
+                ) : (
+                  <div className="flex flex-row chat chat-start">
+                    <div
+                      className="chat chat-bubble chat-bubble-secondary text-black text-justify"
+                      data-theme="chat"
+                    >
+                      {message.content}
+                    </div>
+                  </div>
+                )}
               </div>
-            ) : (
-              <div className="flex flex-row chat chat-start">
-                <div
-                  className="chat chat-bubble chat-bubble-secondary text-black text-justify"
-                  data-theme="chat"
-                >
-                  {message.content}
-                </div>
-              </div>
-            )}
+            ))}
           </div>
-        ))}
-      </div>
-      <div className="absolute bottom-0 w-full bg-white border-t-2 border-b-2">
-        <div className="flex flex-row justify-center h-auto min-h-12 p-3">
-          <textarea
-            rows={1}
-            name="message"
-            id="message"
-            className="block w-full text-gray-900 px-4 ring-0 border-0 
+          <div className="absolute bottom-0 w-full bg-white border-t-2 border-b-2">
+            <div className="flex flex-row justify-center h-auto min-h-12 p-3">
+              <textarea
+                rows={1}
+                name="message"
+                id="message"
+                className="block w-full text-gray-900 px-4 ring-0 border-0 
             focus:outline-none resize-none h-auto bg-gray-100 rounded-md
             py-1 ml-2 overflow-y-scroll"
-            placeholder="Type a message..."
-            value={message}
-            onChange={handleInput}
-          />
-          {/* icon of send*/}
-          <div className="ml-2 flex items-end align-middle">
-            <RiSendPlaneFill
-              className="text-gray-400 h-6 w-6 mr-4 
+                placeholder="Type a message..."
+                value={message}
+                onChange={handleInput}
+              />
+              {/* icon of send*/}
+              <div className="ml-2 flex items-end align-middle">
+                <RiSendPlaneFill
+                  className="text-gray-400 h-6 w-6 mr-4 
             hover:text-gray-800 hover:cursor-pointer"
-            />
+                />
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-    </div>
+      )}
+    </>
   );
 };
 

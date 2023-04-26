@@ -84,19 +84,35 @@ export default function Chat({
   });
 
   const [connUserId, setConnUserId] = useState<number>(-1);
+  const [chatId, setChatId] = useState<number>(-1);
 
   useEffect(() => {
     console.log("connUserId: ", connUserId);
     if (connUserId === -1) return;
+    const verifyChat = async (connUserId: number) => {
+      console.log("user01 id: ", user?.id);
+      console.log("user02 id: ", connUserId);
+      const { data: chat, error: errorChat } = await supabaseClient.rpc(
+        "get_chat_id",
+        { user_id_1: user?.id, user_id_2: connUserId }
+      );
 
+      if (errorChat) console.log(errorChat);
+      if (!chat || chat.length === 0) {
+        console.log("No chat found");
+        return;
+      }
+
+      setChatId(chat[0].chat_id);
+    };
+
+    verifyChat(connUserId);
   }, [connUserId]);
 
-  // verify if the user logged in has already a chat with the user selected
-  // if not, create a new chat and add the users to it
-  // if yes, get the chat id and set it to the state
-  // const verifyChat = async (connUserId: number) => {
-  //   const { data: chat, error: errorChat } = await supabaseClient
-  //   .from("chats
+  // refresh chatconversation when chatId changes
+  useEffect(() => {
+    console.log("chatId: ", chatId);
+  }, [chatId]);
 
   return (
     <div>
@@ -123,7 +139,7 @@ export default function Chat({
           </div>
           {/* second column for chat */}
           <div className="flex flex-col w-3/4">
-            <ChatConversation />
+            <ChatConversation chatId={chatId} />
           </div>
         </div>
       </Layout>
