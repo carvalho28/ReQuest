@@ -9,6 +9,34 @@ export type Json =
 export interface Database {
   public: {
     Tables: {
+      chat_users: {
+        Row: {
+          chat_id: string | null
+          id: number
+          user_id: string | null
+        }
+        Insert: {
+          chat_id?: string | null
+          id?: number
+          user_id?: string | null
+        }
+        Update: {
+          chat_id?: string | null
+          id?: number
+          user_id?: string | null
+        }
+      }
+      chats: {
+        Row: {
+          id: string
+        }
+        Insert: {
+          id?: string
+        }
+        Update: {
+          id?: string
+        }
+      }
       levels: {
         Row: {
           created_at: string | null
@@ -27,6 +55,29 @@ export interface Database {
           denomination?: string | null
           id?: number
           xp_needed?: number | null
+        }
+      }
+      messages: {
+        Row: {
+          author_id: string | null
+          chat_id: string | null
+          content: string | null
+          created_at: string | null
+          id: string
+        }
+        Insert: {
+          author_id?: string | null
+          chat_id?: string | null
+          content?: string | null
+          created_at?: string | null
+          id?: string
+        }
+        Update: {
+          author_id?: string | null
+          chat_id?: string | null
+          content?: string | null
+          created_at?: string | null
+          id?: string
         }
       }
       profiles: {
@@ -162,6 +213,26 @@ export interface Database {
       [_ in never]: never
     }
     Functions: {
+      get_chat_id: {
+        Args: {
+          user_id_1: string
+          user_id_2: string
+        }
+        Returns: {
+          chat_id: string
+        }[]
+      }
+      get_connected_users: {
+        Args: {
+          my_user_id: string
+        }
+        Returns: {
+          id: string
+          email: string
+          name: string
+          avatar_url: string
+        }[]
+      }
       projects_user: {
         Args: {
           user_id: string
