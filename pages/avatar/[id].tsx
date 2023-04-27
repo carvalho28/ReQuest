@@ -2,13 +2,14 @@ import Layout from "@/components/Layout";
 import { ProjectChildren } from "@/components/utils/sidebarHelper";
 import { createServerSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import { GetServerSidePropsContext } from "next";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 
 // avatar imports
 import { createAvatar } from "@dicebear/core";
 import { personas } from "@dicebear/collection";
-import { useState } from "react";
-import { RiCheckLine } from "react-icons/ri";
+import { SkinSVG, HairSVG } from "@/components/SVGComponents";
+import { RiArrowLeftSLine, RiArrowRightSLine } from "react-icons/ri";
 
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   const supabase = createServerSupabaseClient(ctx);
@@ -57,12 +58,60 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   };
 };
 
+type HairType =
+  | "bald"
+  | "balding"
+  | "beanie"
+  | "bobBangs"
+  | "bobCut"
+  | "bunUndercut"
+  | "buzzcut"
+  | "cap"
+  | "curly"
+  | "curlyBun"
+  | "curlyHighTop"
+  | "extraLong"
+  | "fade"
+  | "long"
+  | "mohawk"
+  | "pigtails"
+  | "shortCombover"
+  | "shortComboverChops"
+  | "sideShave"
+  | "straightBun";
+
+const hairTypes: HairType[] = [
+  "bald",
+  "balding",
+  "beanie",
+  "bobBangs",
+  "bobCut",
+  "bunUndercut",
+  "buzzcut",
+  "cap",
+  "curly",
+  "curlyBun",
+  "curlyHighTop",
+  "extraLong",
+  "fade",
+  "long",
+  "mohawk",
+  "pigtails",
+  "shortCombover",
+  "shortComboverChops",
+  "sideShave",
+  "straightBun",
+];
+
 export default function Profile({ avatar_url, projectsChildren }: any) {
   const [skinColor, setSkinColor] = useState("#F2AD98");
+  const [hairType, setHairType] = useState<HairType>("bald");
+  const [hairTypeId, setHairTypeId] = useState(0);
 
   const avatar = createAvatar(personas, {
     // remove hash from skin
     skinColor: [`${skinColor}`.replace("#", "")],
+    hair: [hairType],
     radius: 50,
   });
 
@@ -71,6 +120,23 @@ export default function Profile({ avatar_url, projectsChildren }: any) {
   const changeSkinColor = (color: string) => {
     setSkinColor(color);
   };
+
+  // change hair type using the buttons, left goes on type
+  const changeHairType = (direction: "left" | "right") => {
+    let newHairTypeId;
+    if (direction === "left") {
+      newHairTypeId = hairTypeId === 0 ? hairTypes.length - 1 : hairTypeId - 1;
+    } else {
+      newHairTypeId = hairTypeId === hairTypes.length - 1 ? 0 : hairTypeId + 1;
+    }
+    setHairTypeId(newHairTypeId);
+    setHairType(hairTypes[newHairTypeId]);
+  };
+
+  useEffect(() => {
+    console.log(hairType);
+    console.log(hairTypeId);
+  }, [hairType]);
 
   return (
     <Layout
@@ -95,6 +161,9 @@ export default function Profile({ avatar_url, projectsChildren }: any) {
             <h3 className="uppercase text-2xl text-gray-400 font-light">
               skin
             </h3>
+            <div className="text-center">
+              <SkinSVG color={skinColor} />
+            </div>
             <div className="grid grid-cols-4 gap-4 mt-4">
               <button
                 className="rounded-md w-10 h-10 text-white text-2xl"
@@ -167,6 +236,15 @@ export default function Profile({ avatar_url, projectsChildren }: any) {
             <h3 className="uppercase text-2xl text-gray-400 font-light">
               hair
             </h3>
+            <div className="flex flex-row">
+              <button onClick={() => changeHairType("left")}>
+                <RiArrowLeftSLine className="w-10 h-10" />
+              </button>
+              <HairSVG hairType={hairType} />
+              <button onClick={() => changeHairType("right")}>
+                <RiArrowRightSLine className="w-10 h-10" />
+              </button>
+            </div>
             <div className="grid grid-cols-4 gap-4 mt-4">
               <button
                 className="rounded-md w-10 h-10 text-white text-2xl"
