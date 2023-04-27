@@ -7,6 +7,8 @@ import Image from "next/image";
 // avatar imports
 import { createAvatar } from "@dicebear/core";
 import { personas } from "@dicebear/collection";
+import { useState } from "react";
+import { RiCheckLine } from "react-icons/ri";
 
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   const supabase = createServerSupabaseClient(ctx);
@@ -56,13 +58,19 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
 };
 
 export default function Profile({ avatar_url, projectsChildren }: any) {
+  const [skinColor, setSkinColor] = useState("#F2AD98");
+
   const avatar = createAvatar(personas, {
-    seed: "diogo",
-    backgroundColor: ["b6e3f4"],
+    // remove hash from skin
+    skinColor: [`${skinColor}`.replace("#", "")],
     radius: 50,
   });
 
   const svgData = encodeURIComponent(avatar.toString());
+
+  const changeSkinColor = (color: string) => {
+    setSkinColor(color);
+  };
 
   return (
     <Layout
@@ -89,43 +97,70 @@ export default function Profile({ avatar_url, projectsChildren }: any) {
             </h3>
             <div className="grid grid-cols-4 gap-4 mt-4">
               <button
-                className="rounded-md p-4"
+                className="rounded-md w-10 h-10 text-white text-2xl"
                 style={{ backgroundColor: "#FFCC22" }}
-              ></button>
+                onClick={() => changeSkinColor("#FFCC22")}
+              >
+                {skinColor === "#FFCC22" && "✔"}
+              </button>
               <button
-                className="rounded-md p-4"
+                className="rounded-md w-10 h-10 text-white text-2xl"
                 style={{ backgroundColor: "#FBD2C7" }}
-              ></button>
+                onClick={() => changeSkinColor("#FBD2C7")}
+              >
+                {skinColor === "#FBD2C7" && "✔"}
+              </button>
               <button
-                className="rounded-md p-4"
+                className="rounded-md w-10 h-10 text-white text-2xl"
                 style={{ backgroundColor: "#F2AD9B" }}
-              ></button>
+                onClick={() => changeSkinColor("#F2AD9B")}
+              >
+                {skinColor === "#F2AD9B" && "✔"}
+              </button>
               <button
-                className="rounded-md p-4"
+                className="rounded-md w-10 h-10 text-white text-2xl"
                 style={{ backgroundColor: "#E58F7B" }}
-              ></button>
+                onClick={() => changeSkinColor("#E58F7B")}
+              >
+                {skinColor === "#E58F7B" && "✔"}
+              </button>
 
               <button
-                className="rounded-md p-4"
+                className="rounded-md w-10 h-10 text-white text-2xl"
                 style={{ backgroundColor: "#E4A070" }}
-              ></button>
+                onClick={() => changeSkinColor("#E4A070")}
+              >
+                {skinColor === "#E4A070" && "✔"}
+              </button>
               <button
-                className="rounded-md p-4"
+                className="rounded-md w-10 h-10 text-white text-2xl"
                 style={{ backgroundColor: "#B16A5B" }}
-              ></button>
+                onClick={() => changeSkinColor("#B16A5B")}
+              >
+                {skinColor === "#B16A5B" && "✔"}
+              </button>
               <button
-                className="rounded-md p-4"
+                className="rounded-md w-10 h-10 text-white text-2xl"
                 style={{ backgroundColor: "#92594B" }}
-              ></button>
+                onClick={() => changeSkinColor("#92594B")}
+              >
+                {skinColor === "#92594B" && "✔"}
+              </button>
               <button
-                className="rounded-md p-4"
+                className="rounded-md w-10 h-10 text-white text-2xl"
                 style={{ backgroundColor: "#623D36" }}
-              ></button>
+                onClick={() => changeSkinColor("#623D36")}
+              >
+                {skinColor === "#623D36" && "✔"}
+              </button>
 
               <button
-                className="rounded-md p-4"
+                className="rounded-md w-10 h-10 text-white text-2xl"
                 style={{ backgroundColor: "#C9E6DC" }}
-              ></button>
+                onClick={() => changeSkinColor("#C9E6DC")}
+              >
+                {skinColor === "#C9E6DC" && "✔"}
+              </button>
             </div>
           </div>
           <div className="bg-gray-100 p-4 flex justify-start flex-col h-60 items-center">
@@ -134,36 +169,36 @@ export default function Profile({ avatar_url, projectsChildren }: any) {
             </h3>
             <div className="grid grid-cols-4 gap-4 mt-4">
               <button
-                className="rounded-md p-4"
+                className="rounded-md w-10 h-10 text-white text-2xl"
                 style={{ backgroundColor: "#362C47" }}
               ></button>
               <button
-                className="rounded-md p-4"
+                className="rounded-md w-10 h-10 text-white text-2xl"
                 style={{ backgroundColor: "#675E97" }}
               ></button>
 
               <button
-                className="rounded-md p-4"
+                className="rounded-md w-10 h-10 text-white text-2xl"
                 style={{ backgroundColor: "#5AC4D4" }}
               ></button>
               <button
-                className="rounded-md p-4"
+                className="rounded-md w-10 h-10 text-white text-2xl"
                 style={{ backgroundColor: "#DEE1FF" }}
               ></button>
               <button
-                className="rounded-md p-4"
+                className="rounded-md w-10 h-10 text-white text-2xl"
                 style={{ backgroundColor: "#6C4545" }}
               ></button>
               <button
-                className="rounded-md p-4"
+                className="rounded-md w-10 h-10 text-white text-2xl"
                 style={{ backgroundColor: "#F29C65" }}
               ></button>
               <button
-                className="rounded-md p-4"
+                className="rounded-md w-10 h-10 text-white text-2xl"
                 style={{ backgroundColor: "#E16381" }}
               ></button>
               <button
-                className="rounded-md p-4"
+                className="rounded-md w-10 h-10 text-white text-2xl"
                 style={{ backgroundColor: "#E15C66" }}
               ></button>
             </div>
@@ -174,35 +209,35 @@ export default function Profile({ avatar_url, projectsChildren }: any) {
             </h3>
             <div className="grid grid-cols-4 gap-4 mt-4">
               <button
-                className="rounded-md p-4"
+                className="rounded-md w-10 h-10 text-white text-2xl"
                 style={{ backgroundColor: "#362C47" }}
               ></button>
               <button
-                className="rounded-md p-4"
+                className="rounded-md w-10 h-10 text-white text-2xl"
                 style={{ backgroundColor: "#675E97" }}
               ></button>
               <button
-                className="rounded-md p-4"
+                className="rounded-md w-10 h-10 text-white text-2xl"
                 style={{ backgroundColor: "#5AC4D4" }}
               ></button>
               <button
-                className="rounded-md p-4"
+                className="rounded-md w-10 h-10 text-white text-2xl"
                 style={{ backgroundColor: "#DEE1F5" }}
               ></button>
               <button
-                className="rounded-md p-4"
+                className="rounded-md w-10 h-10 text-white text-2xl"
                 style={{ backgroundColor: "#6C4545" }}
               ></button>
               <button
-                className="rounded-md p-4"
+                className="rounded-md w-10 h-10 text-white text-2xl"
                 style={{ backgroundColor: "#F29C65" }}
               ></button>
               <button
-                className="rounded-md p-4"
+                className="rounded-md w-10 h-10 text-white text-2xl"
                 style={{ backgroundColor: "#E16381" }}
               ></button>
               <button
-                className="rounded-md p-4"
+                className="rounded-md w-10 h-10 text-white text-2xl"
                 style={{ backgroundColor: "#E15C66" }}
               ></button>
             </div>
@@ -213,17 +248,36 @@ export default function Profile({ avatar_url, projectsChildren }: any) {
             </h3>
             <div className="grid grid-cols-4 gap-4 mt-4">
               <button
-                className="rounded-md p-4"
+                className="rounded-md w-10 h-10 text-white text-2xl"
                 style={{ backgroundColor: "#456DFF" }}
               ></button>
-
               <button
-                className="rounded-md p-4"
+                className="rounded-md w-10 h-10 text-white text-2xl"
                 style={{ backgroundColor: "#5A45FF" }}
               ></button>
               <button
-                className="rounded-md p-4"
+                className="rounded-md w-10 h-10 text-white text-2xl"
                 style={{ backgroundColor: "#6DBB58" }}
+              ></button>
+              <button
+                className="rounded-md w-10 h-10 text-white text-2xl"
+                style={{ backgroundColor: "#F55D81" }}
+              ></button>
+              <button
+                className="rounded-md w-10 h-10 text-white text-2xl"
+                style={{ backgroundColor: "#7555CA" }}
+              ></button>
+              <button
+                className="rounded-md w-10 h-10 text-white text-2xl"
+                style={{ backgroundColor: "#E24553" }}
+              ></button>
+              <button
+                className="rounded-md w-10 h-10 text-white text-2xl"
+                style={{ backgroundColor: "#54D7D7" }}
+              ></button>
+              <button
+                className="rounded-md w-10 h-10 text-white text-2xl"
+                style={{ backgroundColor: "#F3B63A" }}
               ></button>
             </div>
           </div>
@@ -237,7 +291,44 @@ export default function Profile({ avatar_url, projectsChildren }: any) {
             7
           </div>
           <div className="bg-gray-100 p-4 flex justify-start items-center flex-col">
-            8
+            <h3 className="uppercase text-2xl text-gray-400 font-light">
+              Background
+            </h3>
+            <div className="grid grid-cols-4 gap-4 mt-4">
+              <button
+                className="rounded-md w-10 h-10 text-white text-2xl"
+                style={{ backgroundColor: "#93A7FF" }}
+              ></button>
+              <button
+                className="rounded-md w-10 h-10 text-white text-2xl"
+                style={{ backgroundColor: "#A9E775" }}
+              ></button>
+              <button
+                className="rounded-md w-10 h-10 text-white text-2xl"
+                style={{ backgroundColor: "#FF7A9A" }}
+              ></button>
+              <button
+                className="rounded-md w-10 h-10 text-white text-2xl"
+                style={{ backgroundColor: "#B379F7" }}
+              ></button>
+
+              <button
+                className="rounded-md w-10 h-10 text-white text-2xl"
+                style={{ backgroundColor: "#FF6674" }}
+              ></button>
+              <button
+                className="rounded-md w-10 h-10 text-white text-2xl"
+                style={{ backgroundColor: "#89E6E4" }}
+              ></button>
+              <button
+                className="rounded-md w-10 h-10 text-white text-2xl"
+                style={{ backgroundColor: "#FFCC65" }}
+              ></button>
+              <button
+                className="rounded-md w-10 h-10 text-white text-2xl"
+                style={{ backgroundColor: "#F8FBFF" }}
+              ></button>
+            </div>
           </div>
         </div>
       </div>
