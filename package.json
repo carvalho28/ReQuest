@@ -75,7 +75,7 @@
     "typescript": "5.0.2",
     "y-prosemirror": "1.0.20",
     "y-protocols": "^1.0.5",
-    "yjs": "^13.5.51"
+    "yjs": "^13.6.0"
   },
   "devDependencies": {
     "@tailwindcss/typography": "^0.5.9",
