@@ -11,7 +11,7 @@
     "update-types": "npx supabase gen types typescript --project-id \"nvvxhbjuugqdzpygnaaw\" > types/supabase.ts"
   },
   "dependencies": {
-    "@fortawesome/fontawesome-svg-core": "^6.3.0",
+    "@fortawesome/fontawesome-svg-core": "^6.4.0",
     "@fortawesome/free-regular-svg-icons": "^6.3.0",
     "@fortawesome/free-solid-svg-icons": "^6.3.0",
     "@fortawesome/react-fontawesome": "^0.2.0",
@@ -30,11 +30,11 @@
     "@tiptap/extension-color": "^2.0.0-beta.220",
     "@tiptap/extension-dropcursor": "^2.0.0-beta.220",
     "@tiptap/extension-hard-break": "^2.0.0-beta.220",
-    "@tiptap/extension-highlight": "^2.0.0-beta.220",
-    "@tiptap/extension-image": "^2.0.0-beta.220",
+    "@tiptap/extension-image": "^2.0.3",
+    "@tiptap/extension-highlight": "^2.0.3",
     "@tiptap/extension-placeholder": "^2.0.0-beta.220",
     "@tiptap/extension-table": "^2.0.0-beta.220",
-    "@tiptap/extension-table-cell": "^2.0.0-beta.220",
+    "@tiptap/extension-table-cell": "^2.0.3",
     "@tiptap/extension-table-header": "^2.0.0-beta.220",
     "@tiptap/extension-table-row": "^2.0.0-beta.220",
     "@tiptap/extension-task-item": "^2.0.0-beta.220",
@@ -42,9 +42,9 @@
     "@tiptap/extension-text-style": "^2.0.0-beta.220",
     "@tiptap/pm": "^2.0.0-beta.220",
     "@tiptap/react": "^2.0.0-beta.220",
-    "@tiptap/starter-kit": "^2.0.0-beta.220",
+    "@tiptap/starter-kit": "^2.0.3",
     "@types/node": "18.15.10",
-    "@types/react": "18.0.29",
+    "@types/react": "18.0.37",
     "@types/react-dom": "18.0.11",
     "@uppy/core": "^3.1.2",
     "@uppy/dashboard": "^3.3.2",
@@ -71,11 +71,11 @@
     "react-icons": "^4.8.0",
     "react-table": "^7.8.0",
     "react-tailwindcss-select": "^1.8.5",
-    "sass": "^1.60.0",
+    "sass": "^1.62.0",
     "typescript": "5.0.2",
     "y-prosemirror": "1.0.20",
     "y-protocols": "^1.0.5",
-    "yjs": "^13.5.51"
+    "yjs": "^13.6.0"
   },
   "devDependencies": {
     "@tailwindcss/typography": "^0.5.9",
@@ -83,10 +83,10 @@
     "@types/react-modal": "^3.13.1",
     "@types/react-table": "^7.7.14",
     "autoprefixer": "^10.4.14",
-    "cypress": "^12.7.0",
+    "cypress": "^12.9.0",
     "netlify-cli": "^13.2.1",
     "postcss": "^8.4.21",
     "supabase": "^1.45.2",
-    "tailwindcss": "^3.2.7"
+    "tailwindcss": "^3.3.1"
   }
 }
