@@ -213,6 +213,15 @@ export interface Database {
       [_ in never]: never
     }
     Functions: {
+      get_chat_id: {
+        Args: {
+          user_id_1: string
+          user_id_2: string
+        }
+        Returns: {
+          chat_id: string
+        }[]
+      }
       get_connected_users: {
         Args: {
           my_user_id: string
