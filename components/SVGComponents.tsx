@@ -116,6 +116,7 @@ interface FacialHairProps {
   width?: React.SVGProps<SVGSVGElement>["width"];
   height?: React.SVGProps<SVGSVGElement>["height"];
   facialHairType: string;
+  probability: number;
 }
 
 const FacialHairSVG = ({
@@ -123,33 +124,44 @@ const FacialHairSVG = ({
   width,
   height,
   facialHairType,
+  probability,
   ...props
 }: FacialHairProps) => {
-  if (facialHairType === "beardMustache") {
-    return (
-      <BeardMustacheSVG
-        color={color}
-        width={width}
-        height={height}
-        {...props}
-      />
-    );
-  } else if (facialHairType === "goatee") {
-    return <GoateeSVG color={color} width={width} height={height} {...props} />;
-  } else if (facialHairType === "pyramid") {
-    return (
-      <PyramidSVG color={color} width={width} height={height} {...props} />
-    );
-  } else if (facialHairType === "shadow") {
-    return <ShadowSVG color={color} width={width} height={height} {...props} />;
-  } else if (facialHairType === "soulPatch") {
-    return (
-      <SoulpatchSVG color={color} width={width} height={height} {...props} />
-    );
-  } else if (facialHairType === "walrus") {
-    return <WalrusSVG color={color} width={width} height={height} {...props} />;
+  if (probability === 100) {
+    if (facialHairType === "beardMustache") {
+      return (
+        <BeardMustacheSVG
+          color={color}
+          width={width}
+          height={height}
+          {...props}
+        />
+      );
+    } else if (facialHairType === "goatee") {
+      return (
+        <GoateeSVG color={color} width={width} height={height} {...props} />
+      );
+    } else if (facialHairType === "pyramid") {
+      return (
+        <PyramidSVG color={color} width={width} height={height} {...props} />
+      );
+    } else if (facialHairType === "shadow") {
+      return (
+        <ShadowSVG color={color} width={width} height={height} {...props} />
+      );
+    } else if (facialHairType === "soulPatch") {
+      return (
+        <SoulpatchSVG color={color} width={width} height={height} {...props} />
+      );
+    } else if (facialHairType === "walrus") {
+      return (
+        <WalrusSVG color={color} width={width} height={height} {...props} />
+      );
+    }
+  } else {
+    return <div className="h-[100px] w-24"></div>;
   }
-  return <div className="h-[100px] w-24"></div>;
+  return <></>;
 };
 
 const BodySVG = ({

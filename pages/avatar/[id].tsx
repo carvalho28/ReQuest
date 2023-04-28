@@ -118,13 +118,15 @@ const hairTypes: HairType[] = [
   "straightBun",
 ];
 
-const facialHairTypes: FacialHairType[] = [
-  "beardMustache",
-  "goatee",
-  "pyramid",
-  "shadow",
-  "soulPatch",
-  "walrus",
+// pair with hairtype and probability
+const facialHairTypes: [FacialHairType, number][] = [
+  ["beardMustache", 100],
+  ["goatee", 100],
+  ["pyramid", 100],
+  ["shadow", 100],
+  ["soulPatch", 100],
+  ["walrus", 100],
+  ["walrus", 0],
 ];
 
 export default function Profile({ avatar_url, projectsChildren }: any) {
@@ -141,20 +143,6 @@ export default function Profile({ avatar_url, projectsChildren }: any) {
   const [facialHairColor, setFacialHairColor] = useState("#362C47");
 
   const [clothingColor, setClothingColor] = useState("#F2AD98");
-
-  const avatar = createAvatar(personas, {
-    // remove hash from skin
-    skinColor: [`${skinColor}`.replace("#", "")],
-    hair: [hairType],
-    hairColor: [`${hairColor}`.replace("#", "")],
-    facialHair: [facialHairType],
-    facialHairProbability: facialHairProbability,
-    body: ["squared"],
-    clothingColor: [`${clothingColor}`.replace("#", "")],
-    radius: 50,
-  });
-
-  const svgData = encodeURIComponent(avatar.toString());
 
   const changeSkinColor = (color: string) => {
     setSkinColor(color);
@@ -191,28 +179,34 @@ export default function Profile({ avatar_url, projectsChildren }: any) {
           : facialHairTypeId + 1;
     }
     setFacialhairTypeId(newFacialHairTypeId);
-    setFacialHairType(facialHairTypes[newFacialHairTypeId]);
+    setFacialHairType(facialHairTypes[newFacialHairTypeId][0]);
+    setFacialHairProbability(facialHairTypes[newFacialHairTypeId][1]);
   };
 
   const changeFacialHairColor = (color: string) => {
     setFacialHairColor(color);
   };
 
-  function changeFacialHairProbability() {
-    let newProbability = facialHairProbability === 0 ? 100 : 0;
-    setFacialHairProbability(newProbability);
-    console.log(facialHairProbability);
-  }
-
   function changeBodyColor(color: string) {
     setClothingColor(color);
   }
 
+  const [svgData, setSvgData] = useState<string | null>("");
+
   useEffect(() => {
-    console.log(hairType);
-    console.log(hairTypeId);
-    console.log(hairColor);
-  }, [hairType, hairColor, facialHairProbability]);
+    const avatar = createAvatar(personas, {
+      // remove hash from skin
+      skinColor: [`${skinColor}`.replace("#", "")],
+      hair: [hairType],
+      hairColor: [`${hairColor}`.replace("#", "")],
+      facialHair: [facialHairType],
+      facialHairProbability: facialHairProbability,
+      body: ["squared"],
+      clothingColor: [`${clothingColor}`.replace("#", "")],
+      radius: 50,
+    });
+    setSvgData(encodeURIComponent(avatar.toString()));
+  }, [hairType, hairColor, facialHairProbability, skinColor, facialHairType, clothingColor]);
 
   return (
     <Layout
@@ -392,31 +386,12 @@ export default function Profile({ avatar_url, projectsChildren }: any) {
               <FacialHairSVG
                 facialHairType={facialHairType}
                 color={facialHairColor}
+                probability={facialHairProbability}
               />
               <button onClick={() => changeFacialHairType("right")}>
                 <RiArrowRightSLine className="w-10 h-10" />
               </button>
             </div>
-            {/* add a button to enable or diable beard */}
-            <Switch
-              checked={facialHairProbability === 100 ? true : false}
-              onChange={() => changeFacialHairProbability()}
-              className={classNames(
-                facialHairProbability === 100
-                  ? "bg-emerald-400"
-                  : "bg-gray-200",
-                "relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-emerald-600 focus:ring-offset-2"
-              )}
-            >
-              <span className="sr-only">Use setting</span>
-              <span
-                aria-hidden="true"
-                className={classNames(
-                  facialHairProbability ? "translate-x-5" : "translate-x-0",
-                  "pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
-                )}
-              />
-            </Switch>{" "}
             <div className="grid grid-cols-4 gap-4 mt-4">
               <button
                 className="rounded-md w-10 h-10 text-white text-2xl"
