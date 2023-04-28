@@ -14,6 +14,7 @@ import {
   FacialHairSVG,
   BodySVG,
   EyesSVG,
+  MouthSVG,
 } from "@/components/SVGComponents";
 import { RiArrowLeftSLine, RiArrowRightSLine } from "react-icons/ri";
 
@@ -96,6 +97,15 @@ type FacialHairType =
 
 type EyesType = "open" | "sleep" | "wink" | "glasses" | "happy" | "sunglasses";
 
+type MouthTypes =
+  | "bigSmile"
+  | "frown"
+  | "lips"
+  | "pacifier"
+  | "smile"
+  | "smirk"
+  | "surprise";
+
 const hairTypes: HairType[] = [
   "bald",
   "balding",
@@ -139,6 +149,16 @@ const eyesTypes: EyesType[] = [
   "sunglasses",
 ];
 
+const mouthTypes: MouthTypes[] = [
+  "bigSmile",
+  "frown",
+  "lips",
+  "pacifier",
+  "smile",
+  "smirk",
+  "surprise",
+];
+
 export default function Profile({ avatar_url, projectsChildren }: any) {
   const [skinColor, setSkinColor] = useState("#F2AD98");
 
@@ -156,6 +176,9 @@ export default function Profile({ avatar_url, projectsChildren }: any) {
 
   const [eyesType, setEyesType] = useState<EyesType>("open");
   const [eyesTypeId, setEyesTypeId] = useState(0);
+
+  const [mouthType, setMouthType] = useState<MouthTypes>("bigSmile");
+  const [mouthTypeId, setMouthTypeId] = useState(0);
 
   const changeSkinColor = (color: string) => {
     setSkinColor(color);
@@ -214,6 +237,16 @@ export default function Profile({ avatar_url, projectsChildren }: any) {
     setEyesType(eyesTypes[newEyesTypeId]);
   };
 
+  const changeMouthType = (direction: "left" | "right") => {
+    const newMouthTypeId =
+      direction === "left"
+        ? (mouthTypeId - 1 + mouthTypes.length) % mouthTypes.length
+        : (mouthTypeId + 1) % mouthTypes.length;
+
+    setMouthTypeId(newMouthTypeId);
+    setMouthType(mouthTypes[newMouthTypeId]);
+  };
+
   const [svgData, setSvgData] = useState<string | null>("");
 
   useEffect(() => {
@@ -227,13 +260,10 @@ export default function Profile({ avatar_url, projectsChildren }: any) {
       body: ["squared"],
       clothingColor: [`${clothingColor}`.replace("#", "")],
       eyes: [eyesType],
+      mouth: [mouthType],
       radius: 50,
     });
     setSvgData(encodeURIComponent(avatar.toString()));
-
-    console.log(eyesType);
-    console.log(eyesTypes);
-    console.log(eyesTypeId);
   }, [
     hairType,
     hairColor,
@@ -242,6 +272,7 @@ export default function Profile({ avatar_url, projectsChildren }: any) {
     facialHairType,
     clothingColor,
     eyesType,
+    mouthType,
   ]);
 
   return (
@@ -571,7 +602,20 @@ export default function Profile({ avatar_url, projectsChildren }: any) {
             </div>
           </div>
           <div className="bg-gray-100 p-4 flex justify-start items-center flex-col">
-            6
+            <h3 className="uppercase text-2xl text-gray-400 font-light">
+              Mouth
+            </h3>
+            <div className="text-center">
+              <div className="flex flex-row">
+                <button onClick={() => changeMouthType("left")}>
+                  <RiArrowLeftSLine className="w-10 h-10" />
+                </button>
+                  <MouthSVG color="#ffffff" mouthType={mouthType} />
+                <button onClick={() => changeMouthType("right")}>
+                  <RiArrowRightSLine className="w-10 h-10" />
+                </button>
+              </div>
+            </div>
           </div>
           <div className="bg-gray-100 p-4 flex justify-start items-center flex-col">
             7

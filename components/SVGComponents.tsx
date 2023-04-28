@@ -1,7 +1,41 @@
 import * as React from "react";
-import { BaldingSVG, BeanieSVG, BobBangsSVG, BobCutSVG, BunUndercutSVG, BuzzcutSVG, CapSVG, CurlyBunSVG, CurlyHighTopSVG, CurlySVG, ExtraLongSVG, FadeSVG, LongSVG, MohawkSVG, PigtailsSVG, ShortComboverChopsSVG, ShortComboverSVG, SideShaveSVG } from "./avatars/Hair";
-import { BeardMustacheSVG, GoateeSVG, PyramidSVG, ShadowSVG, SoulpatchSVG, WalrusSVG } from "./avatars/FacialHair";
-import { HappySVG, OpenSVG, SleepSVG, SunglassesSVG, WinkSVG } from "./avatars/Eyes";
+import {
+  BaldingSVG,
+  BeanieSVG,
+  BobBangsSVG,
+  BobCutSVG,
+  BunUndercutSVG,
+  BuzzcutSVG,
+  CapSVG,
+  CurlyBunSVG,
+  CurlyHighTopSVG,
+  CurlySVG,
+  ExtraLongSVG,
+  FadeSVG,
+  LongSVG,
+  MohawkSVG,
+  PigtailsSVG,
+  ShortComboverChopsSVG,
+  ShortComboverSVG,
+  SideShaveSVG,
+} from "./avatars/Hair";
+import {
+  BeardMustacheSVG,
+  GoateeSVG,
+  PyramidSVG,
+  ShadowSVG,
+  SoulpatchSVG,
+  WalrusSVG,
+} from "./avatars/FacialHair";
+import {
+  GlassesSVG,
+  HappySVG,
+  OpenSVG,
+  SleepSVG,
+  SunglassesSVG,
+  WinkSVG,
+} from "./avatars/Eyes";
+import { BigSmileSVG, FrownSVG, LipsSVG, PacifierSVG, SmileSVG, SmirkSVG, SurpriseSVG } from "./avatars/Mouth";
 
 const SkinSVG = ({
   color = "#000",
@@ -217,5 +251,42 @@ const EyesSVG = ({ color, width, height, eyesType, ...props }: EyesType) => {
   return <div className="h-[100px] w-24"></div>;
 };
 
+interface MouthTypes {
+  color?: React.SVGProps<SVGSVGElement>["color"];
+  width?: React.SVGProps<SVGSVGElement>["width"];
+  height?: React.SVGProps<SVGSVGElement>["height"];
+  mouthType: string;
+}
 
-export { SkinSVG, HairSVG, FacialHairSVG, BodySVG, EyesSVG };
+const MouthSVG = ({
+  color,
+  width,
+  height,
+  mouthType,
+  ...props
+}: MouthTypes) => {
+  if (mouthType === "bigSmile") {
+    return (
+      <BigSmileSVG color={color} width={width} height={height} {...props} />
+    );
+  } else if (mouthType === "frown") {
+    return <FrownSVG color={color} width={width} height={height} {...props} />;
+  } else if (mouthType === "lips") {
+    return <LipsSVG color={color} width={width} height={height} {...props} />;
+  } else if (mouthType === "pacifier") {
+    return (
+      <PacifierSVG color={color} width={width} height={height} {...props} />
+    );
+  } else if (mouthType === "smile") {
+    return <SmileSVG color={color} width={width} height={height} {...props} />;
+  } else if (mouthType === "smirk") {
+    return <SmirkSVG color={color} width={width} height={height} {...props} />;
+  } else if (mouthType === "surprise") {
+    return (
+      <SurpriseSVG color={color} width={width} height={height} {...props} />
+    );
+  }
+  return <div className="h-[100px] w-24"></div>;
+};
+
+export { SkinSVG, HairSVG, FacialHairSVG, BodySVG, EyesSVG, MouthSVG };
