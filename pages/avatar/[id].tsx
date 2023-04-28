@@ -16,8 +16,6 @@ import {
   EyesSVG,
 } from "@/components/SVGComponents";
 import { RiArrowLeftSLine, RiArrowRightSLine } from "react-icons/ri";
-import { Switch } from "@headlessui/react";
-import { classNames } from "@/components/utils/general";
 
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   const supabase = createServerSupabaseClient(ctx);
@@ -202,17 +200,16 @@ export default function Profile({ avatar_url, projectsChildren }: any) {
     setFacialHairColor(color);
   };
 
-  function changeBodyColor(color: string) {
+  const changeBodyColor = (color: string) => {
     setClothingColor(color);
-  }
+  };
 
   const changeEyesType = (direction: "left" | "right") => {
-    let newEyesTypeId;
-    if (direction === "left") {
-      newEyesTypeId = eyesTypeId === 0 ? eyesType.length - 1 : eyesTypeId - 1;
-    } else {
-      newEyesTypeId = eyesTypeId === eyesType.length - 1 ? 0 : eyesTypeId + 1;
-    }
+    const newEyesTypeId =
+      direction === "left"
+        ? (eyesTypeId - 1 + eyesTypes.length) % eyesTypes.length
+        : (eyesTypeId + 1) % eyesTypes.length;
+
     setEyesTypeId(newEyesTypeId);
     setEyesType(eyesTypes[newEyesTypeId]);
   };
@@ -233,6 +230,10 @@ export default function Profile({ avatar_url, projectsChildren }: any) {
       radius: 50,
     });
     setSvgData(encodeURIComponent(avatar.toString()));
+
+    console.log(eyesType);
+    console.log(eyesTypes);
+    console.log(eyesTypeId);
   }, [
     hairType,
     hairColor,
