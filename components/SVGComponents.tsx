@@ -186,6 +186,21 @@ const BodySVG = ({
   </svg>
 );
 
+interface EyesType {
+  color?: React.SVGProps<SVGSVGElement>["color"];
+  width?: React.SVGProps<SVGSVGElement>["width"];
+  height?: React.SVGProps<SVGSVGElement>["height"];
+  eyesType: string;
+}
+
+const EyesSVG = ({ color, width, height, eyesType, ...props }: EyesType) => {
+  if (eyesType === "glasses")
+    return (
+      <GlassesSVG color={color} width={width} height={height} {...props} />
+    );
+  return <div className="h-[100px] w-24"></div>;
+};
+
 const ShortComboverSVG = ({
   color,
   width = 100,
@@ -1045,4 +1060,34 @@ const ShadowSVG = ({
   </svg>
 );
 
-export { SkinSVG, HairSVG, FacialHairSVG, BodySVG };
+const GlassesSVG = ({
+  color,
+  width = 100,
+  height = 100,
+  scale = 1.5,
+  ...props
+}: React.SVGProps<SVGSVGElement>) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 64 64"
+    width={width}
+    height={height}
+    transform={`scale(${scale})`}
+    pointerEvents="none"
+    {...props}
+  >
+    <g fill="none">
+      <path
+        fill="#1b0640"
+        d="M26 30a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm12 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"
+      />
+      <path fill="#fff" d="M23 26h6v6h-6zm12 0h6v6h-6z" opacity={0.303} />
+      <path
+        fill="#1b0640"
+        d="M31 25.053h2c1.5 0 2.5-1.053 5-1.053 1.667 0 3.333.35 5 1.053l1 .526v1.579l-1 .526v3.158C43 32.586 41.657 34 40 34h-4c-1.657 0-3-1.414-3-3.158v-3.684h-2v3.684C31 32.586 29.657 34 28 34h-4c-1.657 0-3-1.414-3-3.158v-3.158l-1-.526v-1.58l1-.525C22.667 24.35 24.333 24 26 24c2.5 0 3.5 1.053 5 1.053zm-2.757 1.47c-.844-.296-1.425-.418-2.243-.418-.995 0-1.993.15-3 .45v4.287c0 .581.448 1.053 1 1.053h4c.552 0 1-.472 1-1.053v-4.051c-.209-.07-.447-.155-.757-.267zm7.514 0c-.31.113-.548.198-.757.268v4.051c0 .581.448 1.053 1 1.053h4c.552 0 1-.472 1-1.053v-4.287c-1.007-.3-2.005-.45-3-.45-.818 0-1.399.122-2.243.419z"
+      />
+    </g>
+  </svg>
+);
+
+export { SkinSVG, HairSVG, FacialHairSVG, BodySVG, EyesSVG };
