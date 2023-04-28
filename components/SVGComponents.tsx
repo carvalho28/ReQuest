@@ -35,7 +35,16 @@ import {
   SunglassesSVG,
   WinkSVG,
 } from "./avatars/Eyes";
-import { BigSmileSVG, FrownSVG, LipsSVG, PacifierSVG, SmileSVG, SmirkSVG, SurpriseSVG } from "./avatars/Mouth";
+import {
+  BigSmileSVG,
+  FrownSVG,
+  LipsSVG,
+  PacifierSVG,
+  SmileSVG,
+  SmirkSVG,
+  SurpriseSVG,
+} from "./avatars/Mouth";
+import { MediumRoundSVG, SmallRoundSVG, WrinklesSVG } from "./avatars/Nose";
 
 const SkinSVG = ({
   color = "#000",
@@ -289,4 +298,28 @@ const MouthSVG = ({
   return <div className="h-[100px] w-24"></div>;
 };
 
-export { SkinSVG, HairSVG, FacialHairSVG, BodySVG, EyesSVG, MouthSVG };
+interface NoseTypes {
+  color?: React.SVGProps<SVGSVGElement>["color"];
+  width?: React.SVGProps<SVGSVGElement>["width"];
+  height?: React.SVGProps<SVGSVGElement>["height"];
+  noseType: string;
+}
+
+const NoseSVG = ({ color, width, height, noseType, ...props }: NoseTypes) => {
+  if (noseType === "mediumRound") {
+    return (
+      <MediumRoundSVG color={color} width={width} height={height} {...props} />
+    );
+  } else if (noseType === "smallRound") {
+    return (
+      <SmallRoundSVG color={color} width={width} height={height} {...props} />
+    );
+  } else if (noseType === "wrinkles") {
+    return (
+      <WrinklesSVG color={color} width={width} height={height} {...props} />
+    );
+  }
+  return <div className="h-[100px] w-24"></div>;
+};
+
+export { SkinSVG, HairSVG, FacialHairSVG, BodySVG, EyesSVG, MouthSVG, NoseSVG };

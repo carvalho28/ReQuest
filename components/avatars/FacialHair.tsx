@@ -1,4 +1,3 @@
-
 export const BeardMustacheSVG = ({
   color,
   width = 100,

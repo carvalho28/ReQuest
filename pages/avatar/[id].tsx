@@ -15,8 +15,21 @@ import {
   BodySVG,
   EyesSVG,
   MouthSVG,
+  NoseSVG,
 } from "@/components/SVGComponents";
 import { RiArrowLeftSLine, RiArrowRightSLine } from "react-icons/ri";
+import {
+  EyesType,
+  FacialHairType,
+  HairType,
+  MouthTypes,
+  NoseType,
+  eyesTypes,
+  facialHairTypes,
+  hairTypes,
+  mouthTypes,
+  noseTypes,
+} from "@/components/avatars/types";
 
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   const supabase = createServerSupabaseClient(ctx);
@@ -65,102 +78,8 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   };
 };
 
-type HairType =
-  | "bald"
-  | "balding"
-  | "beanie"
-  | "bobBangs"
-  | "bobCut"
-  | "bunUndercut"
-  | "buzzcut"
-  | "cap"
-  | "curly"
-  | "curlyBun"
-  | "curlyHighTop"
-  | "extraLong"
-  | "fade"
-  | "long"
-  | "mohawk"
-  | "pigtails"
-  | "shortCombover"
-  | "shortComboverChops"
-  | "sideShave"
-  | "straightBun";
-
-type FacialHairType =
-  | "beardMustache"
-  | "goatee"
-  | "pyramid"
-  | "shadow"
-  | "soulPatch"
-  | "walrus";
-
-type EyesType = "open" | "sleep" | "wink" | "glasses" | "happy" | "sunglasses";
-
-type MouthTypes =
-  | "bigSmile"
-  | "frown"
-  | "lips"
-  | "pacifier"
-  | "smile"
-  | "smirk"
-  | "surprise";
-
-const hairTypes: HairType[] = [
-  "bald",
-  "balding",
-  "beanie",
-  "bobBangs",
-  "bobCut",
-  "bunUndercut",
-  "buzzcut",
-  "cap",
-  "curly",
-  "curlyBun",
-  "curlyHighTop",
-  "extraLong",
-  "fade",
-  "long",
-  "mohawk",
-  "pigtails",
-  "shortCombover",
-  "shortComboverChops",
-  "sideShave",
-  "straightBun",
-];
-
-// pair with hairtype and probability
-const facialHairTypes: [FacialHairType, number][] = [
-  ["beardMustache", 100],
-  ["goatee", 100],
-  ["pyramid", 100],
-  ["shadow", 100],
-  ["soulPatch", 100],
-  ["walrus", 100],
-  ["walrus", 0],
-];
-
-const eyesTypes: EyesType[] = [
-  "open",
-  "sleep",
-  "wink",
-  "glasses",
-  "happy",
-  "sunglasses",
-];
-
-const mouthTypes: MouthTypes[] = [
-  "bigSmile",
-  "frown",
-  "lips",
-  "pacifier",
-  "smile",
-  "smirk",
-  "surprise",
-];
-
 export default function Profile({ avatar_url, projectsChildren }: any) {
-  const [skinColor, setSkinColor] = useState("#F2AD98");
+  const [skinColor, setSkinColor] = useState("#F2AD9B");
 
   const [hairType, setHairType] = useState<HairType>("bald");
   const [hairTypeId, setHairTypeId] = useState(0);
@@ -172,13 +91,18 @@ export default function Profile({ avatar_url, projectsChildren }: any) {
   const [facialHairTypeId, setFacialhairTypeId] = useState(0);
   const [facialHairColor, setFacialHairColor] = useState("#362C47");
 
-  const [clothingColor, setClothingColor] = useState("#F2AD98");
+  const [clothingColor, setClothingColor] = useState("#456DFF");
 
   const [eyesType, setEyesType] = useState<EyesType>("open");
   const [eyesTypeId, setEyesTypeId] = useState(0);
 
   const [mouthType, setMouthType] = useState<MouthTypes>("bigSmile");
   const [mouthTypeId, setMouthTypeId] = useState(0);
+
+  const [noseType, setNoseType] = useState<NoseType>("mediumRound");
+  const [noseTypeId, setNoseTypeId] = useState(0);
+
+  const [backgroundColor, setBackgroundColor] = useState("#93A7FF");
 
   const changeSkinColor = (color: string) => {
     setSkinColor(color);
@@ -199,6 +123,10 @@ export default function Profile({ avatar_url, projectsChildren }: any) {
   // change hair color
   const changeHairColor = (color: string) => {
     setHairColor(color);
+  };
+
+  const changeBackgroundColor = (color: string) => {
+    setBackgroundColor(color);
   };
 
   const changeFacialHairType = (direction: "left" | "right") => {
@@ -247,6 +175,16 @@ export default function Profile({ avatar_url, projectsChildren }: any) {
     setMouthType(mouthTypes[newMouthTypeId]);
   };
 
+  const changeNoseType = (direction: "left" | "right") => {
+    const newNoseTypeId =
+      direction === "left"
+        ? (noseTypeId - 1 + noseTypes.length) % noseTypes.length
+        : (noseTypeId + 1) % noseTypes.length;
+
+    setNoseTypeId(newNoseTypeId);
+    setNoseType(noseTypes[newNoseTypeId]);
+  };
+
   const [svgData, setSvgData] = useState<string | null>("");
 
   useEffect(() => {
@@ -261,6 +199,8 @@ export default function Profile({ avatar_url, projectsChildren }: any) {
       clothingColor: [`${clothingColor}`.replace("#", "")],
       eyes: [eyesType],
       mouth: [mouthType],
+      nose: [noseType],
+      backgroundColor: [`${backgroundColor}`.replace("#", "")],
       radius: 50,
     });
     setSvgData(encodeURIComponent(avatar.toString()));
@@ -273,6 +213,8 @@ export default function Profile({ avatar_url, projectsChildren }: any) {
     clothingColor,
     eyesType,
     mouthType,
+    noseType,
+    backgroundColor,
   ]);
 
   return (
@@ -610,7 +552,7 @@ export default function Profile({ avatar_url, projectsChildren }: any) {
                 <button onClick={() => changeMouthType("left")}>
                   <RiArrowLeftSLine className="w-10 h-10" />
                 </button>
-                  <MouthSVG color="#ffffff" mouthType={mouthType} />
+                <MouthSVG color="#ffffff" mouthType={mouthType} />
                 <button onClick={() => changeMouthType("right")}>
                   <RiArrowRightSLine className="w-10 h-10" />
                 </button>
@@ -618,7 +560,20 @@ export default function Profile({ avatar_url, projectsChildren }: any) {
             </div>
           </div>
           <div className="bg-gray-100 p-4 flex justify-start items-center flex-col">
-            7
+            <h3 className="uppercase text-2xl text-gray-400 font-light">
+              Nose
+            </h3>
+            <div className="text-center">
+              <div className="flex flex-row">
+                <button onClick={() => changeNoseType("left")}>
+                  <RiArrowLeftSLine className="w-10 h-10" />
+                </button>
+                <NoseSVG color="#ffffff" noseType={noseType} />
+                <button onClick={() => changeNoseType("right")}>
+                  <RiArrowRightSLine className="w-10 h-10" />
+                </button>
+              </div>
+            </div>
           </div>
           <div className="bg-gray-100 p-4 flex justify-start items-center flex-col">
             <h3 className="uppercase text-2xl text-gray-400 font-light">
@@ -628,36 +583,60 @@ export default function Profile({ avatar_url, projectsChildren }: any) {
               <button
                 className="rounded-md w-10 h-10 text-white text-2xl"
                 style={{ backgroundColor: "#93A7FF" }}
-              ></button>
+                onClick={() => changeBackgroundColor("#93A7FF")}
+              >
+                {backgroundColor === "#93A7FF" && "✔"}
+              </button>
               <button
                 className="rounded-md w-10 h-10 text-white text-2xl"
                 style={{ backgroundColor: "#A9E775" }}
-              ></button>
+                onClick={() => changeBackgroundColor("#A9E775")}
+              >
+                {backgroundColor === "#A9E775" && "✔"}
+              </button>
               <button
                 className="rounded-md w-10 h-10 text-white text-2xl"
                 style={{ backgroundColor: "#FF7A9A" }}
-              ></button>
+                onClick={() => changeBackgroundColor("#FF7A9A")}
+              >
+                {backgroundColor === "#FF7A9A" && "✔"}
+              </button>
               <button
                 className="rounded-md w-10 h-10 text-white text-2xl"
                 style={{ backgroundColor: "#B379F7" }}
-              ></button>
+                onClick={() => changeBackgroundColor("#B379F7")}
+              >
+                {backgroundColor === "#B379F7" && "✔"}
+              </button>
 
               <button
                 className="rounded-md w-10 h-10 text-white text-2xl"
                 style={{ backgroundColor: "#FF6674" }}
-              ></button>
+                onClick={() => changeBackgroundColor("#FF6674")}
+              > 
+                {backgroundColor === "#FF6674" && "✔"}
+              </button>
               <button
                 className="rounded-md w-10 h-10 text-white text-2xl"
                 style={{ backgroundColor: "#89E6E4" }}
-              ></button>
+                onClick={() => changeBackgroundColor("#89E6E4")}
+              >
+                {backgroundColor === "#89E6E4" && "✔"}
+              </button>
               <button
                 className="rounded-md w-10 h-10 text-white text-2xl"
                 style={{ backgroundColor: "#FFCC65" }}
-              ></button>
+                onClick={() => changeBackgroundColor("#FFCC65")}
+              >
+                {backgroundColor === "#FFCC65" && "✔"}
+              </button>
               <button
                 className="rounded-md w-10 h-10 text-white text-2xl"
                 style={{ backgroundColor: "#F8FBFF" }}
-              ></button>
+                onClick={() => changeBackgroundColor("#F8FBFF")}
+              >
+                {backgroundColor === "#F8FBFF" && "✔"}
+              </button>
             </div>
           </div>
         </div>
