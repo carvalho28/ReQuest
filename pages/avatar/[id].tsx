@@ -8,8 +8,10 @@ import Image from "next/image";
 // avatar imports
 import { createAvatar } from "@dicebear/core";
 import { personas } from "@dicebear/collection";
-import { SkinSVG, HairSVG } from "@/components/SVGComponents";
+import { SkinSVG, HairSVG, FacialHairSVG } from "@/components/SVGComponents";
 import { RiArrowLeftSLine, RiArrowRightSLine } from "react-icons/ri";
+import { Switch } from "@headlessui/react";
+import { classNames } from "@/components/utils/general";
 
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   const supabase = createServerSupabaseClient(ctx);
@@ -80,6 +82,14 @@ type HairType =
   | "sideShave"
   | "straightBun";
 
+type FacialHairType =
+  | "beardMustache"
+  | "goatee"
+  | "pyramid"
+  | "shadow"
+  | "soulPatch"
+  | "walrus";
+
 const hairTypes: HairType[] = [
   "bald",
   "balding",
@@ -103,17 +113,35 @@ const hairTypes: HairType[] = [
   "straightBun",
 ];
 
+const facialHairTypes: FacialHairType[] = [
+  "beardMustache",
+  "goatee",
+  "pyramid",
+  "shadow",
+  "soulPatch",
+  "walrus",
+];
+
 export default function Profile({ avatar_url, projectsChildren }: any) {
   const [skinColor, setSkinColor] = useState("#F2AD98");
+
   const [hairType, setHairType] = useState<HairType>("bald");
   const [hairTypeId, setHairTypeId] = useState(0);
   const [hairColor, setHairColor] = useState("#362C47");
+
+  const [facialHairType, setFacialHairType] =
+    useState<FacialHairType>("pyramid");
+  const [facialHairProbability, setFacialHairProbability] = useState(0);
+  const [facialHairTypeId, setFacialhairTypeId] = useState(0);
+  const [facialHairColor, setFacialHairColor] = useState("#362C47");
 
   const avatar = createAvatar(personas, {
     // remove hash from skin
     skinColor: [`${skinColor}`.replace("#", "")],
     hair: [hairType],
     hairColor: [`${hairColor}`.replace("#", "")],
+    facialHair: [facialHairType],
+    facialHairProbability: facialHairProbability,
     radius: 50,
   });
 
@@ -140,10 +168,38 @@ export default function Profile({ avatar_url, projectsChildren }: any) {
     setHairColor(color);
   };
 
+  const changeFacialHairType = (direction: "left" | "right") => {
+    let newFacialHairTypeId;
+    if (direction === "left") {
+      newFacialHairTypeId =
+        facialHairTypeId === 0
+          ? facialHairTypes.length - 1
+          : facialHairTypeId - 1;
+    } else {
+      newFacialHairTypeId =
+        facialHairTypeId === facialHairTypes.length - 1
+          ? 0
+          : facialHairTypeId + 1;
+    }
+    setFacialhairTypeId(newFacialHairTypeId);
+    setFacialHairType(facialHairTypes[newFacialHairTypeId]);
+  };
+
+  const changeFacialHairColor = (color: string) => {
+    setFacialHairColor(color);
+  };
+
+  function changeFacialHairProbability() {
+    let newProbability = facialHairProbability === 0 ? 100 : 0;
+    setFacialHairProbability(newProbability);
+    console.log(facialHairProbability);
+  }
+
   useEffect(() => {
     console.log(hairType);
     console.log(hairTypeId);
-  }, [hairType]);
+    console.log(hairColor);
+  }, [hairType, hairColor, facialHairProbability]);
 
   return (
     <Layout
@@ -316,39 +372,93 @@ export default function Profile({ avatar_url, projectsChildren }: any) {
             <h3 className="uppercase text-2xl text-gray-400 font-light">
               facial hair
             </h3>
+            <div className="flex flex-row">
+              <button onClick={() => changeFacialHairType("left")}>
+                <RiArrowLeftSLine className="w-10 h-10" />
+              </button>
+              <FacialHairSVG
+                facialHairType={facialHairType}
+                color={facialHairColor}
+              />
+              <button onClick={() => changeFacialHairType("right")}>
+                <RiArrowRightSLine className="w-10 h-10" />
+              </button>
+            </div>
+            {/* add a button to enable or diable beard */}
+            <Switch
+              checked={facialHairProbability === 100 ? true : false}
+              onChange={() => changeFacialHairProbability()}
+              className={classNames(
+                facialHairProbability === 100 ? "bg-emerald-400" : "bg-gray-200",
+                "relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-emerald-600 focus:ring-offset-2"
+              )}
+            >
+              <span className="sr-only">Use setting</span>
+              <span
+                aria-hidden="true"
+                className={classNames(
+                  facialHairProbability ? "translate-x-5" : "translate-x-0",
+                  "pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
+                )}
+              />
+            </Switch>{" "}
             <div className="grid grid-cols-4 gap-4 mt-4">
               <button
                 className="rounded-md w-10 h-10 text-white text-2xl"
                 style={{ backgroundColor: "#362C47" }}
-              ></button>
+                onClick={() => changeFacialHairColor("#362C47")}
+              >
+                {facialHairColor === "#362C47" && "✔"}
+              </button>
               <button
                 className="rounded-md w-10 h-10 text-white text-2xl"
                 style={{ backgroundColor: "#675E97" }}
-              ></button>
+                onClick={() => changeFacialHairColor("#675E97")}
+              >
+                {facialHairColor === "#675E97" && "✔"}
+              </button>
               <button
                 className="rounded-md w-10 h-10 text-white text-2xl"
                 style={{ backgroundColor: "#5AC4D4" }}
-              ></button>
+                onClick={() => changeFacialHairColor("#5AC4D4")}
+              >
+                {facialHairColor === "#5AC4D4" && "✔"}
+              </button>
               <button
                 className="rounded-md w-10 h-10 text-white text-2xl"
                 style={{ backgroundColor: "#DEE1F5" }}
-              ></button>
+                onClick={() => changeFacialHairColor("#DEE1F5")}
+              >
+                {facialHairColor === "#DEE1F5" && "✔"}
+              </button>
               <button
                 className="rounded-md w-10 h-10 text-white text-2xl"
                 style={{ backgroundColor: "#6C4545" }}
-              ></button>
+                onClick={() => changeFacialHairColor("#6C4545")}
+              >
+                {facialHairColor === "#6C4545" && "✔"}
+              </button>
               <button
                 className="rounded-md w-10 h-10 text-white text-2xl"
                 style={{ backgroundColor: "#F29C65" }}
-              ></button>
+                onClick={() => changeFacialHairColor("#F29C65")}
+              >
+                {facialHairColor === "#F29C65" && "✔"}
+              </button>
               <button
                 className="rounded-md w-10 h-10 text-white text-2xl"
                 style={{ backgroundColor: "#E16381" }}
-              ></button>
+                onClick={() => changeFacialHairColor("#E16381")}
+              >
+                {facialHairColor === "#E16381" && "✔"}
+              </button>
               <button
                 className="rounded-md w-10 h-10 text-white text-2xl"
                 style={{ backgroundColor: "#E15C66" }}
-              ></button>
+                onClick={() => changeFacialHairColor("#E15C66")}
+              >
+                {facialHairColor === "#E15C66" && "✔"}
+              </button>
             </div>
           </div>
           <div className="bg-gray-100 p-4 flex justify-start items-center flex-col">
