@@ -107,11 +107,13 @@ export default function Profile({ avatar_url, projectsChildren }: any) {
   const [skinColor, setSkinColor] = useState("#F2AD98");
   const [hairType, setHairType] = useState<HairType>("bald");
   const [hairTypeId, setHairTypeId] = useState(0);
+  const [hairColor, setHairColor] = useState("#362C47");
 
   const avatar = createAvatar(personas, {
     // remove hash from skin
     skinColor: [`${skinColor}`.replace("#", "")],
     hair: [hairType],
+    hairColor: [`${hairColor}`.replace("#", "")],
     radius: 50,
   });
 
@@ -131,6 +133,11 @@ export default function Profile({ avatar_url, projectsChildren }: any) {
     }
     setHairTypeId(newHairTypeId);
     setHairType(hairTypes[newHairTypeId]);
+  };
+
+  // change hair color
+  const changeHairColor = (color: string) => {
+    setHairColor(color);
   };
 
   useEffect(() => {
@@ -240,7 +247,7 @@ export default function Profile({ avatar_url, projectsChildren }: any) {
               <button onClick={() => changeHairType("left")}>
                 <RiArrowLeftSLine className="w-10 h-10" />
               </button>
-              <HairSVG hairType={hairType} />
+              <HairSVG hairType={hairType} color={hairColor} />
               <button onClick={() => changeHairType("right")}>
                 <RiArrowRightSLine className="w-10 h-10" />
               </button>
@@ -249,36 +256,60 @@ export default function Profile({ avatar_url, projectsChildren }: any) {
               <button
                 className="rounded-md w-10 h-10 text-white text-2xl"
                 style={{ backgroundColor: "#362C47" }}
-              ></button>
+                onClick={() => changeHairColor("#362C47")}
+              >
+                {hairColor === "#362C47" && "✔"}
+              </button>
               <button
                 className="rounded-md w-10 h-10 text-white text-2xl"
                 style={{ backgroundColor: "#675E97" }}
-              ></button>
+                onClick={() => changeHairColor("#675E97")}
+              >
+                {hairColor === "#675E97" && "✔"}
+              </button>
 
               <button
                 className="rounded-md w-10 h-10 text-white text-2xl"
                 style={{ backgroundColor: "#5AC4D4" }}
-              ></button>
+                onClick={() => changeHairColor("#5AC4D4")}
+              >
+                {hairColor === "#5AC4D4" && "✔"}
+              </button>
               <button
                 className="rounded-md w-10 h-10 text-white text-2xl"
                 style={{ backgroundColor: "#DEE1FF" }}
-              ></button>
+                onClick={() => changeHairColor("#DEE1FF")}
+              >
+                {hairColor === "#DEE1FF" && "✔"}
+              </button>
               <button
                 className="rounded-md w-10 h-10 text-white text-2xl"
                 style={{ backgroundColor: "#6C4545" }}
-              ></button>
+                onClick={() => changeHairColor("#6C4545")}
+              >
+                {hairColor === "#6C4545" && "✔"}
+              </button>
               <button
                 className="rounded-md w-10 h-10 text-white text-2xl"
                 style={{ backgroundColor: "#F29C65" }}
-              ></button>
+                onClick={() => changeHairColor("#F29C65")}
+              >
+                {hairColor === "#F29C65" && "✔"}
+              </button>
               <button
                 className="rounded-md w-10 h-10 text-white text-2xl"
                 style={{ backgroundColor: "#E16381" }}
-              ></button>
+                onClick={() => changeHairColor("#E16381")}
+              >
+                {hairColor === "#E16381" && "✔"}
+              </button>
               <button
                 className="rounded-md w-10 h-10 text-white text-2xl"
                 style={{ backgroundColor: "#E15C66" }}
-              ></button>
+                onClick={() => changeHairColor("#E15C66")}
+              >
+                {hairColor === "#E15C66" && "✔"}
+              </button>
             </div>
           </div>
           <div className="bg-gray-100 p-4 flex justify-start items-center flex-col">
