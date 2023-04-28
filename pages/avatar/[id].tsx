@@ -8,7 +8,12 @@ import Image from "next/image";
 // avatar imports
 import { createAvatar } from "@dicebear/core";
 import { personas } from "@dicebear/collection";
-import { SkinSVG, HairSVG, FacialHairSVG } from "@/components/SVGComponents";
+import {
+  SkinSVG,
+  HairSVG,
+  FacialHairSVG,
+  BodySVG,
+} from "@/components/SVGComponents";
 import { RiArrowLeftSLine, RiArrowRightSLine } from "react-icons/ri";
 import { Switch } from "@headlessui/react";
 import { classNames } from "@/components/utils/general";
@@ -135,6 +140,8 @@ export default function Profile({ avatar_url, projectsChildren }: any) {
   const [facialHairTypeId, setFacialhairTypeId] = useState(0);
   const [facialHairColor, setFacialHairColor] = useState("#362C47");
 
+  const [clothingColor, setClothingColor] = useState("#F2AD98");
+
   const avatar = createAvatar(personas, {
     // remove hash from skin
     skinColor: [`${skinColor}`.replace("#", "")],
@@ -142,6 +149,8 @@ export default function Profile({ avatar_url, projectsChildren }: any) {
     hairColor: [`${hairColor}`.replace("#", "")],
     facialHair: [facialHairType],
     facialHairProbability: facialHairProbability,
+    body: ["squared"],
+    clothingColor: [`${clothingColor}`.replace("#", "")],
     radius: 50,
   });
 
@@ -193,6 +202,10 @@ export default function Profile({ avatar_url, projectsChildren }: any) {
     let newProbability = facialHairProbability === 0 ? 100 : 0;
     setFacialHairProbability(newProbability);
     console.log(facialHairProbability);
+  }
+
+  function changeBodyColor(color: string) {
+    setClothingColor(color);
   }
 
   useEffect(() => {
@@ -389,7 +402,9 @@ export default function Profile({ avatar_url, projectsChildren }: any) {
               checked={facialHairProbability === 100 ? true : false}
               onChange={() => changeFacialHairProbability()}
               className={classNames(
-                facialHairProbability === 100 ? "bg-emerald-400" : "bg-gray-200",
+                facialHairProbability === 100
+                  ? "bg-emerald-400"
+                  : "bg-gray-200",
                 "relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-emerald-600 focus:ring-offset-2"
               )}
             >
@@ -465,39 +480,67 @@ export default function Profile({ avatar_url, projectsChildren }: any) {
             <h3 className="uppercase text-2xl text-gray-400 font-light">
               body
             </h3>
+            <div className="text-center">
+              <BodySVG color={clothingColor} />
+            </div>
+
             <div className="grid grid-cols-4 gap-4 mt-4">
               <button
                 className="rounded-md w-10 h-10 text-white text-2xl"
                 style={{ backgroundColor: "#456DFF" }}
-              ></button>
+                onClick={() => changeBodyColor("#456DFF")}
+              >
+                {clothingColor === "#456DFF" && "✔"}
+              </button>
               <button
                 className="rounded-md w-10 h-10 text-white text-2xl"
                 style={{ backgroundColor: "#5A45FF" }}
-              ></button>
+                onClick={() => changeBodyColor("#5A45FF")}
+              >
+                {clothingColor === "#5A45FF" && "✔"}
+              </button>
               <button
                 className="rounded-md w-10 h-10 text-white text-2xl"
                 style={{ backgroundColor: "#6DBB58" }}
-              ></button>
+                onClick={() => changeBodyColor("#6DBB58")}
+              >
+                {clothingColor === "#6DBB58" && "✔"}
+              </button>
               <button
                 className="rounded-md w-10 h-10 text-white text-2xl"
                 style={{ backgroundColor: "#F55D81" }}
-              ></button>
+                onClick={() => changeBodyColor("#F55D81")}
+              >
+                {clothingColor === "#F55D81" && "✔"}
+              </button>
               <button
                 className="rounded-md w-10 h-10 text-white text-2xl"
                 style={{ backgroundColor: "#7555CA" }}
-              ></button>
+                onClick={() => changeBodyColor("#7555CA")}
+              >
+                {clothingColor === "#7555CA" && "✔"}
+              </button>
               <button
                 className="rounded-md w-10 h-10 text-white text-2xl"
                 style={{ backgroundColor: "#E24553" }}
-              ></button>
+                onClick={() => changeBodyColor("#E24553")}
+              >
+                {clothingColor === "#E24553" && "✔"}
+              </button>
               <button
                 className="rounded-md w-10 h-10 text-white text-2xl"
                 style={{ backgroundColor: "#54D7D7" }}
-              ></button>
+                onClick={() => changeBodyColor("#54D7D7")}
+              >
+                {clothingColor === "#54D7D7" && "✔"}
+              </button>
               <button
                 className="rounded-md w-10 h-10 text-white text-2xl"
                 style={{ backgroundColor: "#F3B63A" }}
-              ></button>
+                onClick={() => changeBodyColor("#F3B63A")}
+              >
+                {clothingColor === "#F3B63A" && "✔"}
+              </button>
             </div>
           </div>
           <div className="bg-gray-100 p-4 flex justify-start items-center flex-col">

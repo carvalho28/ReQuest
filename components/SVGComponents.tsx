@@ -152,6 +152,28 @@ const FacialHairSVG = ({
   return <div className="h-[100px] w-24"></div>;
 };
 
+const BodySVG = ({
+  color = "#000",
+  width = 100,
+  height = 100,
+  scale = 1.5,
+  ...props
+}: React.SVGProps<SVGSVGElement>) => (
+  <svg
+    width={100}
+    height={100}
+    viewBox="0 24 64 64"
+    transform={`scale(${scale})`}
+    pointerEvents="none"
+    {...props}
+  >
+    <path
+      fill={color}
+      d="M27 49v3a5 5 0 0 0 10 0v-3l6.647 2.045A9 9 0 0 1 50 59.647V64H14v-4.353a9 9 0 0 1 6.353-8.602z"
+    />
+  </svg>
+);
+
 const ShortComboverSVG = ({
   color,
   width = 100,
@@ -1011,4 +1033,4 @@ const ShadowSVG = ({
   </svg>
 );
 
-export { SkinSVG, HairSVG, FacialHairSVG };
+export { SkinSVG, HairSVG, FacialHairSVG, BodySVG };
