@@ -1,12 +1,14 @@
 import Layout from "@/components/Layout";
 import { ProjectChildren } from "@/components/utils/sidebarHelper";
-import { createServerSupabaseClient } from "@supabase/auth-helpers-nextjs";
+import {
+  createServerSupabaseClient,
+} from "@supabase/auth-helpers-nextjs";
 import { GetServerSidePropsContext } from "next";
 import { useEffect, useState } from "react";
 import Image from "next/image";
 
 // avatar imports
-import { createAvatar } from "@dicebear/core";
+import { Result, createAvatar } from "@dicebear/core";
 import { personas } from "@dicebear/collection";
 import {
   SkinSVG,
@@ -30,6 +32,7 @@ import {
   mouthTypes,
   noseTypes,
 } from "@/components/avatars/types";
+import { useSupabaseClient, useUser } from "@supabase/auth-helpers-react";
 
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   const supabase = createServerSupabaseClient(ctx);
@@ -71,16 +74,15 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   );
 
   // check if id from url is the logged in user
-  const id  = ctx.query.id;
+  const id = ctx.query.id;
   if (id !== user?.id) {
-     return {
+    return {
       redirect: {
         destination: "/dashboard",
         permanent: false,
       },
     };
   }
-
 
   return {
     props: {
@@ -91,6 +93,9 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
 };
 
 export default function Profile({ avatar_url, projectsChildren }: any) {
+  const user = useUser();
+  const supabaseClient = useSupabaseClient();
+
   const [skinColor, setSkinColor] = useState("#F2AD9B");
 
   const [hairType, setHairType] = useState<HairType>("bald");
@@ -199,23 +204,45 @@ export default function Profile({ avatar_url, projectsChildren }: any) {
 
   const [svgData, setSvgData] = useState<string | null>("");
 
+  const [avatar, setAvatar] = useState<Result | null>(createAvatar(
+    personas, {
+        skinColor: [`${skinColor}`.replace("#", "")],
+        hair: [hairType],
+        hairColor: [`${hairColor}`.replace("#", "")],
+        facialHair: [facialHairType],
+        facialHairProbability: facialHairProbability,
+        body: ["squared"],
+        clothingColor: [`${clothingColor}`.replace("#", "")],
+        eyes: [eyesType],
+        mouth: [mouthType],
+        nose: [noseType],
+        backgroundColor: [`${backgroundColor}`.replace("#", "")],
+        radius: 50,
+      }
+  ));
+
+
   useEffect(() => {
-    const avatar = createAvatar(personas, {
-      // remove hash from skin
-      skinColor: [`${skinColor}`.replace("#", "")],
-      hair: [hairType],
-      hairColor: [`${hairColor}`.replace("#", "")],
-      facialHair: [facialHairType],
-      facialHairProbability: facialHairProbability,
-      body: ["squared"],
-      clothingColor: [`${clothingColor}`.replace("#", "")],
-      eyes: [eyesType],
-      mouth: [mouthType],
-      nose: [noseType],
-      backgroundColor: [`${backgroundColor}`.replace("#", "")],
-      radius: 50,
-    });
-    setSvgData(encodeURIComponent(avatar.toString()));
+    setAvatar(
+      createAvatar(personas, {
+        // remove hash from skin
+        skinColor: [`${skinColor}`.replace("#", "")],
+        hair: [hairType],
+        hairColor: [`${hairColor}`.replace("#", "")],
+        facialHair: [facialHairType],
+        facialHairProbability: facialHairProbability,
+        body: ["squared"],
+        clothingColor: [`${clothingColor}`.replace("#", "")],
+        eyes: [eyesType],
+        mouth: [mouthType],
+        nose: [noseType],
+        backgroundColor: [`${backgroundColor}`.replace("#", "")],
+        radius: 50,
+      })
+    );
+    if (avatar) {
+      setSvgData(encodeURIComponent(avatar.toString()));
+    }
   }, [
     hairType,
     hairColor,
@@ -228,6 +255,30 @@ export default function Profile({ avatar_url, projectsChildren }: any) {
     noseType,
     backgroundColor,
   ]);
+
+
+  async function downloadAvatar() {
+    const arrayBuffer = await avatar?.toArrayBuffer();
+    if (!arrayBuffer) return;
+
+      // const file = new Blob([arrayBuffer], { type: "image/jpeg" });
+      //
+      // blob as svg
+
+  const file = new Blob([arrayBuffer], { type: "image/svg+xml" });
+
+
+    const { data, error } = await supabaseClient.storage
+      .from("avatars")
+      .upload(`${user?.id}`, file, {
+        cacheControl: "3600",
+        upsert: false,
+      });
+
+    if (error) {
+      console.log("error:", error);
+    }
+  }
 
   return (
     <Layout
@@ -625,7 +676,7 @@ export default function Profile({ avatar_url, projectsChildren }: any) {
                 className="rounded-md w-10 h-10 text-white text-2xl"
                 style={{ backgroundColor: "#FF6674" }}
                 onClick={() => changeBackgroundColor("#FF6674")}
-              > 
+              >
                 {backgroundColor === "#FF6674" && "✔"}
               </button>
               <button
@@ -653,6 +704,7 @@ export default function Profile({ avatar_url, projectsChildren }: any) {
           </div>
         </div>
       </div>
+      <button onClick={() => downloadAvatar()}>Download</button>
     </Layout>
   );
 }

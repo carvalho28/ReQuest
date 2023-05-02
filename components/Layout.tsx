@@ -232,7 +232,7 @@ const Layout = ({
                       {avatar_url ? (
                         <Image
                           id="Profile"
-                          className="h-auto w-48 pb-5"
+                          className="h-auto w-48 pb-5 mt-10"
                           src={avatar_url}
                           alt="Avatar"
                           width={32}
@@ -358,7 +358,7 @@ const Layout = ({
                   {avatar_url ? (
                     <Image
                       id="Profile"
-                      className="h-auto w-48 pb-5"
+                      className="h-auto w-48 pb-5 mt-6"
                       src={avatar_url}
                       alt="Avatar"
                       priority={true}
@@ -514,13 +514,13 @@ const Layout = ({
                     isProfile
                       ? "bg-whitepages rounded-l-3xl"
                       : "hover:bg-whitepages rounded-l-3xl hover:cursor-pointer",
-                    "flex text-center justify-center mt-10"
+                    "flex text-center justify-center mt-10 ml-1"
                   )}
                 >
                   {avatar_url ? (
                     <Image
                       id="Profile"
-                      className="h-auto pb-2 w-14"
+                      className="h-auto pb-2 w-14 mt-2 ml-1"
                       src={avatar_url}
                       alt="Avatar"
                       priority={true}
