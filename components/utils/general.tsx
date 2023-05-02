@@ -185,7 +185,20 @@ export type UserIdAndName = {
 };
 
 function renderImage(avatar_url: any) {
-  const avatar = createAvatar(personas, avatar_url.extra);
+  const avatar = createAvatar(personas, {
+      skinColor: avatar_url.skinColor,
+      hair: avatar_url.hair,
+      hairColor: avatar_url.hairColor,
+      facialHair: avatar_url.facialHair,
+      facialHairProbability: avatar_url.facialHairProbability,
+      body: avatar_url.body,
+      clothingColor: avatar_url.clothingColor,
+      eyes: avatar_url.eyes,
+      mouth: avatar_url.mouth,
+      nose: avatar_url.nose,
+      backgroundColor: avatar_url.backgroundColor,
+      radius: 50,
+    });
   // console.log(avatar.toJson());
   const svgData = encodeURIComponent(avatar.toString());
   // console.log(svgData);

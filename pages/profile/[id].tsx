@@ -10,6 +10,7 @@ import { RiArrowRightCircleFill, RiArrowLeftCircleFill } from "react-icons/ri";
 import dynamic from "next/dynamic";
 import { ProjectChildren } from "@/components/utils/sidebarHelper";
 import { useRouter } from "next/router";
+import { renderImage } from "@/components/utils/general";
 
 // dynamic
 const ModalAddProject = dynamic(() => import("@/components/ModalAddProject"), {
@@ -154,6 +155,8 @@ export default function Profile({
     router.push(`/avatar/${id}`);
   }
 
+  const avatarToRender = renderImage(avatar_url);
+
   return (
     <Layout
       currentPage="profile"
@@ -165,10 +168,10 @@ export default function Profile({
           <div className="w-2/5 flex flex-col justify-center items-center">
             <Image
               className="object-cover w-full rounded-lg"
-              src={avatar_url}
+              src={"data:image/svg+xml," + avatarToRender}
               alt="avatar"
-              width={300}
-              height={300}
+              width={275}
+              height={275}
               priority={true}
             />
             <button
