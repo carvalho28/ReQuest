@@ -70,6 +70,18 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
     }
   );
 
+  // check if id from url is the logged in user
+  const id  = ctx.query.id;
+  if (id !== user?.id) {
+     return {
+      redirect: {
+        destination: "/dashboard",
+        permanent: false,
+      },
+    };
+  }
+
+
   return {
     props: {
       avatar_url: avatar_url,

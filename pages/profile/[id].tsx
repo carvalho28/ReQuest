@@ -9,6 +9,7 @@ import { Black_Ops_One } from "next/font/google";
 import { RiArrowRightCircleFill, RiArrowLeftCircleFill } from "react-icons/ri";
 import dynamic from "next/dynamic";
 import { ProjectChildren } from "@/components/utils/sidebarHelper";
+import { useRouter } from "next/router";
 
 // dynamic
 const ModalAddProject = dynamic(() => import("@/components/ModalAddProject"), {
@@ -145,6 +146,14 @@ export default function Profile({
     setNProjects(userData?.n_projects);
   }, [userData]);
 
+  const router = useRouter();
+
+  function customizeAvatar() {
+    const id = user?.id;
+    // redirect to /avatar/[id]
+    router.push(`/avatar/${id}`);
+  }
+
   return (
     <Layout
       currentPage="profile"
@@ -164,7 +173,10 @@ export default function Profile({
             />
             <button
               type="submit"
-              className="flex w-fit rounded-md bg-contrast py-2 px-3 text-sm font-semibold text-white shadow-sm hover:bg-contrasthover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-contrast mt-4"
+              className="flex w-fit rounded-md bg-contrast py-2 px-3 text-sm font-semibold 
+              text-white shadow-sm hover:bg-contrasthover focus-visible:outline 
+              focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-contrast mt-4"
+              onClick={() => customizeAvatar()}
             >
               Customize me
             </button>
