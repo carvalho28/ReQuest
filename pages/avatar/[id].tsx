@@ -1,8 +1,6 @@
 import Layout from "@/components/Layout";
 import { ProjectChildren } from "@/components/utils/sidebarHelper";
-import {
-  createServerSupabaseClient,
-} from "@supabase/auth-helpers-nextjs";
+import { createServerSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import { GetServerSidePropsContext } from "next";
 import { useEffect, useState } from "react";
 import Image from "next/image";
@@ -204,23 +202,22 @@ export default function Profile({ avatar_url, projectsChildren }: any) {
 
   const [svgData, setSvgData] = useState<string | null>("");
 
-  const [avatar, setAvatar] = useState<Result | null>(createAvatar(
-    personas, {
-        skinColor: [`${skinColor}`.replace("#", "")],
-        hair: [hairType],
-        hairColor: [`${hairColor}`.replace("#", "")],
-        facialHair: [facialHairType],
-        facialHairProbability: facialHairProbability,
-        body: ["squared"],
-        clothingColor: [`${clothingColor}`.replace("#", "")],
-        eyes: [eyesType],
-        mouth: [mouthType],
-        nose: [noseType],
-        backgroundColor: [`${backgroundColor}`.replace("#", "")],
-        radius: 50,
-      }
-  ));
-
+  const [avatar, setAvatar] = useState<Result | null>(
+    createAvatar(personas, {
+      skinColor: [`${skinColor}`.replace("#", "")],
+      hair: [hairType],
+      hairColor: [`${hairColor}`.replace("#", "")],
+      facialHair: [facialHairType],
+      facialHairProbability: facialHairProbability,
+      body: ["squared"],
+      clothingColor: [`${clothingColor}`.replace("#", "")],
+      eyes: [eyesType],
+      mouth: [mouthType],
+      nose: [noseType],
+      backgroundColor: [`${backgroundColor}`.replace("#", "")],
+      radius: 50,
+    })
+  );
 
   useEffect(() => {
     setAvatar(
@@ -256,27 +253,42 @@ export default function Profile({ avatar_url, projectsChildren }: any) {
     backgroundColor,
   ]);
 
-
   async function downloadAvatar() {
+    avatar?.toFile("request-avatar");
+  }
+
+  async function updateAvatar() {
     const arrayBuffer = await avatar?.toArrayBuffer();
     if (!arrayBuffer) return;
 
-      // const file = new Blob([arrayBuffer], { type: "image/jpeg" });
-      //
-      // blob as svg
+    const file = new Blob([arrayBuffer], { type: "image/svg+xml" });
 
-  const file = new Blob([arrayBuffer], { type: "image/svg+xml" });
-
-
-    const { data, error } = await supabaseClient.storage
-      .from("avatars")
-      .upload(`${user?.id}`, file, {
+    const { data: dataStorage, error: errorStorage } =
+      await supabaseClient.storage.from("avatars").upload(`${user?.id}`, file, {
         cacheControl: "3600",
-        upsert: false,
+        upsert: true,
       });
 
-    if (error) {
-      console.log("error:", error);
+    if (errorStorage) {
+      console.log("error:", errorStorage);
+    }
+
+    if (dataStorage) {
+      // get url and set
+      const { data: publicURL } = supabaseClient.storage
+        .from("avatars")
+        .getPublicUrl(`${user?.id}`);
+
+      if (publicURL) {
+        const { error: errorUpdate } = await supabaseClient
+          .from("profiles")
+          .update({ avatar_url: publicURL.publicUrl })
+          .eq("id", user?.id);
+
+        if (errorUpdate) {
+          console.log("error:", errorUpdate);
+        }
+      }
     }
   }
 
@@ -297,7 +309,11 @@ export default function Profile({ avatar_url, projectsChildren }: any) {
             className=""
           />{" "}
         </div>
-        <div className="mt-48"></div>
+        <div className="mt-36"></div>
+        <button
+        className="bg-contrast hover:bg-contrasthover text-white font-bold py-2 px-4 rounded mb-6"
+        onClick={() => updateAvatar()}>Update Avatar</button>
+
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 w-full p-4">
           <div className="bg-gray-100 p-4 flex justify-start items-center flex-col">
             <h3 className="uppercase text-2xl text-gray-400 font-light">
@@ -703,8 +719,13 @@ export default function Profile({ avatar_url, projectsChildren }: any) {
             </div>
           </div>
         </div>
+        <button
+          className="bg-primaryblue hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-4"
+          onClick={() => downloadAvatar()}
+        >
+          Download
+        </button>
       </div>
-      <button onClick={() => downloadAvatar()}>Download</button>
     </Layout>
   );
 }
