@@ -1,5 +1,7 @@
 // render different badge depending on priority
 
+import { createAvatar } from "@dicebear/core";
+import { personas } from "@dicebear/collection";
 import { RiCheckboxBlankCircleFill } from "react-icons/ri";
 
 export type ColumnsReq = {
@@ -182,10 +184,19 @@ export type UserIdAndName = {
   name: string;
 };
 
+function renderImage(avatar_url: any) {
+  const avatar = createAvatar(personas, avatar_url.extra);
+  // console.log(avatar.toJson());
+  const svgData = encodeURIComponent(avatar.toString());
+  // console.log(svgData);
+  return svgData;
+}
+
 export {
   renderPriorityBadge,
   renderStatusBadge,
   renderTypeBadge,
   classNames,
   generatePastelColor,
+  renderImage,
 };

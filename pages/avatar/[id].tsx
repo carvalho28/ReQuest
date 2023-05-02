@@ -31,6 +31,7 @@ import {
   noseTypes,
 } from "@/components/avatars/types";
 import { useSupabaseClient, useUser } from "@supabase/auth-helpers-react";
+import { create, indexOf } from "cypress/types/lodash";
 
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   const supabase = createServerSupabaseClient(ctx);
@@ -90,36 +91,61 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   };
 };
 
+type objectAvatar = {
+  skinColor: string[];
+  hair: string[];
+  hairColor: string[];
+  facialHair: string[];
+  facialHairProbability: number;
+  body: string[];
+  clothingColor: string[];
+  eyes: string[];
+  mouth: string[];
+  nose: string[];
+  backgroundColor: string[];
+  radius: number;
+};
+
 export default function Profile({ avatar_url, projectsChildren }: any) {
   const user = useUser();
   const supabaseClient = useSupabaseClient();
 
-  const [skinColor, setSkinColor] = useState("#F2AD9B");
+  const [skinColor, setSkinColor] = useState("#" + avatar_url.skinColor[0]);
 
-  const [hairType, setHairType] = useState<HairType>("bald");
+  const [hairType, setHairType] = useState<HairType>(avatar_url.hair[0]);
   const [hairTypeId, setHairTypeId] = useState(0);
-  const [hairColor, setHairColor] = useState("#362C47");
+  const [hairColor, setHairColor] = useState("#" + avatar_url.hairColor[0]);
 
-  const [facialHairType, setFacialHairType] =
-    useState<FacialHairType>("pyramid");
+  const [facialHairType, setFacialHairType] = useState<FacialHairType>(
+    avatar_url.facialHair[0]
+  );
   const [facialHairProbability, setFacialHairProbability] = useState(0);
   const [facialHairTypeId, setFacialhairTypeId] = useState(0);
-  const [facialHairColor, setFacialHairColor] = useState("#362C47");
+  const [facialHairColor, setFacialHairColor] = useState(
+    "#" + avatar_url.hairColor[0]
+  );
 
-  const [clothingColor, setClothingColor] = useState("#456DFF");
+  const [clothingColor, setClothingColor] = useState(
+    "#" + avatar_url.clothingColor[0]
+  );
 
-  const [eyesType, setEyesType] = useState<EyesType>("open");
+  const [eyesType, setEyesType] = useState<EyesType>(avatar_url.eyes[0]);
   const [eyesTypeId, setEyesTypeId] = useState(0);
 
-  const [mouthType, setMouthType] = useState<MouthTypes>("bigSmile");
+  const [mouthType, setMouthType] = useState<MouthTypes>(avatar_url.mouth[0]);
   const [mouthTypeId, setMouthTypeId] = useState(0);
 
-  const [noseType, setNoseType] = useState<NoseType>("mediumRound");
+  const [noseType, setNoseType] = useState<NoseType>(avatar_url.nose[0]);
   const [noseTypeId, setNoseTypeId] = useState(0);
 
-  const [backgroundColor, setBackgroundColor] = useState("#93A7FF");
+  const [backgroundColor, setBackgroundColor] = useState(
+    "#" + avatar_url.backgroundColor
+  );
+
+  const [avatarObject, setAvatarObject] = useState<objectAvatar>();
 
   const changeSkinColor = (color: string) => {
+    console.log(color);
     setSkinColor(color);
   };
 
@@ -202,8 +228,9 @@ export default function Profile({ avatar_url, projectsChildren }: any) {
 
   const [svgData, setSvgData] = useState<string | null>("");
 
-  const [avatar, setAvatar] = useState<Result | null>(
-    createAvatar(personas, {
+  // change svgData when avatar changes
+  useEffect(() => {
+    const avatar = createAvatar(personas, {
       skinColor: [`${skinColor}`.replace("#", "")],
       hair: [hairType],
       hairColor: [`${hairColor}`.replace("#", "")],
@@ -216,13 +243,10 @@ export default function Profile({ avatar_url, projectsChildren }: any) {
       nose: [noseType],
       backgroundColor: [`${backgroundColor}`.replace("#", "")],
       radius: 50,
-    })
-  );
-
-  useEffect(() => {
-    setAvatar(
-      createAvatar(personas, {
-        // remove hash from skin
+    });
+    if (avatar) {
+      setSvgData(encodeURIComponent(avatar.toString()));
+      setAvatarObject({
         skinColor: [`${skinColor}`.replace("#", "")],
         hair: [hairType],
         hairColor: [`${hairColor}`.replace("#", "")],
@@ -235,10 +259,7 @@ export default function Profile({ avatar_url, projectsChildren }: any) {
         nose: [noseType],
         backgroundColor: [`${backgroundColor}`.replace("#", "")],
         radius: 50,
-      })
-    );
-    if (avatar) {
-      setSvgData(encodeURIComponent(avatar.toString()));
+      });
     }
   }, [
     hairType,
@@ -254,41 +275,35 @@ export default function Profile({ avatar_url, projectsChildren }: any) {
   ]);
 
   async function downloadAvatar() {
-    avatar?.toFile("request-avatar");
+    const avatar = createAvatar(personas, {
+      skinColor: [`${skinColor}`.replace("#", "")],
+      hair: [hairType],
+      hairColor: [`${hairColor}`.replace("#", "")],
+      facialHair: [facialHairType],
+      facialHairProbability: facialHairProbability,
+      body: ["squared"],
+      clothingColor: [`${clothingColor}`.replace("#", "")],
+      eyes: [eyesType],
+      mouth: [mouthType],
+      nose: [noseType],
+      backgroundColor: [`${backgroundColor}`.replace("#", "")],
+      radius: 50,
+    });
+    if (!avatar) return;
+    avatar.toFile("request-avatar");
   }
 
   async function updateAvatar() {
-    const arrayBuffer = await avatar?.toArrayBuffer();
-    if (!arrayBuffer) return;
+    const json = avatarObject;
+    if (!json) return;
 
-    const file = new Blob([arrayBuffer], { type: "image/svg+xml" });
+    const { error: errorUpdate } = await supabaseClient
+      .from("profiles")
+      .update({ avatar_url: json })
+      .eq("id", user?.id);
 
-    const { data: dataStorage, error: errorStorage } =
-      await supabaseClient.storage.from("avatars").upload(`${user?.id}`, file, {
-        cacheControl: "3600",
-        upsert: true,
-      });
-
-    if (errorStorage) {
-      console.log("error:", errorStorage);
-    }
-
-    if (dataStorage) {
-      // get url and set
-      const { data: publicURL } = supabaseClient.storage
-        .from("avatars")
-        .getPublicUrl(`${user?.id}`);
-
-      if (publicURL) {
-        const { error: errorUpdate } = await supabaseClient
-          .from("profiles")
-          .update({ avatar_url: publicURL.publicUrl })
-          .eq("id", user?.id);
-
-        if (errorUpdate) {
-          console.log("error:", errorUpdate);
-        }
-      }
+    if (errorUpdate) {
+      console.log("error:", errorUpdate);
     }
   }
 
@@ -311,10 +326,13 @@ export default function Profile({ avatar_url, projectsChildren }: any) {
         </div>
         <div className="mt-36"></div>
         <button
-        className="bg-contrast hover:bg-contrasthover text-white font-bold py-2 px-4 rounded mb-6"
-        onClick={() => updateAvatar()}>Update Avatar</button>
+          className="bg-contrast hover:bg-contrasthover text-white font-bold py-2 px-4 rounded mb-6"
+          onClick={() => updateAvatar()}
+        >
+          Update Avatar
+        </button>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 w-full p-4">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 w-full p-4">
           <div className="bg-gray-100 p-4 flex justify-start items-center flex-col">
             <h3 className="uppercase text-2xl text-gray-400 font-light">
               skin

@@ -19,6 +19,7 @@ import { useUser, useSupabaseClient, User } from "@supabase/auth-helpers-react";
 import Link from "next/link";
 import { ChevronDownIcon } from "@heroicons/react/20/solid";
 import { ProjectChildren } from "./utils/sidebarHelper";
+import { renderImage } from "./utils/general";
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
@@ -43,7 +44,7 @@ const navigation = [
   {
     name: "Chat",
     icon: ChatBubbleBottomCenterTextIcon,
-    href: "/chat", 
+    href: "/chat",
     count: 0,
     current: false,
   },
@@ -89,6 +90,8 @@ const Layout = ({
   const router = useRouter();
   const supabaseClient = useSupabaseClient();
   var user = useUser();
+
+  const avatarToRender = renderImage(avatar_url);
 
   const [isProfile, setIsProfile] = useState<boolean>(false);
   const [navItems, setNavItems] = useState([...navigation]);
@@ -233,7 +236,7 @@ const Layout = ({
                         <Image
                           id="Profile"
                           className="h-auto w-48 pb-5 mt-10"
-                          src={avatar_url}
+                          src={"data:image/svg+xml," + avatarToRender}
                           alt="Avatar"
                           width={32}
                           height={32}
@@ -359,7 +362,7 @@ const Layout = ({
                     <Image
                       id="Profile"
                       className="h-auto w-48 pb-5 mt-6"
-                      src={avatar_url}
+                      src={"data:image/svg+xml," + avatarToRender}
                       alt="Avatar"
                       priority={true}
                       width={32}
@@ -521,7 +524,7 @@ const Layout = ({
                     <Image
                       id="Profile"
                       className="h-auto pb-2 w-14 mt-2 ml-1"
-                      src={avatar_url}
+                      src={"data:image/svg+xml," + avatarToRender}
                       alt="Avatar"
                       priority={true}
                       width={32}
