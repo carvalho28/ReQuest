@@ -31,7 +31,6 @@ import {
   noseTypes,
 } from "@/components/avatars/types";
 import { useSupabaseClient, useUser } from "@supabase/auth-helpers-react";
-import { create, indexOf } from "cypress/types/lodash";
 
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   const supabase = createServerSupabaseClient(ctx);
@@ -164,6 +163,7 @@ export default function Profile({ avatar_url, projectsChildren }: any) {
   // change hair color
   const changeHairColor = (color: string) => {
     setHairColor(color);
+    setFacialHairColor(color);
   };
 
   const changeBackgroundColor = (color: string) => {
@@ -408,19 +408,46 @@ export default function Profile({ avatar_url, projectsChildren }: any) {
               </button>
             </div>
           </div>
-          <div className="bg-gray-100 p-4 flex justify-start flex-col h-60 items-center">
-            <h3 className="uppercase text-2xl text-gray-400 font-light">
-              hair
-            </h3>
-            <div className="flex flex-row">
-              <button onClick={() => changeHairType("left")}>
-                <RiArrowLeftSLine className="w-10 h-10" />
-              </button>
-              <HairSVG hairType={hairType} color={hairColor} />
-              <button onClick={() => changeHairType("right")}>
-                <RiArrowRightSLine className="w-10 h-10" />
-              </button>
+
+          <div className="bg-gray-100 p-4 col-span-2 flex justify-start items-center flex-col">
+            <div className="flex justify-between w-full">
+              <div className="ml-24">
+                <h3 className="uppercase text-2xl text-gray-400 font-light">
+                  hair
+                </h3>
+              </div>
+              <div className="mr-16">
+                <h3 className="uppercase text-2xl text-gray-400 font-light">
+                  Facial hair
+                </h3>
+              </div>
             </div>
+
+            <div className="flex justify-between w-full">
+              <div className="flex flex-row ml-10 mt-4">
+                <button onClick={() => changeHairType("left")}>
+                  <RiArrowLeftSLine className="w-10 h-10" />
+                </button>
+                <HairSVG hairType={hairType} color={hairColor} />
+                <button onClick={() => changeHairType("right")}>
+                  <RiArrowRightSLine className="w-10 h-10" />
+                </button>
+              </div>
+              <div className="flex flex-row mr-10">
+                <button onClick={() => changeFacialHairType("left")}>
+                  <RiArrowLeftSLine className="w-10 h-10" />
+                </button>
+                <FacialHairSVG
+                  facialHairType={facialHairType}
+                  color={facialHairColor}
+                  probability={facialHairProbability}
+                />
+                <button onClick={() => changeFacialHairType("right")}>
+                  <RiArrowRightSLine className="w-10 h-10" />
+                </button>
+              </div>
+            </div>
+
             <div className="grid grid-cols-4 gap-4 mt-4">
               <button
                 className="rounded-md w-10 h-10 text-white text-2xl"
@@ -481,82 +508,7 @@ export default function Profile({ avatar_url, projectsChildren }: any) {
               </button>
             </div>
           </div>
-          <div className="bg-gray-100 p-4 flex justify-start items-center flex-col">
-            <h3 className="uppercase text-2xl text-gray-400 font-light">
-              facial hair
-            </h3>
-            <div className="flex flex-row">
-              <button onClick={() => changeFacialHairType("left")}>
-                <RiArrowLeftSLine className="w-10 h-10" />
-              </button>
-              <FacialHairSVG
-                facialHairType={facialHairType}
-                color={facialHairColor}
-                probability={facialHairProbability}
-              />
-              <button onClick={() => changeFacialHairType("right")}>
-                <RiArrowRightSLine className="w-10 h-10" />
-              </button>
-            </div>
-            <div className="grid grid-cols-4 gap-4 mt-4">
-              <button
-                className="rounded-md w-10 h-10 text-white text-2xl"
-                style={{ backgroundColor: "#362C47" }}
-                onClick={() => changeFacialHairColor("#362C47")}
-              >
-                {facialHairColor === "#362C47" && "✔"}
-              </button>
-              <button
-                className="rounded-md w-10 h-10 text-white text-2xl"
-                style={{ backgroundColor: "#675E97" }}
-                onClick={() => changeFacialHairColor("#675E97")}
-              >
-                {facialHairColor === "#675E97" && "✔"}
-              </button>
-              <button
-                className="rounded-md w-10 h-10 text-white text-2xl"
-                style={{ backgroundColor: "#5AC4D4" }}
-                onClick={() => changeFacialHairColor("#5AC4D4")}
-              >
-                {facialHairColor === "#5AC4D4" && "✔"}
-              </button>
-              <button
-                className="rounded-md w-10 h-10 text-white text-2xl"
-                style={{ backgroundColor: "#DEE1F5" }}
-                onClick={() => changeFacialHairColor("#DEE1F5")}
-              >
-                {facialHairColor === "#DEE1F5" && "✔"}
-              </button>
-              <button
-                className="rounded-md w-10 h-10 text-white text-2xl"
-                style={{ backgroundColor: "#6C4545" }}
-                onClick={() => changeFacialHairColor("#6C4545")}
-              >
-                {facialHairColor === "#6C4545" && "✔"}
-              </button>
-              <button
-                className="rounded-md w-10 h-10 text-white text-2xl"
-                style={{ backgroundColor: "#F29C65" }}
-                onClick={() => changeFacialHairColor("#F29C65")}
-              >
-                {facialHairColor === "#F29C65" && "✔"}
-              </button>
-              <button
-                className="rounded-md w-10 h-10 text-white text-2xl"
-                style={{ backgroundColor: "#E16381" }}
-                onClick={() => changeFacialHairColor("#E16381")}
-              >
-                {facialHairColor === "#E16381" && "✔"}
-              </button>
-              <button
-                className="rounded-md w-10 h-10 text-white text-2xl"
-                style={{ backgroundColor: "#E15C66" }}
-                onClick={() => changeFacialHairColor("#E15C66")}
-              >
-                {facialHairColor === "#E15C66" && "✔"}
-              </button>
-            </div>
-          </div>
+
           <div className="bg-gray-100 p-4 flex justify-start items-center flex-col">
             <h3 className="uppercase text-2xl text-gray-400 font-light">
               body

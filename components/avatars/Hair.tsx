@@ -705,4 +705,3 @@ export const ShortComboverSVG = ({
     />
   </svg>
 );
-
