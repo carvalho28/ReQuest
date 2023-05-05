@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 
 // avatar imports
-import { Result, createAvatar } from "@dicebear/core";
+import { createAvatar } from "@dicebear/core";
 import { personas } from "@dicebear/collection";
 import {
   SkinSVG,
@@ -31,6 +31,10 @@ import {
   noseTypes,
 } from "@/components/avatars/types";
 import { useSupabaseClient, useUser } from "@supabase/auth-helpers-react";
+import { type } from "cypress/types/jquery";
+import { log } from "console";
+import { redirect } from "next/dist/server/api-utils";
+import { useRouter } from "next/router";
 
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   const supabase = createServerSupabaseClient(ctx);
@@ -58,7 +62,9 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   // get user projects info
   const { data: dataProjects, error: errorProjects } = await supabase.rpc(
     "projects_user",
-    { user_id: user?.id }
+    {
+      user_id: user?.id,
+    }
   );
 
   // convert to a ProjectChildren type where href is the /projects/[id] route
@@ -109,6 +115,8 @@ export default function Profile({ avatar_url, projectsChildren }: any) {
   const user = useUser();
   const supabaseClient = useSupabaseClient();
 
+  const router = useRouter();
+
   const [skinColor, setSkinColor] = useState("#" + avatar_url.skinColor[0]);
 
   const [hairType, setHairType] = useState<HairType>(avatar_url.hair[0]);
@@ -118,7 +126,9 @@ export default function Profile({ avatar_url, projectsChildren }: any) {
   const [facialHairType, setFacialHairType] = useState<FacialHairType>(
     avatar_url.facialHair[0]
   );
-  const [facialHairProbability, setFacialHairProbability] = useState(0);
+  const [facialHairProbability, setFacialHairProbability] = useState(
+    avatar_url.facialHairProbability
+  );
   const [facialHairTypeId, setFacialhairTypeId] = useState(0);
   const [facialHairColor, setFacialHairColor] = useState(
     "#" + avatar_url.hairColor[0]
@@ -293,9 +303,13 @@ export default function Profile({ avatar_url, projectsChildren }: any) {
     avatar.toFile("request-avatar");
   }
 
+  const [showProgress, setShowProgress] = useState<boolean>(false);
+
   async function updateAvatar() {
     const json = avatarObject;
     if (!json) return;
+
+    setShowProgress(true);
 
     const { error: errorUpdate } = await supabaseClient
       .from("profiles")
@@ -305,6 +319,10 @@ export default function Profile({ avatar_url, projectsChildren }: any) {
     if (errorUpdate) {
       console.log("error:", errorUpdate);
     }
+
+    // go to profile
+    const id = user?.id;
+    router.push(`/profile/${id}`);
   }
 
   return (
@@ -332,8 +350,12 @@ export default function Profile({ avatar_url, projectsChildren }: any) {
           Update Avatar
         </button>
 
+        {showProgress && (
+          <progress className="progress w-56 mt-3 progress-accent mb-5"></progress>
+        )}
+
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 w-full p-4">
-          <div className="bg-gray-100 p-4 flex justify-start items-center flex-col">
+          <div className="bg-gray-100 p-4 flex justify-start items-center flex-col col-span-2 lg:col-span-1">
             <h3 className="uppercase text-2xl text-gray-400 font-light">
               skin
             </h3>
