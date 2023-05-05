@@ -308,7 +308,7 @@ export default function SingleProject({
           <div className="flex flex-col p-6 bg-white rounded-lg shadow-lg md:w-1/3 w-full">
             <h3 className="text-xl font-bold flex justify-center">Ranking</h3>
             <div className="flex flex-col justify-center mt-8 space-y-4 items-center">
-              <ListRanking rankings={ranking} />
+              <ListRanking rankings={ranking} user_id={userId} />
             </div>
           </div>
         </div>
