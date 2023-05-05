@@ -14,8 +14,6 @@ interface ListRankingProps {
 }
 
 const ListRanking = ({ rankings, user_id }: ListRankingProps) => {
-  const rankings3 = [...rankings, ...rankings, ...rankings];
-
   const cups = [
     "/gold-cup.svg",
     "/silver-cup.svg",
@@ -38,11 +36,11 @@ const ListRanking = ({ rankings, user_id }: ListRankingProps) => {
   return (
     <div className="overflow-y-scroll w-full h-60 scroll">
       <dl className="grid grid-cols-1 rounded-lg h-54 space-y-2">
-        {rankings3.map((item, index) => (
+        {rankings.map((item, index) => (
           <div
             key={item.id}
             className={`flex flex-row p-2 rounded-lg border-2 border-gray-100 ${
-              user_id === item.id ? "bg-primaryblue bg-opacity-30" : "bg-white"
+              user_id === item.id ? "bg-contrast bg-opacity-30" : "bg-white"
             }`}
           >
             <dt
@@ -80,7 +78,7 @@ const ListRanking = ({ rankings, user_id }: ListRankingProps) => {
             </div>
             <div className="ml-auto px-3 items-center justify-center flex">
               <Image
-                className="h-8 w-8 rounded-full"
+                className="h-8 w-8 shadow-xl rounded-full"
                 alt="avatar"
                 src={generateCup(index)}
                 width={40}
