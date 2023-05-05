@@ -73,7 +73,7 @@
     "react-icons": "^4.8.0",
     "react-table": "^7.8.0",
     "react-tailwindcss-select": "^1.8.5",
-    "sass": "^1.62.0",
+    "sass": "^1.62.1",
     "typescript": "5.0.2",
     "y-prosemirror": "1.0.20",
     "y-protocols": "^1.0.5",
