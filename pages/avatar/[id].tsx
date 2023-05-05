@@ -31,9 +31,6 @@ import {
   noseTypes,
 } from "@/components/avatars/types";
 import { useSupabaseClient, useUser } from "@supabase/auth-helpers-react";
-import { type } from "cypress/types/jquery";
-import { log } from "console";
-import { redirect } from "next/dist/server/api-utils";
 import { useRouter } from "next/router";
 
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
