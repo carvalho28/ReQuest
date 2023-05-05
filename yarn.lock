@@ -1651,10 +1651,10 @@
   resolved "https://registry.yarnpkg.com/@tiptap/extension-task-item/-/extension-task-item-2.0.0-beta.220.tgz#4c83d7b55587da9c8ed51cca6cd0edee13ff188d"
   integrity sha512-dta4V3GkL3C+gYUUkv26gxvCD11JYE7XYp4GSED/1X/3aHOdV9HcYRtIVnHqb4YwfuX/AJyIDfjhxc2tNGevkQ==
 
-"@tiptap/extension-task-list@^2.0.0-beta.220":
-  version "2.0.0-beta.220"
-  resolved "https://registry.yarnpkg.com/@tiptap/extension-task-list/-/extension-task-list-2.0.0-beta.220.tgz#ba349d84dfb9fd5dff90bfea8fb234cd90383d78"
-  integrity sha512-Hix7/Er4T4xKz4uLTxniJaDtcctmooaxoHiHv4yDUOXZYiK5BZypr8cbCcUaoD3qpfGe8O5JBzY2sbwk0PkNwA==
+"@tiptap/extension-task-list@^2.0.3":
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/@tiptap/extension-task-list/-/extension-task-list-2.0.3.tgz#7e32dd518d7bd5359faab43fb48b37e2d83f5937"
+  integrity sha512-NdW0RtMF2L96qy+j946mTB5Av6Qn5L3vGVWFmJA6/JPXr9Uj/grItCmqUQKHfPBSFow7UqBY82ODblP+GQFgew==
 
 "@tiptap/extension-text-style@^2.0.0-beta.220":
   version "2.0.0-beta.220"
