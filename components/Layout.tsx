@@ -158,6 +158,16 @@ const Layout = ({
     router.push(`/profile/${id}`);
   }
 
+  function projectSettings() {
+    const { pathname, query } = router;
+
+    const newUrl = `${pathname}/settings`;
+    router.push({
+      pathname: newUrl,
+      query: query,
+    });
+  }
+
   return (
     <>
       <div>
@@ -606,7 +616,10 @@ const Layout = ({
                   </h1>
                   {namePage && namePage.toLowerCase().includes("project -") && (
                     <div className="flex ml-auto px-8">
-                    <RiToolsLine className="h-10 w-10" />
+                      <RiToolsLine
+                        className="h-10 w-10 hover:cursor-pointer hover:bg-gray-300"
+                        onClick={projectSettings}
+                      />
                     </div>
                   )}
                 </div>
