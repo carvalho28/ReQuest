@@ -2,6 +2,8 @@ import { connectedUsers } from "@/pages/chat";
 import { useEffect, useState } from "react";
 import { useAsyncDebounce } from "react-table";
 import "regenerator-runtime/runtime";
+import { renderImage } from "./utils/general";
+import Image from "next/image"
 
 interface ChatListProps {
   connectedUsers: connectedUsers[];
@@ -33,6 +35,7 @@ const ChatList = ({ connectedUsers, onUserSelect }: ChatListProps) => {
     onUserSelect(userId);
   };
 
+
   return (
     <div className="border-r-2 border-slate-300 h-full bg-gray-50">
       {/*  search bar */}
@@ -63,11 +66,16 @@ const ChatList = ({ connectedUsers, onUserSelect }: ChatListProps) => {
                 selectUser(person.id);
               }}
             >
-              <img
+              <Image
+                id="Profile"
                 className="h-12 w-12 flex-none rounded-full bg-gray-50"
-                src={person.avatar_url}
-                alt="user avatar"
+                src={"data:image/svg+xml," + renderImage(person.avatar_url)}
+                alt="Avatar"
+                width={2}
+                height={2}
+                priority
               />
+
               <div className="min-w-0 flex-auto">
                 <p className="text-sm font-semibold leading-6 text-gray-900">
                   {person.name}
