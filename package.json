@@ -85,7 +85,7 @@
     "@types/react-modal": "^3.13.1",
     "@types/react-table": "^7.7.14",
     "autoprefixer": "^10.4.14",
-    "cypress": "^12.9.0",
+    "cypress": "^12.11.0",
     "netlify-cli": "^13.2.1",
     "postcss": "^8.4.21",
     "supabase": "^1.45.2",
