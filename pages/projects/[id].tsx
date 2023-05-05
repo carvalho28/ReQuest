@@ -2,7 +2,6 @@ import Layout from "@/components/Layout";
 import { createServerSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import { GetServerSidePropsContext } from "next";
 import { Database } from "@/types/supabase";
-// import Table from "@/components/Table";
 import { useEffect, useState } from "react";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { RealtimeChannel } from "@supabase/supabase-js";
@@ -226,8 +225,6 @@ export default function SingleProject({
   // use Effect to get ranking
   const [ranking, setRanking] = useState<Rankings[]>([]);
   useEffect(() => {
-    console.log(projectId);
-
     const getRanking = async () => {
       const { data, error } = await supabaseClient.rpc("ranking_req", {
         proj_id: projectId,
@@ -236,7 +233,6 @@ export default function SingleProject({
       if (error) console.log(error);
       if (!data) throw new Error("No data found");
 
-      console.log(data);
       setRanking(data);
     };
 
