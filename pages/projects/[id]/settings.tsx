@@ -115,6 +115,14 @@ export default function ProjectSettings({
     getUsers();
   }, []);
 
+  async function deleteProject() {
+    const { error } = await supabaseClient
+      .from("projects")
+      .delete()
+      .eq("id", project.id);
+    if (error) console.log(error); 
+  }
+
   return (
     <Layout
       currentPage={`${project.name}\t⚙️`}
