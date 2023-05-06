@@ -9,6 +9,9 @@ import CardFile from "@/components/CardFile";
 import { ProjectChildren } from "@/components/utils/sidebarHelper";
 import Loading from "@/components/Loading";
 
+import Image from "next/image";
+import { RealtimeChannel } from "@supabase/supabase-js";
+
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   const supabase = createServerSupabaseClient(ctx);
 
@@ -70,6 +73,40 @@ export default function Documents({ avatar_url, projectsChildren }: any) {
     },
   });
 
+  async function getUserFiles() {
+    // get user files from supabase storage
+    const { data, error } = await supabaseClient.storage
+      .from("user-files")
+      .list(`${user?.id}/`);
+
+    if (error) console.log(error);
+    if (!data) throw new Error("No data found");
+
+    console.log("data: ", data);
+
+    // remove . (hidden files)
+    const filesData: any = data.filter(
+      (file: any) => !file.name.startsWith(".")
+    );
+
+    // if it is an image, add the url to the file object
+    for (let i = 0; i < filesData.length; i++) {
+      const { data: urlData, error: urlError } = await supabaseClient.storage
+        .from("user-files")
+        .createSignedUrl(`${user?.id}/${filesData[i].name}`, 60 * 60 * 24);
+
+      if (urlError) console.log(urlError);
+      if (!urlData) throw new Error("No data found");
+
+      // add url to file object
+      if (urlData) {
+        filesData[i].url = urlData.signedUrl as string;
+      }
+    }
+
+    setFiles(filesData);
+  }
+
   // on submit upload all files to supabase storage
   uppy.on("complete", async (result) => {
     const uuid = user?.id;
@@ -104,42 +141,12 @@ export default function Documents({ avatar_url, projectsChildren }: any) {
       }
     }
     uppy.info("Upload complete", "info", 3000);
+
+    // refresh files
+    getUserFiles(); 
   });
 
   useEffect(() => {
-    async function getUserFiles() {
-      // get user files from supabase storage
-      const { data, error } = await supabaseClient.storage
-        .from("user-files")
-        .list(`${user?.id}/`);
-
-      if (error) console.log(error);
-      if (!data) throw new Error("No data found");
-
-      console.log("data: ", data);
-
-      // remove . (hidden files)
-      const filesData: any = data.filter(
-        (file: any) => !file.name.startsWith(".")
-      );
-
-      // if it is an image, add the url to the file object
-      for (let i = 0; i < filesData.length; i++) {
-        const { data: urlData, error: urlError } = await supabaseClient.storage
-          .from("user-files")
-          .createSignedUrl(`${user?.id}/${filesData[i].name}`, 60 * 60 * 24);
-
-        if (urlError) console.log(urlError);
-        if (!urlData) throw new Error("No data found");
-
-        // add url to file object
-        if (urlData) {
-          filesData[i].url = urlData.signedUrl as string;
-        }
-      }
-
-      setFiles(filesData);
-    }
     getUserFiles();
   }, [user?.id]);
 
@@ -166,17 +173,30 @@ export default function Documents({ avatar_url, projectsChildren }: any) {
             )}
           </div>
 
-          <div className="mt-5">
-            <Dashboard
-              height={500}
-              width="100%"
-              uppy={uppy}
-              proudlyDisplayPoweredByUppy={false}
-              // allow images to be edited
-              metaFields={[
-                { id: "name", name: "Name", placeholder: "file name" },
-              ]}
-            />
+          <div className="flex flex-row bg-white p-4">
+            <div className="mt-5 w-2/3 ml-4 mb-4">
+              <Dashboard
+                height={500}
+                width="100%"
+                uppy={uppy}
+                proudlyDisplayPoweredByUppy={false}
+                // allow images to be edited
+                metaFields={[
+                  { id: "name", name: "Name", placeholder: "file name" },
+                ]}
+              />
+            </div>
+            <div className="w-1/3 flex jusitfy-center items-center">
+              <Image
+                id="No ranking"
+                className="w-full h-auto flex-none py-3"
+                src={"/file-manager.svg"}
+                alt="Cat"
+                width={100}
+                height={100}
+                priority
+              />
+            </div>
           </div>
         </div>
       </Layout>
