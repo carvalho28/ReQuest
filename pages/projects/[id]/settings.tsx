@@ -14,6 +14,8 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import ErrorMessage from "@/components/ErrorMessage";
 import SuccessMessage from "@/components/SuccessMessage";
+import Link from "next/link";
+import { RiArrowLeftSLine } from "react-icons/ri";
 
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   const supabase = createServerSupabaseClient(ctx);
@@ -196,10 +198,18 @@ export default function ProjectSettings({
 
   return (
     <Layout
-      currentPage={`${project.name}\t⚙️`}
+      currentPage={`${project.name} - Settings`}
       avatar_url={avatar_url}
       projectChildren={projectsChildren}
     >
+      {/* icon to go back */}
+      <div className="flex items-end justify-end ml-auto gap-x-2 px-6">
+        <Link href={`/projects/${project.id}`}>
+          <span className="text-gray-500 hover:cursor-pointer hover:bg-contrast hover:text-white px-5 py-3 rounded-lg">
+            Return to project
+          </span>
+        </Link>
+      </div>
       <div className="flex mt-8 gap-x-4 flex-col md:flex-row gap-y-8 mx-6">
         <div
           className="flex flex-col p-6 bg-white rounded-lg shadow-lg 
