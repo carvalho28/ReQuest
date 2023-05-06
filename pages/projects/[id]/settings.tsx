@@ -11,6 +11,7 @@ import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { GetServerSidePropsContext } from "next";
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import { useRouter } from "next/router";
 
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   const supabase = createServerSupabaseClient(ctx);
@@ -97,6 +98,8 @@ export default function ProjectSettings({
 
   const [projectUsers, setProjectUsers] = useState<ProjectUsers[]>([]);
 
+  const router = useRouter();
+
   useEffect(() => {
     // get users for the given project
     const getUsers = async () => {
@@ -116,11 +119,17 @@ export default function ProjectSettings({
   }, []);
 
   async function deleteProject() {
+    // popup to confirm
+    if (!confirm("Are you sure you want to delete this project?")) return;
+
     const { error } = await supabaseClient
       .from("projects")
       .delete()
       .eq("id", project.id);
     if (error) console.log(error); 
+
+    // redirect to projects page
+    router.push("/projects/table");
   }
 
   return (
@@ -279,6 +288,9 @@ export default function ProjectSettings({
                 className="inline-flex items-center px-6 py-2 border border-transparent
               text-sm font-medium rounded-md shadow-sm text-white bg-red-500
               hover:bg-red-600"
+                onClick={() => {
+                  deleteProject();
+                }}
               >
                 Delete Project
               </button>
