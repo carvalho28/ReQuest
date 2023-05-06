@@ -197,6 +197,70 @@ export default function ProjectSettings({
   }
 
   const [emailToAdd, setEmailToAdd] = useState("");
+  const [errorAddEmail, setErrorAddEmail] = useState<null | string>(null);
+  const [successAddEmail, setSuccessAddEmail] = useState<null | string>(null);
+  const [showAddEmailMessage, setShowAddEmailMessage] = useState(false);
+
+  async function addPeopleToProject() {
+    if (emailToAdd === "") {
+      setErrorAddEmail("Email cannot be empty");
+      setShowAddEmailMessage(true);
+      return;
+    } else {
+      // if email is already in the project
+      const emailAlreadyInProject = projectUsers.find(
+        (user) => user.profiles.email === emailToAdd
+      );
+      if (emailAlreadyInProject) {
+        setErrorAddEmail("Email is already in the project");
+        setShowAddEmailMessage(true);
+        return;
+      }
+      if (emailToAdd !== undefined) {
+        //if email exists in the database
+        const { data: emailData, error: emailError } = await supabaseClient
+          .from("profiles")
+          .select("*")
+          .eq("email", emailToAdd);
+
+        if (emailError) {
+          setErrorAddEmail("Email not found");
+          setShowAddEmailMessage(true);
+          return;
+        }
+        if (emailData.length === 0) {
+          setErrorAddEmail("Email not found");
+          setShowAddEmailMessage(true);
+          return;
+        } else {
+          const { error } = await supabaseClient
+            .from("project_profiles")
+            .insert({
+              id_proj: project.id,
+              id_user: emailData[0].id,
+            });
+
+          if (error) console.log(error);
+
+          setErrorAddEmail(null);
+          setSuccessAddEmail("Email added successfully");
+          setShowAddEmailMessage(true);
+          //clear email input
+          setEmailToAdd("");
+
+          // set show message for 3 seconds
+          setTimeout(() => {
+            setShowAddEmailMessage(false);
+          }, 3000);
+        }
+      }
+    }
+  }
+
+  // // refresh realtime
+  // useEffect(() => {
+  // 
+  // } , [projectUsers])
 
   return (
     <Layout
@@ -336,7 +400,7 @@ export default function ProjectSettings({
             Project Members
           </h2>
 
-          <div>
+          <div className="h-72">
             {projectUsers.map((user) => (
               <div
                 className="flex items-center mt-4 bg-gray-50 py-3 px-6 rounded-lg"
@@ -366,16 +430,36 @@ export default function ProjectSettings({
             ))}
           </div>
           {/* button to add people to the project */}
-          <div className="flex items-end justify-end">
+          <div className="flex flex-row space-x-4 justify-center items-center w-72">
+            <input
+              type="email"
+              name="email"
+              id="email"
+              className="block w-full rounded-md h-10"
+              placeholder="Enter email to add"
+              value={emailToAdd}
+              onChange={(e) => setEmailToAdd(e.target.value)}
+            />
             <button
               type="button"
-              className="inline-flex items-center px-6 py-2 border border-transparent
+              className="px-2 py-2 border border-transparent
               text-sm font-medium rounded-md shadow-sm text-white bg-contrast
-              hover:bg-contrasthover mt-4"
+              hover:bg-contrasthover justify-center"
+              onClick={addPeopleToProject}
             >
               <RiAddLine className="h-6 w-6" />
             </button>
           </div>
+          {showAddEmailMessage && errorAddEmail && (
+            <div className="mt-4">
+              <ErrorMessage message={errorAddEmail || ""} />
+            </div>
+          )}
+          {showAddEmailMessage && successAddEmail && (
+            <div className="mt-4">
+              <SuccessMessage message={successAddEmail || ""} />
+            </div>
+          )}
         </div>
       </div>
       {/* dangerous options such as delete project or exit project*/}
