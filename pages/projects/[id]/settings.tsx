@@ -219,7 +219,7 @@ export default function ProjectSettings({
 
           <div>
             {projectUsers.map((user) => (
-              <div className="flex items-center mt-4 bg-gray-50 py-3 px-6 rounded-lg">
+              <div className="flex items-center mt-4 bg-gray-50 py-3 px-6 rounded-lg" id={user.profiles.id}>
                 <Image
                   id="Profile"
                   className="h-12 w-12 flex-none rounded-full bg-gray-50"

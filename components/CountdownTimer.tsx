@@ -5,12 +5,6 @@ interface Props {
   dateString: string;
 }
 
-//  <span className="countdown font-mono text-2xl">
-{
-  /* <span style={{ "--value": timeLeft.days }}></span>
-</span> */
-}
-
 // create a type for the style object
 interface Style extends CSSProperties {
   "--value": string;
@@ -66,7 +60,7 @@ const CountdownTimer = ({ dateString }: Props) => {
       ) : (
         // banner with time's up
         <div className="flex flex-col p-2 bg-red-400 rounded-box items-center text-white">
-          <span className="font-bold text-2xl px-4 py-1">Time's up</span>
+          <span className="font-bold text-2xl px-4 py-1">Time&apos;s up</span>
         </div>
       )}
     </>
