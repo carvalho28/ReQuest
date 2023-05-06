@@ -277,7 +277,7 @@ export default function SingleProject({
                 <span className={`text-2xl trucate ${rubikGlitch.className}`}>
                   {Math.round(
                     (requirementsCompleted / totalRequirements) * 100
-                  )}
+                  ) || 0}
                   %
                 </span>
               </div>

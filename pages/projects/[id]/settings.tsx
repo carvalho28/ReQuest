@@ -15,7 +15,7 @@ import { useRouter } from "next/router";
 import ErrorMessage from "@/components/ErrorMessage";
 import SuccessMessage from "@/components/SuccessMessage";
 import Link from "next/link";
-import { RiArrowLeftSLine } from "react-icons/ri";
+import { RiAddLine, RiArrowLeftSLine } from "react-icons/ri";
 
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   const supabase = createServerSupabaseClient(ctx);
@@ -196,9 +196,11 @@ export default function ProjectSettings({
     }, 3000);
   }
 
+  const [emailToAdd, setEmailToAdd] = useState("");
+
   return (
     <Layout
-      currentPage={`${project.name} - Settings`}
+      currentPage={`${project.name}\t⚙️`}
       avatar_url={avatar_url}
       projectChildren={projectsChildren}
     >
@@ -371,7 +373,7 @@ export default function ProjectSettings({
               text-sm font-medium rounded-md shadow-sm text-white bg-contrast
               hover:bg-contrasthover mt-4"
             >
-              Add People
+              <RiAddLine className="h-6 w-6" />
             </button>
           </div>
         </div>
