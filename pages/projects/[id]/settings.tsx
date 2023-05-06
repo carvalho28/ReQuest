@@ -16,6 +16,7 @@ import ErrorMessage from "@/components/ErrorMessage";
 import SuccessMessage from "@/components/SuccessMessage";
 import Link from "next/link";
 import { RiAddLine, RiArrowLeftSLine } from "react-icons/ri";
+import { RealtimeChannel } from "@supabase/supabase-js";
 
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   const supabase = createServerSupabaseClient(ctx);
@@ -202,6 +203,9 @@ export default function ProjectSettings({
   const [showAddEmailMessage, setShowAddEmailMessage] = useState(false);
 
   async function addPeopleToProject() {
+    setErrorAddEmail(null);
+    setSuccessAddEmail(null);
+    setShowAddEmailMessage(false);
     if (emailToAdd === "") {
       setErrorAddEmail("Email cannot be empty");
       setShowAddEmailMessage(true);
@@ -257,10 +261,38 @@ export default function ProjectSettings({
     }
   }
 
-  // // refresh realtime
-  // useEffect(() => {
-  // 
-  // } , [projectUsers])
+  // refresh realtime
+  useEffect(() => {
+    let proj_channel: RealtimeChannel;
+    async function refreshProjectUsers() {
+      proj_channel = supabaseClient
+        .channel("proj_users")
+        .on(
+          "postgres_changes", 
+          {
+            event: "*",
+            schema: "public",
+            table: "project_profiles",
+          },
+          async (payload) => {
+            const { data: usersData, error: usersError } = await supabaseClient
+              .from("project_profiles")
+              .select(
+                `id_user, 
+              profiles(id, email,name, avatar_url)`
+              )
+              .eq("id_proj", project.id);
+            if (usersError) console.log(usersError);
+            setProjectUsers(usersData as ProjectUsers[]);
+          }
+        ).subscribe();
+
+      return () => {
+        supabaseClient.removeChannel(proj_channel);
+      }
+    }
+    refreshProjectUsers();
+  } , [projectUsers])
 
   return (
     <Layout

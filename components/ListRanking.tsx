@@ -41,8 +41,8 @@ const ListRanking = ({ rankings, user_id }: ListRankingProps) => {
         <div className="flex flex-col items-center justify-center">
           <Image
             id="No ranking"
-            className="w-96 h-auto flex-none py-3"
-            src={"/cat.svg"}
+            className="w-72 h-auto flex-none py-3"
+            src={"/dog.svg"}
             alt="Cat"
             width={100}
             height={100}
