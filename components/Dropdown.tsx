@@ -84,6 +84,21 @@ export default function Dropdown({
                 )}
               </Menu.Item>
             )}
+            {options[3] && (
+              <Menu.Item>
+                {({ active }) => (
+                  <span
+                    className={classNames(
+                      active ? "bg-gray-100 text-gray-900" : "text-gray-700",
+                      "block px-4 py-2 text-sm"
+                    )}
+                    onClick={() => onSelect(options[3])}
+                  >
+                    {func(options[3], 4, 1)}
+                  </span>
+                )}
+              </Menu.Item>
+            )}
           </div>
         </Menu.Items>
       </Transition>

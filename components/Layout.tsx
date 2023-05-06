@@ -617,7 +617,7 @@ const Layout = ({
                   {namePage && namePage.toLowerCase().includes("project -") && (
                     <div className="flex ml-auto px-8">
                       <RiToolsLine
-                        className="h-10 w-10 hover:cursor-pointer hover:bg-gray-300"
+                        className="h-10 w-10 hover:cursor-pointer hover:bg-gray-300 rounded-lg"
                         onClick={projectSettings}
                       />
                     </div>

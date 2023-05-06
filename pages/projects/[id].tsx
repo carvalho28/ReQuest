@@ -12,7 +12,6 @@ import CountdownTimer from "@/components/CountdownTimer";
 import { UserIdAndName } from "@/components/utils/general";
 import ListRanking from "@/components/ListRanking";
 import dynamic from "next/dynamic";
-import { RiToolsLine } from "react-icons/ri";
 
 // import Table dynamicaly
 const Table = dynamic(() => import("@/components/Table"), { ssr: false });

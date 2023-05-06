@@ -115,6 +115,53 @@ function renderTypeBadge(type: string, sizex: number, sizey: number) {
   }
 }
 
+function renderProjectStatusBadge(
+  status: string,
+  sizex: number,
+  sizey: number
+) {
+  const s = status.toLowerCase();
+  if (s === "active") {
+    return (
+      <div className="priority-badge">
+        <span
+          className={`inline-flex items-center px-${sizex} py-${sizey} rounded-full text-sm font-medium bg-green-100 text-green-800`}
+        >
+          <RiCheckboxBlankCircleFill className="mr-1" />
+          Active
+        </span>
+      </div>
+    );
+  } else if (s === "on hold") {
+    return (
+      <span
+        className={`inline-flex items-center px-${sizex} py-${sizey} rounded-full text-sm font-medium bg-yellow-100 text-yellow-800`}
+      >
+        <RiCheckboxBlankCircleFill className="mr-1" />
+        On Hold
+      </span>
+    );
+  } else if (s === "completed") {
+    return (
+      <span
+        className={`inline-flex items-center px-${sizex} py-${sizey} rounded-full text-sm font-medium bg-purple-100 text-purple-800`}
+      >
+        <RiCheckboxBlankCircleFill className="mr-1" />
+        Completed
+      </span>
+    );
+  } else {
+    return (
+      <span
+        className={`inline-flex items-center px-${sizex} py-${sizey} rounded-full text-sm font-medium bg-red-100 text-red-800`}
+      >
+        <RiCheckboxBlankCircleFill className="mr-1" />
+        Cancelled
+      </span>
+    );
+  }
+}
+
 function classNames(...classes: any[]) {
   return classes.filter(Boolean).join(" ");
 }
@@ -186,19 +233,19 @@ export type UserIdAndName = {
 
 function renderImage(avatar_url: any) {
   const avatar = createAvatar(personas, {
-      skinColor: avatar_url.skinColor,
-      hair: avatar_url.hair,
-      hairColor: avatar_url.hairColor,
-      facialHair: avatar_url.facialHair,
-      facialHairProbability: avatar_url.facialHairProbability,
-      body: avatar_url.body,
-      clothingColor: avatar_url.clothingColor,
-      eyes: avatar_url.eyes,
-      mouth: avatar_url.mouth,
-      nose: avatar_url.nose,
-      backgroundColor: avatar_url.backgroundColor,
-      radius: 50,
-    });
+    skinColor: avatar_url.skinColor,
+    hair: avatar_url.hair,
+    hairColor: avatar_url.hairColor,
+    facialHair: avatar_url.facialHair,
+    facialHairProbability: avatar_url.facialHairProbability,
+    body: avatar_url.body,
+    clothingColor: avatar_url.clothingColor,
+    eyes: avatar_url.eyes,
+    mouth: avatar_url.mouth,
+    nose: avatar_url.nose,
+    backgroundColor: avatar_url.backgroundColor,
+    radius: 50,
+  });
   // console.log(avatar.toJson());
   const svgData = encodeURIComponent(avatar.toString());
   // console.log(svgData);
@@ -212,4 +259,5 @@ export {
   classNames,
   generatePastelColor,
   renderImage,
+  renderProjectStatusBadge,
 };
