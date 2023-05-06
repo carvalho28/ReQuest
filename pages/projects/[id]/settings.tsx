@@ -7,7 +7,7 @@ import {
 import { ProjectChildren } from "@/components/utils/sidebarHelper";
 import { Database } from "@/types/supabase";
 import { createServerSupabaseClient } from "@supabase/auth-helpers-nextjs";
-import { useSupabaseClient } from "@supabase/auth-helpers-react";
+import { useSupabaseClient, useUser } from "@supabase/auth-helpers-react";
 import { GetServerSidePropsContext } from "next";
 import { useEffect, useState } from "react";
 import Image from "next/image";
@@ -88,6 +88,7 @@ export default function ProjectSettings({
   const project: Database["public"]["Tables"]["projects"]["Row"] =
     project_data[0];
   const supabaseClient = useSupabaseClient();
+  const user = useUser();
 
   const [projectName, setProjectName] = useState(project.name);
   const [projectDescription, setProjectDescription] = useState(
@@ -126,9 +127,22 @@ export default function ProjectSettings({
       .from("projects")
       .delete()
       .eq("id", project.id);
-    if (error) console.log(error); 
+    if (error) console.log(error);
 
     // redirect to projects page
+    router.push("/projects/table");
+  }
+
+  async function exitProject() {
+    // popup to confirm
+    if (!confirm("Are you sure you want to exit this project?")) return;
+    const { error } = await supabaseClient
+      .from("project_profiles")
+      .delete()
+      .match({ id_proj: project.id, id_user: user?.id });
+
+    if (error) console.log(error);
+
     router.push("/projects/table");
   }
 
@@ -228,7 +242,10 @@ export default function ProjectSettings({
 
           <div>
             {projectUsers.map((user) => (
-              <div className="flex items-center mt-4 bg-gray-50 py-3 px-6 rounded-lg" key={user.profiles.id}>
+              <div
+                className="flex items-center mt-4 bg-gray-50 py-3 px-6 rounded-lg"
+                key={user.profiles.id}
+              >
                 <Image
                   id="Profile"
                   className="h-12 w-12 flex-none rounded-full bg-gray-50"
@@ -278,6 +295,9 @@ export default function ProjectSettings({
                 className="inline-flex items-center px-6 py-2 border border-transparent
               text-sm font-medium rounded-md shadow-sm text-white bg-contrast
               hover:bg-contrasthover"
+                onClick={() => {
+                  exitProject();
+                }}
               >
                 Exit Project
               </button>
