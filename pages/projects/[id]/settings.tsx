@@ -12,6 +12,8 @@ import { GetServerSidePropsContext } from "next";
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/router";
+import ErrorMessage from "@/components/ErrorMessage";
+import SuccessMessage from "@/components/SuccessMessage";
 
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   const supabase = createServerSupabaseClient(ctx);
@@ -146,6 +148,52 @@ export default function ProjectSettings({
     router.push("/projects/table");
   }
 
+  const [errorMessage, setErrorMessage] = useState<null | string>(null);
+  const [successMessage, setSuccessMessage] = useState<null | string>(null);
+  const [showMessage, setShowMessage] = useState(false);
+  async function updateProject() {
+    if (projectName === "") {
+      setShowMessage(true);
+      setErrorMessage("Project name cannot be empty");
+      return;
+    }
+    if (projectDescription === "") {
+      setShowMessage(true);
+      setErrorMessage("Project description cannot be empty");
+      return;
+    }
+    if (projectStatus === "") {
+      setShowMessage(true);
+      setErrorMessage("Project status cannot be empty");
+      return;
+    }
+    if (projectDeadline === "") {
+      setShowMessage(true);
+      setErrorMessage("Project deadline cannot be empty");
+      return;
+    }
+
+    const { error } = await supabaseClient
+      .from("projects")
+      .update({
+        name: projectName,
+        description: projectDescription,
+        status: projectStatus,
+        deadline: projectDeadline,
+      })
+      .eq("id", project.id);
+
+    if (error) console.log(error);
+
+    setErrorMessage(null);
+    setSuccessMessage("Project updated successfully");
+    setShowMessage(true);
+    // sset show message for 3 seconds
+    setTimeout(() => {
+      setShowMessage(false);
+    }, 3000);
+  }
+
   return (
     <Layout
       currentPage={`${project.name}\t⚙️`}
@@ -204,20 +252,55 @@ export default function ProjectSettings({
 
           {/* dropdown for status */}
           <div className="mt-10">
-            <label
-              htmlFor="project-status"
-              className="block text-md font-medium leading-6 text-gray-900"
-            >
-              Project Status
-            </label>
-            <div className="mt-2">
-              <Dropdown
-                func={renderProjectStatusBadge}
-                onSelect={(value) => setProjectStatus(value)}
-                options={["Active", "On Hold", "Completed", "Cancelled"]}
-                selected={projectStatus}
-              />
+            <div className="flex flex-row space-x-4 items-center justify-center">
+              <div className="w-1/2 items-center justify-center flex flex-col">
+                <label
+                  htmlFor="project-status"
+                  className="block text-md font-medium leading-6 text-gray-900"
+                >
+                  Project Status
+                </label>
+                <div className="mt-2">
+                  <Dropdown
+                    func={renderProjectStatusBadge}
+                    onSelect={(value) => setProjectStatus(value)}
+                    options={["Active", "On Hold", "Completed", "Cancelled"]}
+                    selected={projectStatus}
+                  />
+                </div>
+              </div>
+              <div className="w-1/2 items-center justify-center flex flex-col">
+                <label
+                  htmlFor="project-deadline"
+                  className="block text-md font-medium leading-6 text-gray-900"
+                >
+                  Project Deadline
+                </label>
+                <div className="mt-2">
+                  <input
+                    type="date"
+                    name="project-deadline"
+                    id="project-deadline"
+                    className="block w-full rounded-md border-0 py-1.5 text-gray-900
+                    shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400
+                    focus:ring-2 focus:ring-inset focus:ring-contrast sm:text-sm
+                    sm:leading-6"
+                    value={projectDeadline.split("T")[0]}
+                    onChange={(e) => setProjectDeadline(e.target.value)}
+                  />
+                </div>
+              </div>
             </div>
+            {showMessage && errorMessage && (
+              <div className="mt-4">
+                <ErrorMessage message={errorMessage || ""} />
+              </div>
+            )}
+            {showMessage && successMessage && (
+              <div className="mt-4">
+                <SuccessMessage message={successMessage || ""} />
+              </div>
+            )}
             {/* save button */}
             <div className="mt-10 items-center flex justify-center">
               <button
@@ -225,6 +308,7 @@ export default function ProjectSettings({
                 className="inline-flex items-center px-6 py-2 border border-transparent
                 text-sm font-medium rounded-md shadow-sm text-white bg-contrast
                 hover:bg-contrasthover"
+                onClick={updateProject}
               >
                 Save
               </button>
