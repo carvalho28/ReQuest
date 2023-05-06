@@ -523,9 +523,6 @@ function Table({
     useRowSelectColumn
   );
 
-  const handleSelectedRows = () => {
-  }
-
   const { pageIndex } = state;
   const paginationRange = useCustomPagination({
     totalPageCount: pageCount,

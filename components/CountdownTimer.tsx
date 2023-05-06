@@ -1,4 +1,4 @@
-import React, { useState, useEffect, CSSProperties } from "react";
+import { useState, useEffect, CSSProperties } from "react";
 import moment from "moment";
 
 interface Props {
