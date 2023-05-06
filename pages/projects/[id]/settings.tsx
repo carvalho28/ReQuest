@@ -1,11 +1,16 @@
 import Dropdown from "@/components/Dropdown";
 import Layout from "@/components/Layout";
-import { renderProjectStatusBadge } from "@/components/utils/general";
+import {
+  renderImage,
+  renderProjectStatusBadge,
+} from "@/components/utils/general";
 import { ProjectChildren } from "@/components/utils/sidebarHelper";
 import { Database } from "@/types/supabase";
 import { createServerSupabaseClient } from "@supabase/auth-helpers-nextjs";
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { GetServerSidePropsContext } from "next";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import Image from "next/image";
 
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   const supabase = createServerSupabaseClient(ctx);
@@ -64,6 +69,16 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   };
 };
 
+type ProjectUsers = {
+  id_user: string;
+  profiles: {
+    id: string;
+    email: string;
+    name: string;
+    avatar_url: string;
+  };
+};
+
 export default function ProjectSettings({
   avatar_url,
   projectsChildren,
@@ -71,8 +86,7 @@ export default function ProjectSettings({
 }: any) {
   const project: Database["public"]["Tables"]["projects"]["Row"] =
     project_data[0];
-
-  console.log(project);
+  const supabaseClient = useSupabaseClient();
 
   const [projectName, setProjectName] = useState(project.name);
   const [projectDescription, setProjectDescription] = useState(
@@ -80,6 +94,26 @@ export default function ProjectSettings({
   );
   const [projectStatus, setProjectStatus] = useState(project.status);
   const [projectDeadline, setProjectDeadline] = useState(project.deadline);
+
+  const [projectUsers, setProjectUsers] = useState<ProjectUsers[]>([]);
+
+  useEffect(() => {
+    // get users for the given project
+    const getUsers = async () => {
+      const { data: usersData, error: usersError } = await supabaseClient
+        .from("project_profiles")
+        .select(
+          `id_user, 
+        profiles(id, email,name, avatar_url)`
+        )
+        .eq("id_proj", project.id);
+      if (usersError) console.log(usersError);
+
+      console.log(usersData);
+      setProjectUsers(usersData as ProjectUsers[]);
+    };
+    getUsers();
+  }, []);
 
   return (
     <Layout
@@ -107,7 +141,7 @@ export default function ProjectSettings({
                 id="project-name"
                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 
                 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 
-                focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm 
+                focus:ring-2 focus:ring-inset focus:ring-contrast sm:text-sm 
                 sm:leading-6"
                 value={projectName}
                 onChange={(e) => setProjectName(e.target.value)}
@@ -129,7 +163,7 @@ export default function ProjectSettings({
                 id="project-description"
                 className="block w-full rounded-md border-0 py-1.5 text-gray-900
                 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400
-                focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm
+                focus:ring-2 focus:ring-inset focus:ring-contrast sm:text-sm
                 sm:leading-6"
                 value={projectDescription || ""}
                 onChange={(e) => setProjectDescription(e.target.value)}
@@ -153,6 +187,17 @@ export default function ProjectSettings({
                 selected={projectStatus}
               />
             </div>
+            {/* save button */}
+            <div className="mt-10 items-center flex justify-center">
+              <button
+                type="button"
+                className="inline-flex items-center px-6 py-2 border border-transparent
+                text-sm font-medium rounded-md shadow-sm text-white bg-contrast
+                hover:bg-contrasthover"
+              >
+                Save
+              </button>
+            </div>
           </div>
         </div>
         <div
@@ -163,6 +208,86 @@ export default function ProjectSettings({
           <h2 className="text-lg font-medium leading-6 text-gray-900">
             Project Members
           </h2>
+
+          <div>
+            {projectUsers.map((user) => (
+              <div className="flex items-center mt-4 bg-gray-50 py-3 px-6 rounded-lg">
+                <Image
+                  id="Profile"
+                  className="h-12 w-12 flex-none rounded-full bg-gray-50"
+                  src={
+                    "data:image/svg+xml," +
+                    renderImage(user.profiles.avatar_url)
+                  }
+                  alt="Avatar"
+                  width={2}
+                  height={2}
+                  priority
+                />
+                <div className="ml-4">
+                  <div className="text-sm font-medium text-gray-900">
+                    {user.profiles.name}
+                  </div>
+                  <div className="text-sm text-gray-500">
+                    {user.profiles.email}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+          {/* button to add people to the project */}
+          <div className="flex items-end justify-end">
+            <button
+              type="button"
+              className="inline-flex items-center px-6 py-2 border border-transparent
+              text-sm font-medium rounded-md shadow-sm text-white bg-contrast
+              hover:bg-contrasthover mt-4"
+            >
+              Add People
+            </button>
+          </div>
+        </div>
+      </div>
+      {/* dangerous options such as delete project or exit project*/}
+      <div className="flex flex-row mt-8 md:flex-row gap-y-8 mx-6 rounded-lg shadow-lg bg-white">
+        <div className="flex flex-row p-6 justify-center w-1/2 items-center">
+          <div className="flex flex-col items-center">
+            <h2 className="text-2xl font-medium leading-6 text-gray-900 w-full p-5">
+              Danger Zone
+            </h2>
+            <div className="mt-8">
+              <button
+                type="button"
+                className="inline-flex items-center px-6 py-2 border border-transparent
+              text-sm font-medium rounded-md shadow-sm text-white bg-contrast
+              hover:bg-contrasthover"
+              >
+                Exit Project
+              </button>
+            </div>
+            <div className="mt-10">
+              <button
+                type="button"
+                className="inline-flex items-center px-6 py-2 border border-transparent
+              text-sm font-medium rounded-md shadow-sm text-white bg-red-500
+              hover:bg-red-600"
+              >
+                Delete Project
+              </button>
+            </div>
+          </div>
+          {/* render svg image */}
+        </div>
+        <div className="flex flex-col justify-center items-center w-1/2">
+          <Image
+            id="Danger"
+            className="w-96 h-96 flex-none p-5"
+            src={"/danger-guy.svg"}
+            alt="Danger"
+            width={2}
+            height={2}
+            priority
+          />
         </div>
       </div>
     </Layout>
