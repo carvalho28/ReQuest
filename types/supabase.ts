@@ -230,8 +230,14 @@ export interface Database {
           id: string
           email: string
           name: string
-          avatar_url: string
+          avatar_url: Json
         }[]
+      }
+      increment_requirements_completed: {
+        Args: {
+          user_ids: string[]
+        }
+        Returns: undefined
       }
       projects_user: {
         Args: {
@@ -265,7 +271,7 @@ export interface Database {
         Returns: {
           id: string
           name: string
-          avatar_url: string
+          avatar_url: Json
           requirements_closed: number
         }[]
       }
