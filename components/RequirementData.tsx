@@ -56,10 +56,7 @@ const RequirementData = ({
     return names;
   }
 
-  useEffect(() => {
-    console.log("updating updated by");
-    console.log("dataReqData", requirementData);
-  }, [requirementData]);
+  useEffect(() => {}, [requirementData]);
 
   const [isUpdatingUpdatedBy, setIsUpdatingUpdatedBy] = useState(false);
 
@@ -83,7 +80,6 @@ const RequirementData = ({
     });
   }, [requirement]);
 
-
   const [createdBy, setCreatedBy] = useState("");
   useEffect(() => {
     async function getCreatedByName() {
@@ -91,22 +87,17 @@ const RequirementData = ({
         .from("profiles")
         .select("name")
         .eq("id", requirement.created_by)
-        .single()
+        .single();
 
       if (error) console.log(error);
       if (data) setCreatedBy(data.name);
     }
     getCreatedByName();
-
   }, [requirement.created_by, supabaseClient]);
-
 
   useEffect(() => {
     async function saveChanges() {
-      console.log("saving changes ---");
-
       // check if requirement.status is changed to completed
-      console.log(requirementData.status);
       if (
         requirement.status?.toLowerCase() !== "completed" &&
         requirementData.status?.toLowerCase() === "completed"
@@ -115,10 +106,18 @@ const RequirementData = ({
         requirementData.closed_at = new Date().toISOString();
         // copy assigned_to to closed_by
         requirementData.closed_by = requirementData.assigned_to;
-      }
 
-      console.log(requirement?.id);
-      console.log(requirementData);
+        console.log(requirementData.closed_by);
+
+        // add to user's profiles +1 requirement
+        const { data: dataReq, error: errorReq } = await supabaseClient.rpc(
+          "increment_requirements_completed",
+          { user_ids: requirementData.closed_by }
+        );
+        if (errorReq) {
+          console.log(errorReq);
+        }
+      }
 
       const { error } = await supabaseClient
         .from("requirements")
@@ -316,7 +315,6 @@ const RequirementData = ({
                       </div>
                     )}
                   </div>
-
                 </div>
                 {/* render type of requirement */}
                 <div className="flex flex-row items-center justify-center w-3/12">

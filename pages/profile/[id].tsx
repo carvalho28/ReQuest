@@ -70,6 +70,7 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
     }
   );
 
+
   return {
     props: {
       avatar_url: data[0].avatar_url,

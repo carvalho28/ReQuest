@@ -98,7 +98,7 @@ export default function Chat({
       if (errorChat) console.log(errorChat);
       console.log("chat: ", chat);
       console.log("chat.length: ", chat?.length);
-      if (!chat || chat?.length === 0) {
+      if (!chat || chat?.length === 0 || chat === undefined) {
         // create chat and and add both users to it
         const { data: newChat, error: errorNewChat } = await supabaseClient
           .from("chats")
@@ -122,7 +122,7 @@ export default function Chat({
           console.log("newChat: ", newChat);
         }
       } else {
-        setChatId(chat[0].id);
+        setChatId(chat[0].chat_id);
       }
     };
 

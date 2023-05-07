@@ -2,7 +2,6 @@ import Layout from "@/components/Layout";
 import { createServerSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import { GetServerSidePropsContext } from "next";
 import { Database } from "@/types/supabase";
-// import Table from "@/components/Table";
 import { useEffect, useState } from "react";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { RealtimeChannel } from "@supabase/supabase-js";
@@ -11,7 +10,6 @@ import Image from "next/image";
 import { Rubik_Glitch } from "next/font/google";
 import CountdownTimer from "@/components/CountdownTimer";
 import { UserIdAndName } from "@/components/utils/general";
-import Leaderboard from "@/components/Leaderboard";
 import ListRanking from "@/components/ListRanking";
 import dynamic from "next/dynamic";
 
@@ -226,8 +224,6 @@ export default function SingleProject({
   // use Effect to get ranking
   const [ranking, setRanking] = useState<Rankings[]>([]);
   useEffect(() => {
-    console.log(projectId);
-
     const getRanking = async () => {
       const { data, error } = await supabaseClient.rpc("ranking_req", {
         proj_id: projectId,
@@ -236,7 +232,6 @@ export default function SingleProject({
       if (error) console.log(error);
       if (!data) throw new Error("No data found");
 
-      console.log(data);
       setRanking(data);
     };
 
@@ -252,7 +247,7 @@ export default function SingleProject({
         projectChildren={projectsChildren}
       >
         <div className="flex gap-x-4 mt-8 flex-col md:flex-row gap-y-8">
-          <div className="flex flex-col p-6 bg-white rounded-lg shadow-lg justify-center md:w-1/4 w-full">
+          <div className="flex flex-col p-6 bg-white rounded-lg shadow-lg justify-center md:w-1/3 w-full">
             <h3 className="text-xl font-bold flex justify-center items-center text-center">
               Progress
             </h3>
@@ -270,8 +265,9 @@ export default function SingleProject({
               <div
                 className="h-4 rounded-full"
                 style={{
-                  width: `${(requirementsCompleted / totalRequirements) * 100
-                    }%`,
+                  width: `${
+                    (requirementsCompleted / totalRequirements) * 100
+                  }%`,
                   backgroundColor: getColor(
                     (requirementsCompleted / totalRequirements) * 100
                   ),
@@ -281,13 +277,13 @@ export default function SingleProject({
                 <span className={`text-2xl trucate ${rubikGlitch.className}`}>
                   {Math.round(
                     (requirementsCompleted / totalRequirements) * 100
-                  )}
+                  ) || 0}
                   %
                 </span>
               </div>
             </div>
           </div>
-          <div className="flex flex-col p-6 bg-white rounded-lg shadow-lg justify-center md:w-1/4 w-full">
+          <div className="flex flex-col p-6 bg-white rounded-lg shadow-lg justify-center md:w-1/3 w-full">
             <h3 className="text-xl font-bold flex justify-center items-center text-center">
               Deadline
             </h3>
@@ -309,19 +305,10 @@ export default function SingleProject({
             </div>
           </div>
 
-          <div className="flex flex-col p-6 bg-white rounded-lg shadow-lg md:w-2/4 w-full">
+          <div className="flex flex-col p-6 bg-white rounded-lg shadow-lg md:w-1/3 w-full">
             <h3 className="text-xl font-bold flex justify-center">Ranking</h3>
             <div className="flex flex-col justify-center mt-8 space-y-4 items-center">
-              <div className="flex flex-row w-full lg2:space-x-8 justify-center">
-                <div className="w-2/5 hidden lg2:flex">
-                  {ranking.length > 0 && <Leaderboard rankings={ranking} />}
-                </div>
-                {/* divider line */}
-                <div className="border-r-2 border-gray-300 hidden lg2:flex"></div>
-                <div className="lg2:w-3/5 w-full">
-                  <ListRanking rankings={ranking} />
-                </div>
-              </div>
+              <ListRanking rankings={ranking} user_id={userId} />
             </div>
           </div>
         </div>

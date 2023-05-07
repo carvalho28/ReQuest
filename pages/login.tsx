@@ -22,7 +22,7 @@ const ErrorMessage = dynamic(() => import("@/components/ErrorMessage"), {
 });
 
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
-  // Create authenticated Supabase Client
+    // Create authenticated Supabase Client
   const supabase = createServerSupabaseClient(ctx);
   // Check if we have a session
   const {

@@ -437,8 +437,6 @@ function Table({
       if (error) console.log(error);
       if (!data) throw new Error("No data found");
 
-      console.log("obter requisito",data);
-
       // destructuring the data for the created_by and updated_by fields
       data?.map((req: any) => {
         req.created_by = req.created_by.id as string;
@@ -525,9 +523,6 @@ function Table({
     useRowSelectColumn
   );
 
-  const handleSelectedRows = () => {
-  }
-
   const { pageIndex } = state;
   const paginationRange = useCustomPagination({
     totalPageCount: pageCount,
@@ -575,7 +570,6 @@ function Table({
   // Render the UI for your table and the styles
   return (
     <div className="mt-2 flex flex-col">
-      <button onClick={handleSelectedRows}>Selected Rows</button>
       <div className="-my-2 overflow-x-auto -mx-4 sm:-mx-6 lg:-mx-8">
         <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
           <div className="overflow-hidden border-gray-200 sm:rounded-lg">

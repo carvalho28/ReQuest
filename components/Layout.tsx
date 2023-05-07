@@ -20,6 +20,7 @@ import Link from "next/link";
 import { ChevronDownIcon } from "@heroicons/react/20/solid";
 import { ProjectChildren } from "./utils/sidebarHelper";
 import { renderImage } from "./utils/general";
+import { RiToolsLine } from "react-icons/ri";
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
@@ -155,6 +156,16 @@ const Layout = ({
   function profileClick() {
     const id = user?.id;
     router.push(`/profile/${id}`);
+  }
+
+  function projectSettings() {
+    const { pathname, query } = router;
+
+    const newUrl = `${pathname}/settings`;
+    router.push({
+      pathname: newUrl,
+      query: query,
+    });
   }
 
   return (
@@ -596,12 +607,22 @@ const Layout = ({
           <main className="flex-1 px-4 py-4">
             <div className="py-6">
               <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                <h1 className="text-3xl font-bold text-black">
-                  {namePage
-                    ? namePage
-                    : currentPage.charAt(0).toUpperCase() +
-                      currentPage.slice(1)}
-                </h1>
+                <div className="flex flex-row items-center">
+                  <h1 className="text-3xl font-bold text-black">
+                    {namePage
+                      ? namePage
+                      : currentPage.charAt(0).toUpperCase() +
+                        currentPage.slice(1)}
+                  </h1>
+                  {namePage && namePage.toLowerCase().includes("project -") && (
+                    <div className="flex ml-auto px-8">
+                      <RiToolsLine
+                        className="h-10 w-10 hover:cursor-pointer hover:bg-gray-300 rounded-lg"
+                        onClick={projectSettings}
+                      />
+                    </div>
+                  )}
+                </div>
               </div>
               <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 mt-8">
                 {children}
