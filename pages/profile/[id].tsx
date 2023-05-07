@@ -98,6 +98,10 @@ export default function Profile({
 
   console.log("dataProjects: ", dataProjects);
 
+  useEffect(() => {
+    
+  } , [dataProjects])
+
   const [userData, setUserData] = useState<any>(user_data);
   const [name, setName] = useState<string>("");
   const [showModal, setShowModal] = useState(false);
@@ -494,21 +498,26 @@ export default function Profile({
                   style={{ height: "10em", width: "16em", margin: "0 auto" }}
                 />
 
-                <div style={{
-                  height: "10em",
-                  width: "10em",
-                  margin: "0 auto",
-                  display: "flex",
-                  justifyContent: "start",
-                  alignItems: "center",
-                  marginTop: "1em",
-                  marginLeft: "-2em",
-                }}>
-                  <div className="text-2xl font-extrabold"
+                <div
+                  style={{
+                    height: "10em",
+                    width: "10em",
+                    margin: "0 auto",
+                    display: "flex",
+                    justifyContent: "start",
+                    alignItems: "center",
+                    marginTop: "1em",
+                    marginLeft: "-2em",
+                  }}
+                >
+                  <div
+                    className="text-2xl font-extrabold"
                     style={{
                       color: "#3B82F6",
-                      }}  
-                  >50%</div>
+                    }}
+                  >
+                    50%
+                  </div>
                 </div>
               </div>
             </div>
