@@ -70,12 +70,12 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
     }
   );
 
-
   return {
     props: {
       avatar_url: data[0].avatar_url,
       user_data: userData,
       projectsChildren: projectsChildren,
+      dataProjects: dataProjects,
     },
   };
 };
@@ -89,9 +89,12 @@ export default function Profile({
   avatar_url,
   user_data,
   projectsChildren,
+  dataProjects,
 }: any) {
   const supabaseClient = useSupabaseClient();
   const user = useUser();
+
+  console.log("dataProjects: ", dataProjects);
 
   const [userData, setUserData] = useState<any>(user_data);
   const [name, setName] = useState<string>("");
@@ -145,7 +148,7 @@ export default function Profile({
     setXp(userData?.xp);
     setXpNeeded(userData?.levels.xp_needed);
     setDenomination(userData?.levels.denomination);
-    setNProjects(userData?.n_projects);
+    setNProjects(projectsChildren.length);
   }, [userData]);
 
   const router = useRouter();
@@ -248,8 +251,12 @@ export default function Profile({
       <div className="flex gap-x-4 mt-8 h-52">
         <div className="flex p-6 bg-white rounded-lg shadow-lg w-full justify-center"></div>
       </div>
+
       <div className="flex gap-x-4 mt-8 flex-col sm:flex-row gap-y-8">
-        <div className="flex flex-col p-6 bg-white rounded-lg shadow-lg justify-center sm:w-1/3 w-full">
+        <div
+          className="flex flex-col p-6 bg-white rounded-lg shadow-lg
+          justify-center sm:w-1/3 w-full"
+        >
           <h3 className="text-xl font-bold flex justify-center">
             Global Stats
           </h3>
@@ -272,11 +279,32 @@ export default function Profile({
             </div>
           </div>
         </div>
+
         <div className="flex p-6 bg-white rounded-lg shadow-lg justify-center sm:w-1/3 w-full">
           <h3 className="text-xl font-bold flex justify-center">Teams</h3>
         </div>
-        <div className="flex p-6 bg-white rounded-lg shadow-lg justify-center sm:w-1/3 w-full">
+
+        <div
+          className="flex p-6 bg-white rounded-lg shadow-lg
+          justify-start sm:w-1/3 w-full flex-col"
+        >
           <h3 className="text-xl font-bold flex justify-center">Projects</h3>
+          <div className="flex flex-col justify-center items-center mt-8">
+            {dataProjects.map((project: any) => (
+              <div
+                className="flex flex-col bg-gray-50 py-3 px-10 rounded-xl"
+                key={project.id}
+              >
+                {/* scg with first letter of project.name */}
+                <div className="text-lg font-medium text-gray-900">
+                  {project.name}
+                </div>
+                <div className="text-sm text-gray-500">
+                  {project.description}
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </Layout>

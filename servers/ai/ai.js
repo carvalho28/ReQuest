@@ -26,6 +26,13 @@ app.post("/api/ai/functional", async (req, res) => {
   res.send({ answer });
 });
 
+// app.post("/api/ai/image", async (req, res) => {
+//   const { text } = req.body;
+//   console.log(text);
+//   const answer = await generateImage(text);
+//   res.send({ answer });
+// });
+
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`);
 });
@@ -67,8 +74,25 @@ async function isFunctional(requirement) {
       max_tokens: 200,
     });
 
-    return completion.data.choices[0].message?.content;
+    return completion;
   } catch (error) {
     console.log(error);
   }
 }
+
+// function to generate an image from a text
+// async function generateImage(text) {
+//   const openai = new OpenAIApi(config);
+//   try {
+//     const response = await openai.createImage({
+//       prompt: text,
+//       n: 1,
+//       size: "512x512"
+//     })
+//     return response.data.data;
+//   } catch (error) {
+//     console.log(error);
+//     // return 400
+//     return error;
+//   }
+// }
