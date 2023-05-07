@@ -10,7 +10,6 @@ import { ProjectChildren } from "@/components/utils/sidebarHelper";
 import Loading from "@/components/Loading";
 
 import Image from "next/image";
-import { RealtimeChannel } from "@supabase/supabase-js";
 
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   const supabase = createServerSupabaseClient(ctx);
