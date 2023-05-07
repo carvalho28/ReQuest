@@ -13,7 +13,6 @@ import { useRouter } from "next/router";
 import { renderImage } from "@/components/utils/general";
 
 import ReactEChart from "echarts-for-react";
-import { forEach } from "cypress/types/lodash";
 
 // dynamic
 const ModalAddProject = dynamic(() => import("@/components/ModalAddProject"), {
@@ -88,6 +87,17 @@ type ItemCarrousel = {
   value: number;
 };
 
+type ProjectInfo = {
+  id: string;
+  name: string;
+  description: string;
+  status: string;
+  created_at: string;
+  deadline: string;
+  completed_reqs: number;
+  total_reqs: number;
+};
+
 export default function Profile({
   avatar_url,
   user_data,
@@ -99,40 +109,47 @@ export default function Profile({
 
   console.log("dataProjects: ", dataProjects);
 
-  const [compProgress, setCompProgress] = useState([]);
-  const [timeProgress, setTimeProgress] = useState([]);
-
-  const [overall, setOverall] = useState(0);
+  const [averageForecast, setAverageForecast] = useState<number>(0);
 
   useEffect(() => {
-    const calculatedCompProgress = [] as any;
-    const calculatedTimeProgress = [] as any;
+    const forecast: number[] = [];
+    dataProjects.forEach((project: ProjectInfo) => {
+      const today = new Date();
+      const deadline = new Date(project.deadline);
+      const createdAt = new Date(project.created_at);
 
-    dataProjects.forEach((project: any) => {
-      const { total_reqs, completed_reqs, deadline } = project;
-      const completionProgress =
-        total_reqs > 0 ? (completed_reqs / total_reqs) * 100 : 0;
-      console.log("completionProgress: ", completionProgress);
-      const timeRemaining =
-        (new Date(deadline).getTime() - Date.now()) / (1000 * 60 * 60 * 24);
+      const totalDays =
+        Math.floor(
+          (deadline.getTime() - createdAt.getTime()) / (1000 * 60 * 60 * 24)
+        ) + 1;
+      const daysRemaining =
+        Math.floor(
+          (deadline.getTime() - today.getTime()) / (1000 * 60 * 60 * 24)
+        ) + 1;
+      const completedRequirements = project.completed_reqs;
+      const totalRequirements = project.total_reqs;
 
-      calculatedCompProgress.push(completionProgress);
-      calculatedTimeProgress.push(timeRemaining);
+      let probability = 0;
+      if (completedRequirements > 0) {
+        const completionRatio =
+          (completedRequirements + 1) / (totalRequirements + 1);
+        const timeRatio = daysRemaining / totalDays;
+        probability = completionRatio * timeRatio;
+      } else {
+        probability = daysRemaining / totalDays;
+      }
+
+      const probabilityPercentage = Math.round(probability * 100);
+
+      forecast.push(probabilityPercentage);
     });
-
-    setCompProgress(calculatedCompProgress);
-    setTimeProgress(calculatedTimeProgress);
-
-    const overallCompletion =
-      calculatedCompProgress.reduce((a: any, b: any) => a + b, 0) /
-      calculatedCompProgress.length;
-    console.log("overallCompletion: ", overallCompletion);
-    setOverall(overallCompletion);
+    setAverageForecast(forecast.reduce((a, b) => a + b, 0) / forecast.length);
+    console.log("forecast: ", forecast);
   }, [dataProjects]);
 
-  useEffect(() => {
-    console.log("oveee: ", overall);
-  }, [overall]);
+  // useEffect(() => {
+  //   console.log("forecast: ", forecast);
+  // }, [forecast]);
 
   const [userData, setUserData] = useState<any>(user_data);
   const [name, setName] = useState<string>("");
@@ -344,7 +361,7 @@ export default function Profile({
         },
         data: [
           {
-            value: overall,
+            value: averageForecast,
             name: "Completion Progress",
           },
         ],
@@ -352,71 +369,9 @@ export default function Profile({
     ],
   };
 
-  function generatePastelColor(percentage: number): string {
-    const baseHue = 60;
-    const baseSaturation = 100;
-    const baseLightness = 50;
-
-    let targetHue: number, targetSaturation: number, targetLightness: number;
-
-    if (percentage <= 33) {
-      targetHue = baseHue;
-      targetSaturation = baseSaturation - (percentage / 33) * 50;
-      targetLightness = baseLightness + (percentage / 33) * 25;
-    } else if (percentage <= 66) {
-      targetHue = baseHue + ((percentage - 33) / 33) * 30;
-      targetSaturation = baseSaturation - 50 + ((percentage - 33) / 33) * 50;
-      targetLightness = baseLightness + 25 - ((percentage - 33) / 33) * 25;
-    } else {
-      targetHue = baseHue + 30;
-      targetSaturation = baseSaturation;
-      targetLightness = baseLightness;
-    }
-
-    const hue = baseHue + (targetHue - baseHue) * (percentage / 100);
-    const saturation =
-      baseSaturation + (targetSaturation - baseSaturation) * (percentage / 100);
-    const lightness =
-      baseLightness + (targetLightness - baseLightness) * (percentage / 100);
-
-    let r = 0,
-      g = 0,
-      b = 0;
-
-    if (saturation === 0) {
-      r = g = b = lightness;
-    } else {
-      const q =
-        lightness < 0.5
-          ? lightness * (1 + saturation)
-          : lightness + saturation - lightness * saturation;
-      const p = 2 * lightness - q;
-
-      r = hueToRgb(p, q, hue + 1 / 3);
-      g = hueToRgb(p, q, hue);
-      b = hueToRgb(p, q, hue - 1 / 3);
-    }
-
-    const componentToHex = (component: number) => {
-      const hex = component.toString(16);
-      return hex.length === 1 ? "0" + hex : hex;
-    };
-
-    return (
-      "#" +
-      componentToHex(Math.round(r * 255)) +
-      componentToHex(Math.round(g * 255)) +
-      componentToHex(Math.round(b * 255))
-    );
-  }
-
-  function hueToRgb(p: number, q: number, t: number): number {
-    if (t < 0) t += 1;
-    if (t > 1) t -= 1;
-    if (t < 1 / 6) return p + (q - p) * 6 * t;
-    if (t < 1 / 2) return q;
-    if (t < 2 / 3) return p + (q - p) * (2 / 3 - t) * 6;
-    return p;
+  function getGradientColor(percentage: number): string {
+    const hue = ((percentage - 0) * 120) / (100 - 0);
+    return `hsl(${hue}, 80%, 45%)`;
   }
 
   return (
@@ -579,7 +534,7 @@ export default function Profile({
           </div>
           <div className="flex flex-col p-6 justify-center sm:w-1/2 w-full">
             <h3 className="text-xl font-bold flex justify-center">
-              Completion Progress
+              Forecast Accuracy
             </h3>
             <div
               style={{
@@ -610,14 +565,13 @@ export default function Profile({
                   }}
                 >
                   <div
-                    className="text-2xl font-extrabold"
+                    className="text-3xl font-extrabold"
                     style={{
-                      // degrade between red, yellow and green depending on overall
-                      color: generatePastelColor(40),
+                      color: getGradientColor(averageForecast),
                     }}
                   >
                     {/* {overall.toFixed(0)}% */}
-                    {Math.round(overall)} %
+                    {Math.round(averageForecast)} %
                   </div>
                 </div>
               </div>
