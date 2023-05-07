@@ -526,93 +526,190 @@ export default function Profile({
       {/*     </div> */}
       {/*   </div> */}
       {/* </div> */}
-      <div className="flex gap-x-4 mt-8 h-full bg-white rounded-lg shadow-lg flex-col">
-        <div className="flex flex-row border-b-primaryblue border-2">
-          <div className="flex flex-col p-6 justify-center sm:w-1/5 w-full">
-            <h3 className="text-xl font-bold flex justify-center">
-              Number of Projects
-            </h3>
-            <div className="flex flex-col justify-center items-center mt-2 text-lg">
-              {nProjects}
-            </div>
-          </div>
-          <div className="flex flex-col p-6 justify-center sm:w-1/5 w-full">
-            <h3 className="text-xl font-bold flex justify-center">
-              Req. Completed
-            </h3>
-            <div className="flex flex-col justify-center items-center mt-2 text-lg">
-              {reqComplete}
-            </div>
-          </div>
-          <div className="flex flex-col p-6 justify-center sm:w-1/4 w-full">
-            <h3 className="text-xl font-bold flex justify-center">
-              Forecast Accuracy
-            </h3>
-            <div
-              style={{
-                height: "3em",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                marginBottom: "1em",
-              }}
-            >
-              <div className="flex flex-row">
-                <ReactEChart
-                  option={optionsGauge}
-                  opts={{ renderer: "svg" }}
-                  style={{ height: "10em", width: "16em", margin: "0 auto" }}
-                />
+      {/* <div className="flex gap-x-4 mt-8 h-full bg-white rounded-lg shadow-lg flex-col"> */}
+      {/*   <div className="flex flex-row"> */}
+      {/*     <div className="flex flex-col p-6 justify-center sm:w-1/5 w-full"> */}
+      {/*       <h3 className="text-xl font-bold flex justify-center"> */}
+      {/*         Number of Projects */}
+      {/*       </h3> */}
+      {/*       <div className="flex flex-col justify-center items-center mt-2 text-lg"> */}
+      {/*         {nProjects} */}
+      {/*       </div> */}
+      {/*     </div> */}
+      {/*     <div className="flex flex-col p-6 justify-center sm:w-1/5 w-full"> */}
+      {/*       <h3 className="text-xl font-bold flex justify-center"> */}
+      {/*         Req. Completed */}
+      {/*       </h3> */}
+      {/*       <div className="flex flex-col justify-center items-center mt-2 text-lg"> */}
+      {/*         {reqComplete} */}
+      {/*       </div> */}
+      {/*     </div> */}
+      {/*     <div className="flex flex-col p-6 justify-center sm:w-1/4 w-full"> */}
+      {/*       <h3 className="text-xl font-bold flex justify-center"> */}
+      {/*         Forecast Accuracy */}
+      {/*       </h3> */}
+      {/*       <div */}
+      {/*         style={{ */}
+      {/*           height: "3em", */}
+      {/*           display: "flex", */}
+      {/*           justifyContent: "center", */}
+      {/*           alignItems: "center", */}
+      {/*           marginBottom: "1em", */}
+      {/*         }} */}
+      {/*       > */}
+      {/*         <div className="flex flex-row"> */}
+      {/*           <ReactEChart */}
+      {/*             option={optionsGauge} */}
+      {/*             opts={{ renderer: "svg" }} */}
+      {/*             style={{ height: "10em", width: "16em", margin: "0 auto" }} */}
+      {/*           /> */}
 
-                <div
-                  style={{
-                    height: "10em",
-                    width: "10em",
-                    margin: "0 auto",
-                    display: "flex",
-                    justifyContent: "start",
-                    alignItems: "center",
-                    marginTop: "1em",
-                    marginLeft: "-2em",
-                  }}
-                >
-                  <div
-                    className="text-3xl font-extrabold"
+      {/*           <div */}
+      {/*             style={{ */}
+      {/*               height: "10em", */}
+      {/*               width: "10em", */}
+      {/*               margin: "0 auto", */}
+      {/*               display: "flex", */}
+      {/*               justifyContent: "start", */}
+      {/*               alignItems: "center", */}
+      {/*               marginTop: "1em", */}
+      {/*               marginLeft: "-2em", */}
+      {/*             }} */}
+      {/*           > */}
+      {/*             <div */}
+      {/*               className="text-3xl font-extrabold" */}
+      {/*               style={{ */}
+      {/*                 color: getGradientColor(averageForecast), */}
+      {/*               }} */}
+      {/*             > */}
+      {/*               {/* {overall.toFixed(0)}% */} 
+      {/*               {Math.round(averageForecast)} % */}
+      {/*             </div> */}
+      {/*           </div> */}
+      {/*         </div> */}
+      {/*       </div> */}
+      {/*     </div> */}
+      {/*   </div> */}
+      {/*   <div className="flex flex-row"> */}
+      {/*     <div className="flex p-6 w-2/3 justify-center"> */}
+      {/*       {/* render an echart, pie format */} 
+      {/*       <div className="flex flex-col justify-start items-center"> */}
+      {/*         <div className="text-3xl font-extrabold p-4"> */}
+      {/*           Projects by status */}
+      {/*         </div> */}
+      {/*         <ReactEChart */}
+      {/*           option={option} */}
+      {/*           style={{ height: "15em", width: "30em", margin: "0 auto" }} */}
+      {/*         /> */}
+      {/*       </div> */}
+      {/*     </div> */}
+      {/*     <div className="flex p-6 w-1/3 justify-center"> */}
+      {/*       <div className="flex flex-col justify-center items-center h-full"> */}
+      {/*         <Image */}
+      {/*           id="No ranking" */}
+      {/*           className="w-96 h-auto flex-none py-3" */}
+      {/*           src={"/milestones.svg"} */}
+      {/*           alt="Cat" */}
+      {/*           width={100} */}
+      {/*           height={100} */}
+      {/*           priority */}
+      {/*         /> */}
+      {/*       </div> */}
+      {/*     </div> */}
+      {/*   </div> */}
+      {/* </div> */}
+
+      <div className="flex flex-wrap bg-white rounded-lg shadow-lg">
+        <div className="flex flex-wrap flex-1 w-3/4">
+          <div className="flex flex-row items-center justify-between w-full">
+            <div className="flex-1 p-6">
+              <h3 className="text-xl font-bold flex justify-center">
+                Number of Projects
+              </h3>
+              <div className="flex flex-col justify-center items-center mt-2 text-lg">
+                {nProjects}
+              </div>
+            </div>
+            <div className="flex-1 p-6">
+              <h3 className="text-xl font-bold flex justify-center">
+                Req. Completed
+              </h3>
+              <div className="flex flex-col justify-center items-center mt-2 text-lg">
+                {reqComplete}
+              </div>
+            </div>
+            <div className="flex-1 p-6">
+              <h3 className="text-xl font-bold flex justify-center">
+                Forecast Accuracy
+              </h3>
+              <div
+                style={{
+                  height: "3em",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  marginBottom: "1em",
+                }}
+              >
+                <div className="flex flex-row">
+                  <ReactEChart
+                    option={optionsGauge}
+                    opts={{ renderer: "svg" }}
                     style={{
-                      color: getGradientColor(averageForecast),
+                      height: "10em",
+                      width: "16em",
+                      margin: "0 auto",
+                    }}
+                  />
+
+                  <div
+                    style={{
+                      height: "10em",
+                      width: "10em",
+                      margin: "0 auto",
+                      display: "flex",
+                      justifyContent: "start",
+                      alignItems: "center",
+                      marginTop: "1em",
+                      marginLeft: "-2em",
                     }}
                   >
-                    {/* {overall.toFixed(0)}% */}
-                    {Math.round(averageForecast)} %
+                    <div
+                      className="text-3xl font-extrabold"
+                      style={{
+                        color: getGradientColor(averageForecast),
+                      }}
+                    >
+                      {/* {overall.toFixed(0)}% */}
+                      {Math.round(averageForecast)} %
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-        <div className="flex flex-row">
-          <div className="flex p-6 w-2/3 justify-center">
-            {/* render an echart, pie format */}
+          <div className="flex-1 p-6">
             <div className="flex flex-col justify-start items-center">
               <div className="text-3xl font-extrabold p-4">
                 Projects by status
               </div>
-              <ReactEChart option={option}
+              <ReactEChart
+                option={option}
                 style={{ height: "15em", width: "30em", margin: "0 auto" }}
               />
             </div>
           </div>
-          <div className="flex p-6 w-1/3 justify-center items-center">
-            <Image
-              id="No ranking"
-              className="w-96 h-auto flex-none py-3"
-              src={"/milestones.svg"}
-              alt="Cat"
-              width={100}
-              height={100}
-              priority
-            />
-          </div>
+        </div>
+        <div className="flex w-1/4 items-center justify-center p-4">
+          <Image
+            id="No ranking"
+            className="w-full h-full flex-none object-cover"
+            src={"/milestones.svg"}
+            alt="Cat"
+            width={100}
+            height={100}
+            priority
+          />
         </div>
       </div>
     </Layout>
