@@ -72,12 +72,18 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
     }
   );
 
+  const { data: dataProjects2, error: errorProjects2 } = await supabase.rpc(
+    "projects_user",
+    { user_id: user?.id }
+  );
+
   return {
     props: {
       avatar_url: data[0].avatar_url,
       user_data: userData,
       projectsChildren: projectsChildren,
       dataProjects: dataProjects,
+      dataProjects2: dataProjects2,
     },
   };
 };
@@ -103,6 +109,7 @@ export default function Profile({
   user_data,
   projectsChildren,
   dataProjects,
+  dataProjects2,
 }: any) {
   const supabaseClient = useSupabaseClient();
   const user = useUser();
@@ -219,25 +226,25 @@ export default function Profile({
   const dataGraph = [
     // get all the active projects, the completed, the on hold and the cancelled
     {
-      value: dataProjects.filter(
+      value: dataProjects2.filter(
         (project: any) => project.status.toLowerCase() === "active"
       ).length,
       name: "Active",
     },
     {
-      value: dataProjects.filter(
+      value: dataProjects2.filter(
         (project: any) => project.status.toLowerCase() === "completed"
       ).length,
       name: "Completed",
     },
     {
-      value: dataProjects.filter(
+      value: dataProjects2.filter(
         (project: any) => project.status.toLowerCase() === "on hold"
       ).length,
       name: "On hold",
     },
     {
-      value: dataProjects.filter(
+      value: dataProjects2.filter(
         (project: any) => project.status.toLowerCase() === "cancelled"
       ).length,
       name: "Cancelled",
@@ -250,8 +257,11 @@ export default function Profile({
       trigger: "item",
     },
     legend: {
-      top: "5%",
-      left: "center",
+      // top: "50%",
+      // left: "5%",
+      orient: "vertical",
+      top: "30%",
+      left: "10%",
     },
     series: [
       {
@@ -518,13 +528,15 @@ export default function Profile({
       {/* </div> */}
       <div className="flex gap-x-4 mt-8 h-full bg-white rounded-lg shadow-lg flex-col">
         <div className="flex flex-row border-b-primaryblue border-2">
-          <div className="flex flex-col p-6 justify-center sm:w-1/4 w-full">
-            <h3 className="text-xl font-bold flex justify-center">Projects</h3>
+          <div className="flex flex-col p-6 justify-center sm:w-1/5 w-full">
+            <h3 className="text-xl font-bold flex justify-center">
+              Number of Projects
+            </h3>
             <div className="flex flex-col justify-center items-center mt-2 text-lg">
               {nProjects}
             </div>
           </div>
-          <div className="flex flex-col p-6 justify-center sm:w-1/4 w-full">
+          <div className="flex flex-col p-6 justify-center sm:w-1/5 w-full">
             <h3 className="text-xl font-bold flex justify-center">
               Req. Completed
             </h3>
@@ -532,7 +544,7 @@ export default function Profile({
               {reqComplete}
             </div>
           </div>
-          <div className="flex flex-col p-6 justify-center sm:w-1/2 w-full">
+          <div className="flex flex-col p-6 justify-center sm:w-1/4 w-full">
             <h3 className="text-xl font-bold flex justify-center">
               Forecast Accuracy
             </h3>
@@ -585,7 +597,9 @@ export default function Profile({
               <div className="text-3xl font-extrabold p-4">
                 Projects by status
               </div>
-              <ReactEChart option={option} className="h-full w-full" />
+              <ReactEChart option={option}
+                style={{ height: "15em", width: "30em", margin: "0 auto" }}
+              />
             </div>
           </div>
           <div className="flex p-6 w-1/3 justify-center items-center">
