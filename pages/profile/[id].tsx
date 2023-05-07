@@ -12,6 +12,8 @@ import { ProjectChildren } from "@/components/utils/sidebarHelper";
 import { useRouter } from "next/router";
 import { renderImage } from "@/components/utils/general";
 
+import ReactEChart from "echarts-for-react";
+
 // dynamic
 const ModalAddProject = dynamic(() => import("@/components/ModalAddProject"), {
   ssr: false,
@@ -161,6 +163,68 @@ export default function Profile({
 
   const avatarToRender = renderImage(avatar_url);
 
+  const dataGraph = [
+    // get all the active projects, the completed, the on hold and the cancelled
+    {
+      value: dataProjects.filter(
+        (project: any) => project.status.toLowerCase() === "active"
+      ).length,
+      name: "Active",
+    },
+    {
+      value: dataProjects.filter(
+        (project: any) => project.status.toLowerCase() === "completed"
+      ).length,
+      name: "Completed",
+    },
+    {
+      value: dataProjects.filter(
+        (project: any) => project.status.toLowerCase() === "on hold"
+      ).length,
+      name: "On hold",
+    },
+    {
+      value: dataProjects.filter(
+        (project: any) => project.status.toLowerCase() === "cancelled"
+      ).length,
+      name: "Cancelled",
+    },
+  ];
+
+  // Charts
+  const option = {
+    tooltip: {
+      trigger: "item",
+    },
+    legend: {
+      top: "5%",
+      left: "center",
+    },
+    series: [
+      {
+        name: "Access From",
+        type: "pie",
+        radius: ["40%", "70%"],
+        avoidLabelOverlap: false,
+        label: {
+          show: false,
+          position: "center",
+        },
+        emphasis: {
+          label: {
+            show: true,
+            fontSize: 30,
+            fontWeight: "bold",
+          },
+        },
+        labelLine: {
+          show: false,
+        },
+        data: dataGraph,
+      },
+    ],
+  };
+
   return (
     <Layout
       currentPage="profile"
@@ -248,8 +312,14 @@ export default function Profile({
           <div></div>
         </div>
       </div>
-      <div className="flex gap-x-4 mt-8 h-52">
-        <div className="flex p-6 bg-white rounded-lg shadow-lg w-full justify-center"></div>
+      <div className="flex gap-x-4 mt-8 h-96">
+        <div className="flex p-6 bg-white rounded-lg shadow-lg w-full justify-center">
+          {/* render an echart, pie format */}
+          <div className="flex flex-col justify-start items-start">
+            <div className="text-3xl font-extrabold">Projects by status</div>
+            <ReactEChart option={option} className="h-full w-full" />
+          </div>
+        </div>
       </div>
 
       <div className="flex gap-x-4 mt-8 flex-col sm:flex-row gap-y-8">
