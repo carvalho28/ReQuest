@@ -257,8 +257,6 @@ export default function Profile({
       trigger: "item",
     },
     legend: {
-      // top: "50%",
-      // left: "5%",
       orient: "vertical",
       top: "30%",
       left: "10%",
@@ -471,155 +469,7 @@ export default function Profile({
           <div></div>
         </div>
       </div>
-      {/* <div className="flex gap-x-4 mt-8 flex-col sm:flex-row gap-y-8"> */}
-      {/*   <div */}
-      {/*     className="flex flex-col p-6 bg-white rounded-lg shadow-lg */}
-      {/*     justify-center sm:w-1/3 w-full" */}
-      {/*   > */}
-      {/*     <h3 className="text-xl font-bold flex justify-center"> */}
-      {/*       Global Stats */}
-      {/*     </h3> */}
-      {/*     <div className="flex flex-col justify-center items-center mt-8"> */}
-      {/*       <div className="text-6xl font-extrabold"> */}
-      {/*         {itemsCarrousel[currentIndex].value} */}
-      {/*       </div> */}
-      {/*       <div className="text-md mt-2 text-gray-700"> */}
-      {/*         {itemsCarrousel[currentIndex].label} */}
-      {/*       </div> */}
-      {/*       <div className="flex justify-center items-center mt-8"> */}
-      {/*         <RiArrowLeftCircleFill */}
-      {/*           className="h-10 w-10 text-black mr-2 hover:cursor-pointer" */}
-      {/*           onClick={() => handleLeftArrow()} */}
-      {/*         /> */}
-      {/*         <RiArrowRightCircleFill */}
-      {/*           className="h-10 w-10 text-black ml-2 hover:cursor-pointer" */}
-      {/*           onClick={() => handleRightArrow()} */}
-      {/*         /> */}
-      {/*       </div> */}
-      {/*     </div> */}
-      {/*   </div> */}
-
-      {/*   <div className="flex p-6 bg-white rounded-lg shadow-lg justify-center sm:w-1/3 w-full"> */}
-      {/*     <h3 className="text-xl font-bold flex justify-center">Teams</h3> */}
-      {/*   </div> */}
-
-      {/*   <div */}
-      {/*     className="flex p-6 bg-white rounded-lg shadow-lg */}
-      {/*     justify-start sm:w-1/3 w-full flex-col" */}
-      {/*   > */}
-      {/*     <h3 className="text-xl font-bold flex justify-center">Projects</h3> */}
-      {/*     <div className="flex flex-col justify-center items-center mt-8"> */}
-      {/*       {dataProjects.map((project: any) => ( */}
-      {/*         <div */}
-      {/*           className="flex flex-col bg-gray-50 py-3 px-10 rounded-xl" */}
-      {/*           key={project.id} */}
-      {/*         > */}
-      {/*           {/* scg with first letter of project.name */}
-      {/*           <div className="text-lg font-medium text-gray-900"> */}
-      {/*             {project.name} */}
-      {/*           </div> */}
-      {/*           <div className="text-sm text-gray-500"> */}
-      {/*             {project.description} */}
-      {/*           </div> */}
-      {/*         </div> */}
-      {/*       ))} */}
-      {/*     </div> */}
-      {/*   </div> */}
-      {/* </div> */}
-      {/* <div className="flex gap-x-4 mt-8 h-full bg-white rounded-lg shadow-lg flex-col"> */}
-      {/*   <div className="flex flex-row"> */}
-      {/*     <div className="flex flex-col p-6 justify-center sm:w-1/5 w-full"> */}
-      {/*       <h3 className="text-xl font-bold flex justify-center"> */}
-      {/*         Number of Projects */}
-      {/*       </h3> */}
-      {/*       <div className="flex flex-col justify-center items-center mt-2 text-lg"> */}
-      {/*         {nProjects} */}
-      {/*       </div> */}
-      {/*     </div> */}
-      {/*     <div className="flex flex-col p-6 justify-center sm:w-1/5 w-full"> */}
-      {/*       <h3 className="text-xl font-bold flex justify-center"> */}
-      {/*         Req. Completed */}
-      {/*       </h3> */}
-      {/*       <div className="flex flex-col justify-center items-center mt-2 text-lg"> */}
-      {/*         {reqComplete} */}
-      {/*       </div> */}
-      {/*     </div> */}
-      {/*     <div className="flex flex-col p-6 justify-center sm:w-1/4 w-full"> */}
-      {/*       <h3 className="text-xl font-bold flex justify-center"> */}
-      {/*         Forecast Accuracy */}
-      {/*       </h3> */}
-      {/*       <div */}
-      {/*         style={{ */}
-      {/*           height: "3em", */}
-      {/*           display: "flex", */}
-      {/*           justifyContent: "center", */}
-      {/*           alignItems: "center", */}
-      {/*           marginBottom: "1em", */}
-      {/*         }} */}
-      {/*       > */}
-      {/*         <div className="flex flex-row"> */}
-      {/*           <ReactEChart */}
-      {/*             option={optionsGauge} */}
-      {/*             opts={{ renderer: "svg" }} */}
-      {/*             style={{ height: "10em", width: "16em", margin: "0 auto" }} */}
-      {/*           /> */}
-
-      {/*           <div */}
-      {/*             style={{ */}
-      {/*               height: "10em", */}
-      {/*               width: "10em", */}
-      {/*               margin: "0 auto", */}
-      {/*               display: "flex", */}
-      {/*               justifyContent: "start", */}
-      {/*               alignItems: "center", */}
-      {/*               marginTop: "1em", */}
-      {/*               marginLeft: "-2em", */}
-      {/*             }} */}
-      {/*           > */}
-      {/*             <div */}
-      {/*               className="text-3xl font-extrabold" */}
-      {/*               style={{ */}
-      {/*                 color: getGradientColor(averageForecast), */}
-      {/*               }} */}
-      {/*             > */}
-      {/*               {/* {overall.toFixed(0)}% */} 
-      {/*               {Math.round(averageForecast)} % */}
-      {/*             </div> */}
-      {/*           </div> */}
-      {/*         </div> */}
-      {/*       </div> */}
-      {/*     </div> */}
-      {/*   </div> */}
-      {/*   <div className="flex flex-row"> */}
-      {/*     <div className="flex p-6 w-2/3 justify-center"> */}
-      {/*       {/* render an echart, pie format */} 
-      {/*       <div className="flex flex-col justify-start items-center"> */}
-      {/*         <div className="text-3xl font-extrabold p-4"> */}
-      {/*           Projects by status */}
-      {/*         </div> */}
-      {/*         <ReactEChart */}
-      {/*           option={option} */}
-      {/*           style={{ height: "15em", width: "30em", margin: "0 auto" }} */}
-      {/*         /> */}
-      {/*       </div> */}
-      {/*     </div> */}
-      {/*     <div className="flex p-6 w-1/3 justify-center"> */}
-      {/*       <div className="flex flex-col justify-center items-center h-full"> */}
-      {/*         <Image */}
-      {/*           id="No ranking" */}
-      {/*           className="w-96 h-auto flex-none py-3" */}
-      {/*           src={"/milestones.svg"} */}
-      {/*           alt="Cat" */}
-      {/*           width={100} */}
-      {/*           height={100} */}
-      {/*           priority */}
-      {/*         /> */}
-      {/*       </div> */}
-      {/*     </div> */}
-      {/*   </div> */}
-      {/* </div> */}
-
-      <div className="flex flex-wrap bg-white rounded-lg shadow-lg">
+            <div className="flex flex-wrap bg-white rounded-lg shadow-lg">
         <div className="flex flex-wrap flex-1 w-3/4">
           <div className="flex flex-row items-center justify-between w-full p-4 mt-4">
             <div className="flex-1 border-r-2 border-primaryblue">
@@ -638,7 +488,7 @@ export default function Profile({
                 {reqComplete}
               </div>
             </div>
-            <div className="flex-1 border-r-2 border-primaryblue">
+            <div className="flex-1 border-r-2 border-primaryblue mr-8">
               <h3 className="text-xl font-bold flex justify-center">
                 Forecast Accuracy
               </h3>
