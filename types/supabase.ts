@@ -134,6 +134,7 @@ export interface Database {
       }
       projects: {
         Row: {
+          created_at: string | null
           deadline: string
           description: string | null
           id: string
@@ -141,6 +142,7 @@ export interface Database {
           status: string
         }
         Insert: {
+          created_at?: string | null
           deadline: string
           description?: string | null
           id?: string
@@ -148,6 +150,7 @@ export interface Database {
           status?: string
         }
         Update: {
+          created_at?: string | null
           deadline?: string
           description?: string | null
           id?: string
@@ -249,6 +252,7 @@ export interface Database {
           description: string
           status: string
           deadline: string
+          created_at: string
         }[]
       }
       projects_user_people: {
@@ -262,6 +266,21 @@ export interface Database {
           status: string
           deadline: string
           project_users: string[]
+        }[]
+      }
+      projects_user_req: {
+        Args: {
+          user_id: string
+        }
+        Returns: {
+          id: string
+          name: string
+          description: string
+          status: string
+          deadline: string
+          created_at: string
+          total_reqs: number
+          completed_reqs: number
         }[]
       }
       ranking_req: {
