@@ -12,6 +12,8 @@ import { ProjectChildren } from "@/components/utils/sidebarHelper";
 import { useRouter } from "next/router";
 import { renderImage } from "@/components/utils/general";
 
+import ReactEChart from "echarts-for-react";
+
 // dynamic
 const ModalAddProject = dynamic(() => import("@/components/ModalAddProject"), {
   ssr: false,
@@ -56,7 +58,7 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
 
   // get user projects info
   const { data: dataProjects, error: errorProjects } = await supabase.rpc(
-    "projects_user",
+    "projects_user_req",
     { user_id: user?.id }
   );
 
@@ -70,12 +72,18 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
     }
   );
 
+  const { data: dataProjects2, error: errorProjects2 } = await supabase.rpc(
+    "projects_user",
+    { user_id: user?.id }
+  );
+
   return {
     props: {
       avatar_url: data[0].avatar_url,
       user_data: userData,
       projectsChildren: projectsChildren,
       dataProjects: dataProjects,
+      dataProjects2: dataProjects2,
     },
   };
 };
@@ -85,16 +93,70 @@ type ItemCarrousel = {
   value: number;
 };
 
+type ProjectInfo = {
+  id: string;
+  name: string;
+  description: string;
+  status: string;
+  created_at: string;
+  deadline: string;
+  completed_reqs: number;
+  total_reqs: number;
+};
+
 export default function Profile({
   avatar_url,
   user_data,
   projectsChildren,
   dataProjects,
+  dataProjects2,
 }: any) {
   const supabaseClient = useSupabaseClient();
   const user = useUser();
 
   console.log("dataProjects: ", dataProjects);
+
+  const [averageForecast, setAverageForecast] = useState<number>(0);
+
+  useEffect(() => {
+    const forecast: number[] = [];
+    dataProjects.forEach((project: ProjectInfo) => {
+      const today = new Date();
+      const deadline = new Date(project.deadline);
+      const createdAt = new Date(project.created_at);
+
+      const totalDays =
+        Math.floor(
+          (deadline.getTime() - createdAt.getTime()) / (1000 * 60 * 60 * 24)
+        ) + 1;
+      const daysRemaining =
+        Math.floor(
+          (deadline.getTime() - today.getTime()) / (1000 * 60 * 60 * 24)
+        ) + 1;
+      const completedRequirements = project.completed_reqs;
+      const totalRequirements = project.total_reqs;
+
+      let probability = 0;
+      if (completedRequirements > 0) {
+        const completionRatio =
+          (completedRequirements + 1) / (totalRequirements + 1);
+        const timeRatio = daysRemaining / totalDays;
+        probability = completionRatio * timeRatio;
+      } else {
+        probability = daysRemaining / totalDays;
+      }
+
+      const probabilityPercentage = Math.round(probability * 100);
+
+      forecast.push(probabilityPercentage);
+    });
+    setAverageForecast(forecast.reduce((a, b) => a + b, 0) / forecast.length);
+    console.log("forecast: ", forecast);
+  }, [dataProjects]);
+
+  // useEffect(() => {
+  //   console.log("forecast: ", forecast);
+  // }, [forecast]);
 
   const [userData, setUserData] = useState<any>(user_data);
   const [name, setName] = useState<string>("");
@@ -160,6 +222,165 @@ export default function Profile({
   }
 
   const avatarToRender = renderImage(avatar_url);
+
+  const dataGraph = [
+    // get all the active projects, the completed, the on hold and the cancelled
+    {
+      value: dataProjects2.filter(
+        (project: any) => project.status.toLowerCase() === "active"
+      ).length,
+      name: "Active",
+    },
+    {
+      value: dataProjects2.filter(
+        (project: any) => project.status.toLowerCase() === "completed"
+      ).length,
+      name: "Completed",
+    },
+    {
+      value: dataProjects2.filter(
+        (project: any) => project.status.toLowerCase() === "on hold"
+      ).length,
+      name: "On hold",
+    },
+    {
+      value: dataProjects2.filter(
+        (project: any) => project.status.toLowerCase() === "cancelled"
+      ).length,
+      name: "Cancelled",
+    },
+  ];
+
+  // Charts
+  const option = {
+    tooltip: {
+      trigger: "item",
+    },
+    legend: {
+      orient: "vertical",
+      top: "30%",
+      left: "10%",
+    },
+    series: [
+      {
+        name: "Number of projects",
+        type: "pie",
+        radius: ["40%", "70%"],
+        avoidLabelOverlap: false,
+        label: {
+          show: false,
+          position: "center",
+        },
+        emphasis: {
+          label: {
+            show: true,
+            fontSize: 30,
+            fontWeight: "bold",
+          },
+        },
+        labelLine: {
+          show: false,
+        },
+        data: dataGraph,
+      },
+    ],
+  };
+
+  const optionsGauge = {
+    grid: {
+      top: 0,
+      bottom: 0,
+      left: 0,
+      right: 0,
+      padding: [0, 0, 0, 0],
+    },
+    series: [
+      {
+        radius: "60%",
+        center: ["50%", "75%"],
+        itemStyle: {
+          borderWidth: 0,
+        },
+        type: "gauge",
+        startAngle: 180,
+        endAngle: 0,
+        min: 0,
+        max: 100,
+        axisLine: {
+          lineStyle: {
+            width: 15,
+            color: [
+              [0.333, "#FF6E76"],
+              [0.666, "#FFD56E"],
+              [1, "#5EE2A0"],
+            ],
+            shadowBlur: 0,
+          },
+        },
+        axisTick: {
+          show: false,
+          lineStyle: {
+            color: "inherit",
+          },
+          length: 0,
+        },
+        axisLabel: {
+          position: "bottom",
+          distance: -60,
+          show: true,
+          formatter: function (value: any) {
+            if (value === 0 || value === 100) {
+              return value + "%";
+            } else {
+              return "";
+            }
+          },
+          textStyle: {
+            color: "inherit",
+            fontSize: 14,
+          },
+        },
+        splitLine: {
+          show: false,
+          lineStyle: {
+            color: "inherit",
+          },
+        },
+        progress: {
+          show: false,
+        },
+        detail: {
+          valueAnimation: true,
+          formatter: "{value}",
+          color: "inherit",
+          show: false,
+        },
+        pointer: {
+          show: true,
+          icon: "path://M2090.36389,615.30999 L2090.36389,615.30999 C2091.48372,615.30999 2092.40383,616.194028 2092.44859,617.312956 L2096.90698,728.755929 C2097.05155,732.369577 2094.2393,735.416212 2090.62566,735.56078 C2090.53845,735.564269 2090.45117,735.566014 2090.36389,735.566014 L2090.36389,735.566014 C2086.74736,735.566014 2083.81557,732.63423 2083.81557,729.017692 C2083.81557,728.930412 2083.81732,728.84314 2083.82081,728.755929 L2088.2792,617.312956 C2088.32396,616.194028 2089.24407,615.30999 2090.36389,615.30999 Z",
+          itemStyle: {
+            color: "#000",
+          },
+          length: "80%",
+          widht: 1,
+        },
+        title: {
+          show: false,
+        },
+        data: [
+          {
+            value: averageForecast,
+            name: "Completion Progress",
+          },
+        ],
+      },
+    ],
+  };
+
+  function getGradientColor(percentage: number): string {
+    const hue = ((percentage - 0) * 120) / (100 - 0);
+    return `hsl(${hue}, 80%, 45%)`;
+  }
 
   return (
     <Layout
@@ -248,63 +469,98 @@ export default function Profile({
           <div></div>
         </div>
       </div>
-      <div className="flex gap-x-4 mt-8 h-52">
-        <div className="flex p-6 bg-white rounded-lg shadow-lg w-full justify-center"></div>
-      </div>
-
-      <div className="flex gap-x-4 mt-8 flex-col sm:flex-row gap-y-8">
-        <div
-          className="flex flex-col p-6 bg-white rounded-lg shadow-lg
-          justify-center sm:w-1/3 w-full"
-        >
-          <h3 className="text-xl font-bold flex justify-center">
-            Global Stats
-          </h3>
-          <div className="flex flex-col justify-center items-center mt-8">
-            <div className="text-6xl font-extrabold">
-              {itemsCarrousel[currentIndex].value}
+            <div className="flex flex-wrap bg-white rounded-lg shadow-lg">
+        <div className="flex flex-wrap flex-1 w-3/4">
+          <div className="flex flex-row items-center justify-between w-full p-4 mt-4">
+            <div className="flex-1 border-r-2 border-primaryblue">
+              <h3 className="text-xl font-bold flex justify-center">
+                Number of Projects
+              </h3>
+              <div className="flex flex-col justify-center items-center mt-2 text-lg">
+                {nProjects}
+              </div>
             </div>
-            <div className="text-md mt-2 text-gray-700">
-              {itemsCarrousel[currentIndex].label}
+            <div className="flex-1  border-r-2 border-primaryblue">
+              <h3 className="text-xl font-bold flex justify-center">
+                Req. Completed
+              </h3>
+              <div className="flex flex-col justify-center items-center mt-2 text-lg">
+                {reqComplete}
+              </div>
             </div>
-            <div className="flex justify-center items-center mt-8">
-              <RiArrowLeftCircleFill
-                className="h-10 w-10 text-black mr-2 hover:cursor-pointer"
-                onClick={() => handleLeftArrow()}
-              />
-              <RiArrowRightCircleFill
-                className="h-10 w-10 text-black ml-2 hover:cursor-pointer"
-                onClick={() => handleRightArrow()}
-              />
-            </div>
-          </div>
-        </div>
-
-        <div className="flex p-6 bg-white rounded-lg shadow-lg justify-center sm:w-1/3 w-full">
-          <h3 className="text-xl font-bold flex justify-center">Teams</h3>
-        </div>
-
-        <div
-          className="flex p-6 bg-white rounded-lg shadow-lg
-          justify-start sm:w-1/3 w-full flex-col"
-        >
-          <h3 className="text-xl font-bold flex justify-center">Projects</h3>
-          <div className="flex flex-col justify-center items-center mt-8">
-            {dataProjects.map((project: any) => (
+            <div className="flex-1 border-r-2 border-primaryblue mr-8">
+              <h3 className="text-xl font-bold flex justify-center">
+                Forecast Accuracy
+              </h3>
               <div
-                className="flex flex-col bg-gray-50 py-3 px-10 rounded-xl"
-                key={project.id}
+                style={{
+                  height: "3em",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  marginBottom: "1em",
+                  marginLeft: "3em"
+                }}
               >
-                {/* scg with first letter of project.name */}
-                <div className="text-lg font-medium text-gray-900">
-                  {project.name}
-                </div>
-                <div className="text-sm text-gray-500">
-                  {project.description}
+                <div className="flex flex-row">
+                  <ReactEChart
+                    option={optionsGauge}
+                    opts={{ renderer: "svg" }}
+                    style={{
+                      height: "10em",
+                      width: "12em",
+                      margin: "0 auto",
+                    }}
+                  />
+
+                  <div
+                    style={{
+                      height: "10em",
+                      width: "10em",
+                      margin: "0 auto",
+                      display: "flex",
+                      justifyContent: "start",
+                      alignItems: "center",
+                      marginTop: "1em",
+                      marginLeft: "1.25em",
+                    }}
+                  >
+                    <div
+                      className="text-3xl font-extrabold"
+                      style={{
+                        color: getGradientColor(averageForecast),
+                      }}
+                    >
+                      {/* {overall.toFixed(0)}% */}
+                      {Math.round(averageForecast)} %
+                    </div>
+                  </div>
                 </div>
               </div>
-            ))}
+            </div>
           </div>
+          <div className="flex-1 p-6">
+            <div className="flex flex-col justify-start items-center">
+              <div className="text-3xl font-extrabold p-4">
+                Projects by status
+              </div>
+              <ReactEChart
+                option={option}
+                style={{ height: "15em", width: "30em", margin: "0 auto" }}
+              />
+            </div>
+          </div>
+        </div>
+        <div className="flex w-1/4 items-center justify-center p-4">
+          <Image
+            id="No ranking"
+            className="w-full h-full flex-none object-cover"
+            src={"/milestones.svg"}
+            alt="Cat"
+            width={100}
+            height={100}
+            priority
+          />
         </div>
       </div>
     </Layout>

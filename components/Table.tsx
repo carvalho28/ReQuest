@@ -23,7 +23,13 @@ import {
 import { DOTS, useCustomPagination } from "./CustomPagination";
 import "regenerator-runtime/runtime";
 import { ArrowUpRightIcon } from "@heroicons/react/24/outline";
-import { ColumnsReq, RowReq, UserIdAndName, classNames, renderTypeBadge } from "./utils/general";
+import {
+  ColumnsReq,
+  RowReq,
+  UserIdAndName,
+  classNames,
+  renderTypeBadge,
+} from "./utils/general";
 import { Database } from "@/types/supabase";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import RequirementData from "./RequirementData";
@@ -31,7 +37,6 @@ import { RealtimeChannel } from "@supabase/supabase-js";
 import { CSVLink } from "react-csv";
 import Stepper from "./Stepper";
 import { XMarkIcon } from "@heroicons/react/20/solid";
-
 
 // dynamic imports
 import dynamic from "next/dynamic";
@@ -50,8 +55,8 @@ export function PriorityProject({ value }: any) {
         status === "p1"
           ? "bg-red-100 text-red-700"
           : status === "p2"
-            ? "bg-yellow-100 text-yellow-700"
-            : "bg-green-100 text-green-700",
+          ? "bg-yellow-100 text-yellow-700"
+          : "bg-green-100 text-green-700",
         "px-2 md:px-3 py-1 md:uppercase capitalize leading-wide font-bold text-xs rounded-full shadow-sm"
       )}
     >
@@ -152,22 +157,24 @@ function createNewRequirement(handleClickPopup: any) {
   handleClickPopup();
 }
 
-async function deleteRequirement(selectedFlatRows : any) {
+async function deleteRequirement(selectedFlatRows: any) {
   let ids: string[] = [];
   selectedFlatRows.forEach((row: any) => {
     ids.push(row.original.id);
   });
-  
+
   // alert asking if user is sure they want to delete
-  const confirmDelete = confirm("Are you sure you want to delete these requirements?");
+  const confirmDelete = confirm(
+    "Are you sure you want to delete these requirements?"
+  );
   if (!confirmDelete) return;
   // use supabase to delete all the rows in ids
   const { error } = await supabase
-   .from("requirements")
-   .delete()
-   .match({id : ids})
+    .from("requirements")
+    .delete()
+    .match({ id: ids });
 
-   if (error) return;
+  if (error) return;
 }
 
 function GlobalFilter({
@@ -297,7 +304,7 @@ function Table({
     setCurrentSlide(currentSlide === 0 ? 2 : currentSlide - 1);
     steps[currentSlide].status = "upcoming";
     steps[currentSlide === 0 ? 2 : currentSlide - 1].status = "current";
-  }
+  };
 
   const handleRightArrow = () => {
     if (requirementName === "" || requirementName == undefined) {
@@ -321,9 +328,7 @@ function Table({
     steps[currentSlide === 2 ? 0 : currentSlide + 1].status = "current";
     setError(false);
     setCurrentSlide(currentSlide === 2 ? 0 : currentSlide + 1);
-
-  }
-
+  };
 
   async function btnCreateNewRequirement() {
     const { data, error } = await supabaseClient
@@ -336,7 +341,7 @@ function Table({
           updated_by: requirementUpdatedBy,
           due_date: requirementDueDate,
           type: requirementType,
-        }
+        },
       ])
       .select("id");
 
@@ -409,7 +414,7 @@ function Table({
     async function getRequirements() {
       const { data, error } = await supabaseClient
         .from("requirements")
-        // get all fields, and get the name of the user in created_by 
+        // get all fields, and get the name of the user in created_by
         // and updated_by name in the profiles table
 
         .select(
@@ -429,7 +434,8 @@ function Table({
             closed_at,
             closed_by,
             type
-          `)
+          `
+        )
 
         .order("created_at", { ascending: false })
         .eq("id_proj", projectId);
@@ -533,22 +539,29 @@ function Table({
     setPageSize(5);
   }, [setPageSize]); //set according to your preferrence
 
-
-  const [requirementType, setRequirementType] = useState<undefined | string>("");
-  const [requirementTypeAI, setRequirementTypeAI] = useState<undefined | string>("");
+  const [requirementType, setRequirementType] = useState<undefined | string>(
+    ""
+  );
+  const [requirementTypeAI, setRequirementTypeAI] = useState<
+    undefined | string
+  >("");
   // call api to verify functional/non-functional
   async function isFunctional() {
     const requirement = requirementName;
-    const req = JSON.stringify({ requirement });
+    const reqBody = JSON.stringify({ requirement });
+    console.log(reqBody);
 
-    // const response = await fetch("http://localhost:8080/api/ai/functional", {
-    const response = await fetch("https://morning-flower-3545.fly.dev/api/ai/functional", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: req,
-    });
+    const response = await fetch(
+      // "https://morning-flower-3545.fly.dev/api/ai/functional",
+      "http://localhost:8080/api/ai/functional",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: reqBody,
+      }
+    );
 
     // if there was an error, then return
     if (!response.ok) {
@@ -564,7 +577,6 @@ function Table({
 
     setRequirementType(answer);
     setRequirementTypeAI(answer);
-
   }
 
   // Render the UI for your table and the styles
@@ -706,7 +718,7 @@ function Table({
         />
       )}
       {showPopup && (
-        // popup 
+        // popup
         <div className="fixed z-10 inset-0 overflow-y-auto">
           <div className="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
             <div
@@ -756,8 +768,9 @@ function Table({
                         {error && <ErrorMessage message={errorMessage} />}
                       </div>
                       <div
-                        className={`carousel-slide ${currentSlide === 0 ? "active" : "hidden"
-                          }`}
+                        className={`carousel-slide ${
+                          currentSlide === 0 ? "active" : "hidden"
+                        }`}
                       >
                         <label
                           htmlFor="name"
@@ -778,8 +791,9 @@ function Table({
                       </div>
 
                       <div
-                        className={`carousel-slide ${currentSlide === 1 ? "active" : "hidden"
-                          }`}
+                        className={`carousel-slide ${
+                          currentSlide === 1 ? "active" : "hidden"
+                        }`}
                       >
                         <label
                           htmlFor="deadline"
@@ -794,26 +808,36 @@ function Table({
                             name="deadline"
                             id="deadline"
                             className="shadow-sm focus:ring-contrast focus:border-contrast block w-36 sm:text-sm border-gray-300 rounded-md"
-                            onChange={(e) => setRequirementDueDate(e.target.value)}
+                            onChange={(e) =>
+                              setRequirementDueDate(e.target.value)
+                            }
                           />
                         </div>
                       </div>
 
-
                       <div
-                        className={`carousel-slide ${currentSlide === 2 ? "active" : "hidden"
-                          }`}
+                        className={`carousel-slide ${
+                          currentSlide === 2 ? "active" : "hidden"
+                        }`}
                       >
                         {/*  show requirement type */}
                         <div className="m-4 pl-2 w-8/12 text-justify items-center flex flex-col mx-auto">
                           {requirementType !== undefined && (
                             <>
-                              <div className="chat chat-start"
-                              >
-                                <div className="chat chat-bubble chat-bubble-primary text-black" data-theme="mytheme2">
-                                  Base on our AI, your requirement is most likely to be a <span className="font-bold text-xl">{requirementTypeAI}</span> requirement.
+                              <div className="chat chat-start">
+                                <div
+                                  className="chat chat-bubble chat-bubble-primary text-black"
+                                  data-theme="mytheme2"
+                                >
+                                  Base on our AI, your requirement is most
+                                  likely to be a{" "}
+                                  <span className="font-bold text-xl">
+                                    {requirementTypeAI}
+                                  </span>{" "}
+                                  requirement.
                                   <br />
-                                  However, you can use the dropdown below to change it.
+                                  However, you can use the dropdown below to
+                                  change it.
                                 </div>
                                 {/* render an alien icon*/}
                                 <div>
@@ -822,7 +846,6 @@ function Table({
                               </div>
                               <div className="mt-2 mb-5 shadow-sm focus:ring-contrast focus:border-contrast border-slate-400 border rounded-md p-2">
                                 {requirementType && (
-
                                   <Dropdown
                                     func={renderTypeBadge}
                                     options={["Functional", "Non-functional"]}
@@ -830,14 +853,11 @@ function Table({
                                     onSelect={(e) => setRequirementType(e)}
                                   />
                                 )}
-
                               </div>
                             </>
                           )}
                         </div>
-
                       </div>
-
                     </div>
                     <div className="px-4 py-3 flex flex-col">
                       <div className="flex flex-row justify-center">
@@ -866,15 +886,12 @@ function Table({
                         )}
                       </div>
                     </div>
-
                   </div>
-
                 </div>
               </div>
             </div>
           </div>
         </div>
-
       )}
     </div>
   );

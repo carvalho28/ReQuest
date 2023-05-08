@@ -33,6 +33,8 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
     { user_id: user?.id }
   );
 
+  console.log(dataProjects);
+
   // get user requirements info
   const { data: dataRequirements, error: errorRequirements } =
     await supabase.rpc("requirements_user", { user_id: user?.id });
