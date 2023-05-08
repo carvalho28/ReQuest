@@ -3,7 +3,11 @@ import { createServerSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import { GetServerSidePropsContext } from "next";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { RiArrowRightCircleFill, RiArrowLeftCircleFill } from "react-icons/ri";
+import {
+  RiArrowRightCircleFill,
+  RiArrowLeftCircleFill,
+  RiArrowRightFill,
+} from "react-icons/ri";
 import { PlusIcon, UserIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { useSupabaseClient, useUser } from "@supabase/auth-helpers-react";
 import { RealtimeChannel } from "@supabase/supabase-js";
@@ -13,6 +17,7 @@ import Tabs, { Tab } from "@/components/Tabs";
 // dynamic imports
 import dynamic from "next/dynamic";
 import { ProjectChildren } from "@/components/utils/sidebarHelper";
+import { renderProjectStatusBadge } from "@/components/utils/general";
 const ErrorMessage = dynamic(() => import("@/components/ErrorMessage"), {
   ssr: false,
 });
@@ -424,15 +429,7 @@ export default function Projects({
                               {item.description}
                             </td>
                             <td className="hidden px-3 py-4 text-sm text-gray-500 sm:table-cell">
-                              {item.status == "Active" ? (
-                                <span className="inline-flex items-center rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-800">
-                                  {item.status}
-                                </span>
-                              ) : (
-                                <span className="inline-flex items-center rounded-full bg-indigo-100 px-2.5 py-0.5 text-xs font-medium text-indigo-800">
-                                  {item.status}
-                                </span>
-                              )}
+                              {renderProjectStatusBadge(item.status, 4, 0.3)}
                             </td>
                             <td className="px-3 py-4 text-sm text-gray-500">
                               {/* convert to only show date */}
@@ -459,7 +456,60 @@ export default function Projects({
                     </table>
                   </div>
                 ) : (
-                  <div>Cards</div>
+                  <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 mt-10">
+                    {projectsList?.map((item: any) => (
+                      <div
+                        key={item.id}
+                        className="bg-white shadow-md rounded-lg overflow-hidden hover:cursor-pointer hover:bg-gray-200"
+                        onClick={() => {
+                          router.push(`/projects/${item.id}`);
+                        }}
+                      >
+                        <div className="p-4">
+                          <h3 className="text-lg font-medium text-black mb-2">
+                            {item.name}
+                          </h3>
+                          <p className="text-gray-500 text-sm mb-4">
+                            {item.description}
+                          </p>
+                          <div className="flex justify-between">
+                            <p className="text-gray-500 text-sm">
+                              {/* {item.status} */}
+                              {renderProjectStatusBadge(item.status, 4, 1)}
+                            </p>
+                            <p className="text-gray-500 text-sm">
+                              {item.deadline?.split("T")[0]}
+                            </p>
+                          </div>
+                          <div className="flex flex-wrap mt-4 flex-col">
+                            {item.project_users?.length === 0 && (
+                              <div className="flex items-center space-x-3">
+                                <div className="flex-shrink-0">-</div>
+                              </div>
+                            )}
+
+                            <div className="text-gray-500 text-sm mt-2">
+                              Coworkers:
+                            </div>
+
+                            <div className="flex flex-wrap mt-2">
+                              {item.project_users?.map((coworker: any) => (
+                                <div
+                                  className="flex items-center space-x-3 text-xs sm:text-sm"
+                                  key={coworker}
+                                >
+                                  <div className="flex flex-row flex-shrink-0 items-center">
+                                    <RiArrowRightFill className="mr-2" />
+                                    {coworker}
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          </div>{" "}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
                 )}
               </>
             )}
