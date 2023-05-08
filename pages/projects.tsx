@@ -8,7 +8,7 @@ import { PlusIcon, UserIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { useSupabaseClient, useUser } from "@supabase/auth-helpers-react";
 import { RealtimeChannel } from "@supabase/supabase-js";
 import { Database } from "@/types/supabase";
-import Tabs from "@/components/Tabs";
+import Tabs, { Tab } from "@/components/Tabs";
 
 // dynamic imports
 import dynamic from "next/dynamic";
@@ -101,10 +101,23 @@ export default function Projects({
   projects,
   projectsChildren,
 }: any) {
-  const tabs = [
-    { name: "Table", href: "/projects/table", current: true },
-    { name: "Cards", href: "/projects/cards", current: false },
-  ];
+  const [isTable, setIsTable] = useState(true);
+
+  // funtion to change isTable and current tab
+  function changeIsTable(tabName: string) {
+    setIsTable(tabName === "Table");
+    setTabs((prevTabs) =>
+      prevTabs.map((tab) => ({
+        ...tab,
+        current: tab.name === tabName,
+      }))
+    );
+  }
+
+  const [tabs, setTabs] = useState([
+    { name: "Table", onClick: () => changeIsTable("Table"), current: true },
+    { name: "Cards", onClick: () => changeIsTable("Cards"), current: false },
+  ]);
 
   const router = useRouter();
   const [showModal, setShowModal] = useState(false);
@@ -338,61 +351,79 @@ export default function Projects({
               </div>
             </div>
             {projectsList && (
-              <div className="-mx-4 mt-8 sm:-mx-0">
-                <table className="min-w-full divide-y divide-gray-300">
-                  <thead>
-                    <tr className="divide-x divide-gray-300">
-                      <th
-                        scope="col"
-                        className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-black sm:pl-0"
-                      >
-                        Name
-                      </th>
-                      <th
-                        scope="col"
-                        className="hidden px-3 py-3.5 text-left text-sm font-semibold text-black lg:table-cell"
-                      >
-                        Description
-                      </th>
-                      <th
-                        scope="col"
-                        className="hidden px-3 py-3.5 text-left text-sm font-semibold text-black sm:table-cell"
-                      >
-                        Status
-                      </th>
-                      <th
-                        scope="col"
-                        className="px-3 py-3.5 text-left text-sm font-semibold text-black"
-                      >
-                        Deadline
-                      </th>
+              <>
+                {isTable ? (
+                  <div className="-mx-4 mt-8 sm:-mx-0">
+                    <table className="min-w-full divide-y divide-gray-300">
+                      <thead>
+                        <tr className="divide-x divide-gray-300">
+                          <th
+                            scope="col"
+                            className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-black sm:pl-0"
+                          >
+                            Name
+                          </th>
+                          <th
+                            scope="col"
+                            className="hidden px-3 py-3.5 text-left text-sm font-semibold text-black lg:table-cell"
+                          >
+                            Description
+                          </th>
+                          <th
+                            scope="col"
+                            className="hidden px-3 py-3.5 text-left text-sm font-semibold text-black sm:table-cell"
+                          >
+                            Status
+                          </th>
+                          <th
+                            scope="col"
+                            className="px-3 py-3.5 text-left text-sm font-semibold text-black"
+                          >
+                            Deadline
+                          </th>
 
-                      <th
-                        scope="col"
-                        className="px-3 py-3.5 text-left text-sm font-semibold text-black"
-                      >
-                        Coworkers
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-gray-200 bg-whitepages">
-                    {projectsList?.map((item: any) => (
-                      <tr
-                        key={item.id}
-                        className="divide-x divide-gray-300 hover:bg-gray-200 hover:cursor-pointer"
-                        onClick={() => {
-                          router.push(`/projects/${item.id}`);
-                        }}
-                      >
-                        <td className="w-full max-w-0 py-4 pl-4 pr-3 text-sm sm:font-medium text-black sm:w-auto sm:max-w-none sm:pl-0">
-                          {item.name}
-                          <dl className="font-normal lg:hidden">
-                            <dt className="sr-only">Description</dt>
-                            <dd className="mt-1 truncate text-gray-700">
+                          <th
+                            scope="col"
+                            className="px-3 py-3.5 text-left text-sm font-semibold text-black"
+                          >
+                            Coworkers
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-gray-200 bg-whitepages">
+                        {projectsList?.map((item: any) => (
+                          <tr
+                            key={item.id}
+                            className="divide-x divide-gray-300 hover:bg-gray-200 hover:cursor-pointer"
+                            onClick={() => {
+                              router.push(`/projects/${item.id}`);
+                            }}
+                          >
+                            <td className="w-full max-w-0 py-4 pl-4 pr-3 text-sm sm:font-medium text-black sm:w-auto sm:max-w-none sm:pl-0">
+                              {item.name}
+                              <dl className="font-normal lg:hidden">
+                                <dt className="sr-only">Description</dt>
+                                <dd className="mt-1 truncate text-gray-700">
+                                  {item.description}
+                                </dd>
+                                <dt className="sr-only sm:hidden">Status</dt>
+                                <dd className="mt-1 truncate text-gray-500 sm:hidden">
+                                  {item.status == "Active" ? (
+                                    <span className="inline-flex items-center rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-800">
+                                      {item.status}
+                                    </span>
+                                  ) : (
+                                    <span className="inline-flex items-center rounded-full bg-indigo-100 px-2.5 py-0.5 text-xs font-medium text-indigo-800">
+                                      {item.status}
+                                    </span>
+                                  )}
+                                </dd>
+                              </dl>
+                            </td>
+                            <td className="hidden px-3 py-4 text-sm text-gray-500 lg:table-cell">
                               {item.description}
-                            </dd>
-                            <dt className="sr-only sm:hidden">Status</dt>
-                            <dd className="mt-1 truncate text-gray-500 sm:hidden">
+                            </td>
+                            <td className="hidden px-3 py-4 text-sm text-gray-500 sm:table-cell">
                               {item.status == "Active" ? (
                                 <span className="inline-flex items-center rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-800">
                                   {item.status}
@@ -402,47 +433,35 @@ export default function Projects({
                                   {item.status}
                                 </span>
                               )}
-                            </dd>
-                          </dl>
-                        </td>
-                        <td className="hidden px-3 py-4 text-sm text-gray-500 lg:table-cell">
-                          {item.description}
-                        </td>
-                        <td className="hidden px-3 py-4 text-sm text-gray-500 sm:table-cell">
-                          {item.status == "Active" ? (
-                            <span className="inline-flex items-center rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-800">
-                              {item.status}
-                            </span>
-                          ) : (
-                            <span className="inline-flex items-center rounded-full bg-indigo-100 px-2.5 py-0.5 text-xs font-medium text-indigo-800">
-                              {item.status}
-                            </span>
-                          )}
-                        </td>
-                        <td className="px-3 py-4 text-sm text-gray-500">
-                          {/* convert to only show date */}
-                          {item.deadline?.split("T")[0]}
-                        </td>
-                        <td className="px-3 py-4 text-sm text-gray-500">
-                          {item.project_users?.length === 0 && (
-                            <div className="flex items-center space-x-3">
-                              <div className="flex-shrink-0">-</div>
-                            </div>
-                          )}
-                          {item.project_users?.map((p: any) => (
-                            <div
-                              className="flex items-center space-x-3 text-xs sm:text-sm"
-                              key={p}
-                            >
-                              <div className="flex-shrink-0">{p}</div>
-                            </div>
-                          ))}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+                            </td>
+                            <td className="px-3 py-4 text-sm text-gray-500">
+                              {/* convert to only show date */}
+                              {item.deadline?.split("T")[0]}
+                            </td>
+                            <td className="px-3 py-4 text-sm text-gray-500">
+                              {item.project_users?.length === 0 && (
+                                <div className="flex items-center space-x-3">
+                                  <div className="flex-shrink-0">-</div>
+                                </div>
+                              )}
+                              {item.project_users?.map((p: any) => (
+                                <div
+                                  className="flex items-center space-x-3 text-xs sm:text-sm"
+                                  key={p}
+                                >
+                                  <div className="flex-shrink-0">{p}</div>
+                                </div>
+                              ))}
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                ) : (
+                  <div>Cards</div>
+                )}
+              </>
             )}
           </div>
         </div>
