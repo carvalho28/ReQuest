@@ -621,8 +621,8 @@ export default function Profile({
 
       <div className="flex flex-wrap bg-white rounded-lg shadow-lg">
         <div className="flex flex-wrap flex-1 w-3/4">
-          <div className="flex flex-row items-center justify-between w-full">
-            <div className="flex-1 p-6">
+          <div className="flex flex-row items-center justify-between w-full p-4 mt-4">
+            <div className="flex-1 border-r-2 border-primaryblue">
               <h3 className="text-xl font-bold flex justify-center">
                 Number of Projects
               </h3>
@@ -630,7 +630,7 @@ export default function Profile({
                 {nProjects}
               </div>
             </div>
-            <div className="flex-1 p-6">
+            <div className="flex-1  border-r-2 border-primaryblue">
               <h3 className="text-xl font-bold flex justify-center">
                 Req. Completed
               </h3>
@@ -638,7 +638,7 @@ export default function Profile({
                 {reqComplete}
               </div>
             </div>
-            <div className="flex-1 p-6">
+            <div className="flex-1 border-r-2 border-primaryblue">
               <h3 className="text-xl font-bold flex justify-center">
                 Forecast Accuracy
               </h3>
@@ -649,6 +649,7 @@ export default function Profile({
                   justifyContent: "center",
                   alignItems: "center",
                   marginBottom: "1em",
+                  marginLeft: "3em"
                 }}
               >
                 <div className="flex flex-row">
@@ -657,7 +658,7 @@ export default function Profile({
                     opts={{ renderer: "svg" }}
                     style={{
                       height: "10em",
-                      width: "16em",
+                      width: "12em",
                       margin: "0 auto",
                     }}
                   />
@@ -671,7 +672,7 @@ export default function Profile({
                       justifyContent: "start",
                       alignItems: "center",
                       marginTop: "1em",
-                      marginLeft: "-2em",
+                      marginLeft: "1.25em",
                     }}
                   >
                     <div
