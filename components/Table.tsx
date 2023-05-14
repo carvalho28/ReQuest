@@ -552,8 +552,8 @@ function Table({
     console.log(reqBody);
 
     const response = await fetch(
-      // "https://morning-flower-3545.fly.dev/api/ai/functional",
-      "http://localhost:8080/api/ai/functional",
+      "https://morning-flower-3545.fly.dev/api/ai/functional",
+      // "http://localhost:8080/api/ai/functional",
       {
         method: "POST",
         headers: {
@@ -595,7 +595,7 @@ function Table({
             />
             <table
               {...getTableProps()}
-              className="min-w-full divide-y divide-gray-200 shadow-md"
+              className="min-w-full divide-y divide-gray-200 shadow-md bg-white"
             >
               <thead className="bg-gray-10">
                 {headerGroups.map((headerGroup: any, i: number) => (

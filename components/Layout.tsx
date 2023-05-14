@@ -37,7 +37,7 @@ const navigation = [
   {
     name: "Projects",
     icon: FolderIcon,
-    href: "/projects/table",
+    href: "/projects",
     count: 0,
     current: false,
     children: [] as ProjectChildren[],

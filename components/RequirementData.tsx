@@ -380,11 +380,7 @@ const RequirementData = ({
                     </div>
                     <MultiselectPeople
                       onChange={(assignedTo) => changeAssignedTo(assignedTo)}
-                      // projectUserNames={projectUserIdsAndNames}
                       projectUserIdsAndNames={projectUserIdsAndNames}
-                      // selectedUserNames={
-                      //   requirementData.assigned_to as string[]
-                      // }
                       selectedUsers={requirementData.assigned_to as string[]}
                     />
                   </div>

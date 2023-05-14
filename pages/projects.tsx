@@ -13,7 +13,6 @@ import { useSupabaseClient, useUser } from "@supabase/auth-helpers-react";
 import { RealtimeChannel } from "@supabase/supabase-js";
 import { Database } from "@/types/supabase";
 import Tabs from "@/components/Tabs";
-import Image from "next/image";
 
 // dynamic imports
 import dynamic from "next/dynamic";
@@ -335,7 +334,7 @@ export default function Projects({
         avatar_url={avatar_url}
         projectChildren={projectsChildren}
       >
-        <div className="bg-white h-full p-6">
+        <div className="bg-white h-full p-6 shadow-lg rounded-xl py-16">
           <Tabs currentPage="table" tabs={tabs} />
           <div className="mt-10">
             <div className="px-4 sm:px-2">
