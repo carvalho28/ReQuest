@@ -5,9 +5,6 @@ on: [push]
 jobs:
   cypress-run:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./request-app
     steps:
       # Install NPM dependencies, cache them correctly
       - name: Checkout
@@ -27,6 +24,7 @@ jobs:
           NEXT_PUBLIC_IMAGE_DOMAINS: ${{secrets.NEXT_PUBLIC_IMAGE_DOMAINS}}
         uses: cypress-io/github-action@v5 # use the explicit version number
         with:
-          build: yarn run build
-          start: yarn start
+          build: yarn build
+          start: yarn dev
           config-file: ./cypress.config.ts
+          working-directory: ./request-app
