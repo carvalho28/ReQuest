@@ -1,5 +1,5 @@
 /** @type {import('next').NextConfig} */
-const {DOCS_URL} = process.env;
+const { DOCS_URL } = process.env;
 
 const nextConfig = {
   reactStrictMode: true,
@@ -10,19 +10,22 @@ const nextConfig = {
   async rewrites() {
     return [
       {
-        source: '/:path*',
-        destination: '/:path*',
+        source: "/:path*",
+        destination: "/:path*",
+        permanent: true,
       },
       {
-        source: '/docs',
+        source: "/docs",
         destination: `${DOCS_URL}/docs`,
+        permanent: true,
       },
       {
-        source: '/docs/:path*',
+        source: "/docs/:path*",
         destination: `${DOCS_URL}/docs/:path*`,
+        permanent: true,
       },
     ];
-  }
+  },
 };
 
 module.exports = nextConfig;
