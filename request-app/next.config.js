@@ -12,17 +12,14 @@ const nextConfig = {
       {
         source: "/:path*",
         destination: "/:path*",
-        permanent: true,
       },
       {
         source: "/docs",
         destination: `${DOCS_URL}/docs`,
-        permanent: true,
       },
       {
         source: "/docs/:path*",
         destination: `${DOCS_URL}/docs/:path*`,
-        permanent: true,
       },
     ];
   },
