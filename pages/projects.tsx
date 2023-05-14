@@ -13,6 +13,7 @@ import { useSupabaseClient, useUser } from "@supabase/auth-helpers-react";
 import { RealtimeChannel } from "@supabase/supabase-js";
 import { Database } from "@/types/supabase";
 import Tabs from "@/components/Tabs";
+import Image from "next/image";
 
 // dynamic imports
 import dynamic from "next/dynamic";
@@ -321,10 +322,6 @@ export default function Projects({
       .select("id");
     if (error) console.log(error);
     if (!data) return;
-
-    console.log(data);
-
-    console.log("Project updated");
   }
 
   return (
@@ -334,7 +331,7 @@ export default function Projects({
         avatar_url={avatar_url}
         projectChildren={projectsChildren}
       >
-        <div className="bg-white h-full p-6 shadow-lg rounded-xl py-16">
+        <div className="bg-white h-full p-6 shadow-lg rounded-xl pb-16 pt-4">
           <Tabs currentPage="table" tabs={tabs} />
           <div className="mt-10">
             <div className="px-4 sm:px-2">
@@ -517,17 +514,17 @@ export default function Projects({
             </div>
           </div>
         </div>
-        {/* <div className="w-full h-80 flex items-center justify-center mt-10"> */}
-        {/*   <Image */}
-        {/*     id="No ranking" */}
-        {/*     className="w-auto h-full" */}
-        {/*     src={"/projects.svg"} */}
-        {/*     alt="Cat" */}
-        {/*     width={100} */}
-        {/*     height={100} */}
-        {/*     priority */}
-        {/*   /> */}
-        {/* </div> */}
+        <div className="flex flex-col items-center justify-center mt-10">
+          <Image
+            id="Project Management"
+            className="w-96 h-auto flex-none py-3"
+            src={"/project-management.svg"}
+            alt="Project management"
+            width={100}
+            height={100}
+            priority
+          />
+        </div>
         <div>
           {showModal && (
             <div className="fixed z-10 inset-0 overflow-y-auto">
