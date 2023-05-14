@@ -5,6 +5,9 @@ on: [push]
 jobs:
   cypress-run:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./request-app
     steps:
       # Install NPM dependencies, cache them correctly
       - name: Checkout
@@ -26,4 +29,3 @@ jobs:
         with:
           build: yarn run build
           start: yarn start
-          working-directory: /request-app
