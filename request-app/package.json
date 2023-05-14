@@ -44,7 +44,7 @@
     "@tiptap/extension-task-list": "^2.0.3",
     "@tiptap/extension-text-style": "^2.0.0-beta.220",
     "@tiptap/pm": "^2.0.0-beta.220",
-    "@tiptap/react": "^2.0.0-beta.220",
+    "@tiptap/react": "^2.0.3",
     "@tiptap/starter-kit": "^2.0.3",
     "@uppy/core": "^3.1.2",
     "@uppy/dashboard": "^3.3.2",
