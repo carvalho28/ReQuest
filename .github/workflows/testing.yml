@@ -2,10 +2,6 @@ name: Cypress Tests
 
 on: [push]
 
-defaults:
-  run:
-    working-directory: ./request-app
-
 jobs:
   cypress-run:
     runs-on: ubuntu-latest
@@ -16,9 +12,11 @@ jobs:
       - name: Write the cypress.env.json file 📝
         run: |
           echo '${{ secrets.CYPRESS_ENV_CI }}' > cypress.env.json
+        working-directory: ./request-app
       - name: Write the .env with url
         run: |
           echo 'DOCS_URL=${{ secrets.SERVER_URL }}' > .env
+        working-directory: ./request-app
       # and run all Cypress tests
       - name: Cypress run
         env:
@@ -30,3 +28,4 @@ jobs:
         with:
           build: yarn run build
           start: yarn start
+          working-directory: ./request-app
