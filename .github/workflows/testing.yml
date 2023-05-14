@@ -12,6 +12,9 @@ jobs:
       - name: Write the cypress.env.json file 📝
         run: |
           echo '${{ secrets.CYPRESS_ENV_CI }}' > cypress.env.json
+      - name: Write the .env with url 
+        run: |
+          echo '${{ secrets.SERVER_URL }}' > .env
       # and run all Cypress tests
       - name: Cypress run
         env:

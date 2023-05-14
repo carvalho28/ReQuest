@@ -40,3 +40,6 @@ next-env.d.ts
 cypress.env.json
 # Local Netlify folder
 .netlify
+
+# turbo 
+*.turbo
