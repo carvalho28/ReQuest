@@ -2,7 +2,7 @@ version: 2
 updates:
   # Enable version updates for Python
   - package-ecosystem: "npm"
-    directory: "/"
+    directory: "/request-app"
     # Check for updates once a week
     schedule:
       interval: "weekly"
