@@ -15,7 +15,7 @@ describe("Profile page", () => {
 
     // it should say "Profile" somewhere on the page
     cy.get("div").contains("Profile");
-    cy.get("h3").contains("Global Stats");
+    cy.get("h3").contains("Number of Projects");
   });
 
   // check if avatar is visible
@@ -32,7 +32,9 @@ describe("Profile page", () => {
     cy.get("#Profile").click();
 
     // check if the global stats card is visible
-    cy.get("h3").contains("Global Stats");
+    cy.get("h3").contains("Number of Projects");
+    cy.get("h3").contains("Req. Completed");
+    cy.get("h3").contains("Forecast Accuracy");
 
     // check if the Projects card is visible
     cy.get("h3").contains("Projects");

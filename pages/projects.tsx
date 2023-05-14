@@ -3,16 +3,22 @@ import { createServerSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import { GetServerSidePropsContext } from "next";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { RiArrowRightCircleFill, RiArrowLeftCircleFill } from "react-icons/ri";
+import {
+  RiArrowRightCircleFill,
+  RiArrowLeftCircleFill,
+  RiArrowRightFill,
+} from "react-icons/ri";
 import { PlusIcon, UserIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { useSupabaseClient, useUser } from "@supabase/auth-helpers-react";
 import { RealtimeChannel } from "@supabase/supabase-js";
 import { Database } from "@/types/supabase";
 import Tabs from "@/components/Tabs";
+import Image from "next/image";
 
 // dynamic imports
 import dynamic from "next/dynamic";
 import { ProjectChildren } from "@/components/utils/sidebarHelper";
+import { renderProjectStatusBadge } from "@/components/utils/general";
 const ErrorMessage = dynamic(() => import("@/components/ErrorMessage"), {
   ssr: false,
 });
@@ -101,10 +107,23 @@ export default function Projects({
   projects,
   projectsChildren,
 }: any) {
-  const tabs = [
-    { name: "Table", href: "/projects/table", current: true },
-    { name: "Cards", href: "/projects/cards", current: false },
-  ];
+  const [isTable, setIsTable] = useState(true);
+
+  // funtion to change isTable and current tab
+  function changeIsTable(tabName: string) {
+    setIsTable(tabName === "Table");
+    setTabs((prevTabs) =>
+      prevTabs.map((tab) => ({
+        ...tab,
+        current: tab.name === tabName,
+      }))
+    );
+  }
+
+  const [tabs, setTabs] = useState([
+    { name: "Table", onClick: () => changeIsTable("Table"), current: true },
+    { name: "Cards", onClick: () => changeIsTable("Cards"), current: false },
+  ]);
 
   const router = useRouter();
   const [showModal, setShowModal] = useState(false);
@@ -303,10 +322,6 @@ export default function Projects({
       .select("id");
     if (error) console.log(error);
     if (!data) return;
-
-    console.log(data);
-
-    console.log("Project updated");
   }
 
   return (
@@ -316,135 +331,199 @@ export default function Projects({
         avatar_url={avatar_url}
         projectChildren={projectsChildren}
       >
-        <Tabs currentPage="table" tabs={tabs} />
-        <div className="mt-10">
-          <div className="px-4 sm:px-2">
-            <div className="sm:flex sm:items-center">
-              <div className="sm:flex-auto">
-                <h1 className="text-base font-semibold leading-6 text-gray-900">
-                  Your projects
-                </h1>
+        <div className="bg-white h-full p-6 shadow-lg rounded-xl pb-16 pt-4">
+          <Tabs currentPage="table" tabs={tabs} />
+          <div className="mt-10">
+            <div className="px-4 sm:px-2">
+              <div className="sm:flex sm:items-center">
+                <div className="sm:flex-auto">
+                  <h1 className="text-base font-semibold leading-6 text-gray-900">
+                    Your projects
+                  </h1>
+                </div>
+                <div className="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
+                  <button
+                    type="button"
+                    className="block rounded-md bg-contrast py-2 px-3 text-center text-sm font-semibold text-white shadow-sm hover:bg-contrasthover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-contrast"
+                    onClick={() => {
+                      toggleModal();
+                    }}
+                  >
+                    Add project
+                  </button>
+                </div>
               </div>
-              <div className="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
-                <button
-                  type="button"
-                  className="block rounded-md bg-contrast py-2 px-3 text-center text-sm font-semibold text-white shadow-sm hover:bg-contrasthover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-contrast"
-                  onClick={() => {
-                    toggleModal();
-                  }}
-                >
-                  Add project
-                </button>
-              </div>
-            </div>
-            {projectsList && (
-              <div className="-mx-4 mt-8 sm:-mx-0">
-                <table className="min-w-full divide-y divide-gray-300">
-                  <thead>
-                    <tr className="divide-x divide-gray-300">
-                      <th
-                        scope="col"
-                        className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-black sm:pl-0"
-                      >
-                        Name
-                      </th>
-                      <th
-                        scope="col"
-                        className="hidden px-3 py-3.5 text-left text-sm font-semibold text-black lg:table-cell"
-                      >
-                        Description
-                      </th>
-                      <th
-                        scope="col"
-                        className="hidden px-3 py-3.5 text-left text-sm font-semibold text-black sm:table-cell"
-                      >
-                        Status
-                      </th>
-                      <th
-                        scope="col"
-                        className="px-3 py-3.5 text-left text-sm font-semibold text-black"
-                      >
-                        Deadline
-                      </th>
-
-                      <th
-                        scope="col"
-                        className="px-3 py-3.5 text-left text-sm font-semibold text-black"
-                      >
-                        Coworkers
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-gray-200 bg-whitepages">
-                    {projectsList?.map((item: any) => (
-                      <tr
-                        key={item.id}
-                        className="divide-x divide-gray-300 hover:bg-gray-200 hover:cursor-pointer"
-                        onClick={() => {
-                          router.push(`/projects/${item.id}`);
-                        }}
-                      >
-                        <td className="w-full max-w-0 py-4 pl-4 pr-3 text-sm sm:font-medium text-black sm:w-auto sm:max-w-none sm:pl-0">
-                          {item.name}
-                          <dl className="font-normal lg:hidden">
-                            <dt className="sr-only">Description</dt>
-                            <dd className="mt-1 truncate text-gray-700">
-                              {item.description}
-                            </dd>
-                            <dt className="sr-only sm:hidden">Status</dt>
-                            <dd className="mt-1 truncate text-gray-500 sm:hidden">
-                              {item.status == "Active" ? (
-                                <span className="inline-flex items-center rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-800">
-                                  {item.status}
-                                </span>
-                              ) : (
-                                <span className="inline-flex items-center rounded-full bg-indigo-100 px-2.5 py-0.5 text-xs font-medium text-indigo-800">
-                                  {item.status}
-                                </span>
-                              )}
-                            </dd>
-                          </dl>
-                        </td>
-                        <td className="hidden px-3 py-4 text-sm text-gray-500 lg:table-cell">
-                          {item.description}
-                        </td>
-                        <td className="hidden px-3 py-4 text-sm text-gray-500 sm:table-cell">
-                          {item.status == "Active" ? (
-                            <span className="inline-flex items-center rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-800">
-                              {item.status}
-                            </span>
-                          ) : (
-                            <span className="inline-flex items-center rounded-full bg-indigo-100 px-2.5 py-0.5 text-xs font-medium text-indigo-800">
-                              {item.status}
-                            </span>
-                          )}
-                        </td>
-                        <td className="px-3 py-4 text-sm text-gray-500">
-                          {/* convert to only show date */}
-                          {item.deadline?.split("T")[0]}
-                        </td>
-                        <td className="px-3 py-4 text-sm text-gray-500">
-                          {item.project_users?.length === 0 && (
-                            <div className="flex items-center space-x-3">
-                              <div className="flex-shrink-0">-</div>
-                            </div>
-                          )}
-                          {item.project_users?.map((p: any) => (
-                            <div
-                              className="flex items-center space-x-3 text-xs sm:text-sm"
-                              key={p}
+              {projectsList && (
+                <>
+                  {isTable ? (
+                    <div className="-mx-4 mt-8 sm:-mx-0">
+                      <table className="min-w-full divide-y divide-gray-300">
+                        <thead>
+                          <tr className="divide-x divide-gray-300">
+                            <th
+                              scope="col"
+                              className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-black sm:pl-0"
                             >
-                              <div className="flex-shrink-0">{p}</div>
-                            </div>
+                              Name
+                            </th>
+                            <th
+                              scope="col"
+                              className="hidden px-3 py-3.5 text-left text-sm font-semibold text-black lg:table-cell"
+                            >
+                              Description
+                            </th>
+                            <th
+                              scope="col"
+                              className="hidden px-3 py-3.5 text-left text-sm font-semibold text-black sm:table-cell"
+                            >
+                              Status
+                            </th>
+                            <th
+                              scope="col"
+                              className="px-3 py-3.5 text-left text-sm font-semibold text-black"
+                            >
+                              Deadline
+                            </th>
+
+                            <th
+                              scope="col"
+                              className="px-3 py-3.5 text-left text-sm font-semibold text-black"
+                            >
+                              Coworkers
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody className="divide-y divide-gray-200">
+                          {projectsList?.map((item: any) => (
+                            <tr
+                              key={item.id}
+                              className="divide-x divide-gray-300 hover:bg-gray-200 hover:cursor-pointer"
+                              onClick={() => {
+                                router.push(`/projects/${item.id}`);
+                              }}
+                            >
+                              <td className="w-full max-w-0 py-4 pl-4 pr-3 text-sm sm:font-medium text-black sm:w-auto sm:max-w-none sm:pl-0">
+                                {item.name}
+                                <dl className="font-normal lg:hidden">
+                                  <dt className="sr-only">Description</dt>
+                                  <dd className="mt-1 truncate text-gray-700">
+                                    {item.description}
+                                  </dd>
+                                  <dt className="sr-only sm:hidden">Status</dt>
+                                  <dd className="mt-1 truncate text-gray-500 sm:hidden">
+                                    {item.status == "Active" ? (
+                                      <span className="inline-flex items-center rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-800">
+                                        {item.status}
+                                      </span>
+                                    ) : (
+                                      <span className="inline-flex items-center rounded-full bg-indigo-100 px-2.5 py-0.5 text-xs font-medium text-indigo-800">
+                                        {item.status}
+                                      </span>
+                                    )}
+                                  </dd>
+                                </dl>
+                              </td>
+                              <td className="hidden px-3 py-4 text-sm text-gray-500 lg:table-cell">
+                                {item.description}
+                              </td>
+                              <td className="hidden px-3 py-4 text-sm text-gray-500 sm:table-cell">
+                                {renderProjectStatusBadge(item.status, 4, 0.3)}
+                              </td>
+                              <td className="px-3 py-4 text-sm text-gray-500">
+                                {/* convert to only show date */}
+                                {item.deadline?.split("T")[0]}
+                              </td>
+                              <td className="px-3 py-4 text-sm text-gray-500">
+                                {item.project_users?.length === 0 && (
+                                  <div className="flex items-center space-x-3">
+                                    <div className="flex-shrink-0">-</div>
+                                  </div>
+                                )}
+                                {item.project_users?.map((p: any) => (
+                                  <div
+                                    className="flex items-center space-x-3 text-xs sm:text-sm"
+                                    key={p}
+                                  >
+                                    <div className="flex-shrink-0">{p}</div>
+                                  </div>
+                                ))}
+                              </td>
+                            </tr>
                           ))}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            )}
+                        </tbody>
+                      </table>
+                    </div>
+                  ) : (
+                    <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 mt-10">
+                      {projectsList?.map((item: any) => (
+                        <div
+                          key={item.id}
+                          className="bg-white shadow-md rounded-lg overflow-hidden hover:cursor-pointer hover:bg-gray-200"
+                          onClick={() => {
+                            router.push(`/projects/${item.id}`);
+                          }}
+                        >
+                          <div className="p-4">
+                            <h3 className="text-lg font-medium text-black mb-2">
+                              {item.name}
+                            </h3>
+                            <p className="text-gray-500 text-sm mb-4">
+                              {item.description}
+                            </p>
+                            <div className="flex justify-between">
+                              <p className="text-gray-500 text-sm">
+                                {/* {item.status} */}
+                                {renderProjectStatusBadge(item.status, 4, 1)}
+                              </p>
+                              <p className="text-gray-500 text-sm">
+                                {item.deadline?.split("T")[0]}
+                              </p>
+                            </div>
+                            <div className="flex flex-wrap mt-4 flex-col">
+                              {item.project_users?.length === 0 && (
+                                <div className="flex items-center space-x-3">
+                                  <div className="flex-shrink-0">-</div>
+                                </div>
+                              )}
+
+                              <div className="text-gray-500 text-sm mt-2">
+                                Coworkers:
+                              </div>
+
+                              <div className="flex flex-wrap mt-2">
+                                {item.project_users?.map((coworker: any) => (
+                                  <div
+                                    className="flex items-center space-x-3 text-xs sm:text-sm"
+                                    key={coworker}
+                                  >
+                                    <div className="flex flex-row flex-shrink-0 items-center">
+                                      <RiArrowRightFill className="mr-2" />
+                                      {coworker}
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>{" "}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </>
+              )}
+            </div>
           </div>
+        </div>
+        <div className="flex flex-col items-center justify-center mt-10">
+          <Image
+            id="Project Management"
+            className="w-96 h-auto flex-none py-3"
+            src={"/project-management.svg"}
+            alt="Project management"
+            width={100}
+            height={100}
+            priority
+          />
         </div>
         <div>
           {showModal && (

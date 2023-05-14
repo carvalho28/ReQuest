@@ -127,7 +127,7 @@ function renderProjectStatusBadge(
         <span
           className={`inline-flex items-center px-${sizex} py-${sizey} rounded-full text-sm font-medium bg-green-100 text-green-800`}
         >
-          <RiCheckboxBlankCircleFill className="mr-1" />
+          {/* <RiCheckboxBlankCircleFill className="mr-1" /> */}
           Active
         </span>
       </div>
@@ -137,7 +137,7 @@ function renderProjectStatusBadge(
       <span
         className={`inline-flex items-center px-${sizex} py-${sizey} rounded-full text-sm font-medium bg-yellow-100 text-yellow-800`}
       >
-        <RiCheckboxBlankCircleFill className="mr-1" />
+        {/* <RiCheckboxBlankCircleFill className="mr-1" /> */}
         On Hold
       </span>
     );
@@ -146,7 +146,7 @@ function renderProjectStatusBadge(
       <span
         className={`inline-flex items-center px-${sizex} py-${sizey} rounded-full text-sm font-medium bg-purple-100 text-purple-800`}
       >
-        <RiCheckboxBlankCircleFill className="mr-1" />
+        {/* <RiCheckboxBlankCircleFill className="mr-1" /> */}
         Completed
       </span>
     );
@@ -155,7 +155,7 @@ function renderProjectStatusBadge(
       <span
         className={`inline-flex items-center px-${sizex} py-${sizey} rounded-full text-sm font-medium bg-red-100 text-red-800`}
       >
-        <RiCheckboxBlankCircleFill className="mr-1" />
+        {/* <RiCheckboxBlankCircleFill className="mr-1" /> */}
         Cancelled
       </span>
     );
