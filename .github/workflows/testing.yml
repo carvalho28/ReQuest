@@ -2,6 +2,10 @@ name: Cypress Tests
 
 on: [push]
 
+defaults:
+  run:
+    working-directory: ./request-app
+
 jobs:
   cypress-run:
     runs-on: ubuntu-latest
@@ -24,7 +28,5 @@ jobs:
           NEXT_PUBLIC_IMAGE_DOMAINS: ${{secrets.NEXT_PUBLIC_IMAGE_DOMAINS}}
         uses: cypress-io/github-action@v5 # use the explicit version number
         with:
-          build: yarn build
-          start: yarn dev
-          config-file: ./cypress.config.ts
-          working-directory: ./request-app
+          build: yarn run build
+          start: yarn start
