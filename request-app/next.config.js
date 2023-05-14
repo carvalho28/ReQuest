@@ -15,7 +15,7 @@ const nextConfig = {
       },
       {
         source: "/docs",
-        destination: `${DOCS_URL}/docs`,
+        destination: `${DOCS_URL}/docs/`,
       },
       {
         source: "/docs/:path*",
