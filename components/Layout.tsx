@@ -20,7 +20,7 @@ import Link from "next/link";
 import { ChevronDownIcon } from "@heroicons/react/20/solid";
 import { ProjectChildren } from "./utils/sidebarHelper";
 import { renderImage } from "./utils/general";
-import { RiToolsLine } from "react-icons/ri";
+import { RiQuestionLine, RiToolsLine } from "react-icons/ri";
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
@@ -70,6 +70,13 @@ const navigation = [
     count: 0,
     current: false,
   },
+  {
+    name: "Help",
+    icon: RiQuestionLine,
+    href: "/help",
+    count: 0,
+    currennt: false,
+  },
 ];
 
 interface LayoutProps {
@@ -115,8 +122,8 @@ const Layout = ({
   }, []);
 
   useEffect(() => {
-    setNavItems((prevNavItems) =>
-      prevNavItems.map((item) => {
+    setNavItems((prevNavItems: any) =>
+      prevNavItems.map((item: any) => {
         if (item.name.toLowerCase() === currentPage.toLowerCase()) {
           return { ...item, current: true };
         } else {
@@ -126,8 +133,8 @@ const Layout = ({
     );
     // add project children to navItems
     if (projectChildren) {
-      setNavItems((prevNavItems) =>
-        prevNavItems.map((item) => {
+      setNavItems((prevNavItems: any) =>
+        prevNavItems.map((item: any) => {
           if (item.name.toLowerCase() === "projects") {
             return { ...item, children: projectChildren };
           } else {
