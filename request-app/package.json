@@ -57,7 +57,7 @@
     "echarts-for-react": "^3.0.2",
     "eslint": "8.36.0",
     "eslint-config-next": "13.2.4",
-    "lowlight": "^2.8.1",
+    "lowlight": "^2.9.0",
     "moment": "^2.29.4",
     "next": "13.2.4",
     "openai": "^3.2.1",
