@@ -223,18 +223,20 @@ function GlobalFilter({
         />
       </div>
       <div className="flex items-end">
-        <CSVLink
-          data={requirements}
-          filename={"requirements.csv"}
-          className="btn text-contrast hover:text-contrasthover bg-transparent border-0 hover:bg-purple-200"
-        >
-          {/* download to excel icon */}
-          <RiDownloadLine
-            className="h-5 w-5"
-            aria-hidden="true"
-            title="Download to Excel"
-          />
-        </CSVLink>
+        <>
+          <CSVLink
+            data={requirements}
+            filename={"requirements.csv"}
+            className="btn text-contrast hover:text-contrasthover bg-transparent border-0 hover:bg-purple-200"
+          >
+            {/* download to excel icon */}
+            <RiDownloadLine
+              className="h-5 w-5"
+              aria-hidden="true"
+              title="Download to Excel"
+            />
+          </CSVLink>
+        </>
       </div>
     </div>
   );
