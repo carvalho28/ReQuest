@@ -1,6 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   basePath: "/docs",
+  trailingSlash: false,
 };
 
 const withNextra = require("nextra")({
