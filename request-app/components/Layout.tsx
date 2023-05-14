@@ -71,9 +71,9 @@ const navigation = [
     current: false,
   },
   {
-    name: "Help",
+    name: "Docs",
     icon: RiQuestionLine,
-    href: "/help",
+    href: "/docs",
     count: 0,
     currennt: false,
   },
@@ -274,6 +274,8 @@ const Layout = ({
                         {navItems.map((item) => (
                           <Link
                             key={item.name}
+                            // href={item.href}
+                            // if docs open in new tab
                             href={item.href}
                             className={classNames(
                               item.current
@@ -561,6 +563,7 @@ const Layout = ({
                     <Link
                       key={item.name}
                       href={item.href}
+                      target={item.name === "Docs" ? "_blank" : "_self"}
                       className={classNames(
                         item.current
                           ? "bg-whitepages text-black"

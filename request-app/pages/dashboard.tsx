@@ -66,7 +66,7 @@ export default function Dashboard({ avatar_url, projectsChildren }: any) {
       avatar_url={avatar_url}
       projectChildren={projectsChildren}
     >
-      Dashboard
+      Dashboard2
     </Layout>
   );
 }
