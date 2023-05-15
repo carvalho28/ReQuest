@@ -305,6 +305,7 @@ export default function Profile({ avatar_url, projectsChildren }: any) {
   async function updateAvatar() {
     const json = avatarObject;
     if (!json) return;
+    console.log(json);
 
     setShowProgress(true);
 

@@ -78,11 +78,13 @@ export default function Register() {
             data: {
               email: email,
               name: name,
-              avatar_url: process.env.NEXT_PUBLIC_DEFAULT_AVATAR,
+              created_at: new Date().toISOString(),
+              updated_at: new Date().toISOString(),
             },
           },
         });
         if (resp.error) {
+          console.log(resp.error);
           setErrorMessage(resp.error.message);
           setLoading(false);
         }
@@ -95,6 +97,7 @@ export default function Register() {
         }
       }
     } catch (error) {
+      console.log("Erro:", error);
       throw error;
     }
   }
