@@ -613,7 +613,8 @@ export default function Projects({
                                 maxLength={125}
                                 name="description"
                                 id="description"
-                                className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-80 md:w-96 sm:text-sm border-gray-300 rounded-md"
+                                className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 
+                                block w-80 md:w-96 sm:text-sm border-gray-300 rounded-md"
                                 onChange={(e) => setDescription(e.target.value)}
                               />
                             </div>

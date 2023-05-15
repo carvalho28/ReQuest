@@ -60,8 +60,8 @@ async function isFunctional(requirement) {
       messages: [
         {
           role: "user",
-          content: `The following requiremtent is functional or non-functional? 
-          Answer with "functional" or "non-functional". ${requirement}`,
+          content: `The following requirement: ${requirement}, is functional or non-functional? 
+          Answer with "functional" or "non-functional".`,
         },
       ],
       max_tokens: 200,
