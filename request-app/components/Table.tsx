@@ -745,7 +745,7 @@ function Table({
                       className="text-2xl text-black font-semibold text-center"
                       id="modal-headline"
                     >
-                      New Project
+                      New Requirement
                     </h3>
                   </div>
                   {/* name */}
@@ -783,12 +783,15 @@ function Table({
                           Name
                         </label>
                         <div className="mt-1">
-                          <input
-                            type="text"
+                          <textarea
+                            // type="text"
                             name="name"
+                            rows={5}
                             id="name"
                             required
-                            className="shadow-sm focus:ring-contrat focus:border-contrast block w-80 md:w-96 sm:text-sm border-gray-300 rounded-md"
+                            className="shadow-sm focus:ring-contrat
+                            focus:border-contrast block w-80 md:w-96 sm:text-sm 
+                            border-gray-300 rounded-md h-20"
                             onChange={(e) => setRequirementName(e.target.value)}
                           />
                         </div>
