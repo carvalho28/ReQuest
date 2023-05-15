@@ -70,12 +70,18 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
     }
   );
 
+  // get all users i have interected with, which means are in a project with me
+  const { data: connectedUsers, error: errorConnectedUsers } =
+    await supabase.rpc("get_connected_users", { my_user_id: user?.id });
+  if (errorConnectedUsers) console.log(errorConnectedUsers);
+
   return {
     props: {
       avatar_url: data[0].avatar_url,
       user_data: userData,
       projectsChildren: projectsChildren,
       dataProjects: dataProjects,
+      connectedUsers: connectedUsers,
     },
   };
 };
@@ -85,6 +91,7 @@ export default function Profile({
   user_data,
   projectsChildren,
   dataProjects,
+  connectedUsers,
 }: any) {
   const supabaseClient = useSupabaseClient();
   const user = useUser();
@@ -132,6 +139,8 @@ export default function Profile({
   }
 
   const avatarToRender = renderImage(avatar_url);
+
+  console.log(connectedUsers);
 
   return (
     <Layout
@@ -231,23 +240,8 @@ export default function Profile({
                   className="flex gap-x-2 items-center bg-gray-100 rounded-lg p-2 px-10
                   hover:bg-gray-200 hover:cursor-pointer"
                   onClick={() => router.push(`/projects/${item.id}`)}
+                  key={item.id}
                 >
-                  {item.icon}
-                  <span className="text-lg font-mono">{item.name}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-          <div className="flex flex-col items-center w-1/4 justify-center">
-            <h3 className="text-xl font-bold">Projects</h3>
-            <div className="flex flex-col gap-y-4 mt-4 overflow-y-scroll h-60 scroll">
-              {dataProjects.map((item: any) => (
-                <div
-                  className="flex gap-x-2 items-center bg-gray-100 rounded-lg p-2 px-10
-                  hover:bg-gray-200 hover:cursor-pointer"
-                  onClick={() => router.push(`/projects/${item.id}`)}
-                >
-                  {item.icon}
                   <span className="text-lg font-mono">{item.name}</span>
                 </div>
               ))}
@@ -260,6 +254,53 @@ export default function Profile({
               className="w-72 h-auto flex-none py-3"
               src={"/business-analytics.svg"}
               alt="Business Analytics"
+              width={100}
+              height={100}
+              priority
+            />
+          </div>
+
+          <div className="flex flex-col items-center w-1/4 justify-center">
+            <h3 className="text-xl font-bold">Connected Users</h3>
+            <div className="flex flex-col gap-y-4 mt-4 overflow-y-scroll h-60 scroll">
+
+              {connectedUsers.map((item: any) => (
+                <div
+                  key={item.id}
+                  className="flex flex-row rounded-lg border-2 border-gray-100 bg-white px-10 items-center p-2"
+                >
+                  <dt className="flex flex-col items-center justify-center ">
+                    <div className="px-2">
+                      <Image
+                        className="h-12 w-12 rounded-full border-2 border-xl border-gray-200"
+                        alt="avatar"
+                        src={
+                          "data:image/svg+xml," + renderImage(item.avatar_url)
+                        }
+                        width={30}
+                        height={30}
+                      />
+                    </div>
+                  </dt>
+                  {/* image */}
+                  <div className="flex flex-col items-start ml-2 justify-center">
+                    <div className="flex flex-row items-center">
+                      <div className="ml-1 text-md font-medium text-gray-900 truncate md:w-24 w-16">
+                        {item.name}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="flex flex-col justify-center items-center w-1/4">
+            <Image
+              id="Connecting Teams"
+              className="w-72 h-auto flex-none py-3"
+              src={"/connecting-teams.svg"}
+              alt="Connecting Teams"
               width={100}
               height={100}
               priority
