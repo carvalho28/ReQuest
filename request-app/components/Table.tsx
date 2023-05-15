@@ -138,7 +138,9 @@ export function NameProject({ value, row, setRequirement }: any) {
   if (value) {
     return (
       <span>
-        {value}
+        {/* {value} */}
+        {/* if more than 20 chars, add ... */}
+        {value.length > 30 ? value.substring(0, 30) + "..." : value}
         <label
           htmlFor="my-modal-5"
           onClick={() => handleCellClick(row.original)}
