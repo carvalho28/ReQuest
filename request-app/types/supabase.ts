@@ -83,6 +83,7 @@ export interface Database {
       profiles: {
         Row: {
           avatar_url: Json | null
+          created_at: string | null
           email: string
           id: string
           level: number | null
@@ -94,6 +95,7 @@ export interface Database {
         }
         Insert: {
           avatar_url?: Json | null
+          created_at?: string | null
           email: string
           id: string
           level?: number | null
@@ -105,6 +107,7 @@ export interface Database {
         }
         Update: {
           avatar_url?: Json | null
+          created_at?: string | null
           email?: string
           id?: string
           level?: number | null
