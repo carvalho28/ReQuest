@@ -156,6 +156,14 @@ export function NameProject({ value, row, setRequirement }: any) {
   }
 }
 
+export function IdentifierProject({ value }: any) {
+  if (value) {
+    return <span>{value}</span>;
+  } else {
+    <></>;
+  }
+}
+
 function createNewRequirement(handleClickPopup: any) {
   handleClickPopup();
 }
@@ -373,6 +381,11 @@ function Table({
   const columns: Column<ColumnsReq>[] = useMemo(
     () => [
       {
+        Header: "ID",
+        accessor: "identifier",
+        Cell: IdentifierProject as any,
+      },
+      {
         Header: "Name",
         accessor: "name",
         Cell: ({ value, row }: any) => (
@@ -438,7 +451,8 @@ function Table({
             status,
             closed_at,
             closed_by,
-            type
+            type,
+            identifier
           `
         )
 
@@ -476,6 +490,7 @@ function Table({
             updated_at: req.updated_at,
             updated_by: req.updated_by,
             type: req.type,
+            identifier: req.identifier,
           };
         })
       );
@@ -545,43 +560,51 @@ function Table({
   }, [setPageSize]); //set according to your preferrence
 
   const [requirementType, setRequirementType] = useState<undefined | string>(
-    ""
+    "functional"
   );
   const [requirementTypeAI, setRequirementTypeAI] = useState<
     undefined | string
-  >("");
+  >("functional");
   // call api to verify functional/non-functional
   async function isFunctional() {
     const requirement = requirementName;
     const reqBody = JSON.stringify({ requirement });
     console.log(reqBody);
 
-    const response = await fetch(
-      "https://morning-flower-3545.fly.dev/api/ai/functional",
-      // "http://localhost:8080/api/ai/functional",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: reqBody,
-      }
-    );
+    try {
+      const response = await fetch(
+        "https://morning-flower-3545.fly.dev/api/ai/functional",
+        // "http://localhost:8080/api/ai/functional",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: reqBody,
+        }
+      );
 
-    // if there was an error, then return
-    if (!response.ok) {
+      // if there was an error, then return
+      if (!response.ok) {
+        setErrorMessage("There was an error");
+        setError(true);
+        return;
+      }
+      const data = await response.json();
+      let answer = data.answer;
+      console.log(answer);
+
+      // remove the . in the end
+      answer = answer.replace(".", "");
+
+      setRequirementType(answer || "functional");
+      setRequirementTypeAI(answer || "functional");
+    } catch (err) {
       setErrorMessage("There was an error");
       setError(true);
+      console.log(err);
       return;
     }
-    const data = await response.json();
-    let answer = data.answer;
-
-    // remove the . in the end
-    answer = answer.replace(".", "");
-
-    setRequirementType(answer);
-    setRequirementTypeAI(answer);
   }
 
   // Render the UI for your table and the styles
