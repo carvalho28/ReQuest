@@ -230,15 +230,15 @@ export default function Profile({
         </div>
       </div>
 
-      <div className="flex gap-x-2 flex-col gap-y-4 sm:flex-row mt-8 h-96">
-        <div className="flex p-5 md:p-6 bg-white rounded-lg shadow-lg w-full">
-          <div className="flex flex-col items-center w-1/4 justify-center">
+      <div className="flex gap-x-2 flex-col gap-y-4 sm:flex-row mt-8 md:h-96 h-fit">
+        <div className="flex p-5 md:p-6 bg-white rounded-lg shadow-lg w-full md:flex-row flex-col">
+          <div className="flex flex-col items-center md:w-1/4 justify-center">
             <h3 className="text-xl font-bold">Projects</h3>
-            <div className="flex flex-col gap-y-4 mt-4 overflow-y-scroll h-60 scroll">
+            <div className={`flex flex-col gap-y-4 mt-4 overflow-y-scroll min-h-fit h-60 scroll ${dataProjects.length >= 6 ? "scrollbar" : ""}`}>
               {dataProjects.map((item: any) => (
                 <div
-                  className="flex gap-x-2 items-center bg-gray-100 rounded-lg p-2 px-10
-                  hover:bg-gray-200 hover:cursor-pointer"
+                  className="flex flex-row rounded-lg border-2 border-gray-100 bg-white w-56
+                  items-center p-2 justify-center h-12 hover:bg-gray-100 hover:cursor-pointer"
                   onClick={() => router.push(`/projects/${item.id}`)}
                   key={item.id}
                 >
@@ -248,7 +248,7 @@ export default function Profile({
             </div>
           </div>
 
-          <div className="flex flex-col justify-center items-center w-1/4">
+          <div className="flex flex-col justify-center items-center md:w-1/4 w-full md:border-r-2 md:border-gray-200">
             <Image
               id="Business Analytics"
               className="w-72 h-auto flex-none py-3"
@@ -260,19 +260,18 @@ export default function Profile({
             />
           </div>
 
-          <div className="flex flex-col items-center w-1/4 justify-center">
+          <div className="flex flex-col items-center md:w-1/4 w-full justify-center md:mt-0 mt-16">
             <h3 className="text-xl font-bold">Connected Users</h3>
-            <div className="flex flex-col gap-y-4 mt-4 overflow-y-scroll h-60 scroll">
-
+            <div className={`flex flex-col gap-y-4 mt-4 overflow-y-scroll min-h-fit h-60 scroll ${connectedUsers.length >= 6 ? "scrollbar" : ""}`}>
               {connectedUsers.map((item: any) => (
                 <div
                   key={item.id}
-                  className="flex flex-row rounded-lg border-2 border-gray-100 bg-white px-10 items-center p-2"
+                  className="flex flex-row rounded-lg border-2 border-gray-100 bg-white w-56 items-center p-2"
                 >
                   <dt className="flex flex-col items-center justify-center ">
                     <div className="px-2">
                       <Image
-                        className="h-12 w-12 rounded-full border-2 border-xl border-gray-200"
+                        className="h-8 w-8 rounded-full border-2 border-xl border-gray-200"
                         alt="avatar"
                         src={
                           "data:image/svg+xml," + renderImage(item.avatar_url)
@@ -285,7 +284,7 @@ export default function Profile({
                   {/* image */}
                   <div className="flex flex-col items-start ml-2 justify-center">
                     <div className="flex flex-row items-center">
-                      <div className="ml-1 text-md font-medium text-gray-900 truncate md:w-24 w-16">
+                      <div className="ml-1 text-md font-medium text-gray-900 truncate md:w-28 w-16">
                         {item.name}
                       </div>
                     </div>
@@ -295,7 +294,7 @@ export default function Profile({
             </div>
           </div>
 
-          <div className="flex flex-col justify-center items-center w-1/4">
+          <div className="flex flex-col justify-center items-center md:w-1/4 w-full">
             <Image
               id="Connecting Teams"
               className="w-72 h-auto flex-none py-3"
