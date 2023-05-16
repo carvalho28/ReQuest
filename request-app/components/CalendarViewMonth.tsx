@@ -116,7 +116,9 @@ const CalendarViewMonth = ({
                               {/* {event.name} */}
                               {/* for medium screens add ... to name */}
                               <span className="hidden lg2:flex">
-                                {event.name}
+                                {event.name.length > 20
+                                  ? event.name.substring(0, 20) + "..."
+                                  : event.name}
                               </span>
                               <span className="lg2:hidden">
                                 {event.name.length > 10
