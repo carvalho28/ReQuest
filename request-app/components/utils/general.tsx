@@ -11,6 +11,7 @@ export type ColumnsReq = {
   priority: string;
   assigned_to: string[];
   status: string;
+  identifier: string;
 };
 
 export type RowReq = {
@@ -25,6 +26,7 @@ export type RowReq = {
   created_by: string;
   updated_at: string;
   updated_by: string;
+  identifier: string;
 };
 
 function renderPriorityBadge(priority: string, sizex: number, sizey: number) {
