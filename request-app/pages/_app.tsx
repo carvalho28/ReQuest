@@ -1,6 +1,7 @@
 import "@/styles/globals.css";
 import "@/styles/tiptap.scss";
 import "@/styles/uppy.css";
+import "@/styles/scrollbar.css";
 import "@uppy/core/dist/style.css";
 import "@uppy/dashboard/dist/style.css";
 

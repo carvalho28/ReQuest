@@ -15,6 +15,8 @@ describe("Documents page", () => {
     // check for a <h1> tag with the text Documents
     cy.get("h1").contains("Documents");
 
+    cy.wait(5000);
+
     // check if documents are loaded
     cy.get("ul").children().should("have.length.greaterThan", 0);
   });

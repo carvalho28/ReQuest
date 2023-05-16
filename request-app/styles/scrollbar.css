@@ -1,0 +1,16 @@
+ .scrollbar-visible {
+    scrollbar-width: thin;
+    scrollbar-color: #4A5568 #E2E8F0;
+  }
+
+  .scrollbar::-webkit-scrollbar {
+    width: 2px;
+  }
+
+  .scrollbar::-webkit-scrollbar-track {
+    background-color: #E2E8F0;
+  }
+
+  .scrollbar::-webkit-scrollbar-thumb {
+    background-color: #4A5568;
+  }
