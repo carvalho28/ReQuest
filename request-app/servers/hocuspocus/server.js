@@ -74,6 +74,7 @@ server.configure({
   async onLoadDocument(data) {
     // Load from database
     const documentName = data.document.name;
+    console.log("documentName", documentName);
 
     const { data: datadb, error: errordb } = await supabase
       .from("requirements")

@@ -104,6 +104,7 @@ export function DueDateProject({ value }: any) {
 
 function getUserNamesFromIds(ids: string[], projectUserIdsAndNames: any) {
   const names: string[] = [];
+  if (ids === null || ids.length === 0) return null;
   ids.forEach((id) => {
     const name = projectUserIdsAndNames.find((user: any) => user.id === id);
     if (name) names.push(name.name);

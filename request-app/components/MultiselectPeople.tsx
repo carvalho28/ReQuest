@@ -53,7 +53,7 @@ const MultiselectPeople = ({
   };
 
   return (
-    <>
+    <div className="flex flex-col w-72">
       <Select
         placeholder={"Assign users"}
         value={selected}
@@ -70,13 +70,13 @@ const MultiselectPeople = ({
                 : `text-black hover:bg-violet-100 hover:text-contrasthover`
             }`,
           tagItem: ({ isSelected }: any) =>
-            `bg-violet-200 border rounded-sm flex space-x-1 ${
+            `bg-violet-200 border rounded-sm flex space-x-1 ml-2 ${
               isSelected ? "border-gray-500 px-1" : "pl-1"
             }
               `,
         }}
       />
-    </>
+    </div>
   );
 };
 
