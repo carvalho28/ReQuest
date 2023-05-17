@@ -266,6 +266,11 @@ const steps: Step[] = [
   { id: "03", name: "Type", href: "#", status: "upcoming" },
 ];
 
+const steps2: Step[] = [
+  { id: "01", name: "Description", href: "#", status: "current" },
+  { id: "02", name: "Generated Requirements", href: "#", status: "upcoming" },
+];
+
 interface RequirementsTableProps {
   userId: string;
   name: string;
@@ -286,6 +291,7 @@ function Table({
     useState<Database["public"]["Tables"]["requirements"]["Row"]>();
 
   const [showPopup, setShowPopup] = useState(false);
+  const [showsPopupAIHelper, setShowsPopupAIHelper] = useState(false);
 
   // requirements properties for creating new requirement
   const [requirementName, setRequirementName] = useState("");
@@ -295,16 +301,25 @@ function Table({
   const [requirementUpdatedBy, setRequirementCreatedBy] = useState(userId);
   const [requirementDueDate, setRequirementDueDate] = useState("");
 
+  const [projectDesc, setProjectDesc] = useState("");
+
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [currentSlideAI, setCurrentSlideAI] = useState(0);
 
   function handleClickPopup(cross?: boolean) {
     if (cross) {
       clearSteps();
     }
     setShowPopup(!showPopup);
+  }
+
+  function handleAIPopup() {
+    setShowPopup(false);
+    setShowsPopupAIHelper(!showsPopupAIHelper);
+    setTimeout(adjustTextareaHeight, 10); // Adjust the textarea height after a small delay
   }
 
   const clearSteps = () => {
@@ -317,6 +332,12 @@ function Table({
     setCurrentSlide(currentSlide === 0 ? 2 : currentSlide - 1);
     steps[currentSlide].status = "upcoming";
     steps[currentSlide === 0 ? 2 : currentSlide - 1].status = "current";
+  };
+
+  const handleLeftArrowAI = () => {
+    setCurrentSlideAI(currentSlideAI === 0 ? 1 : currentSlideAI - 1);
+    steps2[currentSlideAI].status = "upcoming";
+    steps2[currentSlideAI === 0 ? 1 : currentSlideAI - 1].status = "current";
   };
 
   const handleRightArrow = () => {
@@ -341,6 +362,12 @@ function Table({
     steps[currentSlide === 2 ? 0 : currentSlide + 1].status = "current";
     setError(false);
     setCurrentSlide(currentSlide === 2 ? 0 : currentSlide + 1);
+  };
+
+  const handleRightArrowAI = () => {
+    steps2[currentSlideAI].status = "complete";
+    steps2[currentSlideAI === 1 ? 0 : currentSlideAI + 1].status = "current";
+    setCurrentSlideAI(currentSlideAI === 1 ? 0 : currentSlideAI + 1);
   };
 
   async function btnCreateNewRequirement() {
@@ -495,6 +522,7 @@ function Table({
         })
       );
     }
+
     async function getProjectsRealTime() {
       req_channel2 = supabaseClient
         .channel("reqs_load2")
@@ -517,6 +545,48 @@ function Table({
     }
     getRequirements();
     getProjectsRealTime();
+  }, [supabaseClient, projectId]);
+
+  // get projectDesc on Load
+  useEffect(() => {
+    let req_channel_desc: RealtimeChannel;
+
+    async function getProjectDesc() {
+      const { data, error } = await supabaseClient
+        .from("projects")
+        .select("description")
+        .eq("id", projectId);
+
+      if (error) console.log(error);
+      if (!data) throw new Error("No data found");
+
+      setProjectDesc(data[0].description);
+    }
+
+    // update description realtime
+    async function getDescRealTime() {
+      req_channel_desc = supabaseClient
+        .channel("reqs_load2")
+        .on(
+          "postgres_changes",
+          {
+            event: "*",
+            schema: "public",
+            table: "projects",
+          },
+          async (payload: any) => {
+            console.log(payload);
+            setProjectDesc(payload.new.description);
+          }
+        )
+        .subscribe();
+
+      return () => {
+        supabaseClient.removeChannel(req_channel_desc);
+      };
+    }
+    getProjectDesc();
+    getDescRealTime();
   }, [supabaseClient, projectId]);
 
   const {
@@ -607,6 +677,15 @@ function Table({
     }
   }
 
+  function adjustTextareaHeight() {
+    const textarea = document.getElementById("desc");
+    if (textarea) {
+      console.log("here");
+      textarea.style.height = "auto"; // Reset the height to auto
+      textarea.style.height = `${textarea.scrollHeight}px`; // Set the height to the scroll height
+    }
+  }
+
   // Render the UI for your table and the styles
   return (
     <div className="mt-2 flex flex-col">
@@ -619,6 +698,7 @@ function Table({
               setGlobalFilter={setGlobalFilter}
               requirements={requirements}
               handleClickPopup={handleClickPopup}
+              handleAIPopup={handleAIPopup}
               selectedFlatRows={selectedFlatRows}
             />
             <table
@@ -819,6 +899,17 @@ function Table({
                             onChange={(e) => setRequirementName(e.target.value)}
                           />
                         </div>
+
+                        {/* unure how to start ? Press here */}
+                        <div className="flex justify-center items-center mt-8">
+                          <button
+                            className="text-sm text-white hover:text-gray-800 
+                            bg-primarygreen p-2 rounded-lg"
+                            onClick={() => handleAIPopup()}
+                          >
+                            Unsure how to start?
+                          </button>
+                        </div>
                       </div>
 
                       <div
@@ -915,6 +1006,86 @@ function Table({
                             Create
                           </button>
                         )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+      {showsPopupAIHelper && (
+        <div className="fixed z-10 inset-0 overflow-y-auto">
+          <div className="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+            <div
+              className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
+              aria-hidden="true"
+            ></div>
+
+            <span
+              className="hidden sm:inline-block sm:align-middle sm:h-screen"
+              aria-hidden="true"
+            >
+              &#8203;
+            </span>
+
+            <div className="inline-block bg-neutral-50 rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 align-middle w-6/12">
+              <div className="px-4 pt-4 pb-4 sm:p-6 sm:pb-4 flex justify-center items-center">
+                <div className="flex flex-col">
+                  <div className="md:text-left text-center">
+                    <h3
+                      className="text-2xl text-black font-semibold text-center"
+                      id="modal-headline"
+                    >
+                      AI Requirement Generation
+                    </h3>
+                  </div>
+
+                  <div className="px-5 pt-5 text-center items-center flex justify-center flex-grow">
+                    <Stepper steps={steps2} />
+                  </div>
+
+                  {/* // close  */}
+                  <button
+                    className="absolute top-0 right-0 m-4 text-gray-500 hover:text-gray-800"
+                    onClick={() => handleAIPopup()}
+                  >
+                    <XMarkIcon className="h-6 w-6" />
+                  </button>
+
+                  <div className="carousel-container mt-8 md:text-left text-center flex-col space-y-2 w-full">
+                    <div className="flex flex-col justify-center items-center">
+                      <div
+                        className={classNames(
+                          error ? "mb-2" : "mb-0",
+                          "w-80 md:w-96"
+                        )}
+                      >
+                        {error && <ErrorMessage message={errorMessage} />}
+                      </div>
+
+                      <div
+                        className={`carousel-slide ${
+                          currentSlideAI === 0 ? "active" : "hidden"
+                        }`}
+                      >
+                        <label
+                          htmlFor="deadline"
+                          className="block text-md font-medium text-gray-700"
+                        >
+                          Description
+                        </label>
+                        <div className="mt-1">
+                          <textarea
+                            name="desc"
+                            id="desc"
+                            className="shadow-sm focus:ring-contrast focus:border-contrast block
+                            w-96 sm:text-sm border-gray-300 rounded-md h-fit"
+                            value={projectDesc}
+                            onChange={(e) => setProjectDesc(e.target.value)}
+                          />
+                        </div>
                       </div>
                     </div>
                   </div>
