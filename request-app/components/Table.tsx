@@ -276,8 +276,12 @@ const steps2: Step[] = [
 ];
 
 type genReq = {
-  req: string;
-  dueDate: string;
+  name: string;
+  id_proj: string;
+  created_by: string;
+  updated_by: string;
+  due_date: string;
+  type: string;
 };
 
 interface RequirementsTableProps {
@@ -418,7 +422,7 @@ function Table({
   async function addGeneratedRequirements() {
     console.log("adding generated requirements");
     // if requirement does not have a due date, show error
-    const hasEmptyDueDate = generatedReq.some((req) => req.dueDate === "");
+    const hasEmptyDueDate = generatedReq.some((req) => req.due_date === "");
     if (hasEmptyDueDate) {
       console.log("has empty due date");
       setErrorMessage("Please enter a due date for the requirement");
@@ -427,6 +431,24 @@ function Table({
     }
     setErrorMessage("");
     setError(false);
+
+    // add requirements to database
+    const { data, error } = await supabaseClient
+      .from("requirements")
+      .insert(generatedReq)
+      .select("id");
+
+    if (error) {
+      console.log(error);
+    }
+
+    if (data) {
+      console.log(data);
+    }
+
+    // clear generated requirements
+    setGeneratedReq([]);
+    handleAIPopup();
   }
 
   async function btnCreateNewRequirement() {
@@ -518,9 +540,6 @@ function Table({
     async function getRequirements() {
       const { data, error } = await supabaseClient
         .from("requirements")
-        // get all fields, and get the name of the user in created_by
-        // and updated_by name in the profiles table
-
         .select(
           `
             id,
@@ -593,6 +612,7 @@ function Table({
             table: "requirements",
           },
           async (payload: any) => {
+            console.log(payload);
             getRequirements();
           }
         )
@@ -602,14 +622,35 @@ function Table({
         supabaseClient.removeChannel(req_channel2);
       };
     }
+    // update description realtime
+    let req_channel_desc: RealtimeChannel;
+    async function getDescRealTime() {
+      req_channel_desc = supabaseClient
+        .channel("desc_load")
+        .on(
+          "postgres_changes",
+          {
+            event: "*",
+            schema: "public",
+            table: "projects",
+          },
+          async (payload: any) => {
+            setProjectDesc(payload.new.description);
+          }
+        )
+        .subscribe();
+
+      return () => {
+        supabaseClient.removeChannel(req_channel_desc);
+      };
+    }
     getRequirements();
     getProjectsRealTime();
+    getDescRealTime();
   }, [supabaseClient, projectId]);
 
   // get projectDesc on Load
   useEffect(() => {
-    let req_channel_desc: RealtimeChannel;
-
     async function getProjectDesc() {
       const { data, error } = await supabaseClient
         .from("projects")
@@ -621,32 +662,8 @@ function Table({
 
       setProjectDesc(data[0].description);
     }
-
-    // update description realtime
-    async function getDescRealTime() {
-      req_channel_desc = supabaseClient
-        .channel("reqs_load2")
-        .on(
-          "postgres_changes",
-          {
-            event: "*",
-            schema: "public",
-            table: "projects",
-          },
-          async (payload: any) => {
-            console.log(payload);
-            setProjectDesc(payload.new.description);
-          }
-        )
-        .subscribe();
-
-      return () => {
-        supabaseClient.removeChannel(req_channel_desc);
-      };
-    }
     getProjectDesc();
-    getDescRealTime();
-  }, [supabaseClient, projectId]);
+  }, []);
 
   const {
     getTableProps,
@@ -779,8 +796,12 @@ function Table({
       setGeneratedReq(
         answer.map((req: any) => {
           return {
-            req: req,
-            dueDate: "",
+            name: req,
+            id_proj: projectId,
+            due_date: "",
+            created_by: userId,
+            updated_by: userId,
+            type: type,
           };
         })
       );
@@ -1279,17 +1300,17 @@ function Table({
                                           </button>
                                         </td>
                                         <td className="whitespace-normal break-words">
-                                          {req.req}
+                                          {req.name}
                                         </td>
                                         <td>
                                           <input
                                             type="date"
                                             className="shadow-sm focus:ring-contrast focus:border-contrast block
                                               w-36 sm:text-sm border-gray-300 rounded-md h-fit text-justify"
-                                            value={req.dueDate}
+                                            value={req.due_date}
                                             onChange={(e) => {
                                               let temp = [...generatedReq];
-                                              temp[index].dueDate =
+                                              temp[index].due_date =
                                                 e.target.value;
                                               setGeneratedReq(temp);
                                             }}
