@@ -77,6 +77,7 @@ const RequirementData = ({
       closed_at: requirement.closed_at,
       closed_by: requirement.closed_by,
       type: requirement.type,
+      identifier: requirement.identifier,
     });
   }, [requirement]);
 
