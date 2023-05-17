@@ -172,6 +172,7 @@ export interface Database {
           due_date: string | null
           id: string
           id_proj: string
+          identifier: string | null
           name: string
           priority: string
           status: string | null
@@ -189,6 +190,7 @@ export interface Database {
           due_date?: string | null
           id?: string
           id_proj: string
+          identifier?: string | null
           name: string
           priority?: string
           status?: string | null
@@ -206,6 +208,7 @@ export interface Database {
           due_date?: string | null
           id?: string
           id_proj?: string
+          identifier?: string | null
           name?: string
           priority?: string
           status?: string | null
