@@ -268,7 +268,7 @@ export default function ProjectSettings({
       proj_channel = supabaseClient
         .channel("proj_users")
         .on(
-          "postgres_changes", 
+          "postgres_changes",
           {
             event: "*",
             schema: "public",
@@ -285,14 +285,28 @@ export default function ProjectSettings({
             if (usersError) console.log(usersError);
             setProjectUsers(usersData as ProjectUsers[]);
           }
-        ).subscribe();
+        )
+        .subscribe();
 
       return () => {
         supabaseClient.removeChannel(proj_channel);
-      }
+      };
     }
     refreshProjectUsers();
-  } , [projectUsers])
+  }, [projectUsers]);
+
+  function adjustTextareaHeight() {
+    const textarea = document.getElementById("project-description");
+    if (textarea) {
+      console.log("here");
+      textarea.style.height = "auto"; // Reset the height to auto
+      textarea.style.height = `${textarea.scrollHeight}px`; // Set the height to the scroll height
+    }
+  }
+
+  useEffect(() => {
+    adjustTextareaHeight();
+  }, []);
 
   return (
     <Layout
@@ -344,8 +358,7 @@ export default function ProjectSettings({
               Project Description
             </label>
             <div className="mt-2">
-              <input
-                type="text"
+              <textarea
                 name="project-description"
                 id="project-description"
                 className="block w-full rounded-md border-0 py-1.5 text-gray-900
@@ -353,7 +366,10 @@ export default function ProjectSettings({
                 focus:ring-2 focus:ring-inset focus:ring-contrast sm:text-sm
                 sm:leading-6"
                 value={projectDescription || ""}
-                onChange={(e) => setProjectDescription(e.target.value)}
+                onChange={(e) => {
+                  adjustTextareaHeight();
+                  setProjectDescription(e.target.value);
+                }}
               />
             </div>
           </div>
