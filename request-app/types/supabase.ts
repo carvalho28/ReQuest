@@ -25,6 +25,20 @@ export interface Database {
           id?: number
           user_id?: string | null
         }
+        Relationships: [
+          {
+            foreignKeyName: "chat_users_chat_id_fkey"
+            columns: ["chat_id"]
+            referencedRelation: "chats"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "chat_users_user_id_fkey"
+            columns: ["user_id"]
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          }
+        ]
       }
       chats: {
         Row: {
@@ -36,6 +50,7 @@ export interface Database {
         Update: {
           id?: string
         }
+        Relationships: []
       }
       levels: {
         Row: {
@@ -56,6 +71,7 @@ export interface Database {
           id?: number
           xp_needed?: number | null
         }
+        Relationships: []
       }
       messages: {
         Row: {
@@ -79,6 +95,20 @@ export interface Database {
           created_at?: string | null
           id?: string
         }
+        Relationships: [
+          {
+            foreignKeyName: "messages_author_id_fkey"
+            columns: ["author_id"]
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "messages_chat_id_fkey"
+            columns: ["chat_id"]
+            referencedRelation: "chats"
+            referencedColumns: ["id"]
+          }
+        ]
       }
       profiles: {
         Row: {
@@ -117,6 +147,20 @@ export interface Database {
           updated_at?: string | null
           xp?: number | null
         }
+        Relationships: [
+          {
+            foreignKeyName: "profiles_id_fkey"
+            columns: ["id"]
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "profiles_level_fkey"
+            columns: ["level"]
+            referencedRelation: "levels"
+            referencedColumns: ["id"]
+          }
+        ]
       }
       project_profiles: {
         Row: {
@@ -134,6 +178,20 @@ export interface Database {
           id_proj?: string
           id_user?: string
         }
+        Relationships: [
+          {
+            foreignKeyName: "project_profiles_id_proj_fkey"
+            columns: ["id_proj"]
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "project_profiles_id_user_fkey"
+            columns: ["id_user"]
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          }
+        ]
       }
       projects: {
         Row: {
@@ -160,6 +218,7 @@ export interface Database {
           name?: string
           status?: string
         }
+        Relationships: []
       }
       requirements: {
         Row: {
@@ -216,6 +275,26 @@ export interface Database {
           updated_at?: string
           updated_by?: string
         }
+        Relationships: [
+          {
+            foreignKeyName: "requirements_created_by_fkey"
+            columns: ["created_by"]
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "requirements_id_proj_fkey"
+            columns: ["id_proj"]
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "requirements_updated_by_fkey"
+            columns: ["updated_by"]
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          }
+        ]
       }
     }
     Views: {
