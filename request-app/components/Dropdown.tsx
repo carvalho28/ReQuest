@@ -7,7 +7,6 @@ function classNames(...classes: any[]) {
 }
 
 interface DropdownProps {
-  //   function to render the dropdown button
   func: (selected: string, sizex: number, sizey: number) => JSX.Element;
   selected: string;
   options: string[];

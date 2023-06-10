@@ -136,8 +136,8 @@ export default function Dashboard({
 
       forecast.push(probabilityPercentage);
     });
-    setAverageForecast(forecast.reduce((a, b) => a + b, 0) / forecast.length);
-    console.log("forecast: ", forecast);
+    const averageForecastCalc = forecast.reduce((a, b) => a + b, 0) / forecast.length;
+    setAverageForecast(averageForecastCalc < 0 ? 0 : averageForecastCalc);
   }, [dataProjects]);
 
   const dataGraph = [

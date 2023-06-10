@@ -161,8 +161,8 @@ export default function Profile({
             />
             <button
               type="submit"
-              className="flex w-fit rounded-md bg-contrast py-2 px-3 text-sm font-semibold 
-              text-white shadow-sm hover:bg-contrasthover focus-visible:outline 
+              className="flex w-fit rounded-md bg-contrast py-2 px-3 text-sm font-semibold
+              text-white shadow-sm hover:bg-contrasthover focus-visible:outline
               focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-contrast mt-4"
               onClick={() => customizeAvatar()}
             >

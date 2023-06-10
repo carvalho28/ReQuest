@@ -406,7 +406,7 @@ export default function Projects({
                                 {item.name}
                                 <dl className="font-normal lg:hidden">
                                   <dt className="sr-only">Description</dt>
-                                  <dd className="mt-1 truncate text-gray-700">
+                                  <dd className="mt-1 truncate text-gray-700 w-28">
                                     {item.description}
                                   </dd>
                                   <dt className="sr-only sm:hidden">Status</dt>
@@ -423,14 +423,13 @@ export default function Projects({
                                   </dd>
                                 </dl>
                               </td>
-                              <td className="hidden px-3 py-4 text-sm text-gray-500 lg:table-cell">
+                              <td className="hidden px-3 py-4 text-sm text-gray-500 lg:table-cell text-justify max-w-lg">
                                 {item.description}
                               </td>
                               <td className="hidden px-3 py-4 text-sm text-gray-500 sm:table-cell">
                                 {renderProjectStatusBadge(item.status, 4, 0.3)}
                               </td>
                               <td className="px-3 py-4 text-sm text-gray-500">
-                                {/* convert to only show date */}
                                 {item.deadline?.split("T")[0]}
                               </td>
                               <td className="px-3 py-4 text-sm text-gray-500">
@@ -613,8 +612,7 @@ export default function Projects({
                                 maxLength={125}
                                 name="description"
                                 id="description"
-                                className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 
-                                block w-80 md:w-96 sm:text-sm border-gray-300 rounded-md"
+                                className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-80 md:w-96 sm:text-sm border-gray-300 rounded-md"
                                 onChange={(e) => setDescription(e.target.value)}
                               />
                             </div>

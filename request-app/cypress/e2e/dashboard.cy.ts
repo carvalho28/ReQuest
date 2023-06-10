@@ -6,7 +6,7 @@ describe("Dashboard page load", () => {
     cy.get("input[name=password]").type(Cypress.env("password"));
     cy.get("button").contains("Login").click();
 
-    // check "Teams" is working
+    // check "Projects" is working
     cy.get("span").contains("Projects").click();
     cy.url().should("include", "/projects");
   });

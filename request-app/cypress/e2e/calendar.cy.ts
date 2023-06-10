@@ -9,11 +9,13 @@ beforeEach(() => {
 describe("Calendar page", () => {
   it("should navigate to the calendar page", () => {
     // go to calendar
+    // cy.get("h1").contains("Calendar").click();
     cy.get("span").contains("Calendar").click();
     cy.url().should("include", "/calendar");
   });
 
   it("should verify is date in calendar when loaded is today month and year", () => {
+    cy.wait(1000);
     cy.get("span").contains("Calendar").click();
     // check for a <time> tag
     cy.get("time").should("be.visible");

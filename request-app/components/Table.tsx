@@ -17,6 +17,8 @@ import {
   RiArrowRightSLine,
   RiArrowUpSLine,
   RiCheckboxBlankCircleFill,
+  RiCloseLine,
+  RiDeleteRow,
   RiDownloadLine,
   RiRobotLine,
 } from "react-icons/ri";
@@ -42,6 +44,7 @@ import { XMarkIcon } from "@heroicons/react/20/solid";
 import dynamic from "next/dynamic";
 import Dropdown from "./Dropdown";
 import supabase from "@/utils/supabaseClient";
+import Loading from "./Loading";
 const ErrorMessage = dynamic(() => import("@/components/ErrorMessage"), {
   ssr: false,
 });
@@ -266,6 +269,21 @@ const steps: Step[] = [
   { id: "03", name: "Type", href: "#", status: "upcoming" },
 ];
 
+const steps2: Step[] = [
+  { id: "01", name: "Description", href: "#", status: "current" },
+  { id: "02", name: "Type", href: "#", status: "upcoming" },
+  { id: "03", name: "Generated Requirements", href: "#", status: "upcoming" },
+];
+
+type genReq = {
+  name: string;
+  id_proj: string;
+  created_by: string;
+  updated_by: string;
+  due_date: string;
+  type: string;
+};
+
 interface RequirementsTableProps {
   userId: string;
   name: string;
@@ -286,6 +304,7 @@ function Table({
     useState<Database["public"]["Tables"]["requirements"]["Row"]>();
 
   const [showPopup, setShowPopup] = useState(false);
+  const [showsPopupAIHelper, setShowsPopupAIHelper] = useState(false);
 
   // requirements properties for creating new requirement
   const [requirementName, setRequirementName] = useState("");
@@ -295,10 +314,22 @@ function Table({
   const [requirementUpdatedBy, setRequirementCreatedBy] = useState(userId);
   const [requirementDueDate, setRequirementDueDate] = useState("");
 
+  const [projectDesc, setProjectDesc] = useState("");
+
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [currentSlideAI, setCurrentSlideAI] = useState(0);
+
+  const [generatedReq, setGeneratedReq] = useState<genReq[]>([]);
+  const [showLoadingGenAI, setShowLoadingGenAI] = useState(true);
+
+  const deleteRequirementGenerated = (index: number) => {
+    let temp = [...generatedReq];
+    temp.splice(index, 1);
+    setGeneratedReq(temp);
+  };
 
   function handleClickPopup(cross?: boolean) {
     if (cross) {
@@ -307,16 +338,37 @@ function Table({
     setShowPopup(!showPopup);
   }
 
+  function handleAIPopup() {
+    setShowPopup(false);
+    setShowsPopupAIHelper(!showsPopupAIHelper);
+    if (currentSlideAI === 2) {
+      clearStepsAI();
+    }
+    setTimeout(adjustTextareaHeight, 10); // Adjust the textarea height after a small delay
+  }
+
   const clearSteps = () => {
     steps.forEach((step) => (step.status = "upcoming"));
     steps[0].status = "current";
     setCurrentSlide(0);
   };
 
+  const clearStepsAI = () => {
+    steps2.forEach((step) => (step.status = "upcoming"));
+    steps2[0].status = "current";
+    setCurrentSlideAI(0);
+  };
+
   const handleLeftArrow = () => {
     setCurrentSlide(currentSlide === 0 ? 2 : currentSlide - 1);
     steps[currentSlide].status = "upcoming";
     steps[currentSlide === 0 ? 2 : currentSlide - 1].status = "current";
+  };
+
+  const handleLeftArrowAI = () => {
+    setCurrentSlideAI(currentSlideAI === 0 ? 1 : currentSlideAI - 1);
+    steps2[currentSlideAI].status = "upcoming";
+    steps2[currentSlideAI === 0 ? 1 : currentSlideAI - 1].status = "current";
   };
 
   const handleRightArrow = () => {
@@ -342,6 +394,76 @@ function Table({
     setError(false);
     setCurrentSlide(currentSlide === 2 ? 0 : currentSlide + 1);
   };
+
+  const handleRightArrowAI = () => {
+    if (projectDesc === "" || projectDesc == undefined) {
+      setErrorMessage("Please enter a description");
+      setError(true);
+      return;
+    }
+
+    if (currentSlideAI == 0) {
+      // save description in the database
+      const updateProjectDesc = async () => { 
+        const {error} = await supabaseClient
+        .from("projects")
+        .update({ description: projectDesc })
+        .eq("id", projectId);
+        if (error) {
+          console.log(error);
+        }
+      }
+      updateProjectDesc();
+    }
+
+    if (currentSlideAI === 1) {
+      generateRequirements();
+    }
+
+    if (currentSlideAI === 2) {
+      if (generatedReq.length === 0) {
+        setErrorMessage("Please generate requirements");
+        setError(true);
+        return;
+      }
+    }
+
+    steps2[currentSlideAI].status = "complete";
+    steps2[currentSlideAI === 2 ? 0 : currentSlideAI + 1].status = "current";
+    setCurrentSlideAI(currentSlideAI === 2 ? 0 : currentSlideAI + 1);
+  };
+
+  async function addGeneratedRequirements() {
+    console.log("adding generated requirements");
+    // if requirement does not have a due date, show error
+    const hasEmptyDueDate = generatedReq.some((req) => req.due_date === "");
+    if (hasEmptyDueDate) {
+      console.log("has empty due date");
+      setErrorMessage("Please enter a due date for the requirement");
+      setError(true);
+      return;
+    }
+    setErrorMessage("");
+    setError(false);
+
+    // add requirements to database
+    const { data, error } = await supabaseClient
+      .from("requirements")
+      .insert(generatedReq)
+      .select("id");
+
+    if (error) {
+      console.log(error);
+    }
+
+    if (data) {
+      console.log(data);
+    }
+
+    // clear generated requirements
+    setGeneratedReq([]);
+    handleAIPopup();
+  }
 
   async function btnCreateNewRequirement() {
     const { data, error } = await supabaseClient
@@ -432,9 +554,6 @@ function Table({
     async function getRequirements() {
       const { data, error } = await supabaseClient
         .from("requirements")
-        // get all fields, and get the name of the user in created_by
-        // and updated_by name in the profiles table
-
         .select(
           `
             id,
@@ -495,6 +614,7 @@ function Table({
         })
       );
     }
+
     async function getProjectsRealTime() {
       req_channel2 = supabaseClient
         .channel("reqs_load2")
@@ -506,6 +626,7 @@ function Table({
             table: "requirements",
           },
           async (payload: any) => {
+            console.log(payload);
             getRequirements();
           }
         )
@@ -515,9 +636,48 @@ function Table({
         supabaseClient.removeChannel(req_channel2);
       };
     }
+    // update description realtime
+    let req_channel_desc: RealtimeChannel;
+    async function getDescRealTime() {
+      req_channel_desc = supabaseClient
+        .channel("desc_load")
+        .on(
+          "postgres_changes",
+          {
+            event: "*",
+            schema: "public",
+            table: "projects",
+          },
+          async (payload: any) => {
+            setProjectDesc(payload.new.description);
+          }
+        )
+        .subscribe();
+
+      return () => {
+        supabaseClient.removeChannel(req_channel_desc);
+      };
+    }
     getRequirements();
     getProjectsRealTime();
+    getDescRealTime();
   }, [supabaseClient, projectId]);
+
+  // get projectDesc on Load
+  useEffect(() => {
+    async function getProjectDesc() {
+      const { data, error } = await supabaseClient
+        .from("projects")
+        .select("description")
+        .eq("id", projectId);
+
+      if (error) console.log(error);
+      if (!data) throw new Error("No data found");
+
+      setProjectDesc(data[0].description);
+    }
+    getProjectDesc();
+  }, []);
 
   const {
     getTableProps,
@@ -565,6 +725,11 @@ function Table({
   const [requirementTypeAI, setRequirementTypeAI] = useState<
     undefined | string
   >("functional");
+
+  const [requirementChoiceAI, setRequirementChoiceAI] = useState<
+    undefined | string
+  >("functional");
+
   // call api to verify functional/non-functional
   async function isFunctional() {
     const requirement = requirementName;
@@ -607,6 +772,69 @@ function Table({
     }
   }
 
+  async function generateRequirements() {
+    const description = projectDesc;
+    const type = requirementChoiceAI;
+    let typeRoute: string = "";
+    const reqBody = JSON.stringify({ description });
+
+    if (type?.toLowerCase() === "functional") {
+      typeRoute = "functional";
+    } else {
+      typeRoute = "nonfunctional";
+    }
+
+    try {
+      const response = await fetch(
+        "http://localhost:8080/api/ai/create/" + typeRoute,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: reqBody,
+        }
+      );
+
+      // if there was an error, then return
+      if (!response.ok) {
+        setErrorMessage("There was an error");
+        setError(true);
+        return;
+      }
+      const data = await response.json();
+      let answer = data.answer;
+      console.log(answer);
+      setShowLoadingGenAI(false);
+      setGeneratedReq(
+        answer.map((req: any) => {
+          return {
+            name: req,
+            id_proj: projectId,
+            due_date: "",
+            created_by: userId,
+            updated_by: userId,
+            type: type,
+          };
+        })
+      );
+    } catch (err) {
+      setErrorMessage("There was an error");
+      setError(true);
+      console.log(err);
+      return;
+    }
+  }
+
+  function adjustTextareaHeight() {
+    const textarea = document.getElementById("desc");
+    if (textarea) {
+      console.log("here");
+      textarea.style.height = "auto"; // Reset the height to auto
+      textarea.style.height = `${textarea.scrollHeight}px`; // Set the height to the scroll height
+    }
+  }
+
   // Render the UI for your table and the styles
   return (
     <div className="mt-2 flex flex-col">
@@ -619,6 +847,7 @@ function Table({
               setGlobalFilter={setGlobalFilter}
               requirements={requirements}
               handleClickPopup={handleClickPopup}
+              handleAIPopup={handleAIPopup}
               selectedFlatRows={selectedFlatRows}
             />
             <table
@@ -819,6 +1048,17 @@ function Table({
                             onChange={(e) => setRequirementName(e.target.value)}
                           />
                         </div>
+
+                        {/* unure how to start ? Press here */}
+                        <div className="flex justify-center items-center mt-8">
+                          <button
+                            className="text-sm text-white hover:text-gray-800 
+                            bg-primarygreen p-2 rounded-lg"
+                            onClick={() => handleAIPopup()}
+                          >
+                            Unsure how to start?
+                          </button>
+                        </div>
                       </div>
 
                       <div
@@ -916,6 +1156,215 @@ function Table({
                           </button>
                         )}
                       </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+      {showsPopupAIHelper && (
+        <div className="fixed z-10 inset-0 overflow-y-auto">
+          <div className="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+            <div
+              className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
+              aria-hidden="true"
+            ></div>
+
+            <span
+              className="hidden sm:inline-block sm:align-middle sm:h-screen"
+              aria-hidden="true"
+            >
+              &#8203;
+            </span>
+
+            <div className="inline-block bg-neutral-50 rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 align-middle w-6/12">
+              <div className="px-4 pt-4 pb-4 sm:p-6 sm:pb-4 flex justify-center items-center">
+                <div className="flex flex-col">
+                  <div className="md:text-left text-center">
+                    <h3
+                      className="text-2xl text-black font-semibold text-center"
+                      id="modal-headline"
+                    >
+                      AI Requirement Generation
+                    </h3>
+                  </div>
+
+                  <div className="px-5 pt-5 text-center items-center flex justify-center flex-grow">
+                    <Stepper steps={steps2} />
+                  </div>
+
+                  {/* // close  */}
+                  <button
+                    className="absolute top-0 right-0 m-4 text-gray-500 hover:text-gray-800"
+                    onClick={() => handleAIPopup()}
+                  >
+                    <XMarkIcon className="h-6 w-6" />
+                  </button>
+
+                  <div className="carousel-container mt-8 md:text-left text-center flex-col space-y-2 w-full">
+                    <div className="flex flex-col justify-center items-center">
+                      <div
+                        className={classNames(
+                          error ? "mb-2" : "mb-0",
+                          "w-80 md:w-96"
+                        )}
+                      >
+                        {error && <ErrorMessage message={errorMessage} />}
+                      </div>
+
+                      <div
+                        className={`carousel-slide ${
+                          currentSlideAI === 0 ? "active" : "hidden"
+                        }`}
+                      >
+                        <div className="flex flex-col items-center">
+                          <label
+                            htmlFor="deadline"
+                            className="block text-md font-bold text-gray-700"
+                          >
+                            Project Description
+                          </label>
+                          <div className="mt-4">
+                            <textarea
+                              name="desc"
+                              id="desc"
+                              className="shadow-sm focus:ring-contrast focus:border-contrast block
+                            w-96 sm:text-sm border-gray-300 rounded-md h-fit text-justify"
+                              value={projectDesc}
+                              onChange={(e) => {
+                                adjustTextareaHeight();
+                                setProjectDesc(e.target.value);
+                              }}
+                            />
+                          </div>
+                        </div>
+                        <span className="text-gray-500 text-sm mt-4 flex">
+                          Note: The better the project description, the best
+                          results AI can give you.
+                        </span>
+                      </div>
+
+                      <div
+                        className={`carousel-slide ${
+                          currentSlideAI === 1 ? "active" : "hidden"
+                        }`}
+                      >
+                        <label
+                          htmlFor="deadline"
+                          className="block text-md font-medium text-gray-700"
+                        >
+                          Choose the type of requirements you wish to generate
+                        </label>
+                        <div className="mt-1">
+                          <div className="mt-8 mb-5 shadow-sm focus:ring-contrast focus:border-contrast flex items-center justify-center">
+                            {requirementChoiceAI && (
+                              <Dropdown
+                                func={renderTypeBadge}
+                                options={["Functional", "Non-functional"]}
+                                selected={requirementChoiceAI}
+                                onSelect={(e) => setRequirementChoiceAI(e)}
+                              />
+                            )}
+                          </div>
+                        </div>
+                      </div>
+
+                      <div
+                        className={`carousel-slide ${
+                          currentSlideAI === 2 ? "active" : "hidden"
+                        }`}
+                      >
+                        {showLoadingGenAI ? (
+                          <>
+                            <span className="block text-md text-lg font-bold text-center">
+                              This process can take up to 30 sec.
+                            </span>
+                            <Loading />
+                          </>
+                        ) : (
+                          <>
+                            <span className="block text-md text-lg font-bold text-center">
+                              Here are the requirements generated by the AI.
+                            </span>
+                            <div className="mt-4 justify-center flex items-center">
+                              <div className="overflow-x-auto px-4">
+                                <table className="table table-compact w-full">
+                                  {/* head */}
+                                  <thead>
+                                    <tr>
+                                      <th></th>
+                                      <th>Requirement</th>
+                                      <th>Due Date </th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    {generatedReq.map((req, index) => (
+                                      <tr key={index}>
+                                        <td>
+                                          <button
+                                            className="text-contrast hover:text-contrast-hover bg-red-300"
+                                            onClick={() =>
+                                              deleteRequirementGenerated(index)
+                                            }
+                                          >
+                                            <RiCloseLine className="w-5 h-5 text-black" />
+                                          </button>
+                                        </td>
+                                        <td className="whitespace-normal break-words">
+                                          {req.name}
+                                        </td>
+                                        <td>
+                                          <input
+                                            type="date"
+                                            className="shadow-sm focus:ring-contrast focus:border-contrast block
+                                              w-36 sm:text-sm border-gray-300 rounded-md h-fit text-justify"
+                                            value={req.due_date}
+                                            onChange={(e) => {
+                                              let temp = [...generatedReq];
+                                              temp[index].due_date =
+                                                e.target.value;
+                                              setGeneratedReq(temp);
+                                            }}
+                                          />
+                                        </td>
+                                      </tr>
+                                    ))}
+                                  </tbody>
+                                </table>
+                              </div>
+                            </div>{" "}
+                          </>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="px-4 py-3 flex flex-col">
+                    <div className="flex flex-row justify-center">
+                      {currentSlideAI > 0 && (
+                        <RiArrowLeftCircleFill
+                          className="h-12 w-12 text-contrast hover:cursor-pointer"
+                          onClick={() => handleLeftArrowAI()}
+                        />
+                      )}
+                      {currentSlideAI < 2 && (
+                        <RiArrowRightCircleFill
+                          className="h-12 w-12 text-contrast hover:cursor-pointer"
+                          onClick={() => handleRightArrowAI()}
+                        />
+                      )}
+                    </div>
+                    <div className="flex flex-row justify-end mb-5 mr-5">
+                      {currentSlideAI === 2 && (
+                        <button
+                          type="submit"
+                          className="flex w-fit h-fit rounded-md bg-contrast py-2 px-3 text-sm font-semibold text-white shadow-sm hover:bg-contrasthover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-contrast"
+                          onClick={addGeneratedRequirements}
+                        >
+                          Add
+                        </button>
+                      )}
                     </div>
                   </div>
                 </div>
