@@ -41,6 +41,12 @@ app.post("/api/ai/create/nonfunctional", async (req, res) => {
   res.send({ answer });
 });
 
+app.post("/api/ai/ltfs", async (req, res) => {
+  const { keywords } = req.body;
+  const answer = await buildScenarioFromKeywords(keywords);
+  res.send({ answer });
+});
+
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`);
 });
@@ -132,6 +138,27 @@ async function getNonFunctionalRequirements(description) {
     return getRequirementsAsArray(completion.data.choices[0].message?.content);
   } catch (error) {
     console.log(error);
+  }
+}
+
+async function buildScenarioFromKeywords(keywords) {
+  const openai = new OpenAIApi(config);
+  try {
+    const completion = await openai.createChatCompletion({
+      model: "gpt-3.5-turbo",
+      messages: [
+        {
+          role: "user",
+          content: `Given the following keywords: ${keywords},
+                    build a single Long-Term Future Scenario (LTFS) using them.
+                    Do not refer the word scenario or LTFS in your answer.`,
+        },
+      ],
+      max_tokens: 500,
+    });
+    return completion.data.choices[0].message?.content;
+  } catch (error) {
+    console.log(error.message);
   }
 }
 
