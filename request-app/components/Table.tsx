@@ -402,6 +402,20 @@ function Table({
       return;
     }
 
+    if (currentSlideAI == 0) {
+      // save description in the database
+      const updateProjectDesc = async () => { 
+        const {error} = await supabaseClient
+        .from("projects")
+        .update({ description: projectDesc })
+        .eq("id", projectId);
+        if (error) {
+          console.log(error);
+        }
+      }
+      updateProjectDesc();
+    }
+
     if (currentSlideAI === 1) {
       generateRequirements();
     }
@@ -759,7 +773,6 @@ function Table({
   }
 
   async function generateRequirements() {
-    console.log("HERE");
     const description = projectDesc;
     const type = requirementChoiceAI;
     let typeRoute: string = "";
