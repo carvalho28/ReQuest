@@ -20,7 +20,7 @@ import Link from "next/link";
 import { ChevronDownIcon } from "@heroicons/react/20/solid";
 import { ProjectChildren } from "./utils/sidebarHelper";
 import { renderImage } from "./utils/general";
-import { RiQuestionLine, RiToolsLine } from "react-icons/ri";
+import { RiGamepadLine, RiQuestionLine, RiToolsLine } from "react-icons/ri";
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
@@ -64,6 +64,13 @@ const navigation = [
     current: false,
   },
   {
+    name: "Playground",
+    icon: RiGamepadLine,
+    href: "/playground",
+    count: 0,
+    current: false,
+  },
+  {
     name: "Settings",
     icon: Cog6ToothIcon,
     href: "/settings",
@@ -75,7 +82,7 @@ const navigation = [
     icon: RiQuestionLine,
     href: "/docs",
     count: 0,
-    currennt: false,
+    current: false,
   },
 ];
 
