@@ -47,6 +47,12 @@ app.post("/api/ai/ltfs", async (req, res) => {
   res.send({ answer });
 });
 
+app.post("/api/ai/verify", async (req, res) => {
+  const { scenario, requirement } = req.body;
+  const answer = await verifyRequirementWithScenario(scenario, requirement);
+  res.send({ answer });
+});
+
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`);
 });
@@ -152,6 +158,28 @@ async function buildScenarioFromKeywords(keywords) {
           content: `Given the following keywords: ${keywords},
                     build a single Long-Term Future Scenario (LTFS) using them.
                     Do not refer the word scenario or LTFS in your answer.`,
+        },
+      ],
+      max_tokens: 500,
+    });
+    return completion.data.choices[0].message?.content;
+  } catch (error) {
+    console.log(error.message);
+  }
+}
+
+async function verifyRequirementWithScenario(scenario, requirement) {
+  const openai = new OpenAIApi(config);
+  try {
+    const completion = await openai.createChatCompletion({
+      model: "gpt-3.5-turbo",
+      messages: [
+        {
+          role: "user",
+          content: `Given the following scenario: ${scenario}. 
+                    Verify if the following requirement: ${requirement} has the following 
+                    properties: ${requirementsProperties} and if can be used in the scenario.
+                    Answer with only yes or no.`,
         },
       ],
       max_tokens: 500,
