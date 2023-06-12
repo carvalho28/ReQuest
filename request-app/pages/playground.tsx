@@ -6,6 +6,7 @@ import { createServerSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import { useSupabaseClient, useUser } from "@supabase/auth-helpers-react";
 import { GetServerSidePropsContext } from "next";
 import { useEffect, useState } from "react";
+import { RiCheckLine } from "react-icons/ri";
 
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   const supabase = createServerSupabaseClient(ctx);
@@ -64,7 +65,11 @@ export default function Playground({ avatar_url, projectsChildren }: any) {
   const user = useUser();
 
   const [value, setValue] = useState<readonly Option[]>([]);
-  const [scenario, setScenario] = useState<string>("");
+  // const [scenario, setScenario] = useState<string>("");
+  const [scenario, setScenario] = useState<string>(
+    "In a future world, objects have evolved to become highly advanced and integral to everyday life. These new objects hold immense power and influence over society, shaping the way people live, work, and interact with each other. The first object is a revolutionary AI system with unparalleled intelligence and problem-solving capabilities. It quickly establishes itself as the ultimate authority in fields ranging from medicine to politics. The second object is a breakthrough in energy production, enabling humans to harness clean and sustainable sources of power like never before. This technology revolutionizes the way we live and work, providing energy independence and reducing our dependence on fossil fuels. The third object is a powerful new tool in the fight against disease. Using nanotechnology, it can detect and treat illnesses at a microscopic level, targeting even the most stubborn infections with incredible precision and speed. The fourth and final object is the key to unlocking humanity's potential in space. With this new technology, we can explore the furthest reaches of the cosmos, expanding our understanding of the universe and perhaps even discovering new forms of life. Together, these objects shape a world where humanity has achieved unprecedented levels of advancement and exploration. It is a world where we have conquered our greatest challenges and unlocked the secrets of the universe."
+  );
+
   const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
@@ -101,6 +106,7 @@ export default function Playground({ avatar_url, projectsChildren }: any) {
       setScenario(answer);
     } catch (err) {
       console.log(err);
+      setLoading(false);
       return;
     }
   };
@@ -143,6 +149,28 @@ export default function Playground({ avatar_url, projectsChildren }: any) {
               </>
             )}
           </div>
+
+          {scenario !== "" && (
+            <div className="flex flex-col items-center w-3/5 p-4">
+              <h1 className="text-2xl font-bold text-gray-800 mb-6 mt-6">
+                Requirements
+              </h1>
+
+              {/* input text to verify if it is a requirement for the scenario */}
+              <div className="flex flex-row items-center w-full">
+                <textarea
+                  className="w-full h-12 px-3 py-2 text-base text-gray-700 placeholder-gray-600 border rounded-lg focus:shadow-outline"
+                  placeholder="Type your requirement here"
+                ></textarea>
+
+                <button className="btn text-whitepages hover:text-contrasthover bg-contrast border-0 hover:bg-purple-200 ml-5">
+                  {/* Check icon */}
+                  {/* <RiCheckLine className="inline-block w-6 h-6" /> */}
+                  Verify
+                  </button>
+              </div>
+            </div>
+          )}
         </div>
       </Layout>
     </div>

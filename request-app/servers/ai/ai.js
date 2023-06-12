@@ -14,7 +14,7 @@ app.use(express.json());
 const port = 8080;
 
 const requirementsProperties =
-  "Necessary; Feasible; Correct; Concise; Ambiguous; Complete; Consistent; Verifiable; Traceable; Allocated; Design independent; Nonredundant; Written using the standard construct; Avoid of escape clauses";
+  "Necessary; Feasible; Correct; Concise; Non Ambiguous; Complete; Consistent; Verifiable; Traceable; Allocated; Design independent; Nonredundant; Written using the standard construct; Avoid of escape clauses";
 
 app.post("/api/ai/topics", async (req, res) => {
   const { requirement } = req.body;
