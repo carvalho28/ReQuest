@@ -157,7 +157,7 @@ async function buildScenarioFromKeywords(keywords) {
           role: "user",
           content: `Given the following keywords: ${keywords},
                     build a single Long-Term Future Scenario (LTFS) using them.
-                    Do not refer the word scenario or LTFS in your answer.`,
+                    Do not refer the word scenario or LTFS in your answer, or the keywords themselves, try to be as creative as possible, but realistic.`,
         },
       ],
       max_tokens: 500,
