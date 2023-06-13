@@ -41,7 +41,7 @@ const MultiSelectKeywords = ({ value, setValue }: Props) => {
       <CreatableSelect
         id="keywords"
         instanceId="keywords"
-        className="keywords"
+        className="keywords text-lg"
         theme={(theme) => ({
           ...theme,
           borderRadius: 0,

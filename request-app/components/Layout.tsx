@@ -15,7 +15,7 @@ import {
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { Fragment, useEffect, useState } from "react";
-import { useUser, useSupabaseClient, User } from "@supabase/auth-helpers-react";
+import { useUser, useSupabaseClient } from "@supabase/auth-helpers-react";
 import Link from "next/link";
 import { ChevronDownIcon } from "@heroicons/react/20/solid";
 import { ProjectChildren } from "./utils/sidebarHelper";
@@ -544,7 +544,7 @@ const Layout = ({
                     isProfile
                       ? "bg-whitepages rounded-l-3xl"
                       : "hover:bg-whitepages rounded-l-3xl hover:cursor-pointer",
-                    "flex text-center justify-center mt-10 ml-1"
+                    "flex text-center justify-center mt-6 ml-1"
                   )}
                 >
                   {avatar_url ? (

@@ -7,8 +7,8 @@ import { useSupabaseClient, useUser } from "@supabase/auth-helpers-react";
 import { GetServerSidePropsContext } from "next";
 import { useEffect, useState } from "react";
 import Joyride from "react-joyride";
-// RiCornerUpRightFill
 import { RiArrowRightFill } from "react-icons/ri";
+import {FaTrashAlt} from "react-icons/fa";
 import ErrorMessage from "@/components/ErrorMessage";
 
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
@@ -233,10 +233,26 @@ export default function Playground({ avatar_url, projectsChildren }: any) {
             }}
           />
         )}
+
         <div className="flex flex-wrap bg-white rounded-lg shadow-lg justify-center items-center pb-5">
+          {/* trash icon to reset on top right */}
+          <div className="flex justify-end w-full">
+            <FaTrashAlt
+              className="text-gray-800 mr-4 mt-4 cursor-pointer h-10 w-10 hover:text-red-500"
+              onClick={() => {
+                setScenario("");
+                setRequirements([]);
+                setRequirement("");
+                setAIanswer("");
+                setValue([]);
+                setShow(false);
+              }}
+            />
+          </div>
+
           <div className="flex flex-col items-center w-3/5 p-4">
-            <h1 className="text-2xl font-bold text-gray-800 mb-6 mt-4">
-              Scenario generator using keywords
+            <h1 className="text-2xl font-bold text-gray-800 mb-6">
+              Keywords
             </h1>
             <MultiSelectKeywords
               value={value}
@@ -256,7 +272,7 @@ export default function Playground({ avatar_url, projectsChildren }: any) {
             {scenario !== "" && (
               <>
                 <h1 className="text-2xl font-bold text-gray-800 mb-6 mt-6">
-                  Generated scenario
+                  Generated Scenario
                 </h1>
                 <article className="prose-base text-justify bg-gray-50 rounded-lg px-8 py-4">
                   <p>{scenario}</p>
@@ -290,18 +306,17 @@ export default function Playground({ avatar_url, projectsChildren }: any) {
 
               {/* input text to verify if it is a requirement for the scenario */}
               <div className="flex flex-row items-center w-full">
-                 <textarea
-                rows={2}
-                name="message"
-                id="message"
-                className="block w-full text-gray-900 px-4 ring-0 border-1 border-gray-300 
+                <textarea
+                  rows={2}
+                  name="message"
+                  id="message"
+                  className="block w-full text-gray-900 px-4 ring-0 border-1 border-gray-300 
             focus:outline-none resize-none h-auto bg-gray-100 rounded-md
             py-1 ml-2 overflow-y-scroll"
-                placeholder="Type a requirement..."
-                value={requirement}
-                onChange={handleInput}
-              />
- 
+                  placeholder="Type a requirement..."
+                  value={requirement}
+                  onChange={handleInput}
+                />
 
                 <label
                   htmlFor="my_modal_6"
