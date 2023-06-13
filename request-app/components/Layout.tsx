@@ -15,12 +15,12 @@ import {
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { Fragment, useEffect, useState } from "react";
-import { useUser, useSupabaseClient, User } from "@supabase/auth-helpers-react";
+import { useUser, useSupabaseClient } from "@supabase/auth-helpers-react";
 import Link from "next/link";
 import { ChevronDownIcon } from "@heroicons/react/20/solid";
 import { ProjectChildren } from "./utils/sidebarHelper";
 import { renderImage } from "./utils/general";
-import { RiQuestionLine, RiToolsLine } from "react-icons/ri";
+import { RiGamepadLine, RiQuestionLine, RiToolsLine } from "react-icons/ri";
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
@@ -64,6 +64,13 @@ const navigation = [
     current: false,
   },
   {
+    name: "Playground",
+    icon: RiGamepadLine,
+    href: "/playground",
+    count: 0,
+    current: false,
+  },
+  {
     name: "Settings",
     icon: Cog6ToothIcon,
     href: "/settings",
@@ -75,7 +82,7 @@ const navigation = [
     icon: RiQuestionLine,
     href: "/docs",
     count: 0,
-    currennt: false,
+    current: false,
   },
 ];
 
@@ -537,7 +544,7 @@ const Layout = ({
                     isProfile
                       ? "bg-whitepages rounded-l-3xl"
                       : "hover:bg-whitepages rounded-l-3xl hover:cursor-pointer",
-                    "flex text-center justify-center mt-10 ml-1"
+                    "flex text-center justify-center mt-6 ml-1"
                   )}
                 >
                   {avatar_url ? (

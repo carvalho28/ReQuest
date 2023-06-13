@@ -14,7 +14,7 @@ app.use(express.json());
 const port = 8080;
 
 const requirementsProperties =
-  "Necessary; Feasible; Correct; Concise; Ambiguous; Complete; Consistent; Verifiable; Traceable; Allocated; Design independent; Nonredundant; Written using the standard construct; Avoid of escape clauses";
+  "Necessary; Feasible; Correct; Concise; Non Ambiguous; Complete; Consistent; Verifiable; Traceable; Allocated; Design independent; Nonredundant; Written using the standard construct; Avoid of escape clauses";
 
 app.post("/api/ai/topics", async (req, res) => {
   const { requirement } = req.body;
@@ -38,6 +38,18 @@ app.post("/api/ai/create/functional", async (req, res) => {
 app.post("/api/ai/create/nonfunctional", async (req, res) => {
   const { description } = req.body;
   const answer = await getNonFunctionalRequirements(description);
+  res.send({ answer });
+});
+
+app.post("/api/ai/ltfs", async (req, res) => {
+  const { keywords } = req.body;
+  const answer = await buildScenarioFromKeywords(keywords);
+  res.send({ answer });
+});
+
+app.post("/api/ai/verify", async (req, res) => {
+  const { scenario, requirement } = req.body;
+  const answer = await verifyRequirementWithScenario(scenario, requirement);
   res.send({ answer });
 });
 
@@ -132,6 +144,51 @@ async function getNonFunctionalRequirements(description) {
     return getRequirementsAsArray(completion.data.choices[0].message?.content);
   } catch (error) {
     console.log(error);
+  }
+}
+
+async function buildScenarioFromKeywords(keywords) {
+  const openai = new OpenAIApi(config);
+  try {
+    const completion = await openai.createChatCompletion({
+      model: "gpt-3.5-turbo",
+      messages: [
+        {
+          role: "user",
+          content: `Given the following keywords: ${keywords},
+                    build a single Long-Term Future Scenario (LTFS) using them.
+                    Do not refer the word scenario or LTFS in your answer, or the keywords themselves, try to be as creative as possible, but realistic.`,
+        },
+      ],
+      max_tokens: 500,
+    });
+    return completion.data.choices[0].message?.content;
+  } catch (error) {
+    console.log(error.message);
+  }
+}
+
+async function verifyRequirementWithScenario(scenario, requirement) {
+  const openai = new OpenAIApi(config);
+  try {
+    const completion = await openai.createChatCompletion({
+      model: "gpt-3.5-turbo",
+      messages: [
+        {
+          role: "user",
+          content: `Given the following scenario: ${scenario}. 
+                    Verify if the following requirement: ${requirement} has the following 
+                    properties: ${requirementsProperties} and if it can be considered a requirement 
+                    for the scenario.
+                    Answer with only "yes" or "no", please provide a complete reason, no more than 
+                    2 lines, for your answer.`,
+        },
+      ],
+      max_tokens: 200,
+    });
+    return completion.data.choices[0].message?.content;
+  } catch (error) {
+    console.log(error.message);
   }
 }
 

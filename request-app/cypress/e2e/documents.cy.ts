@@ -22,6 +22,7 @@ describe("Documents page", () => {
   });
 
   it("should load a grid of documents", () => {
+    cy.wait(5000);
     // go to documents
     cy.get("span").contains("Documents").click();
 
@@ -38,6 +39,7 @@ describe("Documents page", () => {
 
   //   it should load a uppy Dashboard to upload a document
   it("should load a uppy Dashboard to upload a document", () => {
+    cy.wait(5000);
     // go to documents
     cy.get("span").contains("Documents").click();
 
