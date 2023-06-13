@@ -40,6 +40,8 @@ export default ({ value, setValue }: Props) => {
   return (
     <div className="w-full">
       <CreatableSelect
+        id="keywords"
+        instanceId="keywords"
         className="keywords"
         theme={(theme) => ({
           ...theme,
