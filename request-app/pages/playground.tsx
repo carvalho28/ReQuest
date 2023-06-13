@@ -6,7 +6,9 @@ import { createServerSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import { useSupabaseClient, useUser } from "@supabase/auth-helpers-react";
 import { GetServerSidePropsContext } from "next";
 import { useEffect, useState } from "react";
-import { RiCheckLine } from "react-icons/ri";
+import Joyride from "react-joyride";
+// RiCornerUpRightFill
+import { RiArrowRightFill } from "react-icons/ri";
 
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   const supabase = createServerSupabaseClient(ctx);
@@ -71,10 +73,11 @@ export default function Playground({ avatar_url, projectsChildren }: any) {
   );
 
   const [loading, setLoading] = useState<boolean>(false);
-
-  useEffect(() => {
-    console.log(value);
-  }, [value]);
+  // const [requirements, setRequirements] = useState<string[]>([]);
+  const [requirements, setRequirements] = useState<string[]>([
+    "The AI system must be able to solve problems in a variety of fields.",
+    "The AI system must be able to solve problems in a variety of fields.",
+  ]);
 
   const generateScenario = async () => {
     if (value.length === 0) return;
@@ -111,6 +114,24 @@ export default function Playground({ avatar_url, projectsChildren }: any) {
     }
   };
 
+  // Joyride
+  const [steps, setSteps] = useState<any[]>([]);
+
+  useEffect(() => {
+    setSteps([
+      {
+        target: ".keywords",
+        content: "Select keywords that you want to use to generate a scenario",
+        disableBeacon: true,
+      },
+      {
+        target: ".btn",
+        content: "Click here to generate a scenario",
+        disableBeacon: true,
+      },
+    ]);
+  }, []);
+
   return (
     <div>
       <Layout
@@ -118,7 +139,23 @@ export default function Playground({ avatar_url, projectsChildren }: any) {
         avatar_url={avatar_url}
         projectChildren={projectsChildren}
       >
-        <div className="flex flex-wrap bg-white rounded-lg shadow-lg justify-center items-center">
+        {steps.length > 0 && (
+          <Joyride
+            continuous={true}
+            steps={steps}
+            showProgress={true}
+            showSkipButton={true}
+            styles={{
+              options: {
+                arrowColor: "#8e8e8e",
+                primaryColor: "#845EC2",
+                textColor: "#000",
+                // buttons purple
+              },
+            }}
+          />
+        )}
+        <div className="flex flex-wrap bg-white rounded-lg shadow-lg justify-center items-center pb-5">
           <div className="flex flex-col items-center w-3/5 p-4">
             <h1 className="text-2xl font-bold text-gray-800 mb-6 mt-4">
               Scenario generator using keywords
@@ -151,26 +188,52 @@ export default function Playground({ avatar_url, projectsChildren }: any) {
           </div>
 
           {scenario !== "" && (
-            <div className="flex flex-col items-center w-3/5 p-4">
+            <div className="flex flex-col items-center justify-center w-3/5 p-4">
               <h1 className="text-2xl font-bold text-gray-800 mb-6 mt-6">
                 Requirements
               </h1>
 
+              {/* requirements already verified */}
+              {requirements.length > 0 && (
+                <div className="flex flex-col items-center justify-center  w-full mb-8">
+                  {requirements.map((requirement, index) => (
+                    <div
+                      key={index}
+                      className="flex flex-row items-center justify-center w-full p-2"
+                    >
+                      <RiArrowRightFill className="text-2xl text-gray-800 mr-2" />
+                      {requirement}
+                    </div>
+                  ))}
+                </div>
+              )}
+
               {/* input text to verify if it is a requirement for the scenario */}
               <div className="flex flex-row items-center w-full">
                 <textarea
-                  className="w-full h-12 px-3 py-2 text-base text-gray-700 placeholder-gray-600 border rounded-lg focus:shadow-outline"
+                  className="w-full h-10 px-3 py-2 text-base text-gray-700 placeholder-gray-600 border rounded-lg focus:shadow-outline"
                   placeholder="Type your requirement here"
                 ></textarea>
 
-                <button className="btn text-whitepages hover:text-contrasthover bg-contrast border-0 hover:bg-purple-200 ml-5">
-                  {/* Check icon */}
-                  {/* <RiCheckLine className="inline-block w-6 h-6" /> */}
+                <label htmlFor="my_modal_6" className="btn ml-5 text-whitepages hover:text-contrasthover bg-contrast
+                  border-0 hover:bg-purple-200">
                   Verify
-                  </button>
+                </label>
               </div>
             </div>
           )}
+        </div>
+        <input type="checkbox" id="my_modal_6" className="modal-toggle" />
+        <div className="modal">
+          <div className="modal-box">
+            <h3 className="font-bold text-lg">Hello!</h3>
+            <p className="py-4">This modal works with a hidden checkbox!</p>
+            <div className="modal-action">
+              <label htmlFor="my_modal_6" className="btn">
+                Close!
+              </label>
+            </div>
+          </div>
         </div>
       </Layout>
     </div>

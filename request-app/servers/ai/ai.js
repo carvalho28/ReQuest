@@ -178,11 +178,11 @@ async function verifyRequirementWithScenario(scenario, requirement) {
           role: "user",
           content: `Given the following scenario: ${scenario}. 
                     Verify if the following requirement: ${requirement} has the following 
-                    properties: ${requirementsProperties} and if can be used in the scenario.
-                    Answer with only yes or no.`,
+                    properties: ${requirementsProperties} and if it can be considered a requirement for the scenario.
+                    Answer with only "yes" or "no", please provide a complete reason, no more than 2 lines, for your answer.`,
         },
       ],
-      max_tokens: 500,
+      max_tokens: 200,
     });
     return completion.data.choices[0].message?.content;
   } catch (error) {

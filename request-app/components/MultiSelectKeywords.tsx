@@ -40,6 +40,7 @@ export default ({ value, setValue }: Props) => {
   return (
     <div className="w-full">
       <CreatableSelect
+        className="keywords"
         theme={(theme) => ({
           ...theme,
           borderRadius: 0,
