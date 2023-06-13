@@ -22,7 +22,7 @@ interface Props {
   onChange?: (value: readonly Option[]) => void;
 }
 
-export default ({ value, setValue }: Props) => {
+const MultiSelectKeywords = ({ value, setValue }: Props) => {
   const [inputValue, setInputValue] = React.useState("");
 
   const handleKeyDown: KeyboardEventHandler = (event) => {
@@ -30,7 +30,6 @@ export default ({ value, setValue }: Props) => {
     switch (event.key) {
       case "Enter":
       case "Tab":
-        // setValue((prev) => [...prev, createOption(inputValue)]);
         setValue([...value, createOption(inputValue)]);
         setInputValue("");
         event.preventDefault();
@@ -66,3 +65,6 @@ export default ({ value, setValue }: Props) => {
     </div>
   );
 };
+
+export default MultiSelectKeywords;
+
