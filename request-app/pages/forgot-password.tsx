@@ -5,8 +5,10 @@ import PasswordInput from "@/components/PasswordInput";
 import { createServerSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import { GetServerSidePropsContext } from "next";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
+import { useRouter } from "next/router";
 
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   // Create authenticated Supabase Client
@@ -30,17 +32,49 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
 };
 
 export default function ForgotPassword() {
+  // verify if url has code
+  // useEffect(() => {
+  //   const urlParams = new URLSearchParams(window.location.search);
+  //   const urlCode = urlParams.get("code");
+  //   if (urlCode) {
+  //     setCode(urlCode);
+  //   } else {
+  //     router.push("/login");
+  //   }
+  // }, []);
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordConfirmation, setpasswordConfirmation] = useState("");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
+  const supabaseClient = useSupabaseClient();
+  const router = useRouter();
+
   const resetPassword = async () => {
     setLoading(true);
     setErrorMessage(null);
-  } 
 
+    if (password !== passwordConfirmation) {
+      setLoading(false);
+      return setErrorMessage("Passwords do not match");
+    }
+
+    const { error } = await supabaseClient.auth.updateUser({
+      password: password,
+    });
+
+    if (error) {
+      setLoading(false);
+      return setErrorMessage(error.message);
+    }
+
+    setLoading(false);
+    setErrorMessage(null);
+  };
+
+  const [code, setCode] = useState<string | null>(null);
 
   return (
     <div className="min-h-screen login-background flex flex-col">
@@ -58,31 +92,6 @@ export default function ForgotPassword() {
               <div className="mt-8">
                 <div className="mt-6">
                   <form className="space-y-6">
-                    <div>
-                      <label
-                        htmlFor="email"
-                        className="block text-sm font-medium leading-6 text-gray-900"
-                      >
-                        Email address
-                      </label>
-                      <div className="mt-2">
-                        <input
-                          id="email"
-                          name="email"
-                          type="email"
-                          autoComplete="email"
-                          placeholder="Email address"
-                          required
-                          className="pl-4 block w-full rounded-md border-0
-                          py-1.5 shadow-sm ring-1
-                          ring-inset ring-gray-300 placeholder:text-gray-400 
-                          focus:ring-2 focus:ring-inset 
-                          focus:ring-contrast sm:text-sm sm:leading-6"
-                          onChange={(e) => setEmail(e.target.value)}
-                        />
-                      </div>
-                    </div>
-
                     <div>
                       <label
                         htmlFor="email"
@@ -124,10 +133,11 @@ export default function ForgotPassword() {
                     {errorMessage && <ErrorMessage message={errorMessage} />}
                     <div>
                       <button
+                        onClick={resetPassword}
                         type="submit"
                         className="flex w-full justify-center rounded-md bg-contrast py-2 px-3 text-sm font-semibold text-white shadow-sm hover:bg-contrasthover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-contrast"
                       >
-                        Login
+                        Reset Password
                       </button>
                     </div>
                   </form>
@@ -137,11 +147,12 @@ export default function ForgotPassword() {
           </div>
           <div className="relative flex-1 justify-center hidden lg:block">
             <Image
-              className="inset-0 w-128 h-full max-w-screen p-6 mx-auto"
-              src="/register.svg"
+              className="inset-0 h-auto max-w-screen p-6 mx-auto"
+              style={{ maxWidth: "130%" }}
+              src="/forgot-password.svg"
               alt=""
-              width={800}
-              height={800}
+              width={1600}
+              height={1600}
             />
           </div>
         </div>
