@@ -134,8 +134,7 @@ export default function Playground({ avatar_url, projectsChildren }: any) {
     setError("");
     try {
       const response = await fetch(
-        // "https://morning-flower-3545.fly.dev/api/ai/functional",
-        "http://localhost:8080/api/ai/verify",
+        "https://morning-flower-3545.fly.dev/api/ai/verify",
         {
           method: "POST",
           headers: {

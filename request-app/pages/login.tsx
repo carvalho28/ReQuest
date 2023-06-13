@@ -22,7 +22,7 @@ const ErrorMessage = dynamic(() => import("@/components/ErrorMessage"), {
 });
 
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
-    // Create authenticated Supabase Client
+  // Create authenticated Supabase Client
   const supabase = createServerSupabaseClient(ctx);
   // Check if we have a session
   const {
@@ -178,19 +178,33 @@ export default function Login() {
                           autoComplete="email"
                           placeholder="Email address"
                           required
-                          className="pl-4 block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-contrast sm:text-sm sm:leading-6"
+                          className="pl-4 block w-full rounded-md border-0
+                          py-1.5 shadow-sm ring-1
+                          ring-inset ring-gray-300 placeholder:text-gray-400 
+                          focus:ring-2 focus:ring-inset 
+                          focus:ring-contrast sm:text-sm sm:leading-6"
                           onChange={(e) => setEmail(e.target.value)}
                         />
                       </div>
                     </div>
 
                     <div>
-                      <label
-                        htmlFor="email"
-                        className="block text-sm font-medium leading-6 text-gray-900"
-                      >
-                        Password
-                      </label>
+                      <div className="flex justify-between">
+                        <label
+                          htmlFor="email"
+                          className="block text-sm font-medium leading-6 text-gray-900"
+                        >
+                          Password
+                        </label>
+                        <div className="flex items-center align-end text-sm justify-end">
+                          <Link
+                            href="/forgot-password"
+                            className="font-medium text-contrast hover:text-contrasthover"
+                          >
+                            Forgot your password?
+                          </Link>
+                        </div>
+                      </div>
                       <PasswordInput
                         setPassword={setPassword}
                         placeholder="Password"
