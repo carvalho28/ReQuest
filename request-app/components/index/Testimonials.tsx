@@ -10,16 +10,16 @@ const testimonials = [
       author: {
         name: "John Samson",
         role: "Student at University of Toronto",
-        image: "/person1.jpg"
+        image: "/person1.jpg",
       },
     },
     {
       content:
-        "ReQuest has been a lifesaver for me as a student. With its collaboration features, I can easily work with my classmates on projects and ensure we're all on the same page. The AI integration helps me improve my requirements, and the gamification elements keep me motivated. It's a must-have tool!", 
+        "ReQuest has been a lifesaver for me as a student. With its collaboration features, I can easily work with my classmates on projects and ensure we're all on the same page. The AI integration helps me improve my requirements, and the gamification elements keep me motivated. It's a must-have tool!",
       author: {
         name: "Amy Tribuski",
         role: "Student at National University of Singapore",
-        image: "/person4.jpg"
+        image: "/person4.jpg",
       },
     },
   ],
@@ -28,38 +28,38 @@ const testimonials = [
       content:
         "As a student, I have always struggled with keeping track of project requirements, coordinating with teammates, and staying motivated throughout the process. However, ReQuest has completely transformed my approach to managing requirements, thanks to its powerful features such as collaboration, AI integration, and gamification.",
       author: {
-        name: "Leland Kiehn",
-        role: "Founder of Kiehn and Sons",
-        image: "/person5.jpg"
+        name: "Lily Ion",
+        role: "Student at University of California, Berkeley",
+        image: "/person5.jpg",
       },
     },
     {
       content:
-        "There are so many things I had to do with my old software that I just don’t do at all with TaxPal. Suspicious but I can’t say I don’t love it.",
+        "ReQuest is a fantastic tool for students. Its collaboration features, AI integration, and gamification elements make requirement management a breeze. Highly recommended!",
       author: {
-        name: "Erin Powlowski",
-        role: "COO at Armstrong Inc",
-        image: "/person2.jpg"
+        name: "Guilherme Barata",
+        role: "Student at University of Beira Interior",
+        image: "/person2.jpg",
       },
     },
   ],
   [
     {
       content:
-        "I used to have to remit tax to the EU and with TaxPal I somehow don’t have to do that anymore. Nervous to travel there now though.",
+        "ReQuest has completely transformed how I approach requirement management as a student. The collaborative capabilities make group work seamless, and the AI integration provides valuable insights. The gamification aspect keeps me engaged and motivated. ReQuest is an excellent tool for students!",
       author: {
-        name: "Peter Renolds",
-        role: "Founder of West Inc",
-        image: "/person3.jpg"
+        name: "Ana Lopes",
+        role: "Student atvUniversity of Aveiro",
+        image: "/person3.jpg",
       },
     },
     {
       content:
-        "This is the fourth email I’ve sent to your support team. I am literally being held in jail for tax fraud. Please answer your damn emails, this is important.",
+        "ReQuest has made my project life much more manageable. The collaboration options have improved my group projects, and the AI integration helps me create better requirements.",
       author: {
         name: "Amy Hahn",
-        role: "Director at Velocity Industries",
-        image: "/person4.jpg"
+        role: "Student University of Texas at Austin",
+        image: "/person4.jpg",
       },
     },
   ],
@@ -86,8 +86,8 @@ const Testimonials = () => {
             Loved by students all over the world
           </h2>
           <p className="mt-4 text-lg tracking-tight text-slate-700">
-            Our software is so simple that students all over the world are
-            using it to track their projects and requirements. 
+            Our software is so simple that students all over the world are using
+            it to track their projects and requirements.
           </p>
         </div>
         <ul
@@ -135,6 +135,6 @@ const Testimonials = () => {
       </Container>
     </section>
   );
-}
+};
 
 export default Testimonials;
