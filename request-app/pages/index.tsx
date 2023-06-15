@@ -3,6 +3,7 @@ import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
 import PrimaryFeatures from "@/components/index/PrimaryFeatures";
+import Testimonials from "@/components/index/Testimonials";
 
 export default function Home() {
   return (
@@ -44,6 +45,7 @@ export default function Home() {
         </div>
       </div>
       <PrimaryFeatures />
+      <Testimonials />
     </div>
   );
 }
