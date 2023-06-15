@@ -69,9 +69,6 @@ export default function Playground({ avatar_url, projectsChildren }: any) {
 
   const [value, setValue] = useState<readonly Option[]>([]);
   const [scenario, setScenario] = useState<string>("");
-  // const [scenario, setScenario] = useState<string>(
-  //   "In the foreseeable future, the world is becoming increasingly interconnected. The first object represents the rise of artificial intelligence and automation in various industries, leading to the creation of new jobs and the displacement of others. The second object represents the continued growth of renewable energy sources and their adoption on a global scale in response to climate change. The third object represents the increasing use of virtual reality and augmented reality technologies in entertainment, education, and communication. The fourth object represents the growing importance of data privacy and security in the digital age, leading to new regulations and standards. As these trends continue to evolve, they will shape the world we live in and the way we interact with each other and our environment."
-  // );
 
   const [loading, setLoading] = useState<boolean>(false);
   const [loadingAI, setLoadingAI] = useState<boolean>(false);
@@ -90,8 +87,8 @@ export default function Playground({ avatar_url, projectsChildren }: any) {
     console.log(keywords);
     try {
       const response = await fetch(
-        // "https://morning-flower-3545.fly.dev/api/ai/functional",
-        "http://localhost:8080/api/ai/ltfs",
+        "https://morning-flower-3545.fly.dev/api/ai/ltfs",
+        // "http://localhost:8080/api/ai/ltfs",
         {
           method: "POST",
           headers: {
