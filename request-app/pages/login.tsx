@@ -4,7 +4,7 @@ import { signUpGithub, signUpGoogle } from "@/utils/signInUtils";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FaGithub, FaTwitter } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
@@ -13,6 +13,7 @@ import { createServerSupabaseClient } from "@supabase/auth-helpers-nextjs";
 
 // dynamic imports
 import dynamic from "next/dynamic";
+import ResetPassword from "@/components/ResetPassword";
 const Loading = dynamic(() => import("@/components/Loading"), { ssr: false });
 const ConfirmEmail = dynamic(() => import("@/components/ConfirmEmail"), {
   ssr: false,
@@ -22,7 +23,7 @@ const ErrorMessage = dynamic(() => import("@/components/ErrorMessage"), {
 });
 
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
-    // Create authenticated Supabase Client
+  // Create authenticated Supabase Client
   const supabase = createServerSupabaseClient(ctx);
   // Check if we have a session
   const {
@@ -89,11 +90,18 @@ export default function Login() {
     }
   }
 
+  
+  const [open, setOpen] = useState(false);
+  useEffect(() => {
+    console.log(open);
+  }, [open]);
+
   return (
     <div className="min-h-screen login-background flex flex-col">
       <Header color={0} />
       <div className="flex-1 flex items-center justify-center">
         {regSuccess && <ConfirmEmail />}
+        {open && <ResetPassword open={open} setOpen={setOpen} />}
         <div className="mx-auto max-w-7xl px-6 lg:flex lg:items-center lg:gap-x-24 lg:px-8">
           <div className="flex flex-1 flex-col justify-center py-12 px-12 sm:px-6 lg:flex-none lg:px-20 xl:px-24 bg-white2 rounded-3xl shadow-lg">
             <div className="mx-auto max-w-sm md:w-96">
@@ -178,19 +186,33 @@ export default function Login() {
                           autoComplete="email"
                           placeholder="Email address"
                           required
-                          className="pl-4 block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-contrast sm:text-sm sm:leading-6"
+                          className="pl-4 block w-full rounded-md border-0
+                          py-1.5 shadow-sm ring-1
+                          ring-inset ring-gray-300 placeholder:text-gray-400 
+                          focus:ring-2 focus:ring-inset 
+                          focus:ring-contrast sm:text-sm sm:leading-6"
                           onChange={(e) => setEmail(e.target.value)}
                         />
                       </div>
                     </div>
 
                     <div>
-                      <label
-                        htmlFor="email"
-                        className="block text-sm font-medium leading-6 text-gray-900"
-                      >
-                        Password
-                      </label>
+                      <div className="flex justify-between">
+                        <label
+                          htmlFor="email"
+                          className="block text-sm font-medium leading-6 text-gray-900"
+                        >
+                          Password
+                        </label>
+                        <div className="flex items-center align-end text-sm justify-end">
+                          <p
+                            onClick={() => setOpen(true)}  
+                            className="font-medium text-contrast hover:text-contrasthover cursor-pointer"
+                          >
+                            Forgot your password?
+                          </p>
+                        </div>
+                      </div>
                       <PasswordInput
                         setPassword={setPassword}
                         placeholder="Password"

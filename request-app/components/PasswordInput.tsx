@@ -23,7 +23,11 @@ const PasswordInput = ({
         autoComplete="current-password"
         required
         placeholder={placeholder}
-        className="pl-4 block w-full pr-10 rounded-md border-gray-300 focus:border-contrast focus:ring-contrast sm:text-sm"
+        className="pl-4 block w-full rounded-md border-0
+                   py-1.5 shadow-sm ring-1 ring-inset 
+                   ring-gray-300 placeholder:text-gray-400 
+                   focus:ring-2 focus:ring-inset 
+                   focus:ring-contrast sm:text-sm sm:leading-6"
         onChange={(e) => setPassword(e.target.value)}
       />
       <div className="absolute inset-y-0 right-0 pr-3 flex items-center">
