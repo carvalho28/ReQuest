@@ -1,4 +1,5 @@
 import "@/styles/globals.css";
+import "@/styles/index.css";
 import "@/styles/tiptap.scss";
 import "@/styles/uppy.css";
 import "@/styles/scrollbar.css";
