@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import PrimaryFeatures from "@/components/index/PrimaryFeatures";
 import Testimonials from "@/components/index/Testimonials";
+import { Faqs } from "@/components/index/Faqs";
 
 export default function Home() {
   return (
@@ -46,6 +47,7 @@ export default function Home() {
       </div>
       <PrimaryFeatures />
       <Testimonials />
+      <Faqs />
     </div>
   );
 }
