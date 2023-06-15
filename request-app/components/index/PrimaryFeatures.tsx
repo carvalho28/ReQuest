@@ -100,7 +100,7 @@ const PrimaryFeatures = () => {
               Everything you need to manage your requirements
             </h2>
             <p className="mt-6 text-lg tracking-tight text-purple-100">
-              We've got all the features you need to keep your requirements
+              We&apos;ve got all the features you need to keep your requirements
               organized and your team on the same page.
             </p>
           </div>
