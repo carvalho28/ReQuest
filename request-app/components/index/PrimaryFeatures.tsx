@@ -7,27 +7,27 @@ import { Container } from "./Container";
 
 const features = [
   {
-    title: "Project management",
+    title: "Projects",
     description:
       "Keep track of your projects, who's working on them, status, and more.",
     image: "/projects-preview.png",
   },
   {
-    title: "Calendar view",
+    title: "Requirements",
     description:
-      "All of projects and requirements are displayed in a calendar view, so you can see what's coming up.",
-    image: "/calendar-preview.png",
+      "Keep track of your requirements, progress, deadlines, and more. There is also a ranking system to push your team to the next level.",
+    image: "/requirements-preview.png",
   },
   {
-    title: "VAT handling",
+    title: "Collaboration",
     description:
-      "We only sell our software to companies who don't deal with VAT at all, so technically we do all the VAT stuff they need.",
-    image: "/projects-preview.png",
+      "Collaborate in real-time with your team. This will help you stay on the same page and get things done faster.",
+    image: "/collaboration-preview.png",
   },
   {
-    title: "Reporting",
+    title: "AI",
     description:
-      "Easily export your data into an Excel spreadsheet where you can do whatever the hell you want with it.",
+      "We use AI to help you with your requirements. You can also evaluate your abilities to create requirements from a given scenario.",
     image: "/projects-preview.png",
   },
 ];
@@ -98,11 +98,11 @@ const PrimaryFeatures = () => {
                           className={clsx(
                             "font-display text-lg [&:not(:focus-visible)]:focus:outline-none",
                             selectedIndex === featureIndex
-                              ? "text-blue-600 lg:text-white"
-                              : "text-blue-100 hover:text-white lg:text-white"
+                              ? "text-purple-600 lg:text-white"
+                              : "text-purple-100 hover:text-white lg:text-white"
                           )}
                         >
-                          <span className="absolute inset-0 rounded-full lg:rounded-l-xl lg:rounded-r-none" />
+                          <span className="absolute text-2xl inset-0 rounded-full lg:rounded-l-xl lg:rounded-r-none" />
                           {feature.title}
                         </Tab>
                       </h3>

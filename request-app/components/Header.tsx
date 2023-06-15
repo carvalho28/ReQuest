@@ -6,9 +6,9 @@ import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 
 const navigation = [
-  { name: "Features", href: "#features" },
-  { name: "Testimonials", href: "#" },
-  { name: "About us", href: "#" },
+  { name: "Features", href: "//#features" },
+  { name: "Testimonials", href: "//#testiomonials" },
+  { name: "About us", href: "//#about-us" },
 ];
 
 type headerProps = {
