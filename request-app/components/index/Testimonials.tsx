@@ -54,7 +54,7 @@ const testimonials = [
         "ReQuest has completely transformed how I approach requirement management as a student. The collaborative capabilities make group work seamless, and the AI integration provides valuable insights. The gamification aspect keeps me engaged and motivated. ReQuest is an excellent tool for students!",
       author: {
         name: "Ana Lopes",
-        role: "Student atvUniversity of Aveiro",
+        role: "Student at University of Aveiro",
         image: "/person3.jpg",
       },
     },
@@ -63,7 +63,7 @@ const testimonials = [
         "ReQuest has made my project life much more manageable. The collaboration options have improved my group projects, and the AI integration helps me create better requirements.",
       author: {
         name: "Amy Hahn",
-        role: "Student University of Texas at Austin",
+        role: "Student at University of Texas, Austin",
         image: "/person4.jpg",
       },
     },
