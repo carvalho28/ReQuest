@@ -40,8 +40,16 @@ export default function Home() {
               </a>
             </div>
           </div>
+
           <div className="mt-16 sm:mt-24 lg:mt-0 lg:flex-shrink-0 lg:flex-grow flex justify-center">
-            <Image src="/guy.svg" alt="Guy" width={550} height={550} />
+            <Image
+              priority
+              src="/guy.svg"
+              alt="Guy"
+              width={550}
+              height={550}
+              style={{ width: "auto", height: "375px" }}
+            />
           </div>
         </div>
       </div>

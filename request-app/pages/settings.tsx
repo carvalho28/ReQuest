@@ -1,9 +1,14 @@
+import ErrorMessage from "@/components/ErrorMessage";
 import Layout from "@/components/Layout";
+import Loading from "@/components/Loading";
+import SuccessMessage from "@/components/SuccessMessage";
 import { ProjectChildren } from "@/components/utils/sidebarHelper";
 import { createServerSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import { useSupabaseClient, useUser } from "@supabase/auth-helpers-react";
+import { RealtimeChannel } from "@supabase/supabase-js";
 import { GetServerSidePropsContext } from "next";
 import Image from "next/image";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { RiErrorWarningFill } from "react-icons/ri";
 
@@ -61,10 +66,11 @@ export default function Settings({ avatar_url, projectsChildren }: any) {
   const [userEmailStatic, setUserEmailStatic] = useState<string | undefined>(
     undefined
   );
-  const [userEmail, setUserEmail] = useState<string | undefined>(undefined);
+  const [userEmail, setUserEmail] = useState<string | undefined | string>("");
   const [currentPassword, setCurrentPassword] = useState<string>("");
   const [newPassword, setNewPassword] = useState<string>("");
   const [newPasswordConfirm, setNewPasswordConfirm] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
     if (user) {
@@ -79,6 +85,10 @@ export default function Settings({ avatar_url, projectsChildren }: any) {
     { name: "Privacy", actual: false },
   ];
   const [tabs, setTabs] = useState(tabsPre);
+  const [errorMessage, setErrorMessage] = useState<string | undefined>();
+  const [successMessage, setSuccessMessage] = useState<string | undefined>();
+
+  const router = useRouter();
 
   const handleTabClick = async (e: any) => {
     // set actual
@@ -91,7 +101,70 @@ export default function Settings({ avatar_url, projectsChildren }: any) {
     });
     // set tabs
     setTabs(newTabs);
+    setLoading(false);
   };
+
+  const updateEmail = async () => {
+    if (userEmail === "") {
+      setErrorMessage("Email cannot be empty");
+      return;
+    }
+    setLoading(true);
+    if (userEmail) {
+      const { data, error } = await supabaseClient.auth.updateUser({
+        email: userEmail,
+      });
+      if (error) {
+        console.log(error);
+        setSuccessMessage(undefined);
+        setErrorMessage(error.message);
+      }
+      if (data) {
+        if (data.user) {
+          setSuccessMessage(
+            "Please verify in both the old and new email the confirmation sent"
+          );
+          setErrorMessage(undefined);
+        }
+      }
+    }
+    setLoading(false);
+  };
+
+  // get profile changes in real-time
+  useEffect(() => {
+    let pj_channel: RealtimeChannel;
+    async function getUserDataRealtime() {
+      pj_channel = supabaseClient
+        .channel("user_changes")
+        .on(
+          "postgres_changes",
+          {
+            event: "*",
+            schema: "public",
+            table: "profiles",
+          },
+          async (payload: any) => {
+            console.log(payload);
+            if (payload.new.email) {
+              // get new user and session
+              const { error } = await supabaseClient.auth.signOut();
+              if (error) {
+                console.log(error);
+                throw error;
+              }
+              router.push("/login");
+            }
+          }
+        )
+        .subscribe();
+
+      return () => {
+        supabaseClient.removeChannel(pj_channel);
+      };
+    }
+    getUserDataRealtime();
+  }, [supabaseClient]);
 
   return (
     <div>
@@ -156,6 +229,7 @@ export default function Settings({ avatar_url, projectsChildren }: any) {
                     className="inline-flex items-center px-6 py-2 border border-transparent
                 text-sm font-medium rounded-md shadow-sm text-white bg-contrast
                 hover:bg-contrasthover"
+                    onClick={() => updateEmail()}
                   >
                     Update
                   </button>
@@ -236,8 +310,8 @@ export default function Settings({ avatar_url, projectsChildren }: any) {
           {tabs[2].actual && (
             <div className="flex flex-col gap-x-4 md:flex-row gap-y-8 mx-6">
               <div className="flex flex-col w-64 text-center justify-center items-center">
-                  {/* huge danger icon */}
-                <RiErrorWarningFill className="text-red-400 w-20 h-20" />   
+                {/* huge danger icon */}
+                <RiErrorWarningFill className="text-red-400 w-20 h-20" />
                 <button
                   type="button"
                   className="inline-flex items-center px-10 mt-10 py-2 border border-transparent
@@ -307,6 +381,11 @@ export default function Settings({ avatar_url, projectsChildren }: any) {
               </div>
             </div>
           )}
+          <div className="flex flex-row justify-center items-center mt-8">
+            {loading && <Loading />}
+            {errorMessage && <ErrorMessage message={errorMessage} />}
+            {successMessage && <SuccessMessage message={successMessage} />}
+          </div>
         </div>
       </Layout>
     </div>
