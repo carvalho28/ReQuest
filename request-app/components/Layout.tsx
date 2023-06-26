@@ -21,6 +21,7 @@ import { ChevronDownIcon } from "@heroicons/react/20/solid";
 import { ProjectChildren } from "./utils/sidebarHelper";
 import { renderImage } from "./utils/general";
 import { RiGamepadLine, RiQuestionLine, RiToolsLine } from "react-icons/ri";
+import Head from "next/head";
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
@@ -185,6 +186,14 @@ const Layout = ({
   return (
     <>
       <div>
+        <Head>
+          <title>{`ReQuest | ${currentPage.charAt(0).toUpperCase() + currentPage.slice(1)}`}</title>
+          <meta
+            name="viewport"
+            content="initial-scale=1.0, width=device-width"
+          />
+        </Head>
+
         <Transition.Root show={sidebarOpen} as={Fragment}>
           <Dialog
             as="div"
