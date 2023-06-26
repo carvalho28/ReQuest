@@ -63,9 +63,7 @@ export default function Settings({ avatar_url, projectsChildren }: any) {
   const supabaseClient = useSupabaseClient();
   const user = useUser();
 
-  const [userEmailStatic, setUserEmailStatic] = useState<string | undefined>(
-    undefined
-  );
+  const [userEmailStatic, setUserEmailStatic] = useState<string>("");
   const [userEmail, setUserEmail] = useState<string | undefined | string>("");
   const [currentPassword, setCurrentPassword] = useState<string>("");
   const [newPassword, setNewPassword] = useState<string>("");
@@ -74,7 +72,7 @@ export default function Settings({ avatar_url, projectsChildren }: any) {
 
   useEffect(() => {
     if (user) {
-      setUserEmailStatic(user.email);
+      setUserEmailStatic(user.email as string);
     }
   }, [user]);
 
@@ -89,6 +87,22 @@ export default function Settings({ avatar_url, projectsChildren }: any) {
   const [successMessage, setSuccessMessage] = useState<string | undefined>();
 
   const router = useRouter();
+
+  const handleResetPassword = async () => {
+    setLoading(true);
+    const { error } = await supabaseClient.auth.resetPasswordForEmail(
+      userEmailStatic,
+      {
+        redirectTo: "http://localhost:3000/forgot-password",
+      }
+    );
+    if (error) {
+      console.log(error);
+      return setErrorMessage(error.message);
+    }
+    supabaseClient.auth.signOut();
+    router.push("/");
+  };
 
   const handleTabClick = async (e: any) => {
     // set actual
@@ -129,6 +143,24 @@ export default function Settings({ avatar_url, projectsChildren }: any) {
       }
     }
     setLoading(false);
+  };
+
+  const deleteAccount = async () => {
+    setLoading(true);
+    const { error } = await supabaseClient.auth.admin.deleteUser(
+      user?.id as any
+    );
+    if (error) {
+      setErrorMessage(error.message);
+      setSuccessMessage(undefined);
+    }
+    setLoading(false);
+    const error2 = await supabaseClient.auth.signOut();
+    if (error2) {
+      console.log(error);
+      throw error;
+    }
+    router.push("/");
   };
 
   // get profile changes in real-time
@@ -239,70 +271,21 @@ export default function Settings({ avatar_url, projectsChildren }: any) {
           )}
           {tabs[1].actual && (
             <div className="flex flex-col gap-x-4 md:flex-row gap-y-8 mx-6">
-              <div className="flex flex-col w-64 text-center justify-center items-center">
-                <label
-                  htmlFor="user-password"
-                  className="block text-md font-medium leading-6 text-gray-900"
+              <div className="flex flex-col w-96 text-center justify-center items-center">
+                <p className="text-md font-medium leading-6 text-gray-900">
+                  Click the button to reset the password, you will receive an
+                  email.
+                </p>
+                <button
+                  type="button"
+                  className="mt-10 inline-flex justify-center rounded-md bg-contrast 
+                    px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-contrasthover 
+                    focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 
+                    focus-visible:outline-contrast w-64"
+                  onClick={() => handleResetPassword()}
                 >
-                  Current Password
-                </label>
-                <input
-                  type="text"
-                  name="user-email"
-                  id="user-email"
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900
-                shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400
-                focus:ring-2 focus:ring-inset focus:ring-contrast sm:text-sm
-                sm:leading-6 p-2 mt-2"
-                  value={currentPassword}
-                  onChange={(e) => setCurrentPassword(e.target.value)}
-                />
-                <label
-                  htmlFor="user-password-new"
-                  className="mt-10 block text-md font-medium leading-6 text-gray-900"
-                >
-                  New Password
-                </label>
-                <input
-                  type="text"
-                  name="user-password-new"
-                  id="user-password-new"
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900
-                shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400
-                focus:ring-2 focus:ring-inset focus:ring-contrast sm:text-sm
-                sm:leading-6 p-2 mt-2"
-                  value={newPassword}
-                  onChange={(e) => setNewPassword(e.target.value)}
-                />
-
-                <label
-                  htmlFor="user-password-conf"
-                  className="mt-10 block text-md font-medium leading-6 text-gray-900"
-                >
-                  New Password
-                </label>
-                <input
-                  type="text"
-                  name="user-password-conf"
-                  id="user-password-new"
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900
-                shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400
-                focus:ring-2 focus:ring-inset focus:ring-contrast sm:text-sm
-                sm:leading-6 p-2 mt-2"
-                  value={newPasswordConfirm}
-                  onChange={(e) => setNewPasswordConfirm(e.target.value)}
-                />
-
-                <div className="mt-10 items-center flex justify-center">
-                  <button
-                    type="button"
-                    className="inline-flex items-center px-6 py-2 border border-transparent
-                text-sm font-medium rounded-md shadow-sm text-white bg-contrast
-                hover:bg-contrasthover"
-                  >
-                    Update
-                  </button>
-                </div>
+                  Reset password
+                </button>
               </div>
             </div>
           )}
@@ -311,12 +294,17 @@ export default function Settings({ avatar_url, projectsChildren }: any) {
             <div className="flex flex-col gap-x-4 md:flex-row gap-y-8 mx-6">
               <div className="flex flex-col w-64 text-center justify-center items-center">
                 {/* huge danger icon */}
+                <p className="text-md font-medium leading-6 text-gray-900 mb-10">
+                  We are sorry to see you go. <br />
+                  Are you sure you want to delete your account?
+                </p>
                 <RiErrorWarningFill className="text-red-400 w-20 h-20" />
                 <button
                   type="button"
                   className="inline-flex items-center px-10 mt-10 py-2 border border-transparent
                 text-sm font-medium rounded-md shadow-sm text-white bg-red-500
                 hover:bg-contrasthover"
+                  onClick={() => deleteAccount()}
                 >
                   Delete Account
                 </button>
@@ -371,7 +359,7 @@ export default function Settings({ avatar_url, projectsChildren }: any) {
                         <input
                           type="checkbox"
                           // checked="checked"
-                          checked={true}
+                          defaultChecked
                           className="checkbox checkbox-primary"
                         />
                       </label>
