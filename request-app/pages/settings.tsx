@@ -5,6 +5,7 @@ import { useSupabaseClient, useUser } from "@supabase/auth-helpers-react";
 import { GetServerSidePropsContext } from "next";
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import { RiErrorWarningFill } from "react-icons/ri";
 
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   const supabase = createServerSupabaseClient(ctx);
@@ -61,6 +62,9 @@ export default function Settings({ avatar_url, projectsChildren }: any) {
     undefined
   );
   const [userEmail, setUserEmail] = useState<string | undefined>(undefined);
+  const [currentPassword, setCurrentPassword] = useState<string>("");
+  const [newPassword, setNewPassword] = useState<string>("");
+  const [newPasswordConfirm, setNewPasswordConfirm] = useState<string>("");
 
   useEffect(() => {
     if (user) {
@@ -176,8 +180,80 @@ export default function Settings({ avatar_url, projectsChildren }: any) {
                 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400
                 focus:ring-2 focus:ring-inset focus:ring-contrast sm:text-sm
                 sm:leading-6 p-2 mt-2"
-                  value={userEmail}
-                  onChange={(e) => setUserEmail(e.target.value)}
+                  value={currentPassword}
+                  onChange={(e) => setCurrentPassword(e.target.value)}
+                />
+                <label
+                  htmlFor="user-password-new"
+                  className="mt-10 block text-md font-medium leading-6 text-gray-900"
+                >
+                  New Password
+                </label>
+                <input
+                  type="text"
+                  name="user-password-new"
+                  id="user-password-new"
+                  className="block w-full rounded-md border-0 py-1.5 text-gray-900
+                shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400
+                focus:ring-2 focus:ring-inset focus:ring-contrast sm:text-sm
+                sm:leading-6 p-2 mt-2"
+                  value={newPassword}
+                  onChange={(e) => setNewPassword(e.target.value)}
+                />
+
+                <label
+                  htmlFor="user-password-conf"
+                  className="mt-10 block text-md font-medium leading-6 text-gray-900"
+                >
+                  New Password
+                </label>
+                <input
+                  type="text"
+                  name="user-password-conf"
+                  id="user-password-new"
+                  className="block w-full rounded-md border-0 py-1.5 text-gray-900
+                shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400
+                focus:ring-2 focus:ring-inset focus:ring-contrast sm:text-sm
+                sm:leading-6 p-2 mt-2"
+                  value={newPasswordConfirm}
+                  onChange={(e) => setNewPasswordConfirm(e.target.value)}
+                />
+
+                <div className="mt-10 items-center flex justify-center">
+                  <button
+                    type="button"
+                    className="inline-flex items-center px-6 py-2 border border-transparent
+                text-sm font-medium rounded-md shadow-sm text-white bg-contrast
+                hover:bg-contrasthover"
+                  >
+                    Update
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {tabs[2].actual && (
+            <div className="flex flex-col gap-x-4 md:flex-row gap-y-8 mx-6">
+              <div className="flex flex-col w-64 text-center justify-center items-center">
+                  {/* huge danger icon */}
+                <RiErrorWarningFill className="text-red-400 w-20 h-20" />   
+                <button
+                  type="button"
+                  className="inline-flex items-center px-10 mt-10 py-2 border border-transparent
+                text-sm font-medium rounded-md shadow-sm text-white bg-red-500
+                hover:bg-contrasthover"
+                >
+                  Delete Account
+                </button>
+
+                <Image
+                  className="inset-0 h-auto max-w-screen p-6 mx-auto"
+                  style={{ maxWidth: "130%" }}
+                  src="/delete-account.svg"
+                  alt=""
+                  width={1600}
+                  height={1600}
                 />
               </div>
             </div>
