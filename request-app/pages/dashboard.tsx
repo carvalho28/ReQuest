@@ -427,7 +427,7 @@ export default function Dashboard({
                     onClick={() => handleRowRequirementClick(requirement)}
                   >
                     <td>
-                      <div className="w-64 truncate">
+                      <div className="md:w-64 w-32 truncate">
                         {requirement.requirement_name}
                       </div>
                     </td>
@@ -505,7 +505,7 @@ export default function Dashboard({
         </div>
       </div>
 
-      <div className="md:flex flex-wrap bg-white rounded-lg shadow-lg hidden">
+      <div className="md:flex flex-wrap bg-white rounded-lg shadow-lg hidden mt-5">
         <div className="flex flex-wrap flex-1 w-full md:w-3/4">
           <div
             className="flex md:flex-row flex-col md:gap-y-0 gap-y-10 items-center justify-between
