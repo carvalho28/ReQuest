@@ -101,6 +101,20 @@ export default function Dashboard({
 
   const [recentRequirements, setRecentRequirements] = useState<any[]>([]);
   const [projectNMonths, setProjectNMonths] = useState<any[]>([]);
+  const [nMonths, setNMonths] = useState<number>(1);
+
+  const getProjectNMonths = async (num_months: number) => {
+    const { data, error } = await supabaseClient.rpc(
+      "get_user_projects_within_months",
+      { user_id: userData.id, num_months: num_months }
+    );
+    if (error) console.log(error);
+    if (!data) {
+      console.log("No data found");
+    }
+    console.log(data);
+    setProjectNMonths(data);
+  };
 
   useEffect(() => {
     setReqComplete(userData?.requirements_completed);
@@ -117,20 +131,8 @@ export default function Dashboard({
       // console.log(data);
       setRecentRequirements(data);
     };
-    const getProjectNMonths = async () => {
-      const { data, error } = await supabaseClient.rpc(
-        "get_user_projects_within_months",
-        { user_id: userData.id, num_months: 4 }
-      );
-      if (error) console.log(error);
-      if (!data) {
-        console.log("No data found");
-      }
-      console.log(data);
-      setProjectNMonths(data);
-    };
     getRecentRequirements();
-    getProjectNMonths();
+    getProjectNMonths(1);
   }, [user]);
 
   useEffect(() => {
@@ -389,6 +391,10 @@ export default function Dashboard({
     window.open(url, "_blank");
   };
 
+  useEffect(() => {
+    getProjectNMonths(nMonths);
+  }, [nMonths]);
+
   return (
     <Layout
       currentPage="dashboard"
@@ -404,21 +410,11 @@ export default function Dashboard({
           <h3 className="text-xl font-bold flex justify-center items-center text-center">
             Recent Closed Requirements
           </h3>
-          {/* render svg spaceship */}
-          {/* <div className="text-center flex justify-center items-center">
-            <Image
-              alt="Rocketship"
-              src="/rocketship.svg"
-              width={100}
-              height={100}
-              className="mt-8"
-            />
-          </div> */}
           <div className="overflow-x-auto w-full mt-4">
             <table className="table w-full">
               <thead>
-                <tr className="">
-                  <th>Requirement</th>
+                <tr className="text-md">
+                  <th className="text-lg">Requirement</th>
                   <th>Project</th>
                   <th>Date</th>
                 </tr>
@@ -455,9 +451,22 @@ export default function Dashboard({
           </div>
         </div>
         <div className="flex flex-col p-6 bg-white rounded-lg shadow-lg md:w-1/2 w-full">
-          <h3 className="text-xl font-bold flex justify-center">
-            Projects Ending Soon
-          </h3>
+          <div className="flex flex-row items-center justify-center space-x-2">
+            <h3 className="text-xl font-bold flex justify-center">
+              Projects Ending in
+            </h3>
+            <select
+              className="select select-bordered w-15"
+              onChange={(e) => setNMonths(parseInt(e.target.value))}
+            >
+              <option selected>1</option>
+              <option>2</option>
+              <option>3</option>
+              <option>4</option>
+              <option>5</option>
+            </select>
+            <h3 className="text-xl font-bold flex justify-center">Months</h3>
+          </div>
           <div className="overflow-x-auto w-full mt-4">
             <table className="table w-72 mx-auto">
               <thead>
@@ -474,15 +483,24 @@ export default function Dashboard({
                     onClick={() => handleRowRequirementClick(requirement)}
                   >
                     <td>
-                      <div className="truncate">
-                        {requirement.project_name}
-                      </div>
+                      <div className="truncate">{requirement.project_name}</div>
                     </td>
                     <td>{requirement.deadline.split("T")[0]}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
+          </div>
+          <div className="flex justify-center mt-6">
+            <Image
+              id="Requirements Closed"
+              className="w-36 h-auto flex-none py-3"
+              src={"/time-deadline.svg"}
+              alt="Requirements Closed"
+              width={100}
+              height={100}
+              priority
+            />
           </div>
         </div>
       </div>
