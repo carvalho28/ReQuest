@@ -32,7 +32,7 @@ const features = [
     title: "AI",
     description:
       "We use AI to help you with your requirements. You can also evaluate your abilities to create requirements from a given scenario.",
-    image: "/projects-preview.png",
+    image: "/ai-preview.png",
   },
 ];
 

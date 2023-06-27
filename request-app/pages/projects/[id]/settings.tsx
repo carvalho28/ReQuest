@@ -343,7 +343,7 @@ export default function ProjectSettings({
                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 
                 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 
                 focus:ring-2 focus:ring-inset focus:ring-contrast sm:text-sm 
-                sm:leading-6"
+                sm:leading-6 p-2"
                 value={projectName}
                 onChange={(e) => setProjectName(e.target.value)}
               />
@@ -364,7 +364,7 @@ export default function ProjectSettings({
                 className="block w-full rounded-md border-0 py-1.5 text-gray-900
                 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400
                 focus:ring-2 focus:ring-inset focus:ring-contrast sm:text-sm
-                sm:leading-6"
+                sm:leading-6 p-4 text-justify"
                 value={projectDescription || ""}
                 onChange={(e) => {
                   adjustTextareaHeight();
@@ -408,7 +408,7 @@ export default function ProjectSettings({
                     className="block w-full rounded-md border-0 py-1.5 text-gray-900
                     shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400
                     focus:ring-2 focus:ring-inset focus:ring-contrast sm:text-sm
-                    sm:leading-6"
+                    sm:leading-6 px-2"
                     value={projectDeadline.split("T")[0]}
                     onChange={(e) => setProjectDeadline(e.target.value)}
                   />
@@ -483,7 +483,7 @@ export default function ProjectSettings({
               type="email"
               name="email"
               id="email"
-              className="block w-full rounded-md h-10"
+              className="block w-full rounded-md h-10 border-2 border-gray-300 py-1.5 text-gray-900 p-2"
               placeholder="Enter email to add"
               value={emailToAdd}
               onChange={(e) => setEmailToAdd(e.target.value)}

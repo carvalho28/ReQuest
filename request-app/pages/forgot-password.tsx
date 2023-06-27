@@ -32,16 +32,6 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
 };
 
 export default function ForgotPassword() {
-  // verify if url has code
-  // useEffect(() => {
-  //   const urlParams = new URLSearchParams(window.location.search);
-  //   const urlCode = urlParams.get("code");
-  //   if (urlCode) {
-  //     setCode(urlCode);
-  //   } else {
-  //     router.push("/login");
-  //   }
-  // }, []);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
