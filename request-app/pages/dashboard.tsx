@@ -312,7 +312,7 @@ export default function Dashboard({
           position: "bottom",
           distance: -60,
           show: true,
-          formatter: function (value: any) {
+          formatter: function(value: any) {
             if (value === 0 || value === 100) {
               return value + "%";
             } else {
