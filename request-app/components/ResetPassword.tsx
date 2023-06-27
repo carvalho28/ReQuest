@@ -25,6 +25,7 @@ const ResetPassword = ({ open, setOpen }: { open: boolean; setOpen: any }) => {
     });
     if (error) {
       console.log(error);
+      setLoading(false);
       return setErrorMessage(error.message);
     }
     router.push("/");
