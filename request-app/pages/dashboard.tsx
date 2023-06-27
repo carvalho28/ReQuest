@@ -99,10 +99,38 @@ export default function Dashboard({
   const [nProjects, setNProjects] = useState<number>(0);
   const [averageForecast, setAverageForecast] = useState<number>(0);
 
+  const [recentRequirements, setRecentRequirements] = useState<any[]>([]);
+  const [projectNMonths, setProjectNMonths] = useState<any[]>([]);
+
   useEffect(() => {
     setReqComplete(userData?.requirements_completed);
     setNProjects(projectsChildren.length);
     console.log(userData);
+
+    const getRecentRequirements = async () => {
+      const { data, error } = await supabaseClient.rpc(
+        "get_latest_closed_requirements",
+        { user_id: userData.id }
+      );
+      if (error) console.log(error);
+      if (!data) throw new Error("No data found");
+      // console.log(data);
+      setRecentRequirements(data);
+    };
+    const getProjectNMonths = async () => {
+      const { data, error } = await supabaseClient.rpc(
+        "get_user_projects_within_months",
+        { user_id: userData.id, num_months: 4 }
+      );
+      if (error) console.log(error);
+      if (!data) {
+        console.log("No data found");
+      }
+      console.log(data);
+      setProjectNMonths(data);
+    };
+    getRecentRequirements();
+    getProjectNMonths();
   }, [user]);
 
   useEffect(() => {
@@ -356,6 +384,11 @@ export default function Dashboard({
     }
   };
 
+  const handleRowRequirementClick = (requirement: any) => {
+    const url = `/projects/${requirement.project_id}`;
+    window.open(url, "_blank");
+  };
+
   return (
     <Layout
       currentPage="dashboard"
@@ -365,10 +398,99 @@ export default function Dashboard({
       <h1 className="text-2xl font-bold text-gray-700 mt-10 mb-4">
         {greetingsMessage(userData?.name)}
       </h1>
+
+      <div className="flex gap-x-4 mt-8 flex-col md:flex-row gap-y-8">
+        <div className="flex flex-col p-6 bg-white rounded-lg shadow-lg justify-center md:w-1/2 w-full">
+          <h3 className="text-xl font-bold flex justify-center items-center text-center">
+            Recent Closed Requirements
+          </h3>
+          {/* render svg spaceship */}
+          {/* <div className="text-center flex justify-center items-center">
+            <Image
+              alt="Rocketship"
+              src="/rocketship.svg"
+              width={100}
+              height={100}
+              className="mt-8"
+            />
+          </div> */}
+          <div className="overflow-x-auto w-full mt-4">
+            <table className="table w-full">
+              <thead>
+                <tr className="">
+                  <th>Requirement</th>
+                  <th>Project</th>
+                  <th>Date</th>
+                </tr>
+              </thead>
+              <tbody>
+                {recentRequirements.map((requirement) => (
+                  <tr
+                    key={requirement.id}
+                    className="hover cursor-pointer"
+                    onClick={() => handleRowRequirementClick(requirement)}
+                  >
+                    <td>
+                      <div className="w-64 truncate">
+                        {requirement.requirement_name}
+                      </div>
+                    </td>
+                    <td>{requirement.project_name}</td>
+                    <td>{requirement.closed_at.split("T")[0]}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <div className="flex justify-center mt-6">
+            <Image
+              id="Requirements Closed"
+              className="w-36 h-auto flex-none py-3"
+              src={"/closed-req.svg"}
+              alt="Requirements Closed"
+              width={100}
+              height={100}
+              priority
+            />
+          </div>
+        </div>
+        <div className="flex flex-col p-6 bg-white rounded-lg shadow-lg md:w-1/2 w-full">
+          <h3 className="text-xl font-bold flex justify-center">
+            Projects Ending Soon
+          </h3>
+          <div className="overflow-x-auto w-full mt-4">
+            <table className="table w-72 mx-auto">
+              <thead>
+                <tr className="">
+                  <th>Project</th>
+                  <th>Deadline</th>
+                </tr>
+              </thead>
+              <tbody>
+                {projectNMonths.map((requirement) => (
+                  <tr
+                    key={requirement.id}
+                    className="hover cursor-pointer"
+                    onClick={() => handleRowRequirementClick(requirement)}
+                  >
+                    <td>
+                      <div className="truncate">
+                        {requirement.project_name}
+                      </div>
+                    </td>
+                    <td>{requirement.deadline.split("T")[0]}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
       <div className="md:flex flex-wrap bg-white rounded-lg shadow-lg hidden">
         <div className="flex flex-wrap flex-1 w-full md:w-3/4">
           <div
-            className="flex md:flex-row flex-col md:gap-y-0 gap-y-10 items-center justify-between 
+            className="flex md:flex-row flex-col md:gap-y-0 gap-y-10 items-center justify-between
                           w-full p-4 mt-4"
           >
             <div className="flex-1 md:border-r-2 md:border-primaryblue">

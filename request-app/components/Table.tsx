@@ -753,6 +753,7 @@ function Table({
       if (!response.ok) {
         setErrorMessage("There was an error");
         setError(true);
+        setShowLoadingGenAI(false);
         return;
       }
       const data = await response.json();
@@ -786,7 +787,8 @@ function Table({
 
     try {
       const response = await fetch(
-        "http://localhost:8080/api/ai/create/" + typeRoute,
+        // "http://localhost:8080/api/ai/create/" + typeRoute,
+        "https://morning-flower-3545.fly.dev/api/ai/create/" + typeRoute,
         {
           method: "POST",
           headers: {
@@ -1231,7 +1233,7 @@ function Table({
                               name="desc"
                               id="desc"
                               className="shadow-sm focus:ring-contrast focus:border-contrast block
-                            w-96 sm:text-sm border-gray-300 rounded-md h-fit text-justify"
+                            w-96 sm:text-sm border-gray-300 rounded-md h-fit text-justify border-2 p-2"
                               value={projectDesc}
                               onChange={(e) => {
                                 adjustTextareaHeight();
@@ -1319,7 +1321,7 @@ function Table({
                                           <input
                                             type="date"
                                             className="shadow-sm focus:ring-contrast focus:border-contrast block
-                                              w-36 sm:text-sm border-gray-300 rounded-md h-fit text-justify"
+                                              w-36 sm:text-sm border-gray-300 rounded-md h-fit text-justify border-2 p-1.5"
                                             value={req.due_date}
                                             onChange={(e) => {
                                               let temp = [...generatedReq];

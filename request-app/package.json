@@ -52,7 +52,7 @@
     "@uppy/file-input": "^3.0.1",
     "@uppy/progress-bar": "^3.0.1",
     "@uppy/react": "^3.1.1",
-    "daisyui": "^2.51.5",
+    "daisyui": "^3.1.6",
     "echarts": "^5.4.2",
     "echarts-for-react": "^3.0.2",
     "eslint": "8.36.0",
