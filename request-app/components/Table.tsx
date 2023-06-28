@@ -404,15 +404,15 @@ function Table({
 
     if (currentSlideAI == 0) {
       // save description in the database
-      const updateProjectDesc = async () => { 
-        const {error} = await supabaseClient
-        .from("projects")
-        .update({ description: projectDesc })
-        .eq("id", projectId);
+      const updateProjectDesc = async () => {
+        const { error } = await supabaseClient
+          .from("projects")
+          .update({ description: projectDesc })
+          .eq("id", projectId);
         if (error) {
           console.log(error);
         }
-      }
+      };
       updateProjectDesc();
     }
 
@@ -588,10 +588,7 @@ function Table({
       });
 
       // if there is property of created_by and updated_by, then set the data
-      setRequirements(
-        // data as Database["public"]["Tables"]["requirements"]["Row"][]
-        data as any
-      );
+      setRequirements(data as any);
 
       setData(
         data.map((req: any) => {
@@ -626,7 +623,7 @@ function Table({
             table: "requirements",
           },
           async (payload: any) => {
-            console.log(payload);
+            console.log("payload", payload);
             getRequirements();
           }
         )
@@ -733,6 +730,7 @@ function Table({
   // call api to verify functional/non-functional
   async function isFunctional() {
     const requirement = requirementName;
+    if (requirement == undefined) return;
     const reqBody = JSON.stringify({ requirement });
     console.log(reqBody);
 
@@ -1046,7 +1044,7 @@ function Table({
                             required
                             className="shadow-sm focus:ring-contrat
                             focus:border-contrast block w-80 md:w-96 sm:text-sm 
-                            border-gray-300 rounded-md h-20"
+                            border-gray-300 rounded-md h-20 border-2 p-2"
                             onChange={(e) => setRequirementName(e.target.value)}
                           />
                         </div>
@@ -1080,7 +1078,8 @@ function Table({
                             type="date"
                             name="deadline"
                             id="deadline"
-                            className="shadow-sm focus:ring-contrast focus:border-contrast block w-36 sm:text-sm border-gray-300 rounded-md"
+                            className="shadow-sm focus:ring-contrast focus:border-contrast block w-36 sm:text-sm
+                             border-gray-300 rounded-md border-2 p-2"
                             onChange={(e) =>
                               setRequirementDueDate(e.target.value)
                             }
