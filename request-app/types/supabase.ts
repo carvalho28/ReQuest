@@ -321,6 +321,27 @@ export interface Database {
           avatar_url: Json
         }[]
       }
+      get_latest_closed_requirements: {
+        Args: {
+          user_id: string
+        }
+        Returns: {
+          requirement_name: string
+          project_name: string
+          project_id: string
+          closed_at: string
+        }[]
+      }
+      get_user_projects_within_months: {
+        Args: {
+          user_id: string
+          num_months: number
+        }
+        Returns: {
+          project_name: string
+          deadline: string
+        }[]
+      }
       increment_requirements_completed: {
         Args: {
           user_ids: string[]
