@@ -16,5 +16,12 @@ export default {
   project: {
     link: "https://github.com/carvalho28/ReQuest",
   },
+  head: (
+    <>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <meta name="description" content="ReQuest Documentation" />
+      <meta name="og:title" content="ReQuest Documentation" />
+    </>
+  ),
   // ...
 };

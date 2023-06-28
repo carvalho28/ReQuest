@@ -1335,7 +1335,16 @@ function Table({
                                   </tbody>
                                 </table>
                               </div>
-                            </div>{" "}
+                            </div>
+                            {/* AI warning */}
+                            <div className="mt-6 mb-2 text-center w-full bg-red-300 p-2 rounded-lg">
+                              <span className="text-sm text-black">
+                                Note: AI systems, may have limitations or
+                                inaccuracies. Therefore, students should
+                                exercise critical thinking and complement its
+                                feedback with human expertise.
+                              </span>
+                            </div>
                           </>
                         )}
                       </div>

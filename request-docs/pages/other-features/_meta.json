@@ -3,5 +3,7 @@
   "chat": "Chat",
   "dashboard": "Dashboard",
   "documents": "Documents",
-  "payground": "Playground"
+  "playground": "Playground",
+  "profile": "Profile",
+  "settings": "Settings"
 }
