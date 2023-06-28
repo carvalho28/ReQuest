@@ -21,10 +21,14 @@ The forecast accuracy in requirement management is determined by the probability
 
 The complete formula is:
 
-<div className="bg-red-300">
+<div className="mt-6 rounded border border-gray-200 p-4 dark:border-gray-900 text-center text-lg">
 $$\text{FC} = \frac{\text{drud}}{\text{tdp}} \times \frac{\text{cp} + 1}{\text{tr} + 1}$$
 </div>
 
 Where:
 
-Where:
+- `FC` is the forecast accuracy;
+- `drud` is the days remaining until the deadline;
+- `tdp` is the total days of the project;
+- `cp` is the number of completed requirements;
+- `tr` is the total number of requirements.
