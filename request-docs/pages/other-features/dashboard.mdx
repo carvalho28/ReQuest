@@ -1,0 +1,38 @@
+## Dashboard
+
+Upon logging in, the user is presented with a dashboard that displays the following information:
+
+- recent closed requirements;
+- projects ending in `n` months;
+- number of projects;
+- requirements completed;
+- forecast accuracy;
+- projects by status.
+
+<br />
+
+![Dashboard](/dashboard.png)
+_Figure: Dashboard_
+
+<br />
+
+### Forecast Accuracy
+
+The forecast accuracy in requirement management is determined by the probability of ending a project on time. This metric considers two factors:
+
+- days remaining until the deadline relative to the total project duration: (days remaining / total days);
+- completion ratio of project requirements: (completed requirements + 1) / (total requirements + 1).
+
+The complete formula is:
+
+<div className="mt-6 rounded border border-gray-200 p-4 dark:border-gray-900 text-center text-lg">
+$$\text{FC} = \frac{\text{drud}}{\text{tdp}} \times \frac{\text{cp} + 1}{\text{tr} + 1}$$
+</div>
+
+Where:
+
+- `FC` is the forecast accuracy;
+- `drud` is the days remaining until the deadline;
+- `tdp` is the total days of the project;
+- `cp` is the number of completed requirements;
+- `tr` is the total number of requirements.

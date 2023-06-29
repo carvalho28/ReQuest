@@ -99,9 +99,40 @@ export default function Dashboard({
   const [nProjects, setNProjects] = useState<number>(0);
   const [averageForecast, setAverageForecast] = useState<number>(0);
 
+  const [recentRequirements, setRecentRequirements] = useState<any[]>([]);
+  const [projectNMonths, setProjectNMonths] = useState<any[]>([]);
+  const [nMonths, setNMonths] = useState<number>(1);
+
+  const getProjectNMonths = async (num_months: number) => {
+    const { data, error } = await supabaseClient.rpc(
+      "get_user_projects_within_months",
+      { user_id: userData.id, num_months: num_months }
+    );
+    if (error) console.log(error);
+    if (!data) {
+      console.log("No data found");
+    }
+    console.log(data);
+    setProjectNMonths(data);
+  };
+
   useEffect(() => {
     setReqComplete(userData?.requirements_completed);
     setNProjects(projectsChildren.length);
+    console.log(userData);
+
+    const getRecentRequirements = async () => {
+      const { data, error } = await supabaseClient.rpc(
+        "get_latest_closed_requirements",
+        { user_id: userData.id }
+      );
+      if (error) console.log(error);
+      if (!data) throw new Error("No data found");
+      // console.log(data);
+      setRecentRequirements(data);
+    };
+    getRecentRequirements();
+    getProjectNMonths(1);
   }, [user]);
 
   useEffect(() => {
@@ -136,7 +167,8 @@ export default function Dashboard({
 
       forecast.push(probabilityPercentage);
     });
-    const averageForecastCalc = forecast.reduce((a, b) => a + b, 0) / forecast.length;
+    const averageForecastCalc =
+      forecast.reduce((a, b) => a + b, 0) / forecast.length;
     setAverageForecast(averageForecastCalc < 0 ? 0 : averageForecastCalc);
   }, [dataProjects]);
 
@@ -177,6 +209,41 @@ export default function Dashboard({
       orient: "vertical",
       top: "30%",
       left: "10%",
+    },
+    series: [
+      {
+        name: "Number of projects",
+        type: "pie",
+        radius: ["40%", "70%"],
+        avoidLabelOverlap: false,
+        label: {
+          show: false,
+          position: "center",
+        },
+        emphasis: {
+          label: {
+            show: true,
+            fontSize: 30,
+            fontWeight: "bold",
+          },
+        },
+        labelLine: {
+          show: false,
+        },
+        data: dataGraph,
+      },
+    ],
+  };
+
+  // Charts
+  const optionMobile = {
+    tooltip: {
+      trigger: "item",
+    },
+    legend: {
+      orient: "horizontal",
+      top: "80%",
+      // left: "10%",
     },
     series: [
       {
@@ -245,7 +312,7 @@ export default function Dashboard({
           position: "bottom",
           distance: -60,
           show: true,
-          formatter: function (value: any) {
+          formatter: function(value: any) {
             if (value === 0 || value === 100) {
               return value + "%";
             } else {
@@ -299,16 +366,152 @@ export default function Dashboard({
     return `hsl(${hue}, 80%, 45%)`;
   }
 
+  const greetingsMessage = (name: string) => {
+    const date = new Date();
+    const hour = date.getHours();
+    let greeting = "";
+
+    if (hour < 12) {
+      greeting = "Good Morning";
+    } else if (hour < 18) {
+      greeting = "Good Afternoon";
+    } else {
+      greeting = "Good Evening";
+    }
+
+    if (user === undefined || name === undefined) {
+      return greeting + "!";
+    } else {
+      return greeting + ", " + name.split(" ")[0] + "!";
+    }
+  };
+
+  const handleRowRequirementClick = (requirement: any) => {
+    const url = `/projects/${requirement.project_id}`;
+    window.open(url, "_blank");
+  };
+
+  useEffect(() => {
+    getProjectNMonths(nMonths);
+  }, [nMonths]);
+
   return (
     <Layout
       currentPage="dashboard"
       avatar_url={avatar_url}
       projectChildren={projectsChildren}
     >
-      <div className="flex flex-wrap bg-white rounded-lg shadow-lg">
-        <div className="flex flex-wrap flex-1 w-3/4">
-          <div className="flex flex-row items-center justify-between w-full p-4 mt-4">
-            <div className="flex-1 border-r-2 border-primaryblue">
+      <h1 className="text-2xl font-bold text-gray-700 mt-10 mb-4">
+        {greetingsMessage(userData?.name)}
+      </h1>
+
+      <div className="flex gap-x-4 mt-8 flex-col md:flex-row gap-y-8">
+        <div className="flex flex-col p-6 bg-white rounded-lg shadow-lg justify-center md:w-1/2 w-full">
+          <h3 className="text-xl font-bold flex justify-center items-center text-center">
+            Recent Closed Requirements
+          </h3>
+          <div className="overflow-x-auto w-full mt-4">
+            <table className="table w-full">
+              <thead>
+                <tr className="text-md">
+                  <th className="text-lg">Requirement</th>
+                  <th>Project</th>
+                  <th>Date</th>
+                </tr>
+              </thead>
+              <tbody>
+                {recentRequirements.map((requirement) => (
+                  <tr
+                    key={requirement.id}
+                    className="hover cursor-pointer"
+                    onClick={() => handleRowRequirementClick(requirement)}
+                  >
+                    <td>
+                      <div className="md:w-64 w-32 truncate">
+                        {requirement.requirement_name}
+                      </div>
+                    </td>
+                    <td>{requirement.project_name}</td>
+                    <td>{requirement.closed_at.split("T")[0]}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <div className="flex justify-center mt-6">
+            <Image
+              id="Requirements Closed"
+              className="w-36 h-auto flex-none py-3"
+              src={"/closed-req.svg"}
+              alt="Requirements Closed"
+              width={100}
+              height={100}
+              priority
+            />
+          </div>
+        </div>
+        <div className="flex flex-col p-6 bg-white rounded-lg shadow-lg md:w-1/2 w-full">
+          <div className="flex flex-row items-center justify-center space-x-2">
+            <h3 className="text-xl font-bold flex justify-center">
+              Projects Ending in
+            </h3>
+            <select
+              className="select select-bordered w-15"
+              onChange={(e) => setNMonths(parseInt(e.target.value))}
+            >
+              <option selected>1</option>
+              <option>2</option>
+              <option>3</option>
+              <option>4</option>
+              <option>5</option>
+            </select>
+            <h3 className="text-xl font-bold flex justify-center">Months</h3>
+          </div>
+          <div className="overflow-x-auto w-full mt-4">
+            <table className="table w-72 mx-auto">
+              <thead>
+                <tr className="">
+                  <th>Project</th>
+                  <th>Deadline</th>
+                </tr>
+              </thead>
+              <tbody>
+                {projectNMonths.map((requirement) => (
+                  <tr
+                    key={requirement.id}
+                    className="hover cursor-pointer"
+                    onClick={() => handleRowRequirementClick(requirement)}
+                  >
+                    <td>
+                      <div className="truncate">{requirement.project_name}</div>
+                    </td>
+                    <td>{requirement.deadline.split("T")[0]}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <div className="flex justify-center mt-6">
+            <Image
+              id="Requirements Closed"
+              className="w-36 h-auto flex-none py-3"
+              src={"/time-deadline.svg"}
+              alt="Requirements Closed"
+              width={100}
+              height={100}
+              priority
+            />
+          </div>
+        </div>
+      </div>
+
+      <div className="md:flex flex-wrap bg-white rounded-lg shadow-lg hidden mt-5">
+        <div className="flex flex-wrap flex-1 w-full md:w-3/4">
+          <div
+            className="flex md:flex-row flex-col md:gap-y-0 gap-y-10 items-center justify-between
+                          w-full p-4 mt-4"
+          >
+            <div className="flex-1 md:border-r-2 md:border-primaryblue">
               <h3 className="text-xl font-bold flex justify-center">
                 Number of Projects
               </h3>
@@ -316,7 +519,7 @@ export default function Dashboard({
                 {nProjects}
               </div>
             </div>
-            <div className="flex-1  border-r-2 border-primaryblue">
+            <div className="flex-1 md:border-r-2 md:border-primaryblue">
               <h3 className="text-xl font-bold flex justify-center">
                 Req. Completed
               </h3>
@@ -324,7 +527,7 @@ export default function Dashboard({
                 {reqComplete}
               </div>
             </div>
-            <div className="flex-1 border-r-2 border-primaryblue mr-8">
+            <div className="flex-1 md:border-r-2 md:border-primaryblue md:mr-8">
               <h3 className="text-xl font-bold flex justify-center">
                 Forecast Accuracy
               </h3>
@@ -387,7 +590,7 @@ export default function Dashboard({
             </div>
           </div>
         </div>
-        <div className="flex w-1/4 items-center justify-center p-4">
+        <div className="flex md:w-1/4 w-full items-center justify-center p-4">
           <Image
             id="milestones"
             className="w-full h-full flex-none object-cover"
@@ -397,6 +600,99 @@ export default function Dashboard({
             height={100}
             priority
           />
+        </div>
+      </div>
+
+      {/* mobile */}
+
+      <div className="md:hidden flex-wrap bg-white rounded-lg shadow-lg flex">
+        <div className="flex flex-col justify-start items-center text-center w-full p-4 mt-4">
+          <h3 className="text-xl font-bold">Number of Projects</h3>
+          <div className="flex flex-col justify-center items-center mt-2 text-lg ">
+            {nProjects}
+          </div>
+
+          <div className="border-b-2 border-primaryblue w-10/12 mt-2"></div>
+
+          <h3 className="mt-6 text-xl font-bold flex justify-center">
+            Req. Completed
+          </h3>
+          <div className="flex flex-col justify-center items-center mt-2 text-lg">
+            {reqComplete}
+          </div>
+
+          <div className="border-b-2 border-primaryblue w-10/12 mt-2"></div>
+
+          <div className="mt-6">
+            <h3 className="text-xl font-bold flex justify-center">
+              Forecast Accuracy
+            </h3>
+            <div
+              style={{
+                height: "3em",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                marginBottom: "1em",
+                marginTop: "1em",
+                marginLeft: "5em",
+              }}
+            >
+              <div className="flex flex-row">
+                <ReactEChart
+                  option={optionsGauge}
+                  opts={{ renderer: "svg" }}
+                  style={{
+                    height: "10em",
+                    width: "12em",
+                    margin: "0 auto",
+                  }}
+                />
+
+                <div
+                  style={{
+                    height: "10em",
+                    width: "10em",
+                    margin: "0 auto",
+                    display: "flex",
+                    justifyContent: "start",
+                    alignItems: "center",
+                    marginTop: "1em",
+                    marginLeft: "1.25em",
+                  }}
+                >
+                  <div
+                    className="text-3xl font-extrabold"
+                    style={{
+                      color: getGradientColor(averageForecast),
+                    }}
+                  >
+                    {/* {overall.toFixed(0)}% */}
+                    {Math.round(averageForecast)} %
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="border-b-2 border-primaryblue w-10/12 mt-4"></div>
+
+          <div className="p-6">
+            <div className="flex flex-col justify-start items-center">
+              <div className="text-3xl font-extrabold p-4">
+                Projects by status
+              </div>
+              <ReactEChart
+                option={optionMobile}
+                style={{
+                  height: "25em",
+                  width: "14em",
+                  margin: "0 auto",
+                  marginTop: "-7em",
+                }}
+              />
+            </div>
+          </div>
         </div>
       </div>
     </Layout>

@@ -12,12 +12,19 @@ import { ProjectChildren } from "@/components/utils/sidebarHelper";
 import { useRouter } from "next/router";
 import { renderImage } from "@/components/utils/general";
 
+import { Bubblegum_Sans } from "next/font/google";
+
 // dynamic
 const ModalAddProject = dynamic(() => import("@/components/ModalAddProject"), {
   ssr: false,
 });
 
 const blackOpsOne = Black_Ops_One({
+  subsets: ["latin"],
+  weight: ["400"],
+});
+
+const bubblegumSans = Bubblegum_Sans({
   subsets: ["latin"],
   weight: ["400"],
 });
@@ -224,9 +231,28 @@ export default function Profile({
             />
           )}
         </div>
-        <div className="flex p-6 bg-white rounded-lg shadow-lg sm:w-2/5 justify-center w-full">
-          <h3 className="text-xl font-bold">Trophies</h3>
-          <div></div>
+        <div className="flex flex-col p-6 bg-white rounded-lg shadow-lg sm:w-2/5 w-full">
+          <h3 className="text-2xl font-bold text-center">Trophies</h3>
+          <div
+            className="text-center flex flex-col justify-center items-center h-72
+            tooltip tooltip-bottom hover:cursor-pointer"
+            data-tip="First Project Completed"
+          >
+            <Image
+              alt="Trophie"
+              src="/trophies/trophie2.svg"
+              width={350}
+              height={250}
+              className="items-center justify-center h-full mt-4"
+            />
+          </div>
+          {/* <div className="text-center flex flex-col justify-center items-center ">
+            <span
+              className={`text-white text-bold text-2xl text-center ${bubblegumSans.className} bg-primaryblue px-4 py-2 rounded-lg w-fit`}
+            >
+              First Project Completed
+            </span>
+          </div> */}
         </div>
       </div>
 
@@ -234,7 +260,11 @@ export default function Profile({
         <div className="flex p-5 md:p-6 bg-white rounded-lg shadow-lg w-full md:flex-row flex-col">
           <div className="flex flex-col items-center md:w-1/4 justify-center">
             <h3 className="text-xl font-bold">Projects</h3>
-            <div className={`flex flex-col gap-y-4 mt-4 overflow-y-scroll min-h-fit h-60 scroll ${dataProjects.length >= 6 ? "scrollbar" : ""}`}>
+            <div
+              className={`flex flex-col gap-y-4 mt-4 overflow-y-scroll min-h-fit h-60 scroll ${
+                dataProjects.length >= 6 ? "scrollbar" : ""
+              }`}
+            >
               {dataProjects.map((item: any) => (
                 <div
                   className="flex flex-row rounded-lg border-2 border-gray-100 bg-white w-56
@@ -262,7 +292,11 @@ export default function Profile({
 
           <div className="flex flex-col items-center md:w-1/4 w-full justify-center md:mt-0 mt-16">
             <h3 className="text-xl font-bold">Connected Users</h3>
-            <div className={`flex flex-col gap-y-4 mt-4 overflow-y-scroll min-h-fit h-60 scroll ${connectedUsers.length >= 6 ? "scrollbar" : ""}`}>
+            <div
+              className={`flex flex-col gap-y-4 mt-4 overflow-y-scroll min-h-fit h-60 scroll ${
+                connectedUsers.length >= 6 ? "scrollbar" : ""
+              }`}
+            >
               {connectedUsers.map((item: any) => (
                 <div
                   key={item.id}

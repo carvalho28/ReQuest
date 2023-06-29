@@ -573,9 +573,8 @@ export default function Projects({
                             {error && <ErrorMessage message={errorMessage} />}
                           </div>
                           <div
-                            className={`carousel-slide ${
-                              currentSlide === 0 ? "active" : "hidden"
-                            }`}
+                            className={`carousel-slide ${currentSlide === 0 ? "active" : "hidden"
+                              }`}
                           >
                             <label
                               htmlFor="name"
@@ -589,16 +588,15 @@ export default function Projects({
                                 name="name"
                                 id="name"
                                 required
-                                className="shadow-sm focus:ring-contrat focus:border-contrast block w-80 md:w-96 sm:text-sm border-gray-300 rounded-md"
+                                className="shadow-sm focus:ring-contrat focus:border-contrast block w-80 md:w-96 sm:text-sm border-gray-300 rounded-md border-2 p-2"
                                 onChange={(e) => setName(e.target.value)}
                               />
                             </div>
                           </div>
 
                           <div
-                            className={`carousel-slide ${
-                              currentSlide === 1 ? "active" : "hidden"
-                            }`}
+                            className={`carousel-slide ${currentSlide === 1 ? "active" : "hidden"
+                              }`}
                           >
                             <label
                               htmlFor="description"
@@ -612,15 +610,14 @@ export default function Projects({
                                 maxLength={125}
                                 name="description"
                                 id="description"
-                                className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-80 md:w-96 sm:text-sm border-gray-300 rounded-md"
+                                className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-80 md:w-96 sm:text-sm border-gray-300 rounded-md border-2 p-2"
                                 onChange={(e) => setDescription(e.target.value)}
                               />
                             </div>
                           </div>
                           <div
-                            className={`carousel-slide ${
-                              currentSlide === 2 ? "active" : "hidden"
-                            }`}
+                            className={`carousel-slide ${currentSlide === 2 ? "active" : "hidden"
+                              }`}
                           >
                             <label
                               htmlFor="deadline"
@@ -634,15 +631,14 @@ export default function Projects({
                                 type="date"
                                 name="deadline"
                                 id="deadline"
-                                className="shadow-sm focus:ring-contrast focus:border-contrast block w-36 sm:text-sm border-gray-300 rounded-md"
+                                className="shadow-sm focus:ring-contrast focus:border-contrast block w-36 sm:text-sm border-gray-300 rounded-md border-2 p-2"
                                 onChange={(e) => setDeadline(e.target.value)}
                               />
                             </div>
                           </div>
                           <div
-                            className={`carousel-slide ${
-                              currentSlide === 3 ? "active" : "hidden"
-                            }`}
+                            className={`carousel-slide ${currentSlide === 3 ? "active" : "hidden"
+                              }`}
                           >
                             {/* list of people added */}
                             <div className="flex flex-col space-y-2 mb-8">
@@ -679,7 +675,7 @@ export default function Projects({
                                   name="person"
                                   id="person"
                                   placeholder="Coworker email address"
-                                  className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-64 md:w-80 sm:text-sm border-gray-300 rounded-md"
+                                  className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-64 md:w-80 sm:text-sm border-gray-300 rounded-md border-2 p-2"
                                   onChange={(e) => setPerson(e.target.value)}
                                 />
                               </div>
