@@ -268,7 +268,7 @@ export default function Profile({
         </div>
         <div className="flex flex-col p-6 bg-white rounded-lg shadow-lg sm:w-2/5 w-full">
           <h3 className="text-2xl font-bold text-center">Trophies</h3>
-          {trophies && (
+          {trophies !== undefined && trophies?.length !== 0 ? (
             <div className="text-center flex flex-row justify-center items-center h-72">
               <>
                 <RiArrowLeftSLine
@@ -294,6 +294,20 @@ export default function Profile({
                 />
               </>
             </div>
+          ) : (
+            <>
+              <Image
+                priority
+                alt="Trophie"
+                src="/confused.svg"
+                width={350}
+                height={150}
+                className="items-center justify-center h-64 mt-4 w-full"
+              />
+              <p className="text-center text-gray-800">
+                You don&apos;t have any trophies yet!
+              </p>
+            </>
           )}
         </div>
       </div>
