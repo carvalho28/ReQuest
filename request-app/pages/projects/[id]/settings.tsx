@@ -9,7 +9,7 @@ import { Database } from "@/types/supabase";
 import { createServerSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import { useSupabaseClient, useUser } from "@supabase/auth-helpers-react";
 import { GetServerSidePropsContext } from "next";
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import ErrorMessage from "@/components/ErrorMessage";
@@ -106,6 +106,9 @@ export default function ProjectSettings({
 
   const router = useRouter();
 
+  const [isProjectCompletedTrophy, setIsProjectCompletedTrophy] =
+    useState(true);
+
   useEffect(() => {
     // get users for the given project
     const getUsers = async () => {
@@ -117,8 +120,6 @@ export default function ProjectSettings({
         )
         .eq("id_proj", project.id);
       if (usersError) console.log(usersError);
-
-      console.log(usersData);
       setProjectUsers(usersData as ProjectUsers[]);
     };
     getUsers();
@@ -195,6 +196,53 @@ export default function ProjectSettings({
     setTimeout(() => {
       setShowMessage(false);
     }, 3000);
+
+    if (projectStatus === "Completed") {
+      console.log("project completed");
+      // verify number of projects completed
+      const getProjectsCompleted = async () => {
+        const { data: projectsCompletedData, error: projectsCompletedError } =
+          await supabaseClient
+            .from("project_profiles")
+            .select("*, projects(id, status)")
+            // .eq("projects.status", "Completed")
+            .eq("id_user", user?.id);
+
+        if (projectsCompletedError) console.log(projectsCompletedError);
+        console.log("projectsCompletedData", projectsCompletedData);
+        if (projectsCompletedData === null) return;
+        // check if some projects are completed
+        let x = 0;
+        for (let i = 0; i < projectsCompletedData.length; i++) {
+          if (projectsCompletedData[i].projects.status === "Completed") {
+            x++;
+          }
+          if (x > 1) return;
+        }
+
+        // verify if there is already a trophy for this user
+        const { data: trophiesData, error: trophiesError } =
+          await supabaseClient
+            .from("trophies_profiles")
+            .select("*")
+            .eq("id_user", user?.id)
+            .eq("id_trophy", 1);
+        if (trophiesError) console.log(trophiesError);
+        console.log("trophiesData", trophiesData);
+        if (trophiesData?.length !== 0) return;
+        const { error } = await supabaseClient
+          .from("trophies_profiles")
+          .insert({
+            id_user: user?.id,
+            id_trophy: 1,
+          });
+        if (error) console.log(error);
+        console.log("trophy added");
+        window.my_modal_3.showModal();
+        setIsProjectCompletedTrophy(true);
+      };
+      getProjectsCompleted();
+    }
   }
 
   const [emailToAdd, setEmailToAdd] = useState("");
@@ -279,7 +327,7 @@ export default function ProjectSettings({
               .from("project_profiles")
               .select(
                 `id_user, 
-              profiles(id, email,name, avatar_url)`
+            profiles(id, email,name, avatar_url)`
               )
               .eq("id_proj", project.id);
             if (usersError) console.log(usersError);
@@ -298,7 +346,6 @@ export default function ProjectSettings({
   function adjustTextareaHeight() {
     const textarea = document.getElementById("project-description");
     if (textarea) {
-      console.log("here");
       textarea.style.height = "auto"; // Reset the height to auto
       textarea.style.height = `${textarea.scrollHeight}px`; // Set the height to the scroll height
     }
@@ -558,6 +605,22 @@ export default function ProjectSettings({
           />
         </div>
       </div>
+      {isProjectCompletedTrophy && (
+        <>
+          <button className="btn">open modal</button>
+          <dialog id="my_modal_3" className="modal">
+            <form method="dialog" className="modal-box">
+              <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
+                ✕
+              </button>
+              <h3 className="font-bold text-lg">Hello!</h3>
+              <p className="py-4">
+                Press ESC key or click on ✕ button to close
+              </p>
+            </form>
+          </dialog>
+        </>
+      )}
     </Layout>
   );
 }

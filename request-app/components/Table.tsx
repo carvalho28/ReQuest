@@ -633,6 +633,7 @@ function Table({
         supabaseClient.removeChannel(req_channel2);
       };
     }
+
     // update description realtime
     let req_channel_desc: RealtimeChannel;
     async function getDescRealTime() {

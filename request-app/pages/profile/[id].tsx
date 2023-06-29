@@ -19,6 +19,7 @@ import { renderImage } from "@/components/utils/general";
 
 import { Bubblegum_Sans } from "next/font/google";
 import Loading from "@/components/Loading";
+import { RealtimeChannel } from "@supabase/supabase-js";
 
 // dynamic
 const ModalAddProject = dynamic(() => import("@/components/ModalAddProject"), {
@@ -156,23 +157,23 @@ export default function Profile({
     toggleModal();
   }
 
+  const getTrophies = async () => {
+    const { data, error } = await supabaseClient
+      .from("trophies_profiles")
+      .select("*, trophies (image, desc)");
+    if (error) console.log(error);
+    if (!data) {
+      console.log("No data found");
+    }
+    setTrophies(data as any[]);
+  };
+
   useEffect(() => {
     setName(userData?.name);
     setLevel(userData?.level);
     setXp(userData?.xp);
     setXpNeeded(userData?.levels.xp_needed);
     setDenomination(userData?.levels.denomination);
-
-    const getTrophies = async () => {
-      const { data, error } = await supabaseClient
-        .from("trophies_profiles")
-        .select("*, trophies (image, desc)");
-      if (error) console.log(error);
-      if (!data) {
-        console.log("No data found");
-      }
-      setTrophies(data as any[]);
-    };
     getTrophies();
   }, [userData, supabaseClient]);
 
@@ -183,6 +184,33 @@ export default function Profile({
     // redirect to /avatar/[id]
     router.push(`/avatar/${id}`);
   }
+
+  // update trophies in realtime
+  useEffect(() => {
+    let mySubscription: RealtimeChannel;
+    async function getTrophiesRealtime() {
+      mySubscription = await supabaseClient
+        .channel(`trophies_reload`)
+        .on(
+          "postgres_changes",
+          {
+            event: "*",
+            schema: "public",
+            table: "trophies_profiles",
+          },
+          async (payload) => {
+            console.log("Change received!", payload);
+            getTrophies();
+          }
+        )
+        .subscribe();
+
+      return () => {
+        supabaseClient.removeChannel(mySubscription);
+      };
+    }
+    getTrophiesRealtime();
+  }, [supabaseClient, user?.id]);
 
   return (
     <Layout
