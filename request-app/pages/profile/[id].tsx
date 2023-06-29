@@ -147,7 +147,19 @@ export default function Profile({
 
   const avatarToRender = renderImage(avatar_url);
 
-  console.log(connectedUsers);
+  const [trophies, setTrophies] = useState<any[]>([]);
+
+  useEffect(() => {
+    const getTrophies = async () => {
+      const { data, error } = await supabaseClient.from("trophies").select("*");
+      if (error) console.log(error);
+      if (!data) {
+        console.log("No data found");
+      }
+      setTrophies(data as any[]);
+    };
+    getTrophies();
+  }, []);
 
   return (
     <Layout
@@ -236,14 +248,14 @@ export default function Profile({
           <div
             className="text-center flex flex-col justify-center items-center h-72
             tooltip tooltip-bottom hover:cursor-pointer"
-            data-tip="First Project Completed"
+            data-tip={trophies[0]?.desc}
           >
             <Image
               alt="Trophie"
-              src="/trophies/trophie2.svg"
+              src={trophies[0]?.image}
               width={350}
               height={250}
-              className="items-center justify-center h-full mt-4"
+              className="items-center justify-center h-full mt-4 w-full"
             />
           </div>
           {/* <div className="text-center flex flex-col justify-center items-center ">
