@@ -14,6 +14,7 @@
   "dependencies": {
     "@dicebear/collection": "^6.0.3",
     "@dicebear/core": "^6.0.3",
+    "@fireworks-js/react": "^2.10.6",
     "@fortawesome/fontawesome-svg-core": "^6.4.0",
     "@fortawesome/free-regular-svg-icons": "^6.4.0",
     "@fortawesome/free-solid-svg-icons": "^6.4.0",
@@ -90,7 +91,7 @@
     "@types/react-modal": "^3.13.1",
     "@types/react-table": "^7.7.14",
     "autoprefixer": "^10.4.14",
-    "cypress": "^12.11.0",
+    "cypress": "12.16.0",
     "netlify-cli": "^13.2.1",
     "postcss": "^8.4.21",
     "supabase": "^1.45.2",

@@ -8,6 +8,7 @@ beforeEach(() => {
 
 describe("Calendar page", () => {
   it("should navigate to the calendar page", () => {
+    cy.wait(4000);
     // go to calendar
     // cy.get("h1").contains("Calendar").click();
     cy.get("span").contains("Calendar").click();
@@ -15,7 +16,7 @@ describe("Calendar page", () => {
   });
 
   it("should verify is date in calendar when loaded is today month and year", () => {
-    cy.wait(1000);
+    cy.wait(4000);
     cy.get("span").contains("Calendar").click();
     // check for a <time> tag
     cy.get("time").should("be.visible");
@@ -38,6 +39,7 @@ describe("Calendar page", () => {
 
   // check if next and previous button are working
   it("should go to next month when clicking on next button", () => {
+    cy.wait(4000);
     cy.get("span").contains("Calendar").click();
     // check for an svg within a button with the next month
     cy.get("span.sr-only").contains("Next month").click({ force: true });

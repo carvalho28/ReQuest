@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import Layout from "@/components/Layout";
 import { ProjectChildren } from "@/components/utils/sidebarHelper";
 import Image from "next/image";
-
+import { Fireworks } from "fireworks-js";
 import ReactEChart from "echarts-for-react";
 
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
@@ -312,7 +312,7 @@ export default function Dashboard({
           position: "bottom",
           distance: -60,
           show: true,
-          formatter: function(value: any) {
+          formatter: function (value: any) {
             if (value === 0 || value === 100) {
               return value + "%";
             } else {

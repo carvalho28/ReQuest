@@ -6,13 +6,15 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import { FaPen, FaStar } from "react-icons/fa";
 import { Black_Ops_One } from "next/font/google";
-import { RiArrowRightCircleFill, RiArrowLeftCircleFill } from "react-icons/ri";
+import { RiArrowRightSLine, RiArrowLeftSLine } from "react-icons/ri";
 import dynamic from "next/dynamic";
 import { ProjectChildren } from "@/components/utils/sidebarHelper";
 import { useRouter } from "next/router";
 import { renderImage } from "@/components/utils/general";
 
 import { Bubblegum_Sans } from "next/font/google";
+import Loading from "@/components/Loading";
+import { RealtimeChannel } from "@supabase/supabase-js";
 
 // dynamic
 const ModalAddProject = dynamic(() => import("@/components/ModalAddProject"), {
@@ -111,6 +113,29 @@ export default function Profile({
   const [xpNeeded, setXpNeeded] = useState<number>(0);
   const [denomination, setDenomination] = useState<string>("");
 
+  const avatarToRender = renderImage(avatar_url);
+
+  const [trophies, setTrophies] = useState<any[] | undefined>(undefined);
+  const [currentTrophy, setCurrentTrophy] = useState<number>(0);
+
+  const changeTrophy = (direction: string) => {
+    console.log("changing trophy");
+    if (trophies?.length === 1 || trophies?.length === undefined) return;
+    if (direction === "left") {
+      if (currentTrophy === 0) {
+        setCurrentTrophy(trophies?.length - 1);
+      } else {
+        setCurrentTrophy(currentTrophy - 1);
+      }
+    } else {
+      if (currentTrophy === trophies?.length - 1) {
+        setCurrentTrophy(0);
+      } else {
+        setCurrentTrophy(currentTrophy + 1);
+      }
+    }
+  };
+
   function toggleModal() {
     setShowModal(!showModal);
   }
@@ -123,11 +148,20 @@ export default function Profile({
     if (!error) {
       // console.log("Name updated");
     }
-
     setUserData({ ...userData, name: name });
-
     toggleModal();
   }
+
+  const getTrophies = async () => {
+    const { data, error } = await supabaseClient
+      .from("trophies_profiles")
+      .select("*, trophies (image, desc)");
+    if (error) console.log(error);
+    if (!data) {
+      console.log("No data found");
+    }
+    setTrophies(data as any[]);
+  };
 
   useEffect(() => {
     setName(userData?.name);
@@ -135,7 +169,8 @@ export default function Profile({
     setXp(userData?.xp);
     setXpNeeded(userData?.levels.xp_needed);
     setDenomination(userData?.levels.denomination);
-  }, [userData]);
+    getTrophies();
+  }, [userData, supabaseClient]);
 
   const router = useRouter();
 
@@ -145,9 +180,32 @@ export default function Profile({
     router.push(`/avatar/${id}`);
   }
 
-  const avatarToRender = renderImage(avatar_url);
+  // update trophies in realtime
+  useEffect(() => {
+    let mySubscription: RealtimeChannel;
+    async function getTrophiesRealtime() {
+      mySubscription = await supabaseClient
+        .channel(`trophies_reload`)
+        .on(
+          "postgres_changes",
+          {
+            event: "*",
+            schema: "public",
+            table: "trophies_profiles",
+          },
+          async (payload) => {
+            console.log("Change received!", payload);
+            getTrophies();
+          }
+        )
+        .subscribe();
 
-  console.log(connectedUsers);
+      return () => {
+        supabaseClient.removeChannel(mySubscription);
+      };
+    }
+    getTrophiesRealtime();
+  }, [supabaseClient, user?.id]);
 
   return (
     <Layout
@@ -233,26 +291,51 @@ export default function Profile({
         </div>
         <div className="flex flex-col p-6 bg-white rounded-lg shadow-lg sm:w-2/5 w-full">
           <h3 className="text-2xl font-bold text-center">Trophies</h3>
-          <div
-            className="text-center flex flex-col justify-center items-center h-72
-            tooltip tooltip-bottom hover:cursor-pointer"
-            data-tip="First Project Completed"
-          >
-            <Image
-              alt="Trophie"
-              src="/trophies/trophie2.svg"
-              width={350}
-              height={250}
-              className="items-center justify-center h-full mt-4"
-            />
-          </div>
-          {/* <div className="text-center flex flex-col justify-center items-center ">
-            <span
-              className={`text-white text-bold text-2xl text-center ${bubblegumSans.className} bg-primaryblue px-4 py-2 rounded-lg w-fit`}
-            >
-              First Project Completed
-            </span>
-          </div> */}
+          {trophies !== undefined && trophies?.length !== 0 ? (
+            <div className="text-center flex flex-row justify-center items-center h-72">
+              <>
+                {trophies.length > 1 && (
+                  <RiArrowLeftSLine
+                    className="h-20 w-20 text-gray-400 hover:cursor-pointer hover:text-black"
+                    onClick={() => changeTrophy("left")}
+                  />
+                )}
+                <div
+                  data-tip={trophies[currentTrophy]?.trophies.desc}
+                  className="tooltip tooltip-bottom hover:cursor-pointer"
+                >
+                  <Image
+                    priority
+                    alt="Trophie"
+                    src={trophies[currentTrophy]?.trophies.image}
+                    width={350}
+                    height={250}
+                    className="items-center justify-center h-full mt-4 w-full"
+                  />
+                </div>
+                {trophies.length > 1 && (
+                  <RiArrowRightSLine
+                    className="h-20 w-20 text-gray-400 hover:cursor-pointer hover:text-black"
+                    onClick={() => changeTrophy("right")}
+                  />
+                )}
+              </>
+            </div>
+          ) : (
+            <>
+              <Image
+                priority
+                alt="Trophie"
+                src="/confused.svg"
+                width={350}
+                height={150}
+                className="items-center justify-center h-64 mt-4 w-full"
+              />
+              <p className="text-center text-gray-800">
+                You don&apos;t have any trophies yet!
+              </p>
+            </>
+          )}
         </div>
       </div>
 

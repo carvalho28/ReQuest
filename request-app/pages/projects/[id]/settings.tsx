@@ -15,8 +15,15 @@ import { useRouter } from "next/router";
 import ErrorMessage from "@/components/ErrorMessage";
 import SuccessMessage from "@/components/SuccessMessage";
 import Link from "next/link";
-import { RiAddLine, RiArrowLeftSLine } from "react-icons/ri";
+import { RiAddLine } from "react-icons/ri";
 import { RealtimeChannel } from "@supabase/supabase-js";
+import { Fireworks } from "fireworks-js";
+
+declare global {
+  interface Window {
+    my_modal_3: HTMLDialogElement;
+  }
+}
 
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   const supabase = createServerSupabaseClient(ctx);
@@ -106,6 +113,9 @@ export default function ProjectSettings({
 
   const router = useRouter();
 
+  const [isProjectCompletedTrophy, setIsProjectCompletedTrophy] =
+    useState(true);
+
   useEffect(() => {
     // get users for the given project
     const getUsers = async () => {
@@ -117,12 +127,10 @@ export default function ProjectSettings({
         )
         .eq("id_proj", project.id);
       if (usersError) console.log(usersError);
-
-      console.log(usersData);
       setProjectUsers(usersData as ProjectUsers[]);
     };
     getUsers();
-  }, []);
+  }, [supabaseClient, project.id]);
 
   async function deleteProject() {
     // popup to confirm
@@ -195,6 +203,54 @@ export default function ProjectSettings({
     setTimeout(() => {
       setShowMessage(false);
     }, 3000);
+
+    if (projectStatus === "Completed") {
+      console.log("project completed");
+      // verify number of projects completed
+      const getProjectsCompleted = async () => {
+        const { data: projectsCompletedData, error: projectsCompletedError } =
+          await supabaseClient
+            .from("project_profiles")
+            .select("*, projects(id, status)")
+            // .eq("projects.status", "Completed")
+            .eq("id_user", user?.id);
+
+        if (projectsCompletedError) console.log(projectsCompletedError);
+        console.log("projectsCompletedData", projectsCompletedData);
+        if (projectsCompletedData === null) return;
+        // check if some projects are completed
+        let x = 0;
+        for (let i = 0; i < projectsCompletedData.length; i++) {
+          if (projectsCompletedData[i].projects.status === "Completed") {
+            x++;
+          }
+          if (x > 1) return;
+        }
+
+        // verify if there is already a trophy for this user
+        const { data: trophiesData, error: trophiesError } =
+          await supabaseClient
+            .from("trophies_profiles")
+            .select("*")
+            .eq("id_user", user?.id)
+            .eq("id_trophy", 1);
+        if (trophiesError) console.log(trophiesError);
+        console.log("trophiesData", trophiesData);
+        if (trophiesData?.length !== 0) return;
+        const { error } = await supabaseClient
+          .from("trophies_profiles")
+          .insert({
+            id_user: user?.id,
+            id_trophy: 1,
+          });
+        if (error) console.log(error);
+        console.log("trophy added");
+        window.my_modal_3.showModal();
+        setIsProjectCompletedTrophy(true);
+        if (fireworks) fireworks.start();
+      };
+      getProjectsCompleted();
+    }
   }
 
   const [emailToAdd, setEmailToAdd] = useState("");
@@ -279,7 +335,7 @@ export default function ProjectSettings({
               .from("project_profiles")
               .select(
                 `id_user, 
-              profiles(id, email,name, avatar_url)`
+            profiles(id, email,name, avatar_url)`
               )
               .eq("id_proj", project.id);
             if (usersError) console.log(usersError);
@@ -298,7 +354,6 @@ export default function ProjectSettings({
   function adjustTextareaHeight() {
     const textarea = document.getElementById("project-description");
     if (textarea) {
-      console.log("here");
       textarea.style.height = "auto"; // Reset the height to auto
       textarea.style.height = `${textarea.scrollHeight}px`; // Set the height to the scroll height
     }
@@ -306,6 +361,65 @@ export default function ProjectSettings({
 
   useEffect(() => {
     adjustTextareaHeight();
+  }, []);
+
+  const [fireworks, setFireworks] = useState<Fireworks | null>(null);
+  useEffect(() => {
+    // Check if running in the browser environment
+    if (typeof document !== "undefined") {
+      const container = document.querySelector(".fireworks-x") || document.body;
+      setFireworks(
+        new Fireworks(container, {
+          autoresize: true,
+          opacity: 0.5,
+          acceleration: 1.05,
+          friction: 0.97,
+          gravity: 1.5,
+          particles: 50,
+          traceLength: 3,
+          traceSpeed: 10,
+          explosion: 5,
+          intensity: 30,
+          flickering: 50,
+          lineStyle: "round",
+          hue: {
+            min: 0,
+            max: 360,
+          },
+          delay: {
+            min: 30,
+            max: 60,
+          },
+          rocketsPoint: {
+            min: 50,
+            max: 50,
+          },
+          lineWidth: {
+            explosion: {
+              min: 1,
+              max: 3,
+            },
+            trace: {
+              min: 1,
+              max: 2,
+            },
+          },
+          brightness: {
+            min: 50,
+            max: 80,
+          },
+          decay: {
+            min: 0.015,
+            max: 0.03,
+          },
+          mouse: {
+            click: false,
+            move: false,
+            max: 1,
+          },
+        })
+      );
+    }
   }, []);
 
   return (
@@ -558,6 +672,32 @@ export default function ProjectSettings({
           />
         </div>
       </div>
+      {isProjectCompletedTrophy && (
+        <>
+          <dialog id="my_modal_3" className="modal">
+            <form method="dialog" className="modal-box">
+              <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
+                ✕
+              </button>
+              <h3 className="font-bold text-xl text-center">
+                Congratulations!
+              </h3>
+              <p className="text-center mt-10">
+                You have completed your first project!
+              </p>
+              <p className="mt-2 text-center">You have earned a trophy!</p>
+              <Image
+                priority
+                alt="Trophie"
+                src="/trophies/trophie1.svg"
+                width={200}
+                height={200}
+                className="items-center justify-center h-72 w-full"
+              />
+            </form>
+          </dialog>
+        </>
+      )}
     </Layout>
   );
 }

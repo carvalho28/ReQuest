@@ -8,6 +8,7 @@ beforeEach(() => {
 
 describe("Profile page", () => {
   it("should navigate to the profile page", () => {
+    cy.wait(4000);
     // look for the image that has id "Profile"
     cy.get("#Profile").click();
     // check if the url is correct

@@ -55,7 +55,7 @@ const MultiselectPeople = ({
   return (
     <div className="flex flex-col w-72">
       <Select
-        placeholder={"Assign users"}
+        placeholder={"\xa0\xa0\xa0Assign users"}
         value={selected}
         onChange={handleChange}
         options={options || []}
