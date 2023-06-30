@@ -26,6 +26,7 @@ describe("Documents page", () => {
     // go to documents
     cy.get("span").contains("Documents").click();
 
+    cy.wait(5000);
     // check if there is a ul with li elements
     cy.get("ul").children().should("have.length.greaterThan", 0);
 
