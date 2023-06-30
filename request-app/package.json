@@ -14,6 +14,7 @@
   "dependencies": {
     "@dicebear/collection": "^6.0.3",
     "@dicebear/core": "^6.0.3",
+    "@fireworks-js/react": "^2.10.6",
     "@fortawesome/fontawesome-svg-core": "^6.4.0",
     "@fortawesome/free-regular-svg-icons": "^6.4.0",
     "@fortawesome/free-solid-svg-icons": "^6.4.0",
