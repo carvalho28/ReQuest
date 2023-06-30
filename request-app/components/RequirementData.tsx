@@ -23,6 +23,7 @@ import MultiselectPeople from "./MultiselectPeople";
 import Tiptap from "./TipTap";
 import { useSupabaseClient, useUser } from "@supabase/auth-helpers-react";
 import { RealtimeChannel } from "@supabase/supabase-js";
+import Image from "next/image";
 
 interface RequirementDataProps {
   userId: string;
@@ -59,6 +60,7 @@ const RequirementData = ({
   useEffect(() => {}, [requirementData]);
 
   const [isUpdatingUpdatedBy, setIsUpdatingUpdatedBy] = useState(false);
+  const [is100RequirementsTrophy, setIs100RequirementsTrophy] = useState(true);
 
   useEffect(() => {
     setRequirementData({
@@ -103,12 +105,11 @@ const RequirementData = ({
         requirement.status?.toLowerCase() !== "completed" &&
         requirementData.status?.toLowerCase() === "completed"
       ) {
+        console.log("requirement completed");
         // add a closed_at date
         requirementData.closed_at = new Date().toISOString();
         // copy assigned_to to closed_by
         requirementData.closed_by = requirementData.assigned_to;
-
-        console.log(requirementData.closed_by);
 
         // add to user's profiles +1 requirement
         const { data: dataReq, error: errorReq } = await supabaseClient.rpc(
@@ -117,6 +118,30 @@ const RequirementData = ({
         );
         if (errorReq) {
           console.log(errorReq);
+        }
+
+        // get nRequirementsCompleted from profile
+        const { data: dataProfile, error: errorProfile } = await supabaseClient
+          .from("profiles")
+          .select("requirements_completed")
+          .eq("id", userId)
+          .single();
+        if (errorProfile) {
+          console.log(errorProfile);
+        }
+
+        // if they are 100
+        if (dataProfile?.requirements_completed === 100) {
+          console.log("100 requirements completed");
+          const { error } = await supabaseClient
+            .from("trophies_profiles")
+            .insert({
+              id_user: user?.id,
+              id_trophy: 2,
+            });
+          if (error) console.log(error);
+          console.log("trophy added");
+          window.my_modal_3.showModal();
         }
       }
 
@@ -431,6 +456,32 @@ const RequirementData = ({
           />
         </div>
       </div>
+      {is100RequirementsTrophy && (
+        <>
+          <dialog id="my_modal_3" className="modal">
+            <form method="dialog" className="modal-box">
+              <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
+                ✕
+              </button>
+              <h3 className="font-bold text-xl text-center">
+                Congratulations!
+              </h3>
+              <p className="text-center mt-10">
+                You have completed 100 requirements!
+              </p>
+              <p className="mt-2 text-center">You have earned a trophy!</p>
+              <Image
+                priority
+                alt="Trophie"
+                src="/trophies/trophie2.svg"
+                width={200}
+                height={200}
+                className="items-center justify-center h-72 w-full"
+              />
+            </form>
+          </dialog>
+        </>
+      )}
     </>
   );
 };

@@ -618,10 +618,21 @@ export default function ProjectSettings({
               <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
                 ✕
               </button>
-              <h3 className="font-bold text-lg">Hello!</h3>
-              <p className="py-4">
-                Press ESC key or click on ✕ button to close
+              <h3 className="font-bold text-xl text-center">
+                Congratulations!
+              </h3>
+              <p className="text-center mt-10">
+                You have completed your first project!
               </p>
+              <p className="mt-2 text-center">You have earned a trophy!</p>
+              <Image
+                priority
+                alt="Trophie"
+                src="/trophies/trophie1.svg"
+                width={200}
+                height={200}
+                className="items-center justify-center h-72 w-full"
+              />
             </form>
           </dialog>
         </>
