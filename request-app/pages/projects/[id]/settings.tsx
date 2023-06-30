@@ -9,14 +9,15 @@ import { Database } from "@/types/supabase";
 import { createServerSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import { useSupabaseClient, useUser } from "@supabase/auth-helpers-react";
 import { GetServerSidePropsContext } from "next";
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import ErrorMessage from "@/components/ErrorMessage";
 import SuccessMessage from "@/components/SuccessMessage";
 import Link from "next/link";
-import { RiAddLine, RiArrowLeftSLine } from "react-icons/ri";
+import { RiAddLine } from "react-icons/ri";
 import { RealtimeChannel } from "@supabase/supabase-js";
+import { Fireworks } from "fireworks-js";
 
 declare global {
   interface Window {
@@ -246,6 +247,7 @@ export default function ProjectSettings({
         console.log("trophy added");
         window.my_modal_3.showModal();
         setIsProjectCompletedTrophy(true);
+        if (fireworks) fireworks.start();
       };
       getProjectsCompleted();
     }
@@ -359,6 +361,65 @@ export default function ProjectSettings({
 
   useEffect(() => {
     adjustTextareaHeight();
+  }, []);
+
+  const [fireworks, setFireworks] = useState<Fireworks | null>(null);
+  useEffect(() => {
+    // Check if running in the browser environment
+    if (typeof document !== "undefined") {
+      const container = document.querySelector(".fireworks-x") || document.body;
+      setFireworks(
+        new Fireworks(container, {
+          autoresize: true,
+          opacity: 0.5,
+          acceleration: 1.05,
+          friction: 0.97,
+          gravity: 1.5,
+          particles: 50,
+          traceLength: 3,
+          traceSpeed: 10,
+          explosion: 5,
+          intensity: 30,
+          flickering: 50,
+          lineStyle: "round",
+          hue: {
+            min: 0,
+            max: 360,
+          },
+          delay: {
+            min: 30,
+            max: 60,
+          },
+          rocketsPoint: {
+            min: 50,
+            max: 50,
+          },
+          lineWidth: {
+            explosion: {
+              min: 1,
+              max: 3,
+            },
+            trace: {
+              min: 1,
+              max: 2,
+            },
+          },
+          brightness: {
+            min: 50,
+            max: 80,
+          },
+          decay: {
+            min: 0.015,
+            max: 0.03,
+          },
+          mouse: {
+            click: false,
+            move: false,
+            max: 1,
+          },
+        })
+      );
+    }
   }, []);
 
   return (
