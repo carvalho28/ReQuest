@@ -296,6 +296,55 @@ export interface Database {
           }
         ]
       }
+      trophies: {
+        Row: {
+          desc: string | null
+          id: number
+          image: string | null
+        }
+        Insert: {
+          desc?: string | null
+          id?: number
+          image?: string | null
+        }
+        Update: {
+          desc?: string | null
+          id?: number
+          image?: string | null
+        }
+        Relationships: []
+      }
+      trophies_profiles: {
+        Row: {
+          id: number
+          id_trophy: number | null
+          id_user: string | null
+        }
+        Insert: {
+          id?: number
+          id_trophy?: number | null
+          id_user?: string | null
+        }
+        Update: {
+          id?: number
+          id_trophy?: number | null
+          id_user?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "trophies_profiles_id_trophy_fkey"
+            columns: ["id_trophy"]
+            referencedRelation: "trophies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "trophies_profiles_id_user_fkey"
+            columns: ["id_user"]
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
     }
     Views: {
       [_ in never]: never
