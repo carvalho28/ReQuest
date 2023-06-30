@@ -466,7 +466,7 @@ export default function Projects({
                             <h3 className="text-lg font-medium text-black mb-2">
                               {item.name}
                             </h3>
-                            <p className="text-gray-500 text-sm mb-4">
+                            <p className="text-gray-500 text-sm mb-4 text-justify">
                               {item.description}
                             </p>
                             <div className="flex justify-between">

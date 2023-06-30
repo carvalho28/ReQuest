@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 function classNames(...classes: any[]) {
   return classes.filter(Boolean).join(" ");
 }
@@ -17,6 +19,18 @@ interface TabsProps {
 }
 
 const Tabs = ({ tabs }: TabsProps) => {
+  const [selectedTab, setSelectedTab] = useState(
+    tabs.find((tab) => tab.current)?.name ?? tabs[0].name
+  );
+
+  const handleTabChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedTab(event.target.value);
+    const selectedTabItem = tabs.find((tab) => tab.name === event.target.value);
+    if (selectedTabItem) {
+      selectedTabItem.onClick(); // Call the onClick handler of the selected tab
+    }
+  };
+
   return (
     <div>
       <div className="sm:hidden">
@@ -27,10 +41,13 @@ const Tabs = ({ tabs }: TabsProps) => {
           id="tabs"
           name="tabs"
           className="block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
-          defaultValue={tabs.find((tab) => tab.current)?.name ?? tabs[0].name}
+          value={selectedTab}
+          onChange={handleTabChange}
         >
           {tabs.map((tab) => (
-            <option key={tab.name}>{tab.name}</option>
+            <option key={tab.name} value={tab.name}>
+              {tab.name}
+            </option>
           ))}
         </select>
       </div>
@@ -39,7 +56,6 @@ const Tabs = ({ tabs }: TabsProps) => {
           <nav className="-mb-px flex space-x-8" aria-label="Tabs">
             {tabs.map((tab) => (
               <div
-                // prefetch={true}
                 key={tab.name}
                 onClick={tab.onClick}
                 className={classNames(
