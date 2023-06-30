@@ -8,6 +8,7 @@ export default defineConfig({
     baseUrl: "http://localhost:3000",
     viewportHeight: 1024,
     viewportWidth: 1280,
+    experimentalRunAllSpecs: true,
   },
 
   component: {
