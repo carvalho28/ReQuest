@@ -6,12 +6,7 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import { FaPen, FaStar } from "react-icons/fa";
 import { Black_Ops_One } from "next/font/google";
-import {
-  RiArrowRightCircleFill,
-  RiArrowLeftCircleFill,
-  RiArrowRightSLine,
-  RiArrowLeftSLine,
-} from "react-icons/ri";
+import { RiArrowRightSLine, RiArrowLeftSLine } from "react-icons/ri";
 import dynamic from "next/dynamic";
 import { ProjectChildren } from "@/components/utils/sidebarHelper";
 import { useRouter } from "next/router";
@@ -299,10 +294,12 @@ export default function Profile({
           {trophies !== undefined && trophies?.length !== 0 ? (
             <div className="text-center flex flex-row justify-center items-center h-72">
               <>
-                <RiArrowLeftSLine
-                  className="h-20 w-20 text-gray-400 hover:cursor-pointer hover:text-black"
-                  onClick={() => changeTrophy("left")}
-                />
+                {trophies.length > 1 && (
+                  <RiArrowLeftSLine
+                    className="h-20 w-20 text-gray-400 hover:cursor-pointer hover:text-black"
+                    onClick={() => changeTrophy("left")}
+                  />
+                )}
                 <div
                   data-tip={trophies[currentTrophy]?.trophies.desc}
                   className="tooltip tooltip-bottom hover:cursor-pointer"
@@ -316,10 +313,12 @@ export default function Profile({
                     className="items-center justify-center h-full mt-4 w-full"
                   />
                 </div>
-                <RiArrowRightSLine
-                  className="h-20 w-20 text-gray-400 hover:cursor-pointer hover:text-black"
-                  onClick={() => changeTrophy("right")}
-                />
+                {trophies.length > 1 && (
+                  <RiArrowRightSLine
+                    className="h-20 w-20 text-gray-400 hover:cursor-pointer hover:text-black"
+                    onClick={() => changeTrophy("right")}
+                  />
+                )}
               </>
             </div>
           ) : (

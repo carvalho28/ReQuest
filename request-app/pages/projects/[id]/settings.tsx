@@ -18,6 +18,12 @@ import Link from "next/link";
 import { RiAddLine, RiArrowLeftSLine } from "react-icons/ri";
 import { RealtimeChannel } from "@supabase/supabase-js";
 
+declare global {
+  interface Window {
+    my_modal_3: HTMLDialogElement;
+  }
+}
+
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   const supabase = createServerSupabaseClient(ctx);
 
@@ -123,7 +129,7 @@ export default function ProjectSettings({
       setProjectUsers(usersData as ProjectUsers[]);
     };
     getUsers();
-  }, []);
+  }, [supabaseClient, project.id]);
 
   async function deleteProject() {
     // popup to confirm
@@ -607,7 +613,6 @@ export default function ProjectSettings({
       </div>
       {isProjectCompletedTrophy && (
         <>
-          <button className="btn">open modal</button>
           <dialog id="my_modal_3" className="modal">
             <form method="dialog" className="modal-box">
               <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
