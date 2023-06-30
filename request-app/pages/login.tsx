@@ -90,7 +90,6 @@ export default function Login() {
     }
   }
 
-  
   const [open, setOpen] = useState(false);
   useEffect(() => {
     console.log(open);
@@ -186,7 +185,7 @@ export default function Login() {
                           autoComplete="email"
                           placeholder="Email address"
                           required
-                          className="pl-4 block w-full rounded-md border-0
+                          className="pl-4 block w-full rounded-md border-1
                           py-1.5 shadow-sm ring-1
                           ring-inset ring-gray-300 placeholder:text-gray-400 
                           focus:ring-2 focus:ring-inset 
@@ -200,14 +199,15 @@ export default function Login() {
                       <div className="flex justify-between">
                         <label
                           htmlFor="email"
-                          className="block text-sm font-medium leading-6 text-gray-900"
+                          className="block text-sm font-medium border-1 leading-6 text-gray-900"
                         >
                           Password
                         </label>
                         <div className="flex items-center align-end text-sm justify-end">
                           <p
-                            onClick={() => setOpen(true)}  
-                            className="font-medium text-contrast hover:text-contrasthover cursor-pointer"
+                            onClick={() => setOpen(true)}
+                            className="font-medium text-contrast hover:text-contrasthover
+                             cursor-pointer text-xs md:text-md"
                           >
                             Forgot your password?
                           </p>
