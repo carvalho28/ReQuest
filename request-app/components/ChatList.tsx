@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import "regenerator-runtime/runtime";
 import { renderImage } from "./utils/general";
 import Image from "next/image";
+import { useAsyncDebounce } from "react-table";
 
 interface ChatListProps {
   connectedUsers: connectedUsers[];
@@ -18,14 +19,21 @@ interface ChatListProps {
 const ChatList = ({ connectedUsers, onUserSelect }: ChatListProps) => {
   const [people, setPeople] = useState(connectedUsers);
 
-  // const [searchTerm, setSearchTerm] = useState("");
-  // const onChange = useAsyncDebounce((value) => {
-  //   setSearchTerm(value || "");
-  // }, 200);
+  const [searchTerm, setSearchTerm] = useState("");
+  const onChange = useAsyncDebounce((value) => {
+    setSearchTerm(value || "");
+  }, 200);
 
+  // useEffect(() => {
+  //   setPeople(connectedUsers);
+  // }, [connectedUsers]);
   useEffect(() => {
-    setPeople(connectedUsers);
-  }, [connectedUsers]);
+    // Filter the connectedUsers based on the search term
+    const filteredPeople = connectedUsers.filter((person) =>
+      person.name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    setPeople(filteredPeople);
+  }, [connectedUsers, searchTerm]);
 
   // get the userId of the selected user
   const selectUser = (userId: number) => {
@@ -45,16 +53,22 @@ const ChatList = ({ connectedUsers, onUserSelect }: ChatListProps) => {
       {/*  search bar */}
       <div className="flex items-center w-full justify-center mt-4 mb-2">
         <input
-          // value={searchTerm || ""}
-          // onChange={(e) => {
-          //   setSearchTerm(e.target.value);
-          //   onChange(e.target.value);
-          // }}
+          value={searchTerm || ""}
+          onChange={(e) => {
+            console.log(e.target.value);
+            setSearchTerm(e.target.value);
+            onChange(e.target.value);
+          }}
           className="rounded-xl border p-3 text-gray-500 cursor-pointer"
           type="search"
           placeholder="🔎   Search..."
         />
       </div>
+      {people.length === 0 && (
+        <div className="flex flex-col items-center justify-center h-full">
+          <p className="text-gray-500 text-lg">No users found</p>
+        </div>
+      )}
       <ul role="list" className="divide-gray-300 py-2">
         {people.map((person) => (
           <li

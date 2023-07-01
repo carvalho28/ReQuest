@@ -4,18 +4,9 @@ import Layout from "@/components/Layout";
 import { ProjectChildren } from "@/components/utils/sidebarHelper";
 import { createServerSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import { useSupabaseClient, useUser } from "@supabase/auth-helpers-react";
-import { set } from "cypress/types/lodash";
 import { GetServerSidePropsContext } from "next";
 import { useEffect, useState } from "react";
 import { RiArrowLeftSLine } from "react-icons/ri";
-
-export type connectedUsers = {
-  id: number;
-  name: string;
-  email: string;
-  avatar_url: string;
-  selected: boolean;
-};
 
 /**
  * Chat page
@@ -42,7 +33,6 @@ export default function Chat({
   const [chatId, setChatId] = useState<number>(-1);
 
   useEffect(() => {
-    console.log("connUserId: ", connUserId);
     if (connUserId === -1) return;
     const verifyChat = async (connUserId: number) => {
       const { data: chat, error: errorChat } = await supabaseClient.rpc(
@@ -51,8 +41,6 @@ export default function Chat({
       );
 
       if (errorChat) console.log(errorChat);
-      console.log("chat: ", chat);
-      console.log("chat.length: ", chat?.length);
       if (!chat || chat?.length === 0 || chat === undefined) {
         // create chat and and add both users to it
         const { data: newChat, error: errorNewChat } = await supabaseClient
@@ -73,8 +61,6 @@ export default function Chat({
           if (addUsers) {
             setChatId(newChatID);
           }
-          //
-          console.log("newChat: ", newChat);
         }
       } else {
         setChatId(chat[0].chat_id);
@@ -209,4 +195,12 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
       connectedUsers: connectedUsers,
     },
   };
+};
+
+export type connectedUsers = {
+  id: number;
+  name: string;
+  email: string;
+  avatar_url: string;
+  selected: boolean;
 };

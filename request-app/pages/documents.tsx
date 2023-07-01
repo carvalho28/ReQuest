@@ -41,8 +41,6 @@ export default function Documents({ avatar_url, projectsChildren }: any) {
     if (error) console.log(error);
     if (!data) throw new Error("No data found");
 
-    console.log("data: ", data);
-
     // remove . (hidden files)
     const filesData: any = data.filter(
       (file: any) => !file.name.startsWith(".")
