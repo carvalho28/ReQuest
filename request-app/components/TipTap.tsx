@@ -227,7 +227,7 @@ const Tiptap = ({
           className="element"
         />
       </div>
-      <div className="text-md text-neutral-400 flex justify-end mr-4 italic">
+      <div className="text-md text-neutral-400 flex justify-end mr-4 italic -mb-4">
         Created by {createdBy} on{" "}
         {new Date(reqCreatedAt).toLocaleDateString("pt-PT", {
           year: "numeric",
@@ -235,7 +235,7 @@ const Tiptap = ({
           day: "numeric",
         })}
       </div>
-      <div className="modal-action p-4">
+      <div className="modal-action md:p-4 p-1">
         <label
           htmlFor="my-modal-5"
           className="btn bg-contrast text-white border-0 hover:bg-contrasthover hover:cursor-pointer"

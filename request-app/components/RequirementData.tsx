@@ -353,21 +353,21 @@ const RequirementData = ({
     <>
       <input type="checkbox" id="my-modal-5" className="modal-toggle" />
       <div className="modal">
-        <div className="modal-box w-11/12 max-w-5xl bg-neutral-50">
+        <div className="modal-box w-11/12 max-w-5xl bg-neutral-50 md:p-4 p-2">
           {requirementData.id != undefined && (
-            <div className="p-4">
+            <div className="md:p-4 p-2">
               {/* title */}
-              <div className="flex flex-row">
-                <div className="flex flex-row w-9/12 space-x-3 items-center">
+              <div className="flex md:flex-row flex-col">
+                <div className="flex md:flex-row flex-col md:text-left text-justify md:w-9/12 w-full space-x-3 items-center">
                   <h3
                     className="font-bold text-2xl
-              focus:border-contrast focus:border-2 focus:outline-none px-1"
+                             focus:border-contrast focus:border-2 focus:outline-none px-1"
                     id="requirement-name"
                   >
                     {requirement.name}
                   </h3>
                   {/* show pencil icon and make it editable, then show a check icon to save or a cross icon to cancel */}
-                  <div className="flex flex-row items-center">
+                  <div className="flex flex-row items-center mb-8 md:mb-0">
                     {!isEditing ? (
                       <RiPencilLine
                         size={20}
@@ -393,7 +393,7 @@ const RequirementData = ({
                   </div>
                 </div>
                 {/* render type of requirement */}
-                <div className="flex flex-row items-center justify-center w-3/12">
+                <div className="flex flex-row items-center justify-center md:w-3/12 w-full mb-4 md:mb-0">
                   <Dropdown
                     func={renderTypeBadge}
                     options={["Functional", "Non-Functional"]}
@@ -421,7 +421,7 @@ const RequirementData = ({
 
                   {/* priority badge */}
                   <div className="flex flex-row space-x-3">
-                    <div className="flex flex-row space-x-4 justify-center items-center">
+                    <div className="flex flex-row space-x-4 justify-center items-center md:mb-0 mb-4">
                       <RiErrorWarningLine size={20} />
                       <span className="text-md text-black">Priority</span>{" "}
                     </div>
@@ -434,7 +434,7 @@ const RequirementData = ({
                   </div>
                 </div>
 
-                <div className="flex flex-col md:w-1/3 w-full space-y-5">
+                <div className="flex flex-col md:w-1/3 w-full space-y-4 md:space-y-5">
                   {/* due date */}
                   <div className="flex flex-row space-x-3">
                     <div className="flex flex-row space-x-4 justify-center items-center">
@@ -462,7 +462,7 @@ const RequirementData = ({
                   </div>
                 </div>
 
-                <div className="flex flex-col md:w-1/3 w-full space-y-3 pl-8">
+                <div className="flex flex-col md:w-1/3 w-full space-y-3 md:pl-8 pl-0 md:mt-0 mt-4">
                   <div className="flex flex-row justify-center">
                     <span className="text-md text-black">Last updated</span>{" "}
                   </div>
