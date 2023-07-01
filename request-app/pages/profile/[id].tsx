@@ -11,7 +11,6 @@ import dynamic from "next/dynamic";
 import { ProjectChildren } from "@/components/utils/sidebarHelper";
 import { useRouter } from "next/router";
 import { renderImage } from "@/components/utils/general";
-import { Bubblegum_Sans } from "next/font/google";
 import { RealtimeChannel } from "@supabase/supabase-js";
 
 // dynamic
@@ -399,9 +398,15 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   if (!dataRpc) throw new Error("No user data found");
   const userData = dataRpc[0];
 
+  console.log(user);
+
   // get user projects info
+  // const { data: dataProjects, error: errorProjects } = await supabase.rpc(
+  //   "projects_user_req",
+  //   { user_id: user?.id }
+  // );
   const { data: dataProjects, error: errorProjects } = await supabase.rpc(
-    "projects_user_req",
+    "projects_user",
     { user_id: user?.id }
   );
 
