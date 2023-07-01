@@ -1,10 +1,7 @@
 import Image from "next/image";
 
 import { Container } from "./Container";
-import {
-  Variants,
-  motion,
-} from "framer-motion";
+import { Variants, motion } from "framer-motion";
 import { sectionInOutFadeVariants } from "./PrimaryFeatures";
 
 const testimonials = [
@@ -62,9 +59,9 @@ const testimonials = [
       content:
         "ReQuest has made my project life much more manageable. The collaboration options have improved my group projects, and the AI integration helps me create better requirements.",
       author: {
-        name: "Amy Hahn",
+        name: "Per Håkansson",
         role: "Student at University of Texas, Austin",
-        image: "/person4.jpg",
+        image: "/person6.jpg",
       },
     },
   ],
