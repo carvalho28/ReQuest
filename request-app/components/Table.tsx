@@ -231,7 +231,7 @@ function GlobalFilter({
             setValue(e.target.value);
             onChange(e.target.value);
           }}
-          className="mx-auto lg:w-4/12 w-2/4 rounded-xl border p-3 text-gray-500 cursor-pointer"
+          className="mx-auto lg:w-4/12 w-2/4 rounded-xl border-2 p-3 text-gray-500 cursor-pointer"
           type="search"
           placeholder="🔎   Search..."
         />
@@ -915,17 +915,20 @@ function Table({
 
             {/* pagination */}
             <div className="py-1 flex items-center text-center justify-center pt-10">
-              <div className="flex-1 flex justify-between md:hidden">
-                <button
-                  onClick={() => previousPage()}
-                  disabled={!canPreviousPage}
-                >
-                  Previous
-                </button>
-                <button onClick={() => nextPage()} disabled={!canNextPage}>
-                  Next
-                </button>
-              </div>
+              {/* only show if there are pages */}
+              {pageCount > 1 && (
+                <div className="flex-1 flex justify-between md:hidden">
+                  <button
+                    onClick={() => previousPage()}
+                    disabled={!canPreviousPage}
+                  >
+                    Previous Page
+                  </button>
+                  <button onClick={() => nextPage()} disabled={!canNextPage}>
+                    Next Page
+                  </button>
+                </div>
+              )}
             </div>
             <div
               className="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between mb-4"

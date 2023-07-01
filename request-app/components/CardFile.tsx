@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import Loading from "./Loading";
-import { EllipsisVerticalIcon } from "@heroicons/react/24/outline";
 import { FileIcon } from "react-file-utils";
 import Image from "next/image";
 import { RiDownload2Line, RiDownloadLine } from "react-icons/ri";

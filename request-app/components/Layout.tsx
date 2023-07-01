@@ -187,7 +187,9 @@ const Layout = ({
     <>
       <div>
         <Head>
-          <title>{`ReQuest | ${currentPage.charAt(0).toUpperCase() + currentPage.slice(1)}`}</title>
+          <title>{`ReQuest | ${
+            currentPage.charAt(0).toUpperCase() + currentPage.slice(1)
+          }`}</title>
           <meta
             name="viewport"
             content="initial-scale=1.0, width=device-width"
@@ -620,10 +622,11 @@ const Layout = ({
             "flex flex-1 flex-col"
           )}
         >
-          <div className="sticky top-0 z-10 bg-gray-100 pl-1 pt-1 sm:pl-3 sm:pt-3 lg:hidden">
+          <div className="sticky top-0 z-10 bg-gray-100 pl-2 pt-2 sm:pl-3 sm:pt-3 lg:hidden">
             <button
               type="button"
-              className="-ml-0.5 -mt-0.5 inline-flex h-12 w-12 items-center justify-center rounded-md text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-contrast bg-contrast hover:bg-contrasthover"
+              className="-ml-0.5 -mt-0.5 inline-flex h-12 w-12 items-center justify-center rounded-md text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-contrast 
+              bg-contrast hover:bg-contrasthover"
               onClick={() => setSidebarOpen(true)}
             >
               <span className="sr-only">Open sidebar</span>

@@ -356,7 +356,7 @@ export default function Projects({
               {projectsList && (
                 <>
                   {isTable ? (
-                    <div className="-mx-4 mt-8 sm:-mx-0">
+                    <div className="-mx-4 mt-8 sm:-mx-0 overflow-x-auto">
                       <table className="min-w-full divide-y divide-gray-300">
                         <thead>
                           <tr className="divide-x divide-gray-300">
@@ -402,7 +402,7 @@ export default function Projects({
                                 router.push(`/projects/${item.id}`);
                               }}
                             >
-                              <td className="w-full max-w-0 py-4 pl-4 pr-3 text-sm sm:font-medium text-black sm:w-auto sm:max-w-none sm:pl-0">
+                              <td className="w-full py-4 pl-4 pr-3 text-sm sm:font-medium text-black sm:w-auto sm:max-w-none sm:pl-0 whitespace-nowrap">
                                 {item.name}
                                 <dl className="font-normal lg:hidden">
                                   <dt className="sr-only">Description</dt>
@@ -466,7 +466,7 @@ export default function Projects({
                             <h3 className="text-lg font-medium text-black mb-2">
                               {item.name}
                             </h3>
-                            <p className="text-gray-500 text-sm mb-4">
+                            <p className="text-gray-500 text-sm mb-4 text-justify">
                               {item.description}
                             </p>
                             <div className="flex justify-between">
@@ -573,8 +573,9 @@ export default function Projects({
                             {error && <ErrorMessage message={errorMessage} />}
                           </div>
                           <div
-                            className={`carousel-slide ${currentSlide === 0 ? "active" : "hidden"
-                              }`}
+                            className={`carousel-slide ${
+                              currentSlide === 0 ? "active" : "hidden"
+                            }`}
                           >
                             <label
                               htmlFor="name"
@@ -595,8 +596,9 @@ export default function Projects({
                           </div>
 
                           <div
-                            className={`carousel-slide ${currentSlide === 1 ? "active" : "hidden"
-                              }`}
+                            className={`carousel-slide ${
+                              currentSlide === 1 ? "active" : "hidden"
+                            }`}
                           >
                             <label
                               htmlFor="description"
@@ -616,8 +618,9 @@ export default function Projects({
                             </div>
                           </div>
                           <div
-                            className={`carousel-slide ${currentSlide === 2 ? "active" : "hidden"
-                              }`}
+                            className={`carousel-slide ${
+                              currentSlide === 2 ? "active" : "hidden"
+                            }`}
                           >
                             <label
                               htmlFor="deadline"
@@ -637,8 +640,9 @@ export default function Projects({
                             </div>
                           </div>
                           <div
-                            className={`carousel-slide ${currentSlide === 3 ? "active" : "hidden"
-                              }`}
+                            className={`carousel-slide ${
+                              currentSlide === 3 ? "active" : "hidden"
+                            }`}
                           >
                             {/* list of people added */}
                             <div className="flex flex-col space-y-2 mb-8">

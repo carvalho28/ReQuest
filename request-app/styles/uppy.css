@@ -2,6 +2,16 @@
   background-color: #fafdfe !important;
 }
 
+@media screen and (max-width: 768px) {
+  .uppy-Dashboard-inner {
+    height: 10em !important;
+    /* align vertically */
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+  }
+}
+
 .uppy-Dashboard-browse {
   color: #845ec2 !important;
   /* underline */

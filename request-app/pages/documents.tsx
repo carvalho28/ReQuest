@@ -142,7 +142,7 @@ export default function Documents({ avatar_url, projectsChildren }: any) {
     uppy.info("Upload complete", "info", 3000);
 
     // refresh files
-    getUserFiles(); 
+    getUserFiles();
   });
 
   useEffect(() => {
@@ -156,7 +156,7 @@ export default function Documents({ avatar_url, projectsChildren }: any) {
         avatar_url={avatar_url}
         projectChildren={projectsChildren}
       >
-        <div>
+        <div className="flex flex-col">
           <div>
             {files.length > 0 ? (
               <CardFile files={files} />
@@ -173,7 +173,7 @@ export default function Documents({ avatar_url, projectsChildren }: any) {
           </div>
 
           <div className="flex flex-row bg-white p-4">
-            <div className="mt-5 w-2/3 ml-4 mb-4">
+            <div className="mt-5 md:w-2/3 w-full ml-4 mb-4">
               <Dashboard
                 height={500}
                 width="100%"
@@ -185,7 +185,7 @@ export default function Documents({ avatar_url, projectsChildren }: any) {
                 ]}
               />
             </div>
-            <div className="w-1/3 flex jusitfy-center items-center">
+            <div className="md:w-1/3 md:flex hidden jusitfy-center items-center">
               <Image
                 id="No ranking"
                 className="w-full h-auto flex-none py-3"
