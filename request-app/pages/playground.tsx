@@ -28,7 +28,9 @@ export default function Playground({ avatar_url, projectsChildren }: any) {
   const user = useUser();
 
   const [value, setValue] = useState<readonly Option[]>([]);
-  const [scenario, setScenario] = useState<string>("");
+  const [scenario, setScenario] = useState<string>(
+    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis consectetur maximus mauris et euismod. Nullam a nulla diam. Nam consequat lectus vitae ex imperdiet condimentum. Quisque mi turpis, facilisis nec ultricies quis, semper et leo. Proin placerat suscipit tortor sit amet mollis. Suspendisse eleifend nisi sit amet volutpat dapibus. Proin ullamcorper tortor eget lectus euismod, sed imperdiet urna scelerisque. Curabitur a nisl libero. Aliquam ut aliquam nisl. Aenean pulvinar at sapien tempus molestie. Quisque elementum vel leo et sollicitudin. Ut semper urna sed elit volutpat convallis. Curabitur consectetur, sem ac interdum tincidunt, nisi sapien auctor orci, nec dictum tortor dolor vitae augue. Nullam accumsan lacinia tortor, et interdum ante feugiat quis. Vivamus mattis convallis turpis molestie vehicula. Donec pharetra blandit molestie. Sed tincidunt eget augue at aliquet. Vivamus varius ante mi, at efficitur nisl accumsan ut. Maecenas tempor vehicula egestas. Ut blandit, neque pharetra bibendum ullamcorper, lacus libero auctor orci, nec imperdiet dui nulla nec enim. Donec finibus fringilla lorem, sit amet elementum turpis dignissim nec. Mauris justo mauris, sollicitudin ut quam in, aliquet dapibus leo. Etiam fermentum ex ut arcu dignissim tincidunt. Suspendisse potenti. Sed pretium laoreet sapien, id auctor mi porttitor in. Praesent luctus facilisis justo non aliquet. Integer in pulvinar lectus. Nunc malesuada, neque nec tincidunt tempus, dolor erat posuere arcu, nec laoreet ipsum ligula nec dolor."
+  );
 
   const [loading, setLoading] = useState<boolean>(false);
   const [loadingAI, setLoadingAI] = useState<boolean>(false);
@@ -143,12 +145,42 @@ export default function Playground({ avatar_url, projectsChildren }: any) {
           content: "Click here to generate a scenario",
           disableBeacon: true,
         },
+        {
+          target: ".scenario-show",
+          content: "This is the generated scenario",
+          disableBeacon: true,
+        },
+        {
+          target: ".type-req",
+          content: "Type a requirement here",
+          disableBeacon: true,
+        },
+        {
+          target: ".btn-verify",
+          content: "Click here to verify the requirement",
+          disableBeacon: true,
+        },
+        {
+          content: <h2>Let's get started!</h2>,
+          placement: "center",
+          target: "body",
+        },
       ]);
       console.log("set steps");
       console.log(steps);
       localStorage.setItem("playground", "true");
     }
   }, []);
+
+  // listen for joyride events
+  const handleJoyrideCallback = (data: any) => {
+    const { status, type } = data;
+    const finishedStatuses = ["finished", "skipped"];
+    if (finishedStatuses.includes(status)) {
+      setShow(false);
+      setScenario("");
+    }
+  };
 
   function handleInput(event: any) {
     setRequirement(event.target.value);
@@ -176,6 +208,7 @@ export default function Playground({ avatar_url, projectsChildren }: any) {
       >
         {steps.length > 0 && (
           <Joyride
+            callback={handleJoyrideCallback}
             continuous={true}
             steps={steps}
             showProgress={true}
@@ -229,7 +262,7 @@ export default function Playground({ avatar_url, projectsChildren }: any) {
                 <h1 className="text-2xl font-bold text-gray-800 mb-6 mt-6">
                   Generated Scenario
                 </h1>
-                <article className="prose-base text-justify bg-gray-50 rounded-lg">
+                <article className="prose-base text-justify bg-gray-50 rounded-lg scenario-show">
                   {/* button to copy the full scenario */}
                   {scenario !== "" && (
                     <div className="flex flex-row items-center w-full justify-end">
@@ -286,7 +319,7 @@ export default function Playground({ avatar_url, projectsChildren }: any) {
                   id="message"
                   className="block w-full text-gray-900 px-4 ring-0 border-1 border-gray-300 
             focus:outline-none resize-none h-auto bg-gray-100 rounded-md
-            py-1 ml-2 overflow-y-scroll md:text-lg text-sm"
+            py-1 ml-2 overflow-y-scroll md:text-lg text-sm type-req"
                   placeholder="Type a requirement..."
                   value={requirement}
                   onChange={handleInput}
@@ -295,7 +328,7 @@ export default function Playground({ avatar_url, projectsChildren }: any) {
                 <label
                   htmlFor="my_modal_6"
                   className="btn ml-5 text-whitepages hover:text-contrasthover bg-contrast
-                  border-0 hover:bg-purple-200"
+                  border-0 hover:bg-purple-200 btn-verify"
                   onClick={verifyRequirement}
                 >
                   Verify
