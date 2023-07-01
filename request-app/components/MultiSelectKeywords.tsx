@@ -67,4 +67,3 @@ const MultiSelectKeywords = ({ value, setValue }: Props) => {
 };
 
 export default MultiSelectKeywords;
-

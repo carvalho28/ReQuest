@@ -7,8 +7,8 @@ import { useSupabaseClient, useUser } from "@supabase/auth-helpers-react";
 import { GetServerSidePropsContext } from "next";
 import { useEffect, useState } from "react";
 import Joyride from "react-joyride";
-import { RiArrowRightFill } from "react-icons/ri";
-import {FaTrashAlt} from "react-icons/fa";
+import { RiArrowRightFill, RiFileCopyLine } from "react-icons/ri";
+import { FaTrashAlt } from "react-icons/fa";
 import ErrorMessage from "@/components/ErrorMessage";
 
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
@@ -84,7 +84,6 @@ export default function Playground({ avatar_url, projectsChildren }: any) {
     setLoading(true);
     setScenario("");
     const keywords = value.map((option) => option.value);
-    console.log(keywords);
     try {
       const response = await fetch(
         "https://morning-flower-3545.fly.dev/api/ai/ltfs",
@@ -206,6 +205,8 @@ export default function Playground({ avatar_url, projectsChildren }: any) {
     }
   }
 
+  const [toast, setToast] = useState<boolean>(false);
+
   return (
     <div>
       <Layout
@@ -234,7 +235,7 @@ export default function Playground({ avatar_url, projectsChildren }: any) {
           {/* trash icon to reset on top right */}
           <div className="flex justify-end w-full">
             <FaTrashAlt
-              className="text-gray-800 mr-4 mt-4 cursor-pointer h-10 w-10 hover:text-red-500"
+              className="text-gray-800 mr-4 mt-4 cursor-pointer md:h-10 md:w-10 w-4 h-4 hover:text-red-500"
               onClick={() => {
                 setScenario("");
                 setRequirements([]);
@@ -246,10 +247,8 @@ export default function Playground({ avatar_url, projectsChildren }: any) {
             />
           </div>
 
-          <div className="flex flex-col items-center w-3/5 p-4">
-            <h1 className="text-2xl font-bold text-gray-800 mb-6">
-              Keywords
-            </h1>
+          <div className="flex flex-col items-center md:w-3/5 p-4">
+            <h1 className="text-2xl font-bold text-gray-800 mb-6">Keywords</h1>
             <MultiSelectKeywords
               value={value}
               setValue={setValue}
@@ -263,22 +262,41 @@ export default function Playground({ avatar_url, projectsChildren }: any) {
             </button>
           </div>
 
-          <div className="flex flex-col items-center w-3/5 p-4">
+          <div className="flex flex-col items-center md:w-3/5 md:p-4">
             {loading && <Loading />}
             {scenario !== "" && (
               <>
                 <h1 className="text-2xl font-bold text-gray-800 mb-6 mt-6">
                   Generated Scenario
                 </h1>
-                <article className="prose-base text-justify bg-gray-50 rounded-lg px-8 py-4">
-                  <p>{scenario}</p>
+                <article className="prose-base text-justify bg-gray-50 rounded-lg">
+                  {/* button to copy the full scenario */}
+                  {scenario !== "" && (
+                    <div className="flex flex-row items-center w-full justify-end">
+                      <button
+                        className="btn text-whitepage border-0 md:hover:bg-purple-200 bg-transparent truncate"
+                        onClick={() => {
+                          console.log("copying to clipboard");
+                          setToast(true);
+                          navigator.clipboard.writeText(scenario);
+                          setTimeout(() => {
+                            setToast(false);
+                          }, 3000);
+                        }}
+                        title="Copy to clipboard"
+                      >
+                        <RiFileCopyLine className="md:w-5 md:h-5 h-4 w-4" />
+                      </button>
+                    </div>
+                  )}
+                  <p className="md:px-8 px-2 -mt-0">{scenario}</p>
                 </article>
               </>
             )}
           </div>
 
           {scenario !== "" && (
-            <div className="flex flex-col w-3/5 p-4">
+            <div className="flex flex-col md:w-3/5 p-4">
               <h1 className="text-2xl font-bold text-gray-800 mb-6 mt-6 items-center text-center">
                 Requirements
               </h1>
@@ -308,7 +326,7 @@ export default function Playground({ avatar_url, projectsChildren }: any) {
                   id="message"
                   className="block w-full text-gray-900 px-4 ring-0 border-1 border-gray-300 
             focus:outline-none resize-none h-auto bg-gray-100 rounded-md
-            py-1 ml-2 overflow-y-scroll"
+            py-1 ml-2 overflow-y-scroll md:text-lg text-sm"
                   placeholder="Type a requirement..."
                   value={requirement}
                   onChange={handleInput}
@@ -368,6 +386,13 @@ export default function Playground({ avatar_url, projectsChildren }: any) {
               )}
             </div>
           </>
+        )}
+        {toast && (
+          <div className="toast toast-center">
+            <div className="alert">
+              <span>Scenario copied to clipboard!</span>
+            </div>
+          </div>
         )}
       </Layout>
     </div>
