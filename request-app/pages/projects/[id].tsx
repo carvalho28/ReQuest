@@ -28,116 +28,22 @@ export type Rankings = {
   avatar_url: string;
 };
 
-export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
-  const supabase = createServerSupabaseClient(ctx);
-
-  const {
-    data: { session },
-  } = await supabase.auth.getSession();
-  if (!session)
-    return {
-      redirect: {
-        destination: "/",
-        permanent: false,
-      },
-    };
-
-  const user = session.user;
-  const { data, error } = await supabase
-    .from("profiles")
-    .select("avatar_url")
-    .eq("id", user?.id);
-  if (error) console.log(error);
-  if (!data) throw new Error("No data found");
-
-  //   get the id from the url
-  const id = ctx.params?.id;
-
-  // get the project data from the database
-  const { data: projectData, error: projectError } = await supabase
-    .from("projects")
-    .select("*")
-    .eq("id", id);
-
-  if (projectError) console.log(projectError);
-  if (!projectData) throw new Error("No data found");
-
-  // get user name from the database
-  const { data: userData, error: userError } = await supabase
-    .from("profiles")
-    .select("name")
-    .eq("id", user?.id);
-
-  if (userError) console.log(userError);
-  if (!userData) throw new Error("No data found");
-
-  // get all users that are in the project
-  const { data: usersInProject, error: usersInProjectError } = await supabase
-    .from("project_profiles")
-    .select(
-      `id_user, 
-    profiles (
-      id,
-      name,
-      email
-    )`
-    )
-    .eq("id_proj", id);
-
-  if (usersInProjectError) console.log(usersInProjectError);
-  if (!usersInProject) throw new Error("No data found");
-
-  // const projectUserIds = usersInProject.map((user: any) => user.id_user);
-
-  // const projectUserNames = usersInProject.map(
-  //   (user: any) => user.profiles.name ?? user.profiles.email
-  // );
-
-  // tuple of user ids and user names
-  const projectUserIdsAndNames: UserIdAndName[] = usersInProject.map(
-    (user: any) => {
-      return {
-        id: user.id_user,
-        name: user.profiles.name ?? user.profiles.email,
-      };
-    }
-  );
-
-  // get user projects info
-  const { data: dataProjects, error: errorProjects } = await supabase.rpc(
-    "projects_user",
-    { user_id: user?.id }
-  );
-
-  // convert to a ProjectChildren type where href is the /projects/[id] route
-  const projectsChildren: ProjectChildren[] = dataProjects.map(
-    (project: any) => {
-      return {
-        name: project.name,
-        href: `/projects/${project.id}`,
-      };
-    }
-  );
-
-  return {
-    props: {
-      avatar_url: data[0].avatar_url,
-      project_data: projectData,
-      user: userData[0].name,
-      userId: user?.id,
-      projectUserIdsAndNames: projectUserIdsAndNames,
-      projectsChildren: projectsChildren,
-    },
-  };
-};
-
+/**
+ * Single project page
+ * @description It shows the project details
+ * @param avatar_url - user avatar url
+ * @param project_data - project data
+ * @param user - user name
+ * @param userId - user id
+ * @param projectUserIdsAndNames - project user ids and names
+ * @param projectsChildren - user projects
+ * @returns single project page
+ */
 export default function SingleProject({
   avatar_url,
   project_data,
   user,
   userId,
-  // projectUserNames,
-  // projectUserIds,
   projectUserIdsAndNames,
   projectsChildren,
 }: any) {
@@ -323,3 +229,106 @@ export default function SingleProject({
     </div>
   );
 }
+
+export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
+  const supabase = createServerSupabaseClient(ctx);
+
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
+  if (!session)
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+
+  const user = session.user;
+  const { data, error } = await supabase
+    .from("profiles")
+    .select("avatar_url")
+    .eq("id", user?.id);
+  if (error) console.log(error);
+  if (!data) throw new Error("No data found");
+
+  //   get the id from the url
+  const id = ctx.params?.id;
+
+  // get the project data from the database
+  const { data: projectData, error: projectError } = await supabase
+    .from("projects")
+    .select("*")
+    .eq("id", id);
+
+  if (projectError) console.log(projectError);
+  if (!projectData) throw new Error("No data found");
+
+  // get user name from the database
+  const { data: userData, error: userError } = await supabase
+    .from("profiles")
+    .select("name")
+    .eq("id", user?.id);
+
+  if (userError) console.log(userError);
+  if (!userData) throw new Error("No data found");
+
+  // get all users that are in the project
+  const { data: usersInProject, error: usersInProjectError } = await supabase
+    .from("project_profiles")
+    .select(
+      `id_user, 
+    profiles (
+      id,
+      name,
+      email
+    )`
+    )
+    .eq("id_proj", id);
+
+  if (usersInProjectError) console.log(usersInProjectError);
+  if (!usersInProject) throw new Error("No data found");
+
+  // const projectUserIds = usersInProject.map((user: any) => user.id_user);
+
+  // const projectUserNames = usersInProject.map(
+  //   (user: any) => user.profiles.name ?? user.profiles.email
+  // );
+
+  // tuple of user ids and user names
+  const projectUserIdsAndNames: UserIdAndName[] = usersInProject.map(
+    (user: any) => {
+      return {
+        id: user.id_user,
+        name: user.profiles.name ?? user.profiles.email,
+      };
+    }
+  );
+
+  // get user projects info
+  const { data: dataProjects, error: errorProjects } = await supabase.rpc(
+    "projects_user",
+    { user_id: user?.id }
+  );
+
+  // convert to a ProjectChildren type where href is the /projects/[id] route
+  const projectsChildren: ProjectChildren[] = dataProjects.map(
+    (project: any) => {
+      return {
+        name: project.name,
+        href: `/projects/${project.id}`,
+      };
+    }
+  );
+
+  return {
+    props: {
+      avatar_url: data[0].avatar_url,
+      project_data: projectData,
+      user: userData[0].name,
+      userId: user?.id,
+      projectUserIdsAndNames: projectUserIdsAndNames,
+      projectsChildren: projectsChildren,
+    },
+  };
+};

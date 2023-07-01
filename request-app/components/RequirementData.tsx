@@ -33,6 +33,14 @@ interface RequirementDataProps {
   projectUserIdsAndNames: UserIdAndName[];
 }
 
+/**
+ * RequirementData component is used to display the full-featured markdown editor
+ * @param userId - The user id of the current user
+ * @param name - The name of the current user
+ * @param requirement - The requirement object
+ * @param projectUserIdsAndNames - The user ids and names of the project
+ * @returns - Returns the RequirementData component
+ */
 const RequirementData = ({
   userId,
   name,

@@ -22,6 +22,13 @@ interface Props {
   onChange?: (value: readonly Option[]) => void;
 }
 
+/**
+ * MultiSelectKeywords component is the component used to input keywords
+ * @param value - The value of the keywords
+ * @param setValue - The function to set the value of the keywords
+ * @param onChange - The function to change the value of the keywords
+ * @returns Returns the MultiSelectKeywords component
+ */
 const MultiSelectKeywords = ({ value, setValue }: Props) => {
   const [inputValue, setInputValue] = React.useState("");
 

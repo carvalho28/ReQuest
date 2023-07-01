@@ -13,6 +13,14 @@ interface DropdownProps {
   onSelect: (option: string) => void;
 }
 
+/**
+ * Dropdown component is a custom dropdown component
+ * @param func - The function to call when the date is changed
+ * @param selected - The selected option
+ * @param options - The options to display
+ * @param onSelect - The function to call when an option is selected
+ * @returns Returns the Dropdown component
+ */
 export default function Dropdown({
   onSelect,
   selected,

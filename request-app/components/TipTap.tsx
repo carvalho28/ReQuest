@@ -54,6 +54,18 @@ interface TiptapProps {
   createdBy: string;
 }
 
+/**
+ * Tiptap component is the main component used to render the editor and its definitions
+ * @param userId - The user id of the current user
+ * @param userName - The user name of the current user
+ * @param reqId - The request id of the current request
+ * @param reqDescription - The request description of the current request
+ * @param reqCreatedAt - The request created at of the current request
+ * @param reqCreatedBy - The request created by of the current request
+ * @param reqName - The request name of the current request
+ * @param createdBy - The created by of the current request
+ * @returns Returns the Tiptap component base
+ */
 const Tiptap = ({
   userId,
   userName,

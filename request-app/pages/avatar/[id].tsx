@@ -33,81 +33,13 @@ import {
 import { useSupabaseClient, useUser } from "@supabase/auth-helpers-react";
 import { useRouter } from "next/router";
 
-export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
-  const supabase = createServerSupabaseClient(ctx);
-
-  const {
-    data: { session },
-  } = await supabase.auth.getSession();
-  if (!session)
-    return {
-      redirect: {
-        destination: "/",
-        permanent: false,
-      },
-    };
-
-  const user = session.user;
-  const { data, error } = await supabase
-    .from("profiles")
-    .select("avatar_url")
-    .eq("id", user?.id);
-  if (error) console.log(error);
-  if (!data) throw new Error("No data found");
-  const avatar_url = data[0].avatar_url;
-
-  // get user projects info
-  const { data: dataProjects, error: errorProjects } = await supabase.rpc(
-    "projects_user",
-    {
-      user_id: user?.id,
-    }
-  );
-
-  // convert to a ProjectChildren type where href is the /projects/[id] route
-  const projectsChildren: ProjectChildren[] = dataProjects.map(
-    (project: any) => {
-      return {
-        name: project.name,
-        href: `/projects/${project.id}`,
-      };
-    }
-  );
-
-  // check if id from url is the logged in user
-  const id = ctx.query.id;
-  if (id !== user?.id) {
-    return {
-      redirect: {
-        destination: "/dashboard",
-        permanent: false,
-      },
-    };
-  }
-
-  return {
-    props: {
-      avatar_url: avatar_url,
-      projectsChildren: projectsChildren,
-    },
-  };
-};
-
-type objectAvatar = {
-  skinColor: string[];
-  hair: string[];
-  hairColor: string[];
-  facialHair: string[];
-  facialHairProbability: number;
-  body: string[];
-  clothingColor: string[];
-  eyes: string[];
-  mouth: string[];
-  nose: string[];
-  backgroundColor: string[];
-  radius: number;
-};
-
+/**
+ * Profile page
+ * @description It allows the user to see his profile and edit it
+ * @param avatar_url - the avatar url of the user
+ * @param projectsChildren - the projects of the user
+ * @returns Returns the Profile page
+ */
 export default function Profile({ avatar_url, projectsChildren }: any) {
   const user = useUser();
   const supabaseClient = useSupabaseClient();
@@ -719,3 +651,78 @@ export default function Profile({ avatar_url, projectsChildren }: any) {
     </Layout>
   );
 }
+
+export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
+  const supabase = createServerSupabaseClient(ctx);
+
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
+  if (!session)
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+
+  const user = session.user;
+  const { data, error } = await supabase
+    .from("profiles")
+    .select("avatar_url")
+    .eq("id", user?.id);
+  if (error) console.log(error);
+  if (!data) throw new Error("No data found");
+  const avatar_url = data[0].avatar_url;
+
+  // get user projects info
+  const { data: dataProjects, error: errorProjects } = await supabase.rpc(
+    "projects_user",
+    {
+      user_id: user?.id,
+    }
+  );
+
+  // convert to a ProjectChildren type where href is the /projects/[id] route
+  const projectsChildren: ProjectChildren[] = dataProjects.map(
+    (project: any) => {
+      return {
+        name: project.name,
+        href: `/projects/${project.id}`,
+      };
+    }
+  );
+
+  // check if id from url is the logged in user
+  const id = ctx.query.id;
+  if (id !== user?.id) {
+    return {
+      redirect: {
+        destination: "/dashboard",
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: {
+      avatar_url: avatar_url,
+      projectsChildren: projectsChildren,
+    },
+  };
+};
+
+type objectAvatar = {
+  skinColor: string[];
+  hair: string[];
+  hairColor: string[];
+  facialHair: string[];
+  facialHairProbability: number;
+  body: string[];
+  clothingColor: string[];
+  eyes: string[];
+  mouth: string[];
+  nose: string[];
+  backgroundColor: string[];
+  radius: number;
+};

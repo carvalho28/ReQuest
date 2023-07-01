@@ -12,32 +12,14 @@ interface LeaderboardProps {
   rankings: Rankings[];
 }
 
+/**
+ * Leaderboard component is the component used to render a leaderboard inside a project
+ * @param rankings - The rankings of the current project
+ * @returns Returns the Leaderboard component
+ */
 export default function Leaderboard({ rankings }: LeaderboardProps) {
   const rankings3 = [...rankings, ...rankings, ...rankings];
-  //   console.log(rankings3);
 
-  //   const rankings3 = [
-  //     {
-  //       id: 1,
-  //       name: "Diogo",
-  //       requirements_completed: 1,
-  //       avatar_url: "https://avatars.githubusercontent.com/u/1?v=4",
-  //     },
-  //     {
-  //       id: 2,
-  //       name: "Alcina",
-  //       requirements_completed: 2,
-  //       avatar_url: "https://avatars.githubusercontent.com/u/2?v=4",
-  //     },
-  //     {
-  //       id: 3,
-  //       name: "Zé",
-  //       requirements_completed: 3,
-  //       avatar_url: "https://avatars.githubusercontent.com/u/3?v=4",
-  //     },
-  //   ];
-
-  //   const top3 = rankings3.slice(0, 3);
   // get top three and cut names to appear only the first one
   const top3 = rankings3.slice(0, 3).map((user) => {
     return {

@@ -7,6 +7,13 @@ const range = (start: number, end: number) => {
   return Array.from({ length }, (_, idx) => start + idx);
 };
 
+/**
+ * useCustomPagination is a custom hook used to create the pagination for the table
+ * @param totalPageCount - The total number of pages
+ * @param siblingCount - The number of siblings to show
+ * @param currentPage - The current page
+ * @returns Returns the pagination
+ */
 export const useCustomPagination = ({
   totalPageCount,
   siblingCount = 1,

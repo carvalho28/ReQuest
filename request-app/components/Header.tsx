@@ -15,6 +15,11 @@ type headerProps = {
   color?: number;
 };
 
+/**
+ * Header component is the component used to display the header of the website
+ * @param color - The color of the header
+ * @returns Returns the Header component
+ */
 const Header = ({ color }: headerProps) => {
   let colorClickable = "text-black";
   if (color === 1) {

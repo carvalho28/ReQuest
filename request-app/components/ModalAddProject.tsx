@@ -7,6 +7,14 @@ interface Props {
   toggleModal: () => void;
 }
 
+/**
+ * ModalAddProject component is the component used to add a new project
+ * @param name - The name of the project
+ * @param setName - The function to set the name of the project
+ * @param saveName - The function to save the name of the project
+ * @param toggleModal - The function to toggle the modal
+ * @returns Returns the ModalAddProject component
+ */
 const ModalAddProject = ({ name, setName, saveName, toggleModal }: Props) => {
   return (
     <div className="fixed z-10 inset-0 overflow-y-auto">

@@ -8,6 +8,13 @@ interface MultiselectPeopleProps {
   onChange: (value: any) => void;
 }
 
+/**
+ * MultiselectPeople component is the component used to select multiple users
+ * @param selectedUsers - The selected users
+ * @param projectUserIdsAndNames - The users of the project
+ * @param onChange - The function to change the value of the selected users
+ * @returns Returns the MultiselectPeople component
+ */
 const MultiselectPeople = ({
   projectUserIdsAndNames,
   selectedUsers,

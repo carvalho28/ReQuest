@@ -7,6 +7,13 @@ interface PasswordInputProps {
   id: string;
 }
 
+/**
+ * PasswordInput component is the component used to input passwords
+ * @param setPassword - The function to set the value of the password
+ * @param placeholder - The placeholder of the password input
+ * @param id - The id of the password input
+ * @returns Returns the PasswordInput component
+ */
 const PasswordInput = ({
   setPassword,
   placeholder,

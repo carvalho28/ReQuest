@@ -46,6 +46,13 @@ import {
 } from "./avatars/Mouth";
 import { MediumRoundSVG, SmallRoundSVG, WrinklesSVG } from "./avatars/Nose";
 
+/**
+ * SkinSVG is the component used to display the skin
+ * @param color - The color of the skin
+ * @param width - The width of the skin
+ * @param height - The height of the skin
+ * @returns Returns the SkinSVG component
+ */
 const SkinSVG = ({
   color = "#000",
   width = 100,
@@ -84,6 +91,14 @@ interface HairProps {
   hairType: string;
 }
 
+/**
+ * HairSVG is the component used to display the hair
+ * @param color - The color of the hair
+ * @param width - The width of the hair
+ * @param height - The height of the hair
+ * @param hairType - The type of hair
+ * @returns Returns the HairSVG component
+ */
 const HairSVG = ({ color, width, height, hairType, ...props }: HairProps) => {
   if (hairType === "shortCombover") {
     return (
@@ -165,6 +180,15 @@ interface FacialHairProps {
   probability: number;
 }
 
+/**
+ * FacialHairSVG is the component used to display the facial hair
+ * @param color - The color of the facial hair
+ * @param width - The width of the facial hair
+ * @param height - The height of the facial hair
+ * @param facialHairType - The type of facial hair
+ * @param probability - The probability of the facial hair
+ * @returns Returns the FacialHairSVG component
+ */
 const FacialHairSVG = ({
   color,
   width,
@@ -210,6 +234,14 @@ const FacialHairSVG = ({
   return <></>;
 };
 
+/**
+ * BodySVG is the component used to display the body
+ * @param color - The color of the body
+ * @param width - The width of the body
+ * @param height - The height of the body
+ * @param scale - The scale of the body
+ * @returns Returns the BodySVG component
+ */
 const BodySVG = ({
   color = "#000",
   width = 100,
@@ -239,6 +271,14 @@ interface EyesType {
   eyesType: string;
 }
 
+/**
+ * EyesSVG is the component used to display the eyes
+ * @param color - The color of the eyes
+ * @param width - The width of the eyes
+ * @param height - The height of the eyes
+ * @param eyesType - The type of eyes
+ * @returns Returns the EyesSVG component
+ */
 const EyesSVG = ({ color, width, height, eyesType, ...props }: EyesType) => {
   if (eyesType === "glasses") {
     return (
@@ -267,6 +307,14 @@ interface MouthTypes {
   mouthType: string;
 }
 
+/**
+ * MouthSVG is the component used to display the mouth
+ * @param color - The color of the mouth
+ * @param width - The width of the mouth
+ * @param height - The height of the mouth
+ * @param mouthType - The type of mouth
+ * @returns Returns the MouthSVG component
+ */
 const MouthSVG = ({
   color,
   width,
@@ -305,6 +353,14 @@ interface NoseTypes {
   noseType: string;
 }
 
+/**
+ * NoseSVG is the component used to display the nose
+ * @param color - The color of the nose
+ * @param width - The width of the nose
+ * @param height - The height of the nose
+ * @param noseType - The type of nose
+ * @returns Returns the NoseSVG component
+ */
 const NoseSVG = ({ color, width, height, noseType, ...props }: NoseTypes) => {
   if (noseType === "mediumRound") {
     return (

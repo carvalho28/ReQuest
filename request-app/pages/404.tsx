@@ -1,5 +1,9 @@
 import Image from "next/image";
 
+/**
+ * Custom404 page is the page displayed when a user tries to access a page that doesn't exist
+ * @returns Returns the Custom404 page
+ */
 export default function Custom404() {
   return (
     <div className="flex flex-col items-center justify-center h-screen">

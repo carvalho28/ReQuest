@@ -6,6 +6,11 @@ import PrimaryFeatures from "@/components/index/PrimaryFeatures";
 import Testimonials from "@/components/index/Testimonials";
 import { Faqs } from "@/components/index/Faqs";
 
+/**
+ * ReQuest - Home page
+ * @description The home page contains the primary features, testimonials, and faqs
+ * @returns home page
+ */
 export default function Home() {
   return (
     <div className="min-h-screen index-background">

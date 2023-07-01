@@ -4,6 +4,11 @@ interface SuccessMessageProps {
   message: string;
 }
 
+/**
+ * SuccessMessage component is the component used to display success messages
+ * @param message - The message to display
+ * @returns Returns the SuccessMessage component
+ */
 const SuccessMessage = ({ message }: SuccessMessageProps) => {
   return (
     <div className="rounded-md bg-blue-50 p-4">

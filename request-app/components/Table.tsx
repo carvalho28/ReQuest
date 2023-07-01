@@ -49,6 +49,11 @@ const ErrorMessage = dynamic(() => import("@/components/ErrorMessage"), {
   ssr: false,
 });
 
+/**
+ * PriorityProject component is the component used to display the priority of the project
+ * @param value - The value of the priority
+ * @returns Returns the PriorityProject component
+ */
 export function PriorityProject({ value }: any) {
   const status = typeof value === "string" ? value.toLowerCase() : "p3";
 
@@ -68,6 +73,11 @@ export function PriorityProject({ value }: any) {
   );
 }
 
+/**
+ * StatusProject component is the component used to display the status of the project
+ * @param value - The value of the status
+ * @returns Returns the StatusProject component
+ */
 export function StatusProject({ value }: any) {
   const status =
     typeof value === "string" ? value.toLowerCase() : "not started";
@@ -89,6 +99,11 @@ export function StatusProject({ value }: any) {
   );
 }
 
+/**
+ * DueDateProject component is the component used to display the due date of the project
+ * @param value - The value of the due date
+ * @returns Returns the DueDateProject component
+ */
 export function DueDateProject({ value }: any) {
   if (value) {
     return (
@@ -105,6 +120,12 @@ export function DueDateProject({ value }: any) {
   }
 }
 
+/**
+ * getUserNamesFromIds function is the function used to get the names of the users from their ids
+ * @param ids - The ids of the users
+ * @param projectUserIdsAndNames - The ids and names of the users
+ * @returns Returns the names of the users
+ */
 function getUserNamesFromIds(ids: string[], projectUserIdsAndNames: any) {
   const names: string[] = [];
   if (ids === null || ids.length === 0) return null;
@@ -115,6 +136,11 @@ function getUserNamesFromIds(ids: string[], projectUserIdsAndNames: any) {
   return names;
 }
 
+/**
+ * AssignedToProject component is the component used to display the users assigned to the project
+ * @param value - The value of the users assigned to the project
+ * @returns Returns the AssignedToProject component
+ */
 export function AssignedToProject({ value }: any) {
   if (value && value.length > 0) {
     const users = value.map((user: string) => (
@@ -134,6 +160,13 @@ export function AssignedToProject({ value }: any) {
   }
 }
 
+/**
+ * AssignedToProject component is the component used to display the users assigned to the project
+ * @param value - The value of the users assigned to the project
+ * @param row - The row of the table
+ * @param setRequirement - The function to set the requirement
+ * @returns Returns the AssignedToProject component
+ */
 export function NameProject({ value, row, setRequirement }: any) {
   const handleCellClick = (requirement: any) => {
     setRequirement(requirement);
@@ -171,6 +204,11 @@ function createNewRequirement(handleClickPopup: any) {
   handleClickPopup();
 }
 
+/**
+ * deleteRequirement function is the function used to delete the requirements
+ * @param selectedFlatRows - The selected rows
+ * @returns Returns the deleted requirements
+ */
 async function deleteRequirement(selectedFlatRows: any) {
   let ids: string[] = [];
   selectedFlatRows.forEach((row: any) => {
@@ -191,6 +229,16 @@ async function deleteRequirement(selectedFlatRows: any) {
   if (error) return;
 }
 
+/**
+ * GlobalFilter component is the component used to filter the table
+ * @param globalFilter - The global filter
+ * @param setGlobalFilter - The function to set the global filter
+ * @param placeholder - The placeholder of the global filter
+ * @param requirements - The requirements
+ * @param handleClickPopup - The function to handle the click of the popup
+ * @param selectedFlatRows - The selected rows
+ * @returns Returns the GlobalFilter component
+ */
 function GlobalFilter({
   globalFilter,
   setGlobalFilter,
@@ -291,6 +339,14 @@ interface RequirementsTableProps {
   projectId: string;
 }
 
+/**
+ * Table component is the component used to display the requirements table
+ * @param userId - The user id
+ * @param name - The name of the user
+ * @param projectUserIdsAndNames - The project user ids and names
+ * @param projectId - The project id
+ * @returns Returns the Table component
+ */
 function Table({
   userId,
   name,

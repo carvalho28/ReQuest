@@ -1,3 +1,7 @@
 {
-  "extends": "next/core-web-vitals"
+  "extends": "next/core-web-vitals",
+  //disable missing use effect dependency warning
+  "rules": {
+    "react-hooks/exhaustive-deps": "off"
+  }
 }

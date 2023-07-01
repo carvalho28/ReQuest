@@ -16,7 +16,12 @@ export type Days = {
   }>;
 };
 
-// write a function that returns the projects in the form of the days array
+/**
+ * Function to get the days of the month
+ * @param projects - user's projects
+ * @param monthYear - the month and year to get the days for
+ * @returns an array of days
+ */
 function getProjectsAsDays(
   projects: Database["public"]["Tables"]["projects"]["Row"][],
   monthYear: Date
@@ -125,6 +130,12 @@ function getProjectsAsDays(
   return days;
 }
 
+/**
+ * Function to get the days of the month
+ * @param requirements - user's requirements
+ * @param monthYear - the month and year to get the days for
+ * @returns an array of days
+ */
 function addRequirementsAsDays(
   requirements: Database["public"]["Tables"]["requirements"]["Row"][],
   days: Days[]
@@ -179,7 +190,13 @@ export type MonthYear = {
   days: DaysYear[];
 };
 
-// convert the requirements and projects into days
+/**
+ * Function to set the projects and requirements for the year
+ * @param proj - projects
+ * @param req  - requirements
+ * @param year - year to get the data for
+ * @returns an array of months with the days for each month
+ */
 function getProjReqYear(
   proj: Database["public"]["Tables"]["projects"]["Row"][],
   req: Database["public"]["Tables"]["requirements"]["Row"][],
@@ -252,8 +269,6 @@ function getProjReqYear(
     months.push(month);
   }
 
-  console.log(months);
-
   // add projects to days if they are in the same year, month, and day
   proj.forEach((project: any) => {
     const date = new Date(project.deadline);
@@ -282,8 +297,6 @@ function getProjReqYear(
   // add requirements to days if they are in the same year, month, and day
   req.forEach((requirement: any) => {
     const date = new Date(requirement.due_date);
-    console.log(date.getFullYear());
-    console.log(year);
 
     if (date.getFullYear() === year) {
       const month = months.find(

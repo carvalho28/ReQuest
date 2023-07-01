@@ -1,3 +1,7 @@
+/**
+ * Loading component is the component used to display a loading spinner
+ * @returns Returns the Loading component
+ */
 const Loading = () => {
   return (
     <div className="flex justify-center">

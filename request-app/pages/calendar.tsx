@@ -4,9 +4,38 @@ import { ProjectChildren } from "@/components/utils/sidebarHelper";
 import { createServerSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import { GetServerSidePropsContext } from "next";
 
+/**
+ * Calendar page
+ * @description It allows the user to see the calendar of the projects
+ * @param avatar_url - the avatar url of the user
+ * @param projects - the projects of the user
+ * @param requirements - the requirements of the user
+ * @param projectsChildren - the projects of the user
+ * @returns Returns the Calendar page
+ */
+export default function Calendar({
+  avatar_url,
+  projects,
+  requirements,
+  projectsChildren,
+}: any) {
+  return (
+    <div>
+      <Layout
+        currentPage="Calendar"
+        avatar_url={avatar_url}
+        projectChildren={projectsChildren}
+      >
+        <div>
+          <CalendarHeader projects={projects} requirements={requirements} />
+        </div>
+      </Layout>
+    </div>
+  );
+}
+
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   const supabase = createServerSupabaseClient(ctx);
-
   const {
     data: { session },
   } = await supabase.auth.getSession();
@@ -32,8 +61,6 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
     "projects_user",
     { user_id: user?.id }
   );
-
-  console.log(dataProjects);
 
   // get user requirements info
   const { data: dataRequirements, error: errorRequirements } =
@@ -61,26 +88,3 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
     },
   };
 };
-
-export default function Calendar({
-  avatar_url,
-  projects,
-  requirements,
-  projectsChildren,
-}: any) {
-  return (
-    <div>
-      <Layout
-        currentPage="Calendar"
-        avatar_url={avatar_url}
-        projectChildren={projectsChildren}
-      >
-        <div>
-          <CalendarHeader projects={projects} requirements={requirements} />
-          {/* <CalendarViewMonth projects={projects} requirements={requirements} /> */}
-          {/* <CalendarViewYear projects={projects} requirements={requirements} /> */}
-        </div>
-      </Layout>
-    </div>
-  );
-}

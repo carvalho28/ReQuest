@@ -11,69 +11,6 @@ import Image from "next/image";
 import dynamic from "next/dynamic";
 const ReactEChart = dynamic(() => import("echarts-for-react"), { ssr: false });
 
-export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
-  const supabase = createServerSupabaseClient(ctx);
-
-  const {
-    data: { session },
-  } = await supabase.auth.getSession();
-  if (!session)
-    return {
-      redirect: {
-        destination: "/",
-        permanent: false,
-      },
-    };
-
-  const user = session.user;
-  const { data, error } = await supabase
-    .from("profiles")
-    .select("avatar_url")
-    .eq("id", user?.id);
-  if (error) console.log(error);
-  if (!data) throw new Error("No data found");
-
-  // get user data
-  const { data: dataRpc, error: errorRpc } = await supabase
-    .from("profiles")
-    .select("*, levels (denomination, xp_needed)")
-    .eq("id", user?.id);
-  if (errorRpc) console.log(error);
-  if (!dataRpc) throw new Error("No user data found");
-  const userData = dataRpc[0];
-
-  // get user projects info
-  const { data: dataProjects, error: errorProjects } = await supabase.rpc(
-    "projects_user",
-    { user_id: user?.id }
-  );
-
-  // convert to a ProjectChildren type where href is the /projects/[id] route
-  const projectsChildren: ProjectChildren[] = dataProjects.map(
-    (project: any) => {
-      return {
-        name: project.name,
-        href: `/projects/${project.id}`,
-      };
-    }
-  );
-
-  const { data: dataProjects2, error: errorProjects2 } = await supabase.rpc(
-    "projects_user",
-    { user_id: user?.id }
-  );
-
-  return {
-    props: {
-      avatar_url: data[0].avatar_url,
-      projectsChildren: projectsChildren,
-      dataProjects: dataProjects,
-      userData: userData,
-      dataProjects2: dataProjects2,
-    },
-  };
-};
-
 type ProjectInfo = {
   id: string;
   name: string;
@@ -85,6 +22,15 @@ type ProjectInfo = {
   total_reqs: number;
 };
 
+/**
+ * Dashboard page
+ * @description Contains user information and statistics
+ * @param avatar_url - user avatar url
+ * @param projectsChildren - array of projects
+ * @param dataProjects - array of projects
+ * @param dataProjects2 - array of projects (active)
+ * @returns Dashboard page
+ */
 export default function Dashboard({
   avatar_url,
   projectsChildren,
@@ -699,3 +645,66 @@ export default function Dashboard({
     </Layout>
   );
 }
+
+export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
+  const supabase = createServerSupabaseClient(ctx);
+
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
+  if (!session)
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+
+  const user = session.user;
+  const { data, error } = await supabase
+    .from("profiles")
+    .select("avatar_url")
+    .eq("id", user?.id);
+  if (error) console.log(error);
+  if (!data) throw new Error("No data found");
+
+  // get user data
+  const { data: dataRpc, error: errorRpc } = await supabase
+    .from("profiles")
+    .select("*, levels (denomination, xp_needed)")
+    .eq("id", user?.id);
+  if (errorRpc) console.log(error);
+  if (!dataRpc) throw new Error("No user data found");
+  const userData = dataRpc[0];
+
+  // get user projects info
+  const { data: dataProjects, error: errorProjects } = await supabase.rpc(
+    "projects_user",
+    { user_id: user?.id }
+  );
+
+  // convert to a ProjectChildren type where href is the /projects/[id] route
+  const projectsChildren: ProjectChildren[] = dataProjects.map(
+    (project: any) => {
+      return {
+        name: project.name,
+        href: `/projects/${project.id}`,
+      };
+    }
+  );
+
+  const { data: dataProjects2, error: errorProjects2 } = await supabase.rpc(
+    "projects_user",
+    { user_id: user?.id }
+  );
+
+  return {
+    props: {
+      avatar_url: data[0].avatar_url,
+      projectsChildren: projectsChildren,
+      dataProjects: dataProjects,
+      userData: userData,
+      dataProjects2: dataProjects2,
+    },
+  };
+};

@@ -29,6 +29,12 @@ import {
   RiTextWrap,
 } from "react-icons/ri";
 
+/**
+ * MenuBar component is the component used to render the menu bar related to the TipTap editor
+ * @param editor - The editor instance
+ * @param reqName - The request name of the current request
+ * @returns Returns the MenuBar component base
+ */
 const MenuBar = ({ editor, reqName }: any) => {
   const supabaseClient = useSupabaseClient();
   const [showModal, setShowModal] = useState(false);
@@ -99,13 +105,16 @@ const MenuBar = ({ editor, reqName }: any) => {
     const req = JSON.stringify({ requirement });
     console.log("req", req);
 
-    const response = await fetch("https://morning-flower-3545.fly.dev/api/ai/topics", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ requirement }),
-    });
+    const response = await fetch(
+      "https://morning-flower-3545.fly.dev/api/ai/topics",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ requirement }),
+      }
+    );
     const data = await response.json();
     console.log("data", data);
     const answer = data.answer;

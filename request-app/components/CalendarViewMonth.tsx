@@ -12,13 +12,18 @@ interface CalendarViewProps {
   monthYear: any;
 }
 
+/**
+ * CalendarViewMonth component is the component used to render the month view of the calendar
+ * @param projects - The projects of the current user
+ * @param requirements - The requirements of the current user
+ * @param monthYear - The month and year of the current view
+ * @returns Returns the CalendarViewMonth component
+ */
 const CalendarViewMonth = ({
   projects,
   requirements,
   monthYear,
 }: CalendarViewProps) => {
-  // const days = getProjectsAsDays(projects);
-
   const [days, setDays] = useState<Days[]>([]);
 
   // turn isSelected to true on 20 of the month

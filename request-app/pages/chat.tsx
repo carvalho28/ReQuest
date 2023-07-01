@@ -4,74 +4,18 @@ import Layout from "@/components/Layout";
 import { ProjectChildren } from "@/components/utils/sidebarHelper";
 import { createServerSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import { useSupabaseClient, useUser } from "@supabase/auth-helpers-react";
-import { set } from "cypress/types/lodash";
 import { GetServerSidePropsContext } from "next";
 import { useEffect, useState } from "react";
 import { RiArrowLeftSLine } from "react-icons/ri";
 
-export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
-  const supabase = createServerSupabaseClient(ctx);
-
-  const {
-    data: { session },
-  } = await supabase.auth.getSession();
-  if (!session)
-    return {
-      redirect: {
-        destination: "/",
-        permanent: false,
-      },
-    };
-
-  const user = session.user;
-  const { data, error } = await supabase
-    .from("profiles")
-    .select("avatar_url")
-    .eq("id", user?.id);
-  if (error) console.log(error);
-  if (!data) throw new Error("No data found");
-  const avatar_url = data[0].avatar_url;
-
-  // get user projects info
-  const { data: dataProjects, error: errorProjects } = await supabase.rpc(
-    "projects_user",
-    { user_id: user?.id }
-  );
-
-  // convert to a ProjectChildren type where href is the /projects/[id] route
-  const projectsChildren: ProjectChildren[] = dataProjects.map(
-    (project: any) => {
-      return {
-        name: project.name,
-        href: `/projects/${project.id}`,
-      };
-    }
-  );
-
-  // get all users i have interected with, which means are in a project with me
-  const { data: connectedUsers, error: errorConnectedUsers } =
-    await supabase.rpc("get_connected_users", { my_user_id: user?.id });
-  if (errorConnectedUsers) console.log(errorConnectedUsers);
-
-  console.log(connectedUsers);
-
-  return {
-    props: {
-      avatar_url: avatar_url,
-      projectsChildren: projectsChildren,
-      connectedUsers: connectedUsers,
-    },
-  };
-};
-
-export type connectedUsers = {
-  id: number;
-  name: string;
-  email: string;
-  avatar_url: string;
-  selected: boolean;
-};
-
+/**
+ * Chat page
+ * @description It allows the user to chat with other users (related to them)
+ * @param avatar_url - user avatar url
+ * @param projectsChildren - projects user is in
+ * @param connectedUsers - users user has interacted with
+ * @returns Chat page
+ */
 export default function Chat({
   avatar_url,
   projectsChildren,
@@ -89,7 +33,6 @@ export default function Chat({
   const [chatId, setChatId] = useState<number>(-1);
 
   useEffect(() => {
-    console.log("connUserId: ", connUserId);
     if (connUserId === -1) return;
     const verifyChat = async (connUserId: number) => {
       const { data: chat, error: errorChat } = await supabaseClient.rpc(
@@ -98,8 +41,6 @@ export default function Chat({
       );
 
       if (errorChat) console.log(errorChat);
-      console.log("chat: ", chat);
-      console.log("chat.length: ", chat?.length);
       if (!chat || chat?.length === 0 || chat === undefined) {
         // create chat and and add both users to it
         const { data: newChat, error: errorNewChat } = await supabaseClient
@@ -120,8 +61,6 @@ export default function Chat({
           if (addUsers) {
             setChatId(newChatID);
           }
-          //
-          console.log("newChat: ", newChat);
         }
       } else {
         setChatId(chat[0].chat_id);
@@ -202,3 +141,66 @@ export default function Chat({
     </Layout>
   );
 }
+
+export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
+  const supabase = createServerSupabaseClient(ctx);
+
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
+  if (!session)
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+
+  const user = session.user;
+  const { data, error } = await supabase
+    .from("profiles")
+    .select("avatar_url")
+    .eq("id", user?.id);
+  if (error) console.log(error);
+  if (!data) throw new Error("No data found");
+  const avatar_url = data[0].avatar_url;
+
+  // get user projects info
+  const { data: dataProjects, error: errorProjects } = await supabase.rpc(
+    "projects_user",
+    { user_id: user?.id }
+  );
+
+  // convert to a ProjectChildren type where href is the /projects/[id] route
+  const projectsChildren: ProjectChildren[] = dataProjects.map(
+    (project: any) => {
+      return {
+        name: project.name,
+        href: `/projects/${project.id}`,
+      };
+    }
+  );
+
+  // get all users i have interected with, which means are in a project with me
+  const { data: connectedUsers, error: errorConnectedUsers } =
+    await supabase.rpc("get_connected_users", { my_user_id: user?.id });
+  if (errorConnectedUsers) console.log(errorConnectedUsers);
+
+  console.log(connectedUsers);
+
+  return {
+    props: {
+      avatar_url: avatar_url,
+      projectsChildren: projectsChildren,
+      connectedUsers: connectedUsers,
+    },
+  };
+};
+
+export type connectedUsers = {
+  id: number;
+  name: string;
+  email: string;
+  avatar_url: string;
+  selected: boolean;
+};
