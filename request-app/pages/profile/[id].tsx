@@ -11,9 +11,7 @@ import dynamic from "next/dynamic";
 import { ProjectChildren } from "@/components/utils/sidebarHelper";
 import { useRouter } from "next/router";
 import { renderImage } from "@/components/utils/general";
-
 import { Bubblegum_Sans } from "next/font/google";
-import Loading from "@/components/Loading";
 import { RealtimeChannel } from "@supabase/supabase-js";
 
 // dynamic
@@ -26,75 +24,16 @@ const blackOpsOne = Black_Ops_One({
   weight: ["400"],
 });
 
-const bubblegumSans = Bubblegum_Sans({
-  subsets: ["latin"],
-  weight: ["400"],
-});
-
-export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
-  const supabase = createServerSupabaseClient(ctx);
-
-  const {
-    data: { session },
-  } = await supabase.auth.getSession();
-  if (!session) {
-    return {
-      redirect: {
-        destination: "/",
-        permanent: false,
-      },
-    };
-  }
-
-  const user = session.user;
-  const { data, error } = await supabase
-    .from("profiles")
-    .select("avatar_url")
-    .eq("id", user?.id);
-  if (error) console.log(error);
-  if (!data) throw new Error("No data found");
-
-  // get user data
-  const { data: dataRpc, error: errorRpc } = await supabase
-    .from("profiles")
-    .select("*, levels (denomination, xp_needed)")
-    .eq("id", user?.id);
-  if (errorRpc) console.log(error);
-  if (!dataRpc) throw new Error("No user data found");
-  const userData = dataRpc[0];
-
-  // get user projects info
-  const { data: dataProjects, error: errorProjects } = await supabase.rpc(
-    "projects_user_req",
-    { user_id: user?.id }
-  );
-
-  // convert to a ProjectChildren type where href is the /projects/[id] route
-  const projectsChildren: ProjectChildren[] = dataProjects.map(
-    (project: any) => {
-      return {
-        name: project.name,
-        href: `/projects/${project.id}`,
-      };
-    }
-  );
-
-  // get all users i have interected with, which means are in a project with me
-  const { data: connectedUsers, error: errorConnectedUsers } =
-    await supabase.rpc("get_connected_users", { my_user_id: user?.id });
-  if (errorConnectedUsers) console.log(errorConnectedUsers);
-
-  return {
-    props: {
-      avatar_url: data[0].avatar_url,
-      user_data: userData,
-      projectsChildren: projectsChildren,
-      dataProjects: dataProjects,
-      connectedUsers: connectedUsers,
-    },
-  };
-};
-
+/**
+ * Profile page
+ * @description It shows the user profile
+ * @param avatar_url - user avatar url
+ * @param user_data - user data
+ * @param projectsChildren - user projects
+ * @param dataProjects - user projects data
+ * @param connectedUsers - connected users
+ * @returns profile page
+ */
 export default function Profile({
   avatar_url,
   user_data,
@@ -427,3 +366,67 @@ export default function Profile({
     </Layout>
   );
 }
+
+export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
+  const supabase = createServerSupabaseClient(ctx);
+
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
+  if (!session) {
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+  }
+
+  const user = session.user;
+  const { data, error } = await supabase
+    .from("profiles")
+    .select("avatar_url")
+    .eq("id", user?.id);
+  if (error) console.log(error);
+  if (!data) throw new Error("No data found");
+
+  // get user data
+  const { data: dataRpc, error: errorRpc } = await supabase
+    .from("profiles")
+    .select("*, levels (denomination, xp_needed)")
+    .eq("id", user?.id);
+  if (errorRpc) console.log(error);
+  if (!dataRpc) throw new Error("No user data found");
+  const userData = dataRpc[0];
+
+  // get user projects info
+  const { data: dataProjects, error: errorProjects } = await supabase.rpc(
+    "projects_user_req",
+    { user_id: user?.id }
+  );
+
+  // convert to a ProjectChildren type where href is the /projects/[id] route
+  const projectsChildren: ProjectChildren[] = dataProjects.map(
+    (project: any) => {
+      return {
+        name: project.name,
+        href: `/projects/${project.id}`,
+      };
+    }
+  );
+
+  // get all users i have interected with, which means are in a project with me
+  const { data: connectedUsers, error: errorConnectedUsers } =
+    await supabase.rpc("get_connected_users", { my_user_id: user?.id });
+  if (errorConnectedUsers) console.log(errorConnectedUsers);
+
+  return {
+    props: {
+      avatar_url: data[0].avatar_url,
+      user_data: userData,
+      projectsChildren: projectsChildren,
+      dataProjects: dataProjects,
+      connectedUsers: connectedUsers,
+    },
+  };
+};

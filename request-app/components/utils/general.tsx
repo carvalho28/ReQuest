@@ -29,6 +29,13 @@ export type RowReq = {
   identifier: string;
 };
 
+/**
+ * renderPriorityBadge component is the component used to render the priority badge
+ * @param priority - The priority of the request
+ * @param sizex  - the size of the badge in x axis
+ * @param sizey - the size of the badge in y axis
+ * @returns Returns the renderPriorityBadge component
+ */
 function renderPriorityBadge(priority: string, sizex: number, sizey: number) {
   const p = priority.toLowerCase();
   if (p === "p1") {
@@ -60,6 +67,13 @@ function renderPriorityBadge(priority: string, sizex: number, sizey: number) {
   }
 }
 
+/**
+ * renderStatusBadge component is the component used to render the status badge
+ * @param status - The status of the request
+ * @param sizex  - the size of the badge in x axis
+ * @param sizey - the size of the badge in y axis
+ * @returns Returns the renderStatusBadge component
+ */
 function renderStatusBadge(status: string, sizex: number, sizey: number) {
   const s = status.toLowerCase();
   if (s === "not started") {
@@ -94,6 +108,13 @@ function renderStatusBadge(status: string, sizex: number, sizey: number) {
   }
 }
 
+/**
+ * renderTypeBadge component is the component used to render the type badge
+ * @param type - The type of the request
+ * @param sizex  - the size of the badge in x axis
+ * @param sizey - the size of the badge in y axis
+ * @returns Returns the renderTypeBadge component
+ */
 function renderTypeBadge(type: string, sizex: number, sizey: number) {
   const t = type.toLowerCase();
   if (t === "functional") {
@@ -117,6 +138,13 @@ function renderTypeBadge(type: string, sizex: number, sizey: number) {
   }
 }
 
+/**
+ * renderProjectStatusBadge component is the component used to render the project status badge
+ * @param status - The status of the project
+ * @param sizex  - the size of the badge in x axis
+ * @param sizey - the size of the badge in y axis
+ * @returns Returns the renderProjectStatusBadge component
+ */
 function renderProjectStatusBadge(
   status: string,
   sizex: number,
@@ -168,6 +196,10 @@ function classNames(...classes: any[]) {
   return classes.filter(Boolean).join(" ");
 }
 
+/**
+ * generatePastelColor function is the function used to generate a random pastel color
+ * @returns Returns the generated color
+ */
 function generatePastelColor() {
   // Set the saturation and lightness to a fixed value to generate a pastel color
   const saturation = 50; // 50% saturation
@@ -233,6 +265,11 @@ export type UserIdAndName = {
   name: string;
 };
 
+/**
+ * renderAvatar function is the function used to render the avatar
+ * @param avatar_url - The avatar url
+ * @returns Returns the rendered avatar
+ */
 function renderImage(avatar_url: any) {
   const avatar = createAvatar(personas, {
     skinColor: avatar_url.skinColor,

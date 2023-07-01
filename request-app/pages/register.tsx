@@ -20,27 +20,10 @@ const ConfirmEmail = dynamic(() => import("@/components/ConfirmEmail"), {
   ssr: false,
 });
 
-export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
-  // Create authenticated Supabase Client
-  const supabase = createServerSupabaseClient(ctx);
-  // Check if we have a session
-  const {
-    data: { session },
-  } = await supabase.auth.getSession();
-
-  if (session)
-    return {
-      redirect: {
-        destination: "/dashboard",
-        permanent: false,
-      },
-    };
-
-  return {
-    props: {},
-  };
-};
-
+/**
+ * Register page
+ * @returns register page
+ */
 export default function Register() {
   const [name, setName] = useState<string | undefined>();
   const [email, setEmail] = useState<string | undefined>();
@@ -320,3 +303,24 @@ export default function Register() {
     </div>
   );
 }
+
+export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
+  // Create authenticated Supabase Client
+  const supabase = createServerSupabaseClient(ctx);
+  // Check if we have a session
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
+
+  if (session)
+    return {
+      redirect: {
+        destination: "/dashboard",
+        permanent: false,
+      },
+    };
+
+  return {
+    props: {},
+  };
+};

@@ -10,30 +10,11 @@ import Image from "next/image";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { useRouter } from "next/router";
 
-export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
-  // Create authenticated Supabase Client
-  const supabase = createServerSupabaseClient(ctx);
-  // Check if we have a session
-  const {
-    data: { session },
-  } = await supabase.auth.getSession();
-
-  if (session)
-    return {
-      redirect: {
-        destination: "/dashboard",
-        permanent: false,
-      },
-    };
-
-  return {
-    props: {},
-  };
-};
-
+/**
+ * Forgot password page
+ * @returns forgot password page
+ */
 export default function ForgotPassword() {
-
-  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordConfirmation, setpasswordConfirmation] = useState("");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -63,8 +44,6 @@ export default function ForgotPassword() {
     setLoading(false);
     setErrorMessage(null);
   };
-
-  const [code, setCode] = useState<string | null>(null);
 
   return (
     <div className="min-h-screen login-background flex flex-col">
@@ -150,3 +129,24 @@ export default function ForgotPassword() {
     </div>
   );
 }
+
+export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
+  // Create authenticated Supabase Client
+  const supabase = createServerSupabaseClient(ctx);
+  // Check if we have a session
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
+
+  if (session)
+    return {
+      redirect: {
+        destination: "/dashboard",
+        permanent: false,
+      },
+    };
+
+  return {
+    props: {},
+  };
+};

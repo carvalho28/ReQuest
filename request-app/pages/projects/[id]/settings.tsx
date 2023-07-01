@@ -19,79 +19,14 @@ import { RiAddLine } from "react-icons/ri";
 import { RealtimeChannel } from "@supabase/supabase-js";
 import { Fireworks } from "fireworks-js";
 
-declare global {
-  interface Window {
-    my_modal_3: HTMLDialogElement;
-  }
-}
-
-export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
-  const supabase = createServerSupabaseClient(ctx);
-
-  const {
-    data: { session },
-  } = await supabase.auth.getSession();
-  if (!session)
-    return {
-      redirect: {
-        destination: "/",
-        permanent: false,
-      },
-    };
-
-  const user = session.user;
-  const { data, error } = await supabase
-    .from("profiles")
-    .select("avatar_url")
-    .eq("id", user?.id);
-  if (error) console.log(error);
-  if (!data) throw new Error("No data found");
-  const avatar_url = data[0].avatar_url;
-
-  // get user projects info
-  const { data: dataProjects, error: errorProjects } = await supabase.rpc(
-    "projects_user",
-    { user_id: user?.id }
-  );
-
-  // convert to a ProjectChildren type where href is the /projects/[id] route
-  const projectsChildren: ProjectChildren[] = dataProjects.map(
-    (project: any) => {
-      return {
-        name: project.name,
-        href: `/projects/${project.id}`,
-      };
-    }
-  );
-
-  const id = ctx.params?.id;
-  const { data: projectData, error: projectError } = await supabase
-    .from("projects")
-    .select("*")
-    .eq("id", id);
-
-  if (projectError) console.log(projectError);
-  if (!projectData) throw new Error("No data found");
-
-  return {
-    props: {
-      avatar_url: avatar_url,
-      projectsChildren: projectsChildren,
-      project_data: projectData,
-    },
-  };
-};
-
-type ProjectUsers = {
-  id_user: string;
-  profiles: {
-    id: string;
-    email: string;
-    name: string;
-    avatar_url: string;
-  };
-};
-
+/**
+ * Project settings page
+ * @description It allows the user to edit the project name, description, status, deadline, and delete the project
+ * @param avatar_url - user avatar url
+ * @param projectsChildren - user projects
+ * @param project_data - project data
+ * @returns project settings page
+ */
 export default function ProjectSettings({
   avatar_url,
   projectsChildren,
@@ -701,3 +636,76 @@ export default function ProjectSettings({
     </Layout>
   );
 }
+
+export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
+  const supabase = createServerSupabaseClient(ctx);
+
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
+  if (!session)
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+
+  const user = session.user;
+  const { data, error } = await supabase
+    .from("profiles")
+    .select("avatar_url")
+    .eq("id", user?.id);
+  if (error) console.log(error);
+  if (!data) throw new Error("No data found");
+  const avatar_url = data[0].avatar_url;
+
+  // get user projects info
+  const { data: dataProjects, error: errorProjects } = await supabase.rpc(
+    "projects_user",
+    { user_id: user?.id }
+  );
+
+  // convert to a ProjectChildren type where href is the /projects/[id] route
+  const projectsChildren: ProjectChildren[] = dataProjects.map(
+    (project: any) => {
+      return {
+        name: project.name,
+        href: `/projects/${project.id}`,
+      };
+    }
+  );
+
+  const id = ctx.params?.id;
+  const { data: projectData, error: projectError } = await supabase
+    .from("projects")
+    .select("*")
+    .eq("id", id);
+
+  if (projectError) console.log(projectError);
+  if (!projectData) throw new Error("No data found");
+
+  return {
+    props: {
+      avatar_url: avatar_url,
+      projectsChildren: projectsChildren,
+      project_data: projectData,
+    },
+  };
+};
+
+declare global {
+  interface Window {
+    my_modal_3: HTMLDialogElement;
+  }
+}
+
+type ProjectUsers = {
+  id_user: string;
+  profiles: {
+    id: string;
+    email: string;
+    name: string;
+    avatar_url: string;
+  };
+};

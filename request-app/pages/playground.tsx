@@ -11,58 +11,18 @@ import { RiArrowRightFill, RiFileCopyLine } from "react-icons/ri";
 import { FaTrashAlt } from "react-icons/fa";
 import ErrorMessage from "@/components/ErrorMessage";
 
-export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
-  const supabase = createServerSupabaseClient(ctx);
-
-  const {
-    data: { session },
-  } = await supabase.auth.getSession();
-  if (!session)
-    return {
-      redirect: {
-        destination: "/",
-        permanent: false,
-      },
-    };
-
-  const user = session.user;
-  const { data, error } = await supabase
-    .from("profiles")
-    .select("avatar_url")
-    .eq("id", user?.id);
-  if (error) console.log(error);
-  if (!data) throw new Error("No data found");
-  const avatar_url = data[0].avatar_url;
-
-  // get user projects info
-  const { data: dataProjects, error: errorProjects } = await supabase.rpc(
-    "projects_user",
-    { user_id: user?.id }
-  );
-
-  // convert to a ProjectChildren type where href is the /projects/[id] route
-  const projectsChildren: ProjectChildren[] = dataProjects.map(
-    (project: any) => {
-      return {
-        name: project.name,
-        href: `/projects/${project.id}`,
-      };
-    }
-  );
-
-  return {
-    props: {
-      avatar_url: avatar_url,
-      projectsChildren: projectsChildren,
-    },
-  };
-};
-
 export interface Option {
   readonly label: string;
   readonly value: string;
 }
 
+/**
+ * Playground page
+ * @description The playground page is where the user can test the AI to generate a scenario and verify a requirements
+ * @param avatar_url - The avatar url of the user
+ * @param projectsChildren - The projects of the user
+ * @returns playground page
+ */
 export default function Playground({ avatar_url, projectsChildren }: any) {
   const supabaseClient = useSupabaseClient();
   const user = useUser();
@@ -398,3 +358,50 @@ export default function Playground({ avatar_url, projectsChildren }: any) {
     </div>
   );
 }
+
+export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
+  const supabase = createServerSupabaseClient(ctx);
+
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
+  if (!session)
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+
+  const user = session.user;
+  const { data, error } = await supabase
+    .from("profiles")
+    .select("avatar_url")
+    .eq("id", user?.id);
+  if (error) console.log(error);
+  if (!data) throw new Error("No data found");
+  const avatar_url = data[0].avatar_url;
+
+  // get user projects info
+  const { data: dataProjects, error: errorProjects } = await supabase.rpc(
+    "projects_user",
+    { user_id: user?.id }
+  );
+
+  // convert to a ProjectChildren type where href is the /projects/[id] route
+  const projectsChildren: ProjectChildren[] = dataProjects.map(
+    (project: any) => {
+      return {
+        name: project.name,
+        href: `/projects/${project.id}`,
+      };
+    }
+  );
+
+  return {
+    props: {
+      avatar_url: avatar_url,
+      projectsChildren: projectsChildren,
+    },
+  };
+};
