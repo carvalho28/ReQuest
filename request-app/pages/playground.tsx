@@ -161,7 +161,7 @@ export default function Playground({ avatar_url, projectsChildren }: any) {
           disableBeacon: true,
         },
         {
-          content: <h2>Let's get started!</h2>,
+          content: <h2>Let&apos;s get started!</h2>,
           placement: "center",
           target: "body",
         },
