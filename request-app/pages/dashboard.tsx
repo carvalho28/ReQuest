@@ -6,8 +6,10 @@ import { useEffect, useState } from "react";
 import Layout from "@/components/Layout";
 import { ProjectChildren } from "@/components/utils/sidebarHelper";
 import Image from "next/image";
-import { Fireworks } from "fireworks-js";
-import ReactEChart from "echarts-for-react";
+
+// dynamically import
+import dynamic from "next/dynamic";
+const ReactEChart = dynamic(() => import("echarts-for-react"), { ssr: false });
 
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   const supabase = createServerSupabaseClient(ctx);
@@ -604,7 +606,6 @@ export default function Dashboard({
       </div>
 
       {/* mobile */}
-
       <div className="md:hidden flex-wrap bg-white rounded-lg shadow-lg flex mt-8">
         <div className="flex flex-col justify-start items-center text-center w-full p-4 mt-4">
           <h3 className="text-xl font-bold">Number of Projects</h3>

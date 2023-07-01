@@ -2,7 +2,7 @@ import { connectedUsers } from "@/pages/chat";
 import { useEffect, useState } from "react";
 import "regenerator-runtime/runtime";
 import { renderImage } from "./utils/general";
-import Image from "next/image"
+import Image from "next/image";
 
 interface ChatListProps {
   connectedUsers: connectedUsers[];
@@ -34,9 +34,8 @@ const ChatList = ({ connectedUsers, onUserSelect }: ChatListProps) => {
     onUserSelect(userId);
   };
 
-
   return (
-    <div className="border-r-2 border-slate-300 h-full bg-gray-50">
+    <div className="md:border-r-2 border-slate-300 h-full bg-gray-50">
       {/*  search bar */}
       <div className="flex items-center w-full justify-center mt-4 mb-2">
         <input
@@ -56,7 +55,7 @@ const ChatList = ({ connectedUsers, onUserSelect }: ChatListProps) => {
             key={person.id}
             className={`flex justify-between gap-x-6 
           py-5 px-4 hover:bg-gray-200 cursor-pointer border-b border-gray-300 
-          ${person.selected ? "bg-gray-200" : "bg-white2"}`}
+          first:border-t ${person.selected ? "bg-gray-200" : "bg-white2"}`}
           >
             <div
               className="flex gap-x-4"
@@ -86,6 +85,23 @@ const ChatList = ({ connectedUsers, onUserSelect }: ChatListProps) => {
             </div>
           </li>
         ))}
+        {/* if there are less than 3 people add an image */}
+        {people.length <= 2 && (
+          <li
+            className="flex justify-center py-5 px-4 hover:bg-gray-200 cursor-pointer
+           border-gray-300 first:border-t bg-white2 h-full items-center mt-32"
+          >
+            <Image
+              id="Profile"
+              className="flex-none rounded-full bg-gray-50 h-48 w-full"
+              src="/team-work.svg"
+              alt="Team work"
+              width={2}
+              height={2}
+              priority
+            />
+          </li>
+        )}
       </ul>
     </div>
   );

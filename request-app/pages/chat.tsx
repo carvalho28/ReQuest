@@ -4,8 +4,10 @@ import Layout from "@/components/Layout";
 import { ProjectChildren } from "@/components/utils/sidebarHelper";
 import { createServerSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import { useSupabaseClient, useUser } from "@supabase/auth-helpers-react";
+import { set } from "cypress/types/lodash";
 import { GetServerSidePropsContext } from "next";
 import { useEffect, useState } from "react";
+import { RiArrowLeftSLine } from "react-icons/ri";
 
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   const supabase = createServerSupabaseClient(ctx);
@@ -135,34 +137,68 @@ export default function Chat({
   }, [chatId]);
 
   return (
-    <div>
-      <Layout
-        currentPage="Chat"
-        avatar_url={avatar_url}
-        projectChildren={projectsChildren}
+    <Layout
+      currentPage="Chat"
+      avatar_url={avatar_url}
+      projectChildren={projectsChildren}
+    >
+      {/* chat layout  */}
+      <div
+        className="md:flex flex-row bg-whitepages border-gray-200 rounded-lg 
+        border-2 hidden"
+        style={{ height: "calc(100vh - 12em)" }}
       >
-        {/* chat layout  */}
+        {/* first column for chat selection */}
         <div
-          className="flex flex-row bg-whitepages border-gray-200 rounded-lg 
-        border-2"
-          style={{ height: "calc(100vh - 12em)" }}
-        >
-          {/* first column for chat selection */}
-          <div
-            className="flex flex-col w-1/4 overflow-y-auto 
+          className="flex flex-col w-1/4 overflow-y-auto 
           scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100"
+        >
+          <ChatList
+            connectedUsers={connectedUsers}
+            onUserSelect={setConnUserId}
+          />
+        </div>
+        {/* second column for chat */}
+        <div className="flex flex-col w-3/4">
+          <ChatConversation chatId={chatId} />
+        </div>
+      </div>
+
+      {/* chat layout for mobile */}
+      {/* button top left to go back */}
+      <div className="flex md:hidden flex-row justify-end items-center px-4 py-2 -mt-10">
+        {connUserId !== -1 ? (
+          <button
+            className="text-gray-500 hover:text-gray-700 focus:outline-none"
+            aria-label="Back"
+            onClick={() => setConnUserId(-1)}
           >
-            <ChatList
-              connectedUsers={connectedUsers}
-              onUserSelect={setConnUserId}
-            />
-          </div>
-          {/* second column for chat */}
-          <div className="flex flex-col w-3/4">
+            <RiArrowLeftSLine size={24} />
+          </button>
+        ) : (
+          <div className="mt-5"></div>
+        )}
+      </div>
+      <div
+        className="md:hidden flex flex-col bg-whitepages border-gray-300 rounded-md
+        border-2"
+        style={{ height: "calc(100vh - 12em)" }}
+      >
+        <div className="flex flex-col w-full overflow-y-auto">
+          <ChatList
+            connectedUsers={connectedUsers}
+            onUserSelect={setConnUserId}
+          />
+        </div>
+        {/* if a user is selected, show chat, else show nothing */}
+        {connUserId !== -1 ? (
+          <div className="flex flex-col w-full">
             <ChatConversation chatId={chatId} />
           </div>
-        </div>
-      </Layout>
-    </div>
+        ) : (
+          <div className="flex flex-col w-full"></div>
+        )}
+      </div>
+    </Layout>
   );
 }
