@@ -9,6 +9,12 @@ interface ChatListProps {
   onUserSelect: (userId: number) => void;
 }
 
+/**
+ * ChatList component is the component used to render the list of the users
+ * @param connectedUsers - The connected users related to the current user
+ * @param onUserSelect - The function to call when a user is selected
+ * @returns Returns the ChatList component base
+ */
 const ChatList = ({ connectedUsers, onUserSelect }: ChatListProps) => {
   const [people, setPeople] = useState(connectedUsers);
 

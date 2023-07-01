@@ -18,6 +18,11 @@ interface TabsProps {
   tabs: Tab[];
 }
 
+/**
+ * Tabs component is the component used to display tabs
+ * @param tabs - The tabs to display
+ * @returns Returns the Tabs component
+ */
 const Tabs = ({ tabs }: TabsProps) => {
   const [selectedTab, setSelectedTab] = useState(
     tabs.find((tab) => tab.current)?.name ?? tabs[0].name

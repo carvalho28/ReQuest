@@ -5,6 +5,11 @@ interface ErrorMessageProps {
   message: string;
 }
 
+/**
+ * ErrorMessage component is component used to display an error message
+ * @param message - The message to display
+ * @returns Returns the ErrorMessage component
+ */
 const ErrorMessage = ({ message }: ErrorMessageProps) => {
   return (
     <div className="rounded-md bg-red-50 p-4">

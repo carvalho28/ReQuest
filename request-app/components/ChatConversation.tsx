@@ -8,6 +8,11 @@ interface ChatConversationProps {
   chatId: number;
 }
 
+/**
+ * ChatConversation component is the component used to render the chat conversation
+ * @param chatId - The chat id of the current chat
+ * @returns Returns the ChatConversation component base
+ */
 const ChatConversation = ({ chatId }: ChatConversationProps) => {
   const [message, setMessage] = useState("");
   const maxRows = 5;

@@ -7,7 +7,13 @@ import ErrorMessage from "./ErrorMessage";
 import Loading from "./Loading";
 import { RiCloseLine } from "react-icons/ri";
 
-const ResetPassword = ({ open, setOpen }: { open: boolean; setOpen: any }) => { 
+/**
+ * ResetPassword component is the component used to reset the password of the user
+ * @param open - The state of the modal
+ * @param setOpen - The function to set the state of the modal
+ * @returns Returns the ResetPassword component
+ */
+const ResetPassword = ({ open, setOpen }: { open: boolean; setOpen: any }) => {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);

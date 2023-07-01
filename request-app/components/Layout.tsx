@@ -95,6 +95,15 @@ interface LayoutProps {
   projectChildren?: ProjectChildren[];
 }
 
+/**
+ * Layout component is the component used to render the layout of the application
+ * @param children - The children of the component
+ * @param currentPage - The current page of the application
+ * @param avatar_url - The avatar url of the current user
+ * @param namePage - The name of the current page
+ * @param projectChildren - The children of the current project
+ * @returns Returns the Layout component
+ */
 const Layout = ({
   children,
   currentPage,

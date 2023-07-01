@@ -16,6 +16,12 @@ interface CalendarHeaderProps {
   requirements: any;
 }
 
+/**
+ * CalendarHeader component is the component used to change the view of the calendar
+ * @param projects - The projects of the current user
+ * @param requirements - The requirements of the current user
+ * @returns Returns the CalendarHeader component
+ */
 const CalendarHeader = ({ projects, requirements }: CalendarHeaderProps) => {
   const [isMonthView, setIsMonthView] = useState(true);
   const [isYearView, setIsYearView] = useState(false);

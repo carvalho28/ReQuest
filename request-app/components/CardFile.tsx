@@ -8,6 +8,11 @@ interface CardFileProps {
   files: any;
 }
 
+/**
+ * CardFile component is the component used to render the files of the current request
+ * @param files - The files of the current request
+ * @returns Returns the CardFile component
+ */
 const CardFile = ({ files }: CardFileProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [imageSelected, setImageSelected] = useState("");

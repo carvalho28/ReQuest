@@ -3,16 +3,17 @@ import { Rubik_Bubbles } from "next/font/google";
 import Image from "next/image";
 import { renderImage } from "./utils/general";
 
-const rubikBubbles = Rubik_Bubbles({
-  subsets: ["latin"],
-  weight: ["400"],
-});
-
 interface ListRankingProps {
   rankings: Rankings[];
   user_id: string;
 }
 
+/**
+ * ListRanking component is the component used to render the `trophy` respective to the ranking
+ * @param rankings - The rankings of the current project
+ * @param user_id - The user id of the current user
+ * @returns Returns the ListRanking component
+ */
 const ListRanking = ({ rankings, user_id }: ListRankingProps) => {
   const cups = [
     "/gold-cup.svg",
@@ -33,8 +34,6 @@ const ListRanking = ({ rankings, user_id }: ListRankingProps) => {
     }
   }
 
-  console.log(rankings);
-
   return (
     <>
       {rankings.length == 0 ? (
@@ -48,7 +47,9 @@ const ListRanking = ({ rankings, user_id }: ListRankingProps) => {
             height={100}
             priority
           />
-          <span className="text-md font-normal text-gray-900">No ranking yet</span>
+          <span className="text-md font-normal text-gray-900">
+            No ranking yet
+          </span>
         </div>
       ) : (
         <div className="overflow-y-scroll w-full h-60 scroll">
@@ -66,7 +67,7 @@ const ListRanking = ({ rankings, user_id }: ListRankingProps) => {
                 >
                   <div className="px-2">
                     <Image
-                      className="h-12 w-12 rounded-full border-2 border-xl border-gray-200"
+                      className="h-12 w-12 rounded-full"
                       alt="avatar"
                       src={"data:image/svg+xml," + renderImage(item.avatar_url)}
                       width={40}

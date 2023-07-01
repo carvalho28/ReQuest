@@ -3,6 +3,10 @@ import { CheckIcon } from "@heroicons/react/24/outline";
 import { Fragment, useState } from "react";
 import { useRouter } from "next/router";
 
+/**
+ * ConfirmEmail component is the component used to confirm the email of the user
+ * @returns Returns the ConfirmEmail component
+ */
 const ConfirmEmail = () => {
   const [open, setOpen] = useState(true);
   const router = useRouter();

@@ -10,6 +10,11 @@ interface Style extends CSSProperties {
   "--value": string;
 }
 
+/**
+ * CountdownTimer component is the component used to render the countdown timer
+ * @param dateString - The date string of the countdown timer
+ * @returns Returns the CountdownTimer component
+ */
 const CountdownTimer = ({ dateString }: Props) => {
   const date = new Date(dateString);
 

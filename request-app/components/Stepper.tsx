@@ -11,6 +11,11 @@ interface StepperProps {
   steps: Step[];
 }
 
+/**
+ * Stepper component is the component used to display the progress of creation
+ * @param steps - The steps of the stepper
+ * @returns Returns the Stepper component
+ */
 const Stepper = ({ steps }: StepperProps) => {
   return (
     <div>

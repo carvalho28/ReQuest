@@ -8,6 +8,13 @@ interface CalendarViewYearProps {
   year: any;
 }
 
+/**
+ * CalendarViewYear component is the component used to render the year view of the calendar
+ * @param projects - The projects of the current user
+ * @param requirements - The requirements of the current user
+ * @param year - The year of the current calendar view
+ * @returns Returns the CalendarViewYear component
+ */
 const CalendarViewYear = ({
   projects,
   requirements,

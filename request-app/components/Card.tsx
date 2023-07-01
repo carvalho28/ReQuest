@@ -2,6 +2,11 @@ interface CardProps {
   sizeClass: string;
 }
 
+/**
+ * Card component is the component used to render a card
+ * @param sizeClass - The size class of the card
+ * @returns Returns the Card component
+ */
 const Card = ({ sizeClass }: CardProps) => {
   return (
     <div

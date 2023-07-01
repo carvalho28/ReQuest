@@ -5,11 +5,14 @@ interface DatePickerProps {
   onDateChange: (date: string) => void;
 }
 
+/**
+ * DatePicker component is a custom date picker component
+ * @param value - The value of the date picker
+ * @param onDateChange - The function to call when the date is changed
+ * @returns Returns the DatePicker component
+ */
 const DatePicker = ({ value, onDateChange }: DatePickerProps) => {
-  // if (!value) return null;
-
   const data = value?.substring(0, 10) || "";
-
   return (
     <>
       <input
