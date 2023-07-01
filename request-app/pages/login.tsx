@@ -91,9 +91,7 @@ export default function Login() {
   }
 
   const [open, setOpen] = useState(false);
-  useEffect(() => {
-    console.log(open);
-  }, [open]);
+  // useEffect(() => {}, [open]);
 
   return (
     <div className="min-h-screen login-background flex flex-col">
@@ -246,6 +244,7 @@ export default function Login() {
           </div>
           <div className="relative flex-1 justify-center hidden lg:block">
             <Image
+              priority
               className="inset-0 w-128 h-full max-w-screen p-6 mx-auto"
               src="/register.svg"
               alt=""

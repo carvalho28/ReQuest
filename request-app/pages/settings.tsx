@@ -271,7 +271,7 @@ export default function Settings({ avatar_url, projectsChildren }: any) {
           )}
           {tabs[1].actual && (
             <div className="flex flex-col gap-x-4 md:flex-row gap-y-8 mx-6">
-              <div className="flex flex-col w-96 text-center justify-center items-center">
+              <div className="flex flex-col md:w-96 w-full text-center justify-center items-center">
                 <p className="text-md font-medium leading-6 text-gray-900">
                   Click the button to reset the password, you will receive an
                   email.
@@ -310,7 +310,7 @@ export default function Settings({ avatar_url, projectsChildren }: any) {
                 </button>
 
                 <Image
-                  className="inset-0 h-auto max-w-screen p-6 mx-auto"
+                  className="inset-0 h-auto md:max-w-screen w-full p-6 mx-auto"
                   style={{ maxWidth: "130%" }}
                   src="/delete-account.svg"
                   alt=""
@@ -328,7 +328,7 @@ export default function Settings({ avatar_url, projectsChildren }: any) {
                   Your privacy settings
                 </h3>
               </div>
-              <div className="flex flex-col w-96 text-center justify-center items-center">
+              <div className="flex flex-col md:w-96 w-full md:text-center text-left justify-center items-center">
                 <div className="form-control">
                   <label className="label cursor-pointer">
                     <span className="label-text mr-10">

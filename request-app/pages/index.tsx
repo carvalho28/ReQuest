@@ -10,17 +10,21 @@ export default function Home() {
   return (
     <div className="min-h-screen index-background">
       <Head>
-        <title>ReQuest App</title>
-        <meta name="description" content="" />
+        <title>ReQuest</title>
+        <meta
+          name="description"
+          content="ReQuest - A requirements management tool"
+        />
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Header />
       <div className="relative isolate scroll-smooth">
         <div className="mx-auto max-w-7xl px-6 py-10 sm:py-2 lg:flex lg:items-center lg:gap-x-24 lg:px-8 lg:py-40">
           <div className="mx-auto max-w-2xl lg:mx-0 lg:flex-auto flex flex-col justify-center items-center">
-            <h1 className="max-w-xl text-4xl font-bold tracking-tight text-center text-white sm:text-6xl">
+            <h1 className="max-w-xl text-4xl font-bold tracking-tight text-center leading-snug text-white sm:text-[2.9rem]">
               {/* Your requirements at a fun glance */}
-              Your requirements to the next level
+              {/* You are in control of your requirements */}
+              Embracing the future of requirement management
             </h1>
             <p className="mt-8 text-lg max-w-md text-center leading-8 text-white">
               {/* Your projects will benefit from a streamlined and efficient

@@ -3,7 +3,7 @@ describe("Home page load", () => {
     cy.visit("/");
 
     // check for the title
-    cy.get("h1").should("contain", "Your requirements at a fun glance");
+    cy.get("h1").should("contain", "Requirements mastered, success achieved");
 
     // check for the "Link" to the login page
     cy.get("a").contains("Login").should("have.attr", "href", "/login");
