@@ -88,8 +88,8 @@ const ChatList = ({ connectedUsers, onUserSelect }: ChatListProps) => {
         {/* if there are less than 3 people add an image */}
         {people.length <= 2 && (
           <li
-            className="flex justify-center py-5 px-4 hover:bg-gray-200 cursor-pointer
-           border-gray-300 first:border-t bg-white2 h-full items-center mt-32"
+            className="flex justify-center py-5 px-4
+           border-gray-300 first:border-t bg-white2 h-full items-center mt-32 md:hidden"
           >
             <Image
               id="Profile"
