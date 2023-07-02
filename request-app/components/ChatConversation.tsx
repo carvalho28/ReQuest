@@ -48,6 +48,38 @@ const ChatConversation = ({ chatId }: ChatConversationProps) => {
   const [messages, setMessages] = useState<
     Database["public"]["Tables"]["messages"]["Row"][]
   >([]);
+
+  // send message
+  const sendMessage = async () => {
+    if (message === "") {
+      return;
+    }
+    const { data: newMessage, error: errorNewMessage } = await supabaseClient
+      .from("messages")
+      .insert([
+        {
+          chat_id: chatId,
+          author_id: user?.id,
+          content: message,
+        },
+      ]);
+    if (errorNewMessage) {
+      return;
+    }
+    setMessage("");
+    // clear the textarea
+    const textarea = document.getElementById("message") as HTMLTextAreaElement;
+    textarea.value = "";
+  };
+
+  // on enter send message
+  function handleKeyDown(event: any) {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      sendMessage();
+    }
+  }
+
   // retrieve messages from the database
   useEffect(() => {
     if (chatId === undefined || chatId === -1) {
@@ -94,38 +126,7 @@ const ChatConversation = ({ chatId }: ChatConversationProps) => {
     }
     getMessages();
     getMessagesRealtime();
-  }, [chatId]);
-
-  // send message
-  const sendMessage = async () => {
-    if (message === "") {
-      return;
-    }
-    const { data: newMessage, error: errorNewMessage } = await supabaseClient
-      .from("messages")
-      .insert([
-        {
-          chat_id: chatId,
-          author_id: user?.id,
-          content: message,
-        },
-      ]);
-    if (errorNewMessage) {
-      return;
-    }
-    setMessage("");
-    // clear the textarea
-    const textarea = document.getElementById("message") as HTMLTextAreaElement;
-    textarea.value = "";
-  };
-
-  // on enter send message
-  function handleKeyDown(event: any) {
-    if (event.key === "Enter") {
-      event.preventDefault();
-      sendMessage();
-    }
-  }
+  }, [chatId, sendMessage]);
 
   return (
     <>

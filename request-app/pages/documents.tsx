@@ -62,6 +62,7 @@ export default function Documents({ avatar_url, projectsChildren }: any) {
     }
 
     setFiles(filesData);
+    setIsLoading(false);
   }
 
   // on submit upload all files to supabase storage
@@ -107,6 +108,8 @@ export default function Documents({ avatar_url, projectsChildren }: any) {
     getUserFiles();
   }, [user?.id]);
 
+  const [isLoading, setIsLoading] = useState(true);
+
   return (
     <div>
       <Layout
@@ -124,7 +127,13 @@ export default function Documents({ avatar_url, projectsChildren }: any) {
                   My Files
                 </h2>
                 <div>
-                  <Loading />
+                  {isLoading ? (
+                    <Loading />
+                  ) : (
+                    <p className="text-center text-gray-500 mt-10 text-lg">
+                      No files found
+                    </p>
+                  )}
                 </div>
               </div>
             )}
