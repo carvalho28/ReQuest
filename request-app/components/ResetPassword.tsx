@@ -27,7 +27,7 @@ const ResetPassword = ({ open, setOpen }: { open: boolean; setOpen: any }) => {
     }
     setLoading(true);
     const { error } = await supabaseClient.auth.resetPasswordForEmail(email, {
-      redirectTo: "http://localhost:3000/forgot-password",
+      redirectTo: "http://re-quest.vercel.app/forgot-password",
     });
     if (error) {
       console.log(error);

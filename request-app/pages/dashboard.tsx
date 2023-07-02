@@ -117,8 +117,19 @@ export default function Dashboard({
     });
     const averageForecastCalc =
       forecast.reduce((a, b) => a + b, 0) / forecast.length;
-    setAverageForecast(averageForecastCalc < 0 ? 0 : averageForecastCalc);
+    setAverageForecast(
+      averageForecastCalc < 0 ||
+        averageForecastCalc === undefined ||
+        averageForecastCalc === null ||
+        Number.isNaN(averageForecastCalc)
+        ? 0
+        : averageForecastCalc
+    );
   }, [dataProjects]);
+
+  useEffect(() => {
+    console.log(averageForecast);
+  }, [averageForecast]);
 
   const dataGraph = [
     // get all the active projects, the completed, the on hold and the cancelled

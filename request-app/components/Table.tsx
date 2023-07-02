@@ -443,6 +443,7 @@ function Table({
         setError(true);
         return;
       }
+      setShowLoadingGenAI(true);
     }
 
     steps[currentSlide].status = "complete";

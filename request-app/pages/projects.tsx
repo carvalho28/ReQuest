@@ -128,7 +128,7 @@ export default function Projects({
       setPeopleId([]);
       setPeopleEmails([]);
       clearSteps();
-      router.push("/projects/table");
+      router.push("/projects");
     }
   }
 
@@ -448,6 +448,18 @@ export default function Projects({
                       ))}
                     </div>
                   )}
+                  {projectsList?.length === 0 && (
+                    <div className="flex justify-center items-center h-20 mt-5">
+                      <div className="text-center">
+                        <p className="text-2xl font-semibold text-gray-500">
+                          No projects yet
+                        </p>
+                        <p className="text-gray-400">
+                          Create a new project to get started
+                        </p>
+                      </div>
+                    </div>
+                  )}
                 </>
               )}
             </div>
@@ -549,7 +561,7 @@ export default function Projects({
                             <div className="mt-1">
                               <textarea
                                 rows={3}
-                                maxLength={125}
+                                // maxLength={125}
                                 name="description"
                                 id="description"
                                 className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-80 md:w-96 sm:text-sm border-gray-300 rounded-md border-2 p-2"
