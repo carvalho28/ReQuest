@@ -57,7 +57,6 @@ export default function Profile({
   const [currentTrophy, setCurrentTrophy] = useState<number>(0);
 
   const changeTrophy = (direction: string) => {
-    console.log("changing trophy");
     if (trophies?.length === 1 || trophies?.length === undefined) return;
     if (direction === "left") {
       if (currentTrophy === 0) {
@@ -132,7 +131,6 @@ export default function Profile({
             table: "trophies_profiles",
           },
           async (payload) => {
-            console.log("Change received!", payload);
             getTrophies();
           }
         )
@@ -397,8 +395,6 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   if (errorRpc) console.log(error);
   if (!dataRpc) throw new Error("No user data found");
   const userData = dataRpc[0];
-
-  console.log(user);
 
   // get user projects info
   // const { data: dataProjects, error: errorProjects } = await supabase.rpc(

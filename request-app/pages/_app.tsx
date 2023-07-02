@@ -52,7 +52,7 @@ function Loading() {
     <>
       {loading && (
         <div className="fixed inset-0 bg-white opacity-50 z-50 flex items-center justify-center">
-          <div className="w-20 h-20 bg-transparent rounded-md animate-pulse mx-auto">
+          <div className="w-24 h-24 bg-transparent rounded-md animate-pulse mx-auto">
             <Image src="/logo.svg" alt="logo" width={500} height={500} />
           </div>
         </div>
@@ -77,7 +77,7 @@ export default function App({
         supabaseClient={supabaseClient}
         initialSession={pageProps.initialSession}
       >
-        {/* <Loading /> */}
+        <Loading />
         <Component {...pageProps} />
       </SessionContextProvider>
     </main>

@@ -219,14 +219,14 @@ async function deleteRequirement(selectedFlatRows: any) {
   const confirmDelete = confirm(
     "Are you sure you want to delete these requirements?"
   );
+  console.log(ids);
   if (!confirmDelete) return;
   // use supabase to delete all the rows in ids
-  const { error } = await supabase
-    .from("requirements")
-    .delete()
-    .match({ id: ids });
+  for (let i = 0; i < ids.length; i++) {
+    await supabase.from("requirements").delete().eq("id", ids[i]);
+  }
 
-  if (error) return;
+  // if (error) return;
 }
 
 /**
@@ -818,8 +818,16 @@ function Table({
       // remove the . in the end
       answer = answer.replace(".", "");
 
-      setRequirementType(answer || "functional");
-      setRequirementTypeAI(answer || "functional");
+      if (
+        answer.toLowerCase() === "non-functional" ||
+        answer.toLowerCase() === "functional"
+      ) {
+        setRequirementType(answer || "functional");
+        setRequirementTypeAI(answer || "functional");
+      } else {
+        setRequirementType("functional");
+        setRequirementTypeAI("functional");
+      }
     } catch (err) {
       setErrorMessage("There was an error");
       setError(true);
@@ -1161,10 +1169,13 @@ function Table({
                                   className="chat chat-bubble chat-bubble-primary text-black"
                                   data-theme="mytheme2"
                                 >
-                                  Base on our AI, your requirement is most
+                                  Based on our AI, your requirement is most
                                   likely to be a{" "}
                                   <span className="font-bold text-xl">
-                                    {requirementTypeAI}
+                                    {/* {requirementTypeAI} */}
+                                    {requirementTypeAI === "functional"
+                                      ? "Functional"
+                                      : "Non-functional"}
                                   </span>{" "}
                                   requirement.
                                   <br />
@@ -1185,6 +1196,14 @@ function Table({
                                     onSelect={(e) => setRequirementType(e)}
                                   />
                                 )}
+                              </div>
+                              {/* note ai being wrong */}
+                              <div>
+                                <p className="text-sm text-gray-500">
+                                  Note: AI systems, may have limitations or
+                                  inaccuracies. Please use your own judgement
+                                  when selecting the requirement type.
+                                </p>
                               </div>
                             </>
                           )}

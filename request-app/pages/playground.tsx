@@ -166,9 +166,9 @@ export default function Playground({ avatar_url, projectsChildren }: any) {
           target: "body",
         },
       ]);
-      console.log("set steps");
-      console.log(steps);
       localStorage.setItem("playground", "true");
+    } else {
+      setScenario("");
     }
   }, []);
 
