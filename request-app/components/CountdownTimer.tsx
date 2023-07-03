@@ -44,9 +44,18 @@ const CountdownTimer = ({ dateString }: Props) => {
       {timeLeft.minutes.toString() > "0" ? (
         <div className="grid grid-flow-col gap-1 text-center auto-cols-max">
           <div className="flex flex-col p-2 bg-primaryblue rounded-box items-center text-white">
-            <span className="countdown font-mono text-2xl">
-              <span style={{ "--value": timeLeft.days } as Style}></span>
-            </span>
+            {timeLeft.days.toString().length > 2 ? (
+              <div className="flex flex-row">
+                <span className="countdown font-mono text-xl">
+                  <span style={{ "--value": "99" } as Style}></span>
+                </span>
+                <span className="countdown font-mono text-xl">+</span>
+              </div>
+            ) : (
+              <span className="countdown font-mono text-2xl">
+                <span style={{ "--value": timeLeft.days } as Style}></span>
+              </span>
+            )}
             days
           </div>
           <div className="flex flex-col p-2 bg-primaryblue rounded-box text-white items-center">
