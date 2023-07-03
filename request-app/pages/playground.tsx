@@ -85,7 +85,6 @@ export default function Playground({ avatar_url, projectsChildren }: any) {
       setError("Please enter a requirement");
       return;
     }
-    console.log(scenario);
     setLoadingAI(true);
     setAIanswer("");
     setShow(true);
@@ -260,7 +259,7 @@ export default function Playground({ avatar_url, projectsChildren }: any) {
             {scenario !== "" && (
               <>
                 <h1 className="text-2xl font-bold text-gray-800 mb-6 mt-6">
-                  Generated Scenario
+                  AI Generated Scenario
                 </h1>
                 <article className="prose-base text-justify bg-gray-50 rounded-lg scenario-show">
                   {/* button to copy the full scenario */}

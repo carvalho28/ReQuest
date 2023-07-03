@@ -55,7 +55,7 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="mt-16 sm:mt-24 lg:mt-0 lg:flex-shrink-0 lg:flex-grow flex justify-center">
+          <div className="mt-0 sm:mt-24 lg:mt-0 lg:flex-shrink-0 lg:flex-grow flex justify-center">
             <Image
               priority
               src="/guy.svg"
