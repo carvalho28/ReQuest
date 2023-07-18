@@ -21,6 +21,7 @@ A requirement management tool built for students, by a student.
 </p>
 
 <p align="center">
+  <a href="#about">About</a> •
   <a href="#key-features">Key Features</a> •
   <a href="#how-to-use">How to Use</a> •
   <a href="#tech-stack">Tech Stack</a> •
@@ -32,6 +33,11 @@ A requirement management tool built for students, by a student.
   <img src="https://github.com/carvalho28/ReQuest/assets/44882507/756b03c6-9885-42fd-b5c7-8c790b219c6f" alt="animated" />
 </p>
 
+## About
+
+- In the realm of requirement management, market tools often pose challenges for students due to their lack of simplicity.
+- As a response to this issue, my final project of the Computer Science and Engineering Bachelor's degree program @ UBI introduces ReQuest, a gamified application designed to simplify requirement management. 
+- By integrating collaboration and AI, ReQuest provides students with an interactive and user-friendly solution that offers valuable insights and streamlines the management of requirements.
 
 ## Key Features
 
