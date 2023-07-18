@@ -25,6 +25,7 @@ A requirement management tool built for students, by a student.
   <a href="#key-features">Key Features</a> •
   <a href="#how-to-use">How to Use</a> •
   <a href="#tech-stack">Tech Stack</a> •
+  <a href="#support">Support</a> •
   <a href="#license">License</a>
 </p>
 
