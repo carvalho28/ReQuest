@@ -12,7 +12,7 @@ A requirement management tool built for students, by a student.
 <p align="center">
 <!-- latest commit badge -->
   <a href="https://github.com/carvalho28/ReQuest/
-    master" >
+    master">
     <img src="https://img.shields.io/github/last-commit/carvalho28/ReQuest.svg?color=0998B7" />
   </a>
   <a href="https://github.com/carvalho28/ReQuest/graphs/contributors" alt="Contributors">
@@ -78,10 +78,10 @@ GPLv3. See [LICENSE](LICENSE) for more information.
 ---
 <!-- github icon and name hyperlink -->
 <p align="center">
-  <a href="https://www.linkedin.com/in/dca28/" alt="LinkedIn">
+  <a href="https://www.linkedin.com/in/dca28/" target="_blank" alt="LinkedIn">
     <img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white" />
   </a>
-  <a href="https://github.com/carvalho28" alt="GitHub">
+  <a href="https://github.com/carvalho28" target="_blank" alt="GitHub">
     <img src="https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white" />
   </a>
 </p>
