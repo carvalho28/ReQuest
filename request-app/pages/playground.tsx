@@ -48,8 +48,7 @@ export default function Playground({ avatar_url, projectsChildren }: any) {
     const keywords = value.map((option) => option.value);
     try {
       const response = await fetch(
-        "https://morning-flower-3545.fly.dev/api/ai/ltfs",
-        // "http://localhost:8080/api/ai/ltfs",
+        "http://localhost:8080/api/ai/ltfs",
         {
           method: "POST",
           headers: {
@@ -91,7 +90,7 @@ export default function Playground({ avatar_url, projectsChildren }: any) {
     setError("");
     try {
       const response = await fetch(
-        "https://morning-flower-3545.fly.dev/api/ai/verify",
+        "https://localhost:8080/api/ai/verify",
         {
           method: "POST",
           headers: {
