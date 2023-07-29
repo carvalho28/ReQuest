@@ -101,7 +101,7 @@ const Tiptap = ({
     // setContent(reqDescription);
     console.log("reqId", reqId);
     const newProvider = new HocuspocusProvider({
-      url: "ws://localhost:8080",
+      url: "ws://localhost:8090",
       parameters: {
         userId: userId,
       },
