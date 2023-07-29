@@ -11,7 +11,7 @@ A requirement management tool built for students, by a student.
 
 <p align="center">
 <!-- latest commit badge -->
-  <a href="https://github.com/carvalho28/ReQuest/main">
+  <a href="https://github.com/carvalho28/ReQuest/commits">
     <img src="https://img.shields.io/github/last-commit/carvalho28/ReQuest.svg?color=0998B7" />
   </a>
   <a href="https://github.com/carvalho28/ReQuest/graphs/contributors" alt="Contributors">
