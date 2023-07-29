@@ -11,8 +11,7 @@ A requirement management tool built for students, by a student.
 
 <p align="center">
 <!-- latest commit badge -->
-  <a href="https://github.com/carvalho28/ReQuest/
-    master">
+  <a href="https://github.com/carvalho28/ReQuest/main">
     <img src="https://img.shields.io/github/last-commit/carvalho28/ReQuest.svg?color=0998B7" />
   </a>
   <a href="https://github.com/carvalho28/ReQuest/graphs/contributors" alt="Contributors">
@@ -23,7 +22,7 @@ A requirement management tool built for students, by a student.
 <p align="center">
   <a href="#about">About</a> •
   <a href="#key-features">Key Features</a> •
-  <a href="#how-to-use">How to Use</a> •
+  <a href="#installation-and-use">Installation and Use</a> •
   <a href="#tech-stack">Tech Stack</a> •
   <a href="#support">Support</a> •
   <a href="#license">License</a>
@@ -31,7 +30,7 @@ A requirement management tool built for students, by a student.
 
 <!-- gif -->
 <p align="center">
-  <img src="https://github.com/carvalho28/ReQuest/assets/44882507/756b03c6-9885-42fd-b5c7-8c790b219c6f" alt="animated" />
+  <img src="https://github.com/carvalho28/ReQuest/assets/44882507/34e01cc8-164f-4150-ad69-a481982198c2" alt="animated" />
 </p>
 
 ## About
