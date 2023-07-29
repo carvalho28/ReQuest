@@ -1,5 +1,5 @@
 /** @type {import('next').NextConfig} */
-const { DOCS_URL } = process.env;
+const { DOCS_URL } = process.env || "http://localhost:4000";
 
 const nextConfig = {
   reactStrictMode: true,
