@@ -49,9 +49,9 @@ A requirement management tool built for students, by a student.
 - Artificial Intelligence
   - Get suggestions on your requirements.
 
-## How to Use
+## Installation and Use
 
-<!-- how to use -->
+To the process of installation and use, visit the [wiki](https://github.com/carvalho28/ReQuest/wiki).
 
 ## Tech Stack
 
