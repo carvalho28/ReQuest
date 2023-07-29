@@ -106,7 +106,7 @@ const MenuBar = ({ editor, reqName }: any) => {
     console.log("req", req);
 
     const response = await fetch(
-      "http://localhost:8080/api/ai/topics"
+      "http://localhost:8080/api/ai/topics",
       {
         method: "POST",
         headers: {
